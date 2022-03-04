@@ -89,6 +89,7 @@ class State(BaseResource):
         self.built_in = built_in
         self.roles = roles
         self.transitions = transitions
+
         super().__init__(
             id=id,
             version=version,
@@ -146,6 +147,7 @@ class StateDraft(_BaseType):
         self.initial = initial
         self.roles = roles
         self.transitions = transitions
+
         super().__init__()
 
     @classmethod
@@ -193,6 +195,7 @@ class StatePagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -217,6 +220,7 @@ class StateReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["State"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.STATE)
 
     @classmethod
@@ -280,6 +284,7 @@ class StateUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["StateUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -299,6 +304,7 @@ class StateUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -352,6 +358,7 @@ class StateAddRolesAction(StateUpdateAction):
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="addRoles")
 
     @classmethod
@@ -372,6 +379,7 @@ class StateChangeInitialAction(StateUpdateAction):
 
     def __init__(self, *, initial: bool):
         self.initial = initial
+
         super().__init__(action="changeInitial")
 
     @classmethod
@@ -395,6 +403,7 @@ class StateChangeKeyAction(StateUpdateAction):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__(action="changeKey")
 
     @classmethod
@@ -416,6 +425,7 @@ class StateChangeTypeAction(StateUpdateAction):
 
     def __init__(self, *, type: "StateTypeEnum"):
         self.type = type
+
         super().__init__(action="changeType")
 
     @classmethod
@@ -436,6 +446,7 @@ class StateRemoveRolesAction(StateUpdateAction):
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="removeRoles")
 
     @classmethod
@@ -459,6 +470,7 @@ class StateSetDescriptionAction(StateUpdateAction):
 
     def __init__(self, *, description: "LocalizedString"):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -482,6 +494,7 @@ class StateSetNameAction(StateUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="setName")
 
     @classmethod
@@ -503,6 +516,7 @@ class StateSetRolesAction(StateUpdateAction):
 
     def __init__(self, *, roles: typing.List["StateRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="setRoles")
 
     @classmethod
@@ -536,6 +550,7 @@ class StateSetTransitionsAction(StateUpdateAction):
         transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
     ):
         self.transitions = transitions
+
         super().__init__(action="setTransitions")
 
     @classmethod

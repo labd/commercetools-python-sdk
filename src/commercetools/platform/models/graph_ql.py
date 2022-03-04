@@ -35,6 +35,7 @@ class GraphQLError(_BaseType):
         self.message = message
         self.locations = locations
         self.path = path
+
         super().__init__()
 
     @classmethod
@@ -56,6 +57,7 @@ class GraphQLErrorLocation(_BaseType):
     def __init__(self, *, line: int, column: int):
         self.line = line
         self.column = column
+
         super().__init__()
 
     @classmethod
@@ -85,6 +87,7 @@ class GraphQLRequest(_BaseType):
         self.query = query
         self.operation_name = operation_name
         self.variables = variables
+
         super().__init__()
 
     @classmethod
@@ -111,6 +114,7 @@ class GraphQLResponse(_BaseType):
     ):
         self.data = data
         self.errors = errors
+
         super().__init__()
 
     @classmethod

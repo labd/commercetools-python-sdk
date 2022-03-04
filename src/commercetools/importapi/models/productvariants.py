@@ -68,6 +68,7 @@ class Attribute(_BaseType):
     def __init__(self, *, name: typing.Optional[str] = None, type: str):
         self.name = name
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -174,6 +175,7 @@ class BooleanAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: bool):
         self.value = value
+
         super().__init__(name=name, type="boolean")
 
     @classmethod
@@ -197,6 +199,7 @@ class BooleanSetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["bool"]
     ):
         self.value = value
+
         super().__init__(name=name, type="boolean-set")
 
     @classmethod
@@ -218,6 +221,7 @@ class DateAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: datetime.date):
         self.value = value
+
         super().__init__(name=name, type="date")
 
     @classmethod
@@ -241,6 +245,7 @@ class DateSetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["datetime.date"]
     ):
         self.value = value
+
         super().__init__(name=name, type="date-set")
 
     @classmethod
@@ -262,6 +267,7 @@ class DateTimeAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: datetime.datetime):
         self.value = value
+
         super().__init__(name=name, type="datetime")
 
     @classmethod
@@ -288,6 +294,7 @@ class DateTimeSetAttribute(Attribute):
         value: typing.List["datetime.datetime"]
     ):
         self.value = value
+
         super().__init__(name=name, type="datetime-set")
 
     @classmethod
@@ -312,6 +319,7 @@ class EnumAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
+
         super().__init__(name=name, type="enum")
 
     @classmethod
@@ -336,6 +344,7 @@ class EnumSetAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
+
         super().__init__(name=name, type="enum-set")
 
     @classmethod
@@ -360,6 +369,7 @@ class LocalizableEnumAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
+
         super().__init__(name=name, type="lenum")
 
     @classmethod
@@ -386,6 +396,7 @@ class LocalizableEnumSetAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
+
         super().__init__(name=name, type="lenum-set")
 
     @classmethod
@@ -416,6 +427,7 @@ class LocalizableTextAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: "LocalizedString"):
         self.value = value
+
         super().__init__(name=name, type="ltext")
 
     @classmethod
@@ -444,6 +456,7 @@ class LocalizableTextSetAttribute(Attribute):
         value: typing.List["LocalizedString"]
     ):
         self.value = value
+
         super().__init__(name=name, type="ltext-set")
 
     @classmethod
@@ -467,6 +480,7 @@ class MoneyAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: "TypedMoney"):
         self.value = value
+
         super().__init__(name=name, type="money")
 
     @classmethod
@@ -490,6 +504,7 @@ class MoneySetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["TypedMoney"]
     ):
         self.value = value
+
         super().__init__(name=name, type="money-set")
 
     @classmethod
@@ -511,6 +526,7 @@ class NumberAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: float):
         self.value = value
+
         super().__init__(name=name, type="number")
 
     @classmethod
@@ -534,6 +550,7 @@ class NumberSetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["float"]
     ):
         self.value = value
+
         super().__init__(name=name, type="number-set")
 
     @classmethod
@@ -556,6 +573,7 @@ class ReferenceAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: "KeyReference"):
         self.value = value
+
         super().__init__(name=name, type="reference")
 
     @classmethod
@@ -579,6 +597,7 @@ class ReferenceSetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["KeyReference"]
     ):
         self.value = value
+
         super().__init__(name=name, type="reference-set")
 
     @classmethod
@@ -600,6 +619,7 @@ class TextAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: str):
         self.value = value
+
         super().__init__(name=name, type="text")
 
     @classmethod
@@ -621,6 +641,7 @@ class TextSetAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: typing.List["str"]):
         self.value = value
+
         super().__init__(name=name, type="text-set")
 
     @classmethod
@@ -642,6 +663,7 @@ class TimeAttribute(Attribute):
 
     def __init__(self, *, name: typing.Optional[str] = None, value: datetime.time):
         self.value = value
+
         super().__init__(name=name, type="time")
 
     @classmethod
@@ -665,6 +687,7 @@ class TimeSetAttribute(Attribute):
         self, *, name: typing.Optional[str] = None, value: typing.List["datetime.time"]
     ):
         self.value = value
+
         super().__init__(name=name, type="time-set")
 
     @classmethod
@@ -721,6 +744,7 @@ class ProductVariantImport(ImportResource):
         self.assets = assets
         self.publish = publish
         self.product = product
+
         super().__init__(key=key)
 
     @classmethod
@@ -761,6 +785,7 @@ class ProductVariantPatch(_BaseType):
         self.product_variant = product_variant
         self.attributes = attributes
         self.staged = staged
+
         super().__init__()
 
     @classmethod

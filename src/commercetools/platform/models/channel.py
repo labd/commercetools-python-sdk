@@ -104,6 +104,7 @@ class Channel(BaseResource):
         self.review_rating_statistics = review_rating_statistics
         self.custom = custom
         self.geo_location = geo_location
+
         super().__init__(
             id=id,
             version=version,
@@ -160,6 +161,7 @@ class ChannelDraft(_BaseType):
         self.address = address
         self.custom = custom
         self.geo_location = geo_location
+
         super().__init__()
 
     @classmethod
@@ -207,6 +209,7 @@ class ChannelPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -232,6 +235,7 @@ class ChannelReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Channel"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CHANNEL)
 
     @classmethod
@@ -288,6 +292,7 @@ class ChannelUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ChannelUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -307,6 +312,7 @@ class ChannelUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -372,6 +378,7 @@ class ChannelAddRolesAction(ChannelUpdateAction):
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="addRoles")
 
     @classmethod
@@ -392,6 +399,7 @@ class ChannelChangeDescriptionAction(ChannelUpdateAction):
 
     def __init__(self, *, description: "LocalizedString"):
         self.description = description
+
         super().__init__(action="changeDescription")
 
     @classmethod
@@ -414,6 +422,7 @@ class ChannelChangeKeyAction(ChannelUpdateAction):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__(action="changeKey")
 
     @classmethod
@@ -436,6 +445,7 @@ class ChannelChangeNameAction(ChannelUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -458,6 +468,7 @@ class ChannelRemoveRolesAction(ChannelUpdateAction):
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="removeRoles")
 
     @classmethod
@@ -480,6 +491,7 @@ class ChannelSetAddressAction(ChannelUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setAddress")
 
     @classmethod
@@ -506,6 +518,7 @@ class ChannelSetAddressCustomFieldAction(ChannelUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setAddressCustomField")
 
     @classmethod
@@ -537,6 +550,7 @@ class ChannelSetAddressCustomTypeAction(ChannelUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setAddressCustomType")
 
     @classmethod
@@ -564,6 +578,7 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -595,6 +610,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -617,6 +633,7 @@ class ChannelSetGeoLocationAction(ChannelUpdateAction):
 
     def __init__(self, *, geo_location: typing.Optional["GeoJson"] = None):
         self.geo_location = geo_location
+
         super().__init__(action="setGeoLocation")
 
     @classmethod
@@ -639,6 +656,7 @@ class ChannelSetRolesAction(ChannelUpdateAction):
 
     def __init__(self, *, roles: typing.List["ChannelRoleEnum"]):
         self.roles = roles
+
         super().__init__(action="setRoles")
 
     @classmethod

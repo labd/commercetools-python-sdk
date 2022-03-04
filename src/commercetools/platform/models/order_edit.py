@@ -244,6 +244,7 @@ class OrderEdit(BaseResource):
         self.custom = custom
         self.result = result
         self.comment = comment
+
         super().__init__(
             id=id,
             version=version,
@@ -270,6 +271,7 @@ class OrderEditApply(_BaseType):
     def __init__(self, *, edit_version: int, resource_version: int):
         self.edit_version = edit_version
         self.resource_version = resource_version
+
         super().__init__()
 
     @classmethod
@@ -314,6 +316,7 @@ class OrderEditDraft(_BaseType):
         self.custom = custom
         self.comment = comment
         self.dry_run = dry_run
+
         super().__init__()
 
     @classmethod
@@ -349,6 +352,7 @@ class OrderEditPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -370,6 +374,7 @@ class OrderEditReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["OrderEdit"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.ORDER_EDIT)
 
     @classmethod
@@ -410,6 +415,7 @@ class OrderEditResult(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -452,6 +458,7 @@ class OrderEditApplied(OrderEditResult):
         self.applied_at = applied_at
         self.excerpt_before_edit = excerpt_before_edit
         self.excerpt_after_edit = excerpt_after_edit
+
         super().__init__(type="Applied")
 
     @classmethod
@@ -488,6 +495,7 @@ class OrderEditPreviewFailure(OrderEditResult):
 
     def __init__(self, *, errors: typing.List["ErrorObject"]):
         self.errors = errors
+
         super().__init__(type="PreviewFailure")
 
     @classmethod
@@ -513,6 +521,7 @@ class OrderEditPreviewSuccess(OrderEditResult):
     ):
         self.preview = preview
         self.message_payloads = message_payloads
+
         super().__init__(type="PreviewSuccess")
 
     @classmethod
@@ -544,6 +553,7 @@ class OrderEditUpdate(_BaseType):
         self.version = version
         self.actions = actions
         self.dry_run = dry_run
+
         super().__init__()
 
     @classmethod
@@ -563,6 +573,7 @@ class OrderEditUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -613,6 +624,7 @@ class OrderExcerpt(_BaseType):
         self.total_price = total_price
         self.taxed_price = taxed_price
         self.version = version
+
         super().__init__()
 
     @classmethod
@@ -735,6 +747,7 @@ class OrderEditAddStagedActionAction(OrderEditUpdateAction):
 
     def __init__(self, *, staged_action: "StagedOrderUpdateAction"):
         self.staged_action = staged_action
+
         super().__init__(action="addStagedAction")
 
     @classmethod
@@ -756,6 +769,7 @@ class OrderEditSetCommentAction(OrderEditUpdateAction):
 
     def __init__(self, *, comment: typing.Optional[str] = None):
         self.comment = comment
+
         super().__init__(action="setComment")
 
     @classmethod
@@ -783,6 +797,7 @@ class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -814,6 +829,7 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -836,6 +852,7 @@ class OrderEditSetKeyAction(OrderEditUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -856,6 +873,7 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 
     def __init__(self, *, staged_actions: typing.List["StagedOrderUpdateAction"]):
         self.staged_actions = staged_actions
+
         super().__init__(action="setStagedActions")
 
     @classmethod
@@ -903,6 +921,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         self.tax_category = tax_category
         self.custom = custom
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="addCustomLineItem")
 
     @classmethod
@@ -938,6 +957,7 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
         self.address = address
         self.parcels = parcels
         self.custom = custom
+
         super().__init__(action="addDelivery")
 
     @classmethod
@@ -959,6 +979,7 @@ class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
 
     def __init__(self, *, code: str):
         self.code = code
+
         super().__init__(action="addDiscountCode")
 
     @classmethod
@@ -980,6 +1001,7 @@ class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addItemShippingAddress")
 
     @classmethod
@@ -1043,6 +1065,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details = shipping_details
+
         super().__init__(action="addLineItem")
 
     @classmethod
@@ -1077,6 +1100,7 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+
         super().__init__(action="addParcelToDelivery")
 
     @classmethod
@@ -1098,6 +1122,7 @@ class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="addPayment")
 
     @classmethod
@@ -1129,6 +1154,7 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
         self.return_tracking_id = return_tracking_id
         self.items = items
         self.return_date = return_date
+
         super().__init__(action="addReturnInfo")
 
     @classmethod
@@ -1162,6 +1188,7 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
         self.shopping_list = shopping_list
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
+
         super().__init__(action="addShoppingList")
 
     @classmethod
@@ -1187,6 +1214,7 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     def __init__(self, *, custom_line_item_id: str, money: "Money"):
         self.custom_line_item_id = custom_line_item_id
         self.money = money
+
         super().__init__(action="changeCustomLineItemMoney")
 
     @classmethod
@@ -1214,6 +1242,7 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
     def __init__(self, *, custom_line_item_id: str, quantity: float):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeCustomLineItemQuantity")
 
     @classmethod
@@ -1254,6 +1283,7 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
+
         super().__init__(action="changeLineItemQuantity")
 
     @classmethod
@@ -1275,6 +1305,7 @@ class StagedOrderChangeOrderStateAction(StagedOrderUpdateAction):
 
     def __init__(self, *, order_state: "OrderState"):
         self.order_state = order_state
+
         super().__init__(action="changeOrderState")
 
     @classmethod
@@ -1296,6 +1327,7 @@ class StagedOrderChangePaymentStateAction(StagedOrderUpdateAction):
 
     def __init__(self, *, payment_state: typing.Optional["PaymentState"] = None):
         self.payment_state = payment_state
+
         super().__init__(action="changePaymentState")
 
     @classmethod
@@ -1317,6 +1349,7 @@ class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
 
     def __init__(self, *, shipment_state: typing.Optional["ShipmentState"] = None):
         self.shipment_state = shipment_state
+
         super().__init__(action="changeShipmentState")
 
     @classmethod
@@ -1338,6 +1371,7 @@ class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
 
     def __init__(self, *, tax_calculation_mode: "TaxCalculationMode"):
         self.tax_calculation_mode = tax_calculation_mode
+
         super().__init__(action="changeTaxCalculationMode")
 
     @classmethod
@@ -1359,6 +1393,7 @@ class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
 
     def __init__(self, *, tax_mode: "TaxMode"):
         self.tax_mode = tax_mode
+
         super().__init__(action="changeTaxMode")
 
     @classmethod
@@ -1380,6 +1415,7 @@ class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
 
     def __init__(self, *, tax_rounding_mode: "RoundingMode"):
         self.tax_rounding_mode = tax_rounding_mode
+
         super().__init__(action="changeTaxRoundingMode")
 
     @classmethod
@@ -1403,6 +1439,7 @@ class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
     def __init__(self, *, custom_line_item_id: str, state: typing.List["ItemState"]):
         self.custom_line_item_id = custom_line_item_id
         self.state = state
+
         super().__init__(action="importCustomLineItemState")
 
     @classmethod
@@ -1430,6 +1467,7 @@ class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
     def __init__(self, *, line_item_id: str, state: typing.List["ItemState"]):
         self.line_item_id = line_item_id
         self.state = state
+
         super().__init__(action="importLineItemState")
 
     @classmethod
@@ -1451,6 +1489,7 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
 
     def __init__(self, *, custom_line_item_id: str):
         self.custom_line_item_id = custom_line_item_id
+
         super().__init__(action="removeCustomLineItem")
 
     @classmethod
@@ -1472,6 +1511,7 @@ class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
 
     def __init__(self, *, delivery_id: str):
         self.delivery_id = delivery_id
+
         super().__init__(action="removeDelivery")
 
     @classmethod
@@ -1493,6 +1533,7 @@ class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
         self.discount_code = discount_code
+
         super().__init__(action="removeDiscountCode")
 
     @classmethod
@@ -1514,6 +1555,7 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 
     def __init__(self, *, address_key: str):
         self.address_key = address_key
+
         super().__init__(action="removeItemShippingAddress")
 
     @classmethod
@@ -1557,6 +1599,7 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details_to_remove = shipping_details_to_remove
+
         super().__init__(action="removeLineItem")
 
     @classmethod
@@ -1578,6 +1621,7 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
 
     def __init__(self, *, parcel_id: str):
         self.parcel_id = parcel_id
+
         super().__init__(action="removeParcelFromDelivery")
 
     @classmethod
@@ -1599,6 +1643,7 @@ class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="removePayment")
 
     @classmethod
@@ -1620,6 +1665,7 @@ class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setBillingAddress")
 
     @classmethod
@@ -1647,6 +1693,7 @@ class StagedOrderSetBillingAddressCustomFieldAction(StagedOrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setBillingAddressCustomField")
 
     @classmethod
@@ -1682,6 +1729,7 @@ class StagedOrderSetBillingAddressCustomTypeAction(StagedOrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setBillingAddressCustomType")
 
     @classmethod
@@ -1707,6 +1755,7 @@ class StagedOrderSetCountryAction(StagedOrderUpdateAction):
 
     def __init__(self, *, country: typing.Optional[str] = None):
         self.country = country
+
         super().__init__(action="setCountry")
 
     @classmethod
@@ -1734,6 +1783,7 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -1769,6 +1819,7 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomLineItemCustomField")
 
     @classmethod
@@ -1807,6 +1858,7 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomLineItemCustomType")
 
     @classmethod
@@ -1839,6 +1891,7 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
     ):
         self.custom_line_item_id = custom_line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setCustomLineItemShippingDetails")
 
     @classmethod
@@ -1871,6 +1924,7 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setCustomLineItemTaxAmount")
 
     @classmethod
@@ -1903,6 +1957,7 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setCustomLineItemTaxRate")
 
     @classmethod
@@ -1938,6 +1993,7 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
         self.shipping_rate = shipping_rate
         self.tax_category = tax_category
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setCustomShippingMethod")
 
     @classmethod
@@ -1969,6 +2025,7 @@ class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -1990,6 +2047,7 @@ class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
 
     def __init__(self, *, email: typing.Optional[str] = None):
         self.email = email
+
         super().__init__(action="setCustomerEmail")
 
     @classmethod
@@ -2016,6 +2074,7 @@ class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ):
         self.customer_group = customer_group
+
         super().__init__(action="setCustomerGroup")
 
     @classmethod
@@ -2037,6 +2096,7 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
 
     def __init__(self, *, customer_id: typing.Optional[str] = None):
         self.customer_id = customer_id
+
         super().__init__(action="setCustomerId")
 
     @classmethod
@@ -2062,6 +2122,7 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
     ):
         self.delivery_id = delivery_id
         self.address = address
+
         super().__init__(action="setDeliveryAddress")
 
     @classmethod
@@ -2093,6 +2154,7 @@ class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
         self.delivery_id = delivery_id
         self.name = name
         self.value = value
+
         super().__init__(action="setDeliveryAddressCustomField")
 
     @classmethod
@@ -2131,6 +2193,7 @@ class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
         self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setDeliveryAddressCustomType")
 
     @classmethod
@@ -2166,6 +2229,7 @@ class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
         self.delivery_id = delivery_id
         self.name = name
         self.value = value
+
         super().__init__(action="setDeliveryCustomField")
 
     @classmethod
@@ -2200,6 +2264,7 @@ class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
         self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setDeliveryCustomType")
 
     @classmethod
@@ -2223,6 +2288,7 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
     def __init__(self, *, delivery_id: str, items: typing.List["DeliveryItem"]):
         self.delivery_id = delivery_id
         self.items = items
+
         super().__init__(action="setDeliveryItems")
 
     @classmethod
@@ -2254,6 +2320,7 @@ class StagedOrderSetItemShippingAddressCustomFieldAction(StagedOrderUpdateAction
         self.address_key = address_key
         self.name = name
         self.value = value
+
         super().__init__(action="setItemShippingAddressCustomField")
 
     @classmethod
@@ -2292,6 +2359,7 @@ class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction)
         self.address_key = address_key
         self.type = type
         self.fields = fields
+
         super().__init__(action="setItemShippingAddressCustomType")
 
     @classmethod
@@ -2327,6 +2395,7 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -2361,6 +2430,7 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -2390,6 +2460,7 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.distribution_channel = distribution_channel
+
         super().__init__(action="setLineItemDistributionChannel")
 
     @classmethod
@@ -2421,6 +2492,7 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_price = external_price
+
         super().__init__(action="setLineItemPrice")
 
     @classmethod
@@ -2449,6 +2521,7 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setLineItemShippingDetails")
 
     @classmethod
@@ -2481,6 +2554,7 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setLineItemTaxAmount")
 
     @classmethod
@@ -2509,6 +2583,7 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setLineItemTaxRate")
 
     @classmethod
@@ -2537,6 +2612,7 @@ class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_total_price = external_total_price
+
         super().__init__(action="setLineItemTotalPrice")
 
     @classmethod
@@ -2558,6 +2634,7 @@ class StagedOrderSetLocaleAction(StagedOrderUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -2579,6 +2656,7 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
 
     def __init__(self, *, order_number: typing.Optional[str] = None):
         self.order_number = order_number
+
         super().__init__(action="setOrderNumber")
 
     @classmethod
@@ -2609,6 +2687,7 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
     ):
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions
+
         super().__init__(action="setOrderTotalTax")
 
     @classmethod
@@ -2640,6 +2719,7 @@ class StagedOrderSetParcelCustomFieldAction(StagedOrderUpdateAction):
         self.parcel_id = parcel_id
         self.name = name
         self.value = value
+
         super().__init__(action="setParcelCustomField")
 
     @classmethod
@@ -2674,6 +2754,7 @@ class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
         self.parcel_id = parcel_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setParcelCustomType")
 
     @classmethod
@@ -2697,6 +2778,7 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
     def __init__(self, *, parcel_id: str, items: typing.List["DeliveryItem"]):
         self.parcel_id = parcel_id
         self.items = items
+
         super().__init__(action="setParcelItems")
 
     @classmethod
@@ -2725,6 +2807,7 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
     ):
         self.parcel_id = parcel_id
         self.measurements = measurements
+
         super().__init__(action="setParcelMeasurements")
 
     @classmethod
@@ -2750,6 +2833,7 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
     ):
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
+
         super().__init__(action="setParcelTrackingData")
 
     @classmethod
@@ -2773,6 +2857,7 @@ class StagedOrderSetReturnInfoAction(StagedOrderUpdateAction):
         self, *, items: typing.Optional[typing.List["ReturnInfoDraft"]] = None
     ):
         self.items = items
+
         super().__init__(action="setReturnInfo")
 
     @classmethod
@@ -2808,6 +2893,7 @@ class StagedOrderSetReturnItemCustomFieldAction(StagedOrderUpdateAction):
         self.return_item_id = return_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setReturnItemCustomField")
 
     @classmethod
@@ -2842,6 +2928,7 @@ class StagedOrderSetReturnItemCustomTypeAction(StagedOrderUpdateAction):
         self.return_item_id = return_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setReturnItemCustomType")
 
     @classmethod
@@ -2865,6 +2952,7 @@ class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
     def __init__(self, *, return_item_id: str, payment_state: "ReturnPaymentState"):
         self.return_item_id = return_item_id
         self.payment_state = payment_state
+
         super().__init__(action="setReturnPaymentState")
 
     @classmethod
@@ -2888,6 +2976,7 @@ class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
     def __init__(self, *, return_item_id: str, shipment_state: "ReturnShipmentState"):
         self.return_item_id = return_item_id
         self.shipment_state = shipment_state
+
         super().__init__(action="setReturnShipmentState")
 
     @classmethod
@@ -2909,6 +2998,7 @@ class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setShippingAddress")
 
     @classmethod
@@ -2949,6 +3039,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
         self.shipping_rate = shipping_rate
         self.tax_category = tax_category
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingAddressAndCustomShippingMethod")
 
     @classmethod
@@ -2988,6 +3079,7 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
         self.address = address
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingAddressAndShippingMethod")
 
     @classmethod
@@ -3019,6 +3111,7 @@ class StagedOrderSetShippingAddressCustomFieldAction(StagedOrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setShippingAddressCustomField")
 
     @classmethod
@@ -3054,6 +3147,7 @@ class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setShippingAddressCustomType")
 
     @classmethod
@@ -3086,6 +3180,7 @@ class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingMethod")
 
     @classmethod
@@ -3109,6 +3204,7 @@ class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
         self, *, external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setShippingMethodTaxAmount")
 
     @classmethod
@@ -3136,6 +3232,7 @@ class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
         self, *, external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingMethodTaxRate")
 
     @classmethod
@@ -3159,6 +3256,7 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
         self, *, shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None
     ):
         self.shipping_rate_input = shipping_rate_input
+
         super().__init__(action="setShippingRateInput")
 
     @classmethod
@@ -3198,6 +3296,7 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
         self.from_state = from_state
         self.to_state = to_state
         self.actual_transition_date = actual_transition_date
+
         super().__init__(action="transitionCustomLineItemState")
 
     @classmethod
@@ -3241,6 +3340,7 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
         self.from_state = from_state
         self.to_state = to_state
         self.actual_transition_date = actual_transition_date
+
         super().__init__(action="transitionLineItemState")
 
     @classmethod
@@ -3267,6 +3367,7 @@ class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
     ):
         self.state = state
         self.force = force
+
         super().__init__(action="transitionState")
 
     @classmethod
@@ -3288,6 +3389,7 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="updateItemShippingAddress")
 
     @classmethod
@@ -3324,6 +3426,7 @@ class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
         self.channel = channel
         self.external_id = external_id
         self.synced_at = synced_at
+
         super().__init__(action="updateSyncInfo")
 
     @classmethod

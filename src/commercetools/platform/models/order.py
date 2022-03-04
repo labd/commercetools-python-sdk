@@ -172,6 +172,7 @@ class StagedOrderUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -629,6 +630,7 @@ class Hit(_BaseType):
         self.id = id
         self.version = version
         self.relevance = relevance
+
         super().__init__()
 
     @classmethod
@@ -665,6 +667,7 @@ class OrderPagedSearchResponse(_BaseType):
         self.offset = offset
         self.limit = limit
         self.hits = hits
+
         super().__init__()
 
     @classmethod
@@ -708,6 +711,7 @@ class Delivery(_BaseType):
         self.parcels = parcels
         self.address = address
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -729,6 +733,7 @@ class DeliveryItem(_BaseType):
     def __init__(self, *, id: str, quantity: int):
         self.id = id
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -757,6 +762,7 @@ class DiscountedLineItemPriceDraft(_BaseType):
     ):
         self.value = value
         self.included_discounts = included_discounts
+
         super().__init__()
 
     @classmethod
@@ -780,6 +786,7 @@ class ItemState(_BaseType):
     def __init__(self, *, quantity: float, state: "StateReference"):
         self.quantity = quantity
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -844,6 +851,7 @@ class LineItemImportDraft(_BaseType):
         self.tax_rate = tax_rate
         self.custom = custom
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -1004,6 +1012,7 @@ class Order(BaseResource):
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
         self.refused_gifts = refused_gifts
+
         super().__init__(
             id=id,
             version=version,
@@ -1061,6 +1070,7 @@ class OrderFromCartDraft(_BaseType):
         self.shipment_state = shipment_state
         self.order_state = order_state
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -1169,6 +1179,7 @@ class OrderImportDraft(_BaseType):
         self.item_shipping_addresses = item_shipping_addresses
         self.store = store
         self.origin = origin
+
         super().__init__()
 
     @classmethod
@@ -1204,6 +1215,7 @@ class OrderPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -1225,6 +1237,7 @@ class OrderReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Order"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.ORDER)
 
     @classmethod
@@ -1286,6 +1299,7 @@ class OrderSearchRequest(_BaseType):
         self.sort = sort
         self.limit = limit
         self.offset = offset
+
         super().__init__()
 
     @classmethod
@@ -1314,6 +1328,7 @@ class OrderUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["OrderUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -1333,6 +1348,7 @@ class OrderUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -1600,6 +1616,7 @@ class Parcel(_BaseType):
         self.tracking_data = tracking_data
         self.items = items
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -1634,6 +1651,7 @@ class ParcelDraft(_BaseType):
         self.tracking_data = tracking_data
         self.items = items
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -1666,6 +1684,7 @@ class ParcelMeasurements(_BaseType):
         self.length_in_millimeter = length_in_millimeter
         self.width_in_millimeter = width_in_millimeter
         self.weight_in_gram = weight_in_gram
+
         super().__init__()
 
     @classmethod
@@ -1685,6 +1704,7 @@ class PaymentInfo(_BaseType):
 
     def __init__(self, *, payments: typing.List["PaymentReference"]):
         self.payments = payments
+
         super().__init__()
 
     @classmethod
@@ -1739,6 +1759,7 @@ class ProductVariantImportDraft(_BaseType):
         self.prices = prices
         self.attributes = attributes
         self.images = images
+
         super().__init__()
 
     @classmethod
@@ -1771,6 +1792,7 @@ class ReturnInfo(_BaseType):
         self.items = items
         self.return_tracking_id = return_tracking_id
         self.return_date = return_date
+
         super().__init__()
 
     @classmethod
@@ -1801,6 +1823,7 @@ class ReturnInfoDraft(_BaseType):
         self.items = items
         self.return_tracking_id = return_tracking_id
         self.return_date = return_date
+
         super().__init__()
 
     @classmethod
@@ -1849,6 +1872,7 @@ class ReturnItem(_BaseType):
         self.custom = custom
         self.last_modified_at = last_modified_at
         self.created_at = created_at
+
         super().__init__()
 
     @classmethod
@@ -1885,6 +1909,7 @@ class CustomLineItemReturnItem(ReturnItem):
         custom_line_item_id: str
     ):
         self.custom_line_item_id = custom_line_item_id
+
         super().__init__(
             id=id,
             quantity=quantity,
@@ -1928,6 +1953,7 @@ class LineItemReturnItem(ReturnItem):
         line_item_id: str
     ):
         self.line_item_id = line_item_id
+
         super().__init__(
             id=id,
             quantity=quantity,
@@ -1977,6 +2003,7 @@ class ReturnItemDraft(_BaseType):
         self.comment = comment
         self.shipment_state = shipment_state
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -2051,6 +2078,7 @@ class ShippingInfoImportDraft(_BaseType):
         self.deliveries = deliveries
         self.discounted_price = discounted_price
         self.shipping_method_state = shipping_method_state
+
         super().__init__()
 
     @classmethod
@@ -2084,6 +2112,7 @@ class SyncInfo(_BaseType):
         self.channel = channel
         self.external_id = external_id
         self.synced_at = synced_at
+
         super().__init__()
 
     @classmethod
@@ -2109,6 +2138,7 @@ class TaxedItemPriceDraft(_BaseType):
     def __init__(self, *, total_net: "Money", total_gross: "Money"):
         self.total_net = total_net
         self.total_gross = total_gross
+
         super().__init__()
 
     @classmethod
@@ -2147,6 +2177,7 @@ class TrackingData(_BaseType):
         self.provider = provider
         self.provider_transaction = provider_transaction
         self.is_return = is_return
+
         super().__init__()
 
     @classmethod
@@ -2180,6 +2211,7 @@ class OrderAddDeliveryAction(OrderUpdateAction):
         self.address = address
         self.parcels = parcels
         self.custom = custom
+
         super().__init__(action="addDelivery")
 
     @classmethod
@@ -2201,6 +2233,7 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addItemShippingAddress")
 
     @classmethod
@@ -2235,6 +2268,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+
         super().__init__(action="addParcelToDelivery")
 
     @classmethod
@@ -2256,6 +2290,7 @@ class OrderAddPaymentAction(OrderUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="addPayment")
 
     @classmethod
@@ -2285,6 +2320,7 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
         self.return_tracking_id = return_tracking_id
         self.items = items
         self.return_date = return_date
+
         super().__init__(action="addReturnInfo")
 
     @classmethod
@@ -2306,6 +2342,7 @@ class OrderChangeOrderStateAction(OrderUpdateAction):
 
     def __init__(self, *, order_state: "OrderState"):
         self.order_state = order_state
+
         super().__init__(action="changeOrderState")
 
     @classmethod
@@ -2327,6 +2364,7 @@ class OrderChangePaymentStateAction(OrderUpdateAction):
 
     def __init__(self, *, payment_state: typing.Optional["PaymentState"] = None):
         self.payment_state = payment_state
+
         super().__init__(action="changePaymentState")
 
     @classmethod
@@ -2348,6 +2386,7 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 
     def __init__(self, *, shipment_state: typing.Optional["ShipmentState"] = None):
         self.shipment_state = shipment_state
+
         super().__init__(action="changeShipmentState")
 
     @classmethod
@@ -2371,6 +2410,7 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
     def __init__(self, *, custom_line_item_id: str, state: typing.List["ItemState"]):
         self.custom_line_item_id = custom_line_item_id
         self.state = state
+
         super().__init__(action="importCustomLineItemState")
 
     @classmethod
@@ -2394,6 +2434,7 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
     def __init__(self, *, line_item_id: str, state: typing.List["ItemState"]):
         self.line_item_id = line_item_id
         self.state = state
+
         super().__init__(action="importLineItemState")
 
     @classmethod
@@ -2415,6 +2456,7 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
 
     def __init__(self, *, delivery_id: str):
         self.delivery_id = delivery_id
+
         super().__init__(action="removeDelivery")
 
     @classmethod
@@ -2436,6 +2478,7 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(self, *, address_key: str):
         self.address_key = address_key
+
         super().__init__(action="removeItemShippingAddress")
 
     @classmethod
@@ -2457,6 +2500,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
     def __init__(self, *, parcel_id: str):
         self.parcel_id = parcel_id
+
         super().__init__(action="removeParcelFromDelivery")
 
     @classmethod
@@ -2478,6 +2522,7 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="removePayment")
 
     @classmethod
@@ -2499,6 +2544,7 @@ class OrderSetBillingAddressAction(OrderUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setBillingAddress")
 
     @classmethod
@@ -2526,6 +2572,7 @@ class OrderSetBillingAddressCustomFieldAction(OrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setBillingAddressCustomField")
 
     @classmethod
@@ -2557,6 +2604,7 @@ class OrderSetBillingAddressCustomTypeAction(OrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setBillingAddressCustomType")
 
     @classmethod
@@ -2584,6 +2632,7 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -2619,6 +2668,7 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomLineItemCustomField")
 
     @classmethod
@@ -2653,6 +2703,7 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomLineItemCustomType")
 
     @classmethod
@@ -2681,6 +2732,7 @@ class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setCustomLineItemShippingDetails")
 
     @classmethod
@@ -2712,6 +2764,7 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -2733,6 +2786,7 @@ class OrderSetCustomerEmailAction(OrderUpdateAction):
 
     def __init__(self, *, email: typing.Optional[str] = None):
         self.email = email
+
         super().__init__(action="setCustomerEmail")
 
     @classmethod
@@ -2754,6 +2808,7 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
     def __init__(self, *, customer_id: typing.Optional[str] = None):
         self.customer_id = customer_id
+
         super().__init__(action="setCustomerId")
 
     @classmethod
@@ -2779,6 +2834,7 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
     ):
         self.delivery_id = delivery_id
         self.address = address
+
         super().__init__(action="setDeliveryAddress")
 
     @classmethod
@@ -2810,6 +2866,7 @@ class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
         self.delivery_id = delivery_id
         self.name = name
         self.value = value
+
         super().__init__(action="setDeliveryAddressCustomField")
 
     @classmethod
@@ -2844,6 +2901,7 @@ class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
         self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setDeliveryAddressCustomType")
 
     @classmethod
@@ -2875,6 +2933,7 @@ class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
         self.delivery_id = delivery_id
         self.name = name
         self.value = value
+
         super().__init__(action="setDeliveryCustomField")
 
     @classmethod
@@ -2909,6 +2968,7 @@ class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
         self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setDeliveryCustomType")
 
     @classmethod
@@ -2932,6 +2992,7 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
     def __init__(self, *, delivery_id: str, items: typing.List["DeliveryItem"]):
         self.delivery_id = delivery_id
         self.items = items
+
         super().__init__(action="setDeliveryItems")
 
     @classmethod
@@ -2963,6 +3024,7 @@ class OrderSetItemShippingAddressCustomFieldAction(OrderUpdateAction):
         self.address_key = address_key
         self.name = name
         self.value = value
+
         super().__init__(action="setItemShippingAddressCustomField")
 
     @classmethod
@@ -2997,6 +3059,7 @@ class OrderSetItemShippingAddressCustomTypeAction(OrderUpdateAction):
         self.address_key = address_key
         self.type = type
         self.fields = fields
+
         super().__init__(action="setItemShippingAddressCustomType")
 
     @classmethod
@@ -3028,6 +3091,7 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -3062,6 +3126,7 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -3090,6 +3155,7 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setLineItemShippingDetails")
 
     @classmethod
@@ -3111,6 +3177,7 @@ class OrderSetLocaleAction(OrderUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -3130,6 +3197,7 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 
     def __init__(self, *, order_number: typing.Optional[str] = None):
         self.order_number = order_number
+
         super().__init__(action="setOrderNumber")
 
     @classmethod
@@ -3161,6 +3229,7 @@ class OrderSetParcelCustomFieldAction(OrderUpdateAction):
         self.parcel_id = parcel_id
         self.name = name
         self.value = value
+
         super().__init__(action="setParcelCustomField")
 
     @classmethod
@@ -3195,6 +3264,7 @@ class OrderSetParcelCustomTypeAction(OrderUpdateAction):
         self.parcel_id = parcel_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setParcelCustomType")
 
     @classmethod
@@ -3218,6 +3288,7 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
     def __init__(self, *, parcel_id: str, items: typing.List["DeliveryItem"]):
         self.parcel_id = parcel_id
         self.items = items
+
         super().__init__(action="setParcelItems")
 
     @classmethod
@@ -3246,6 +3317,7 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
     ):
         self.parcel_id = parcel_id
         self.measurements = measurements
+
         super().__init__(action="setParcelMeasurements")
 
     @classmethod
@@ -3271,6 +3343,7 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
     ):
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
+
         super().__init__(action="setParcelTrackingData")
 
     @classmethod
@@ -3294,6 +3367,7 @@ class OrderSetReturnInfoAction(OrderUpdateAction):
         self, *, items: typing.Optional[typing.List["ReturnInfoDraft"]] = None
     ):
         self.items = items
+
         super().__init__(action="setReturnInfo")
 
     @classmethod
@@ -3329,6 +3403,7 @@ class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
         self.return_item_id = return_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setReturnItemCustomField")
 
     @classmethod
@@ -3363,6 +3438,7 @@ class OrderSetReturnItemCustomTypeAction(OrderUpdateAction):
         self.return_item_id = return_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setReturnItemCustomType")
 
     @classmethod
@@ -3386,6 +3462,7 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
     def __init__(self, *, return_item_id: str, payment_state: "ReturnPaymentState"):
         self.return_item_id = return_item_id
         self.payment_state = payment_state
+
         super().__init__(action="setReturnPaymentState")
 
     @classmethod
@@ -3409,6 +3486,7 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
     def __init__(self, *, return_item_id: str, shipment_state: "ReturnShipmentState"):
         self.return_item_id = return_item_id
         self.shipment_state = shipment_state
+
         super().__init__(action="setReturnShipmentState")
 
     @classmethod
@@ -3430,6 +3508,7 @@ class OrderSetShippingAddressAction(OrderUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setShippingAddress")
 
     @classmethod
@@ -3457,6 +3536,7 @@ class OrderSetShippingAddressCustomFieldAction(OrderUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setShippingAddressCustomField")
 
     @classmethod
@@ -3488,6 +3568,7 @@ class OrderSetShippingAddressCustomTypeAction(OrderUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setShippingAddressCustomType")
 
     @classmethod
@@ -3509,6 +3590,7 @@ class OrderSetStoreAction(OrderUpdateAction):
 
     def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
         self.store = store
+
         super().__init__(action="setStore")
 
     @classmethod
@@ -3546,6 +3628,7 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
         self.from_state = from_state
         self.to_state = to_state
         self.actual_transition_date = actual_transition_date
+
         super().__init__(action="transitionCustomLineItemState")
 
     @classmethod
@@ -3585,6 +3668,7 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
         self.from_state = from_state
         self.to_state = to_state
         self.actual_transition_date = actual_transition_date
+
         super().__init__(action="transitionLineItemState")
 
     @classmethod
@@ -3611,6 +3695,7 @@ class OrderTransitionStateAction(OrderUpdateAction):
     ):
         self.state = state
         self.force = force
+
         super().__init__(action="transitionState")
 
     @classmethod
@@ -3632,6 +3717,7 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="updateItemShippingAddress")
 
     @classmethod
@@ -3664,6 +3750,7 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
         self.channel = channel
         self.external_id = external_id
         self.synced_at = synced_at
+
         super().__init__(action="updateSyncInfo")
 
     @classmethod

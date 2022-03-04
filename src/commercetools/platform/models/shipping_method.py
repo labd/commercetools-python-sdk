@@ -73,6 +73,7 @@ class PriceFunction(_BaseType):
     def __init__(self, *, currency_code: str, function: str):
         self.currency_code = currency_code
         self.function = function
+
         super().__init__()
 
     @classmethod
@@ -138,6 +139,7 @@ class ShippingMethod(BaseResource):
         self.is_default = is_default
         self.predicate = predicate
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -195,6 +197,7 @@ class ShippingMethodDraft(_BaseType):
         self.is_default = is_default
         self.predicate = predicate
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -230,6 +233,7 @@ class ShippingMethodPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -251,6 +255,7 @@ class ShippingMethodReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["ShippingMethod"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.SHIPPING_METHOD)
 
     @classmethod
@@ -297,6 +302,7 @@ class ShippingMethodUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -316,6 +322,7 @@ class ShippingMethodUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -426,6 +433,7 @@ class ShippingRate(_BaseType):
         self.free_above = free_above
         self.is_matching = is_matching
         self.tiers = tiers
+
         super().__init__()
 
     @classmethod
@@ -459,6 +467,7 @@ class ShippingRateDraft(_BaseType):
         self.price = price
         self.free_above = free_above
         self.tiers = tiers
+
         super().__init__()
 
     @classmethod
@@ -479,6 +488,7 @@ class ShippingRatePriceTier(_BaseType):
 
     def __init__(self, *, type: "ShippingRateTierType"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -515,6 +525,7 @@ class CartClassificationTier(ShippingRatePriceTier):
         self.value = value
         self.price = price
         self.is_matching = is_matching
+
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
 
     @classmethod
@@ -551,6 +562,7 @@ class CartScoreTier(ShippingRatePriceTier):
         self.price = price
         self.price_function = price_function
         self.is_matching = is_matching
+
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     @classmethod
@@ -582,6 +594,7 @@ class CartValueTier(ShippingRatePriceTier):
         self.minimum_cent_amount = minimum_cent_amount
         self.price = price
         self.is_matching = is_matching
+
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     @classmethod
@@ -614,6 +627,7 @@ class ZoneRate(_BaseType):
     ):
         self.zone = zone
         self.shipping_rates = shipping_rates
+
         super().__init__()
 
     @classmethod
@@ -641,6 +655,7 @@ class ZoneRateDraft(_BaseType):
     ):
         self.zone = zone
         self.shipping_rates = shipping_rates
+
         super().__init__()
 
     @classmethod
@@ -664,6 +679,7 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
     ):
         self.zone = zone
         self.shipping_rate = shipping_rate
+
         super().__init__(action="addShippingRate")
 
     @classmethod
@@ -685,6 +701,7 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, zone: "ZoneResourceIdentifier"):
         self.zone = zone
+
         super().__init__(action="addZone")
 
     @classmethod
@@ -707,6 +724,7 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, is_default: bool):
         self.is_default = is_default
+
         super().__init__(action="changeIsDefault")
 
     @classmethod
@@ -728,6 +746,7 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -749,6 +768,7 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, tax_category: "TaxCategoryResourceIdentifier"):
         self.tax_category = tax_category
+
         super().__init__(action="changeTaxCategory")
 
     @classmethod
@@ -778,6 +798,7 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
     ):
         self.zone = zone
         self.shipping_rate = shipping_rate
+
         super().__init__(action="removeShippingRate")
 
     @classmethod
@@ -803,6 +824,7 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, zone: "ZoneResourceIdentifier"):
         self.zone = zone
+
         super().__init__(action="removeZone")
 
     @classmethod
@@ -830,6 +852,7 @@ class ShippingMethodSetCustomFieldAction(ShippingMethodUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -861,6 +884,7 @@ class ShippingMethodSetCustomTypeAction(ShippingMethodUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -882,6 +906,7 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -904,6 +929,7 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -927,6 +953,7 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
         self, *, localized_description: typing.Optional["LocalizedString"] = None
     ):
         self.localized_description = localized_description
+
         super().__init__(action="setLocalizedDescription")
 
     @classmethod
@@ -952,6 +979,7 @@ class ShippingMethodSetLocalizedNameAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, localized_name: typing.Optional["LocalizedString"] = None):
         self.localized_name = localized_name
+
         super().__init__(action="setLocalizedName")
 
     @classmethod
@@ -975,6 +1003,7 @@ class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
 
     def __init__(self, *, predicate: typing.Optional[str] = None):
         self.predicate = predicate
+
         super().__init__(action="setPredicate")
 
     @classmethod

@@ -112,6 +112,7 @@ class Review(BaseResource):
         self.state = state
         self.customer = customer
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -184,6 +185,7 @@ class ReviewDraft(_BaseType):
         self.rating = rating
         self.customer = customer
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -219,6 +221,7 @@ class ReviewPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -264,6 +267,7 @@ class ReviewRatingStatistics(_BaseType):
         self.lowest_rating = lowest_rating
         self.count = count
         self.ratings_distribution = ratings_distribution
+
         super().__init__()
 
     @classmethod
@@ -285,6 +289,7 @@ class ReviewReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Review"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.REVIEW)
 
     @classmethod
@@ -327,6 +332,7 @@ class ReviewUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ReviewUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -346,6 +352,7 @@ class ReviewUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -407,6 +414,7 @@ class ReviewSetAuthorNameAction(ReviewUpdateAction):
 
     def __init__(self, *, author_name: typing.Optional[str] = None):
         self.author_name = author_name
+
         super().__init__(action="setAuthorName")
 
     @classmethod
@@ -434,6 +442,7 @@ class ReviewSetCustomFieldAction(ReviewUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -465,6 +474,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -490,6 +500,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
         self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ):
         self.customer = customer
+
         super().__init__(action="setCustomer")
 
     @classmethod
@@ -512,6 +523,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -532,6 +544,7 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -553,6 +566,7 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 
     def __init__(self, *, rating: typing.Optional[int] = None):
         self.rating = rating
+
         super().__init__(action="setRating")
 
     @classmethod
@@ -579,6 +593,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
         target: typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"]
     ):
         self.target = target
+
         super().__init__(action="setTarget")
 
     @classmethod
@@ -599,6 +614,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
 
     def __init__(self, *, text: typing.Optional[str] = None):
         self.text = text
+
         super().__init__(action="setText")
 
     @classmethod
@@ -619,6 +635,7 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
     def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
+
         super().__init__(action="setTitle")
 
     @classmethod
@@ -642,6 +659,7 @@ class ReviewTransitionStateAction(ReviewUpdateAction):
     ):
         self.state = state
         self.force = force
+
         super().__init__(action="transitionState")
 
     @classmethod

@@ -54,6 +54,7 @@ class AssignedProductReference(_BaseType):
 
     def __init__(self, *, product: "ProductReference"):
         self.product = product
+
         super().__init__()
 
     @classmethod
@@ -76,6 +77,7 @@ class AssignedProductSelection(_BaseType):
 
     def __init__(self, *, product_selection: "ProductSelectionReference"):
         self.product_selection = product_selection
+
         super().__init__()
 
     @classmethod
@@ -125,6 +127,7 @@ class AssignedProductSelectionPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -185,6 +188,7 @@ class ProductSelection(BaseResource):
         self.product_count = product_count
         self.type = type
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -220,6 +224,7 @@ class ProductSelectionAssignment(_BaseType):
     ):
         self.product = product
         self.product_selection = product_selection
+
         super().__init__()
 
     @classmethod
@@ -254,6 +259,7 @@ class ProductSelectionDraft(_BaseType):
         self.key = key
         self.name = name
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -301,6 +307,7 @@ class ProductSelectionPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -350,6 +357,7 @@ class ProductSelectionProductPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -376,6 +384,7 @@ class ProductSelectionReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductSelection"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_SELECTION)
 
     @classmethod
@@ -419,6 +428,7 @@ class ProductSelectionType(_BaseType):
 
     def __init__(self, *, type: "ProductSelectionTypeEnum"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -440,6 +450,7 @@ class IndividualProductSelectionType(ProductSelectionType):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(type=ProductSelectionTypeEnum.INDIVIDUAL)
 
     @classmethod
@@ -471,6 +482,7 @@ class ProductSelectionUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -492,6 +504,7 @@ class ProductSelectionUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -572,6 +585,7 @@ class ProductsInStorePagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -594,6 +608,7 @@ class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
 
     def __init__(self, *, product: "ProductResourceIdentifier"):
         self.product = product
+
         super().__init__(action="addProduct")
 
     @classmethod
@@ -616,6 +631,7 @@ class ProductSelectionChangeNameAction(ProductSelectionUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -638,6 +654,7 @@ class ProductSelectionRemoveProductAction(ProductSelectionUpdateAction):
 
     def __init__(self, *, product: "ProductResourceIdentifier"):
         self.product = product
+
         super().__init__(action="removeProduct")
 
     @classmethod
@@ -669,6 +686,7 @@ class ProductSelectionSetCustomFieldAction(ProductSelectionUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -704,6 +722,7 @@ class ProductSelectionSetCustomTypeAction(ProductSelectionUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -730,6 +749,7 @@ class ProductSelectionSetKeyAction(ProductSelectionUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod

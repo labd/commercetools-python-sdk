@@ -295,6 +295,7 @@ class Cart(BaseResource):
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
         self.total_line_item_quantity = total_line_item_quantity
+
         super().__init__(
             id=id,
             version=version,
@@ -430,6 +431,7 @@ class CartDraft(_BaseType):
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
         self.discount_codes = discount_codes
+
         super().__init__()
 
     @classmethod
@@ -470,6 +472,7 @@ class CartPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -491,6 +494,7 @@ class CartReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Cart"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CART)
 
     @classmethod
@@ -539,6 +543,7 @@ class CartUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["CartUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -558,6 +563,7 @@ class CartUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -889,6 +895,7 @@ class CustomLineItem(_BaseType):
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.custom = custom
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -939,6 +946,7 @@ class CustomLineItemDraft(_BaseType):
         self.external_tax_rate = external_tax_rate
         self.custom = custom
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -962,6 +970,7 @@ class DiscountCodeInfo(_BaseType):
     ):
         self.discount_code = discount_code
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -994,6 +1003,7 @@ class DiscountedLineItemPortion(_BaseType):
     ):
         self.discount = discount
         self.discounted_amount = discounted_amount
+
         super().__init__()
 
     @classmethod
@@ -1022,6 +1032,7 @@ class DiscountedLineItemPrice(_BaseType):
     ):
         self.value = value
         self.included_discounts = included_discounts
+
         super().__init__()
 
     @classmethod
@@ -1045,6 +1056,7 @@ class DiscountedLineItemPriceForQuantity(_BaseType):
     def __init__(self, *, quantity: float, discounted_price: "DiscountedLineItemPrice"):
         self.quantity = quantity
         self.discounted_price = discounted_price
+
         super().__init__()
 
     @classmethod
@@ -1068,6 +1080,7 @@ class ExternalLineItemTotalPrice(_BaseType):
     def __init__(self, *, price: "Money", total_price: "Money"):
         self.price = price
         self.total_price = total_price
+
         super().__init__()
 
     @classmethod
@@ -1092,6 +1105,7 @@ class ExternalTaxAmountDraft(_BaseType):
     def __init__(self, *, total_gross: "Money", tax_rate: "ExternalTaxRateDraft"):
         self.total_gross = total_gross
         self.tax_rate = tax_rate
+
         super().__init__()
 
     @classmethod
@@ -1142,6 +1156,7 @@ class ExternalTaxRateDraft(_BaseType):
         self.state = state
         self.sub_rates = sub_rates
         self.included_in_price = included_in_price
+
         super().__init__()
 
     @classmethod
@@ -1174,6 +1189,7 @@ class ItemShippingDetails(_BaseType):
     def __init__(self, *, targets: typing.List["ItemShippingTarget"], valid: bool):
         self.targets = targets
         self.valid = valid
+
         super().__init__()
 
     @classmethod
@@ -1197,6 +1213,7 @@ class ItemShippingDetailsDraft(_BaseType):
 
     def __init__(self, *, targets: typing.List["ItemShippingTarget"]):
         self.targets = targets
+
         super().__init__()
 
     @classmethod
@@ -1224,6 +1241,7 @@ class ItemShippingTarget(_BaseType):
     def __init__(self, *, address_key: str, quantity: float):
         self.address_key = address_key
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -1344,6 +1362,7 @@ class LineItem(_BaseType):
         self.custom = custom
         self.shipping_details = shipping_details
         self.last_modified_at = last_modified_at
+
         super().__init__()
 
     @classmethod
@@ -1415,6 +1434,7 @@ class LineItemDraft(_BaseType):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -1453,6 +1473,7 @@ class ReplicaCartDraft(_BaseType):
     ):
         self.reference = reference
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -1517,6 +1538,7 @@ class ShippingInfo(_BaseType):
         self.deliveries = deliveries
         self.discounted_price = discounted_price
         self.shipping_method_state = shipping_method_state
+
         super().__init__()
 
     @classmethod
@@ -1541,6 +1563,7 @@ class ShippingRateInput(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -1567,6 +1590,7 @@ class ClassificationShippingRateInput(ShippingRateInput):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__(type="Classification")
 
     @classmethod
@@ -1588,6 +1612,7 @@ class ScoreShippingRateInput(ShippingRateInput):
 
     def __init__(self, *, score: float):
         self.score = score
+
         super().__init__(type="Score")
 
     @classmethod
@@ -1609,6 +1634,7 @@ class ShippingRateInputDraft(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -1635,6 +1661,7 @@ class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__(type="Classification")
 
     @classmethod
@@ -1656,6 +1683,7 @@ class ScoreShippingRateInputDraft(ShippingRateInputDraft):
 
     def __init__(self, *, score: float):
         self.score = score
+
         super().__init__(type="Score")
 
     @classmethod
@@ -1696,6 +1724,7 @@ class TaxPortion(_BaseType):
         self.name = name
         self.rate = rate
         self.amount = amount
+
         super().__init__()
 
     @classmethod
@@ -1723,6 +1752,7 @@ class TaxPortionDraft(_BaseType):
         self.name = name
         self.rate = rate
         self.amount = amount
+
         super().__init__()
 
     @classmethod
@@ -1745,6 +1775,7 @@ class TaxedItemPrice(_BaseType):
     def __init__(self, *, total_net: "TypedMoney", total_gross: "TypedMoney"):
         self.total_net = total_net
         self.total_gross = total_gross
+
         super().__init__()
 
     @classmethod
@@ -1775,6 +1806,7 @@ class TaxedPrice(_BaseType):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
+
         super().__init__()
 
     @classmethod
@@ -1808,6 +1840,7 @@ class TaxedPriceDraft(_BaseType):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
+
         super().__init__()
 
     @classmethod
@@ -1853,6 +1886,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         self.tax_category = tax_category
         self.custom = custom
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="addCustomLineItem")
 
     @classmethod
@@ -1874,6 +1908,7 @@ class CartAddDiscountCodeAction(CartUpdateAction):
 
     def __init__(self, *, code: str):
         self.code = code
+
         super().__init__(action="addDiscountCode")
 
     @classmethod
@@ -1895,6 +1930,7 @@ class CartAddItemShippingAddressAction(CartUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addItemShippingAddress")
 
     @classmethod
@@ -1955,6 +1991,7 @@ class CartAddLineItemAction(CartUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details = shipping_details
+
         super().__init__(action="addLineItem")
 
     @classmethod
@@ -1974,6 +2011,7 @@ class CartAddPaymentAction(CartUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="addPayment")
 
     @classmethod
@@ -2005,6 +2043,7 @@ class CartAddShoppingListAction(CartUpdateAction):
         self.shopping_list = shopping_list
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
+
         super().__init__(action="addShoppingList")
 
     @classmethod
@@ -2033,6 +2072,7 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateActio
     ):
         self.custom_line_item_id = custom_line_item_id
         self.targets_delta = targets_delta
+
         super().__init__(action="applyDeltaToCustomLineItemShippingDetailsTargets")
 
     @classmethod
@@ -2066,6 +2106,7 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.targets_delta = targets_delta
+
         super().__init__(action="applyDeltaToLineItemShippingDetailsTargets")
 
     @classmethod
@@ -2095,6 +2136,7 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
     def __init__(self, *, custom_line_item_id: str, money: "Money"):
         self.custom_line_item_id = custom_line_item_id
         self.money = money
+
         super().__init__(action="changeCustomLineItemMoney")
 
     @classmethod
@@ -2118,6 +2160,7 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
     def __init__(self, *, custom_line_item_id: str, quantity: int):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeCustomLineItemQuantity")
 
     @classmethod
@@ -2154,6 +2197,7 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
+
         super().__init__(action="changeLineItemQuantity")
 
     @classmethod
@@ -2175,6 +2219,7 @@ class CartChangeTaxCalculationModeAction(CartUpdateAction):
 
     def __init__(self, *, tax_calculation_mode: "TaxCalculationMode"):
         self.tax_calculation_mode = tax_calculation_mode
+
         super().__init__(action="changeTaxCalculationMode")
 
     @classmethod
@@ -2196,6 +2241,7 @@ class CartChangeTaxModeAction(CartUpdateAction):
 
     def __init__(self, *, tax_mode: "TaxMode"):
         self.tax_mode = tax_mode
+
         super().__init__(action="changeTaxMode")
 
     @classmethod
@@ -2217,6 +2263,7 @@ class CartChangeTaxRoundingModeAction(CartUpdateAction):
 
     def __init__(self, *, tax_rounding_mode: "RoundingMode"):
         self.tax_rounding_mode = tax_rounding_mode
+
         super().__init__(action="changeTaxRoundingMode")
 
     @classmethod
@@ -2242,6 +2289,7 @@ class CartRecalculateAction(CartUpdateAction):
 
     def __init__(self, *, update_product_data: typing.Optional[bool] = None):
         self.update_product_data = update_product_data
+
         super().__init__(action="recalculate")
 
     @classmethod
@@ -2261,6 +2309,7 @@ class CartRemoveCustomLineItemAction(CartUpdateAction):
 
     def __init__(self, *, custom_line_item_id: str):
         self.custom_line_item_id = custom_line_item_id
+
         super().__init__(action="removeCustomLineItem")
 
     @classmethod
@@ -2282,6 +2331,7 @@ class CartRemoveDiscountCodeAction(CartUpdateAction):
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
         self.discount_code = discount_code
+
         super().__init__(action="removeDiscountCode")
 
     @classmethod
@@ -2303,6 +2353,7 @@ class CartRemoveItemShippingAddressAction(CartUpdateAction):
 
     def __init__(self, *, address_key: str):
         self.address_key = address_key
+
         super().__init__(action="removeItemShippingAddress")
 
     @classmethod
@@ -2342,6 +2393,7 @@ class CartRemoveLineItemAction(CartUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details_to_remove = shipping_details_to_remove
+
         super().__init__(action="removeLineItem")
 
     @classmethod
@@ -2363,6 +2415,7 @@ class CartRemovePaymentAction(CartUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="removePayment")
 
     @classmethod
@@ -2385,6 +2438,7 @@ class CartSetAnonymousIdAction(CartUpdateAction):
 
     def __init__(self, *, anonymous_id: typing.Optional[str] = None):
         self.anonymous_id = anonymous_id
+
         super().__init__(action="setAnonymousId")
 
     @classmethod
@@ -2406,6 +2460,7 @@ class CartSetBillingAddressAction(CartUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setBillingAddress")
 
     @classmethod
@@ -2433,6 +2488,7 @@ class CartSetBillingAddressCustomFieldAction(CartUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setBillingAddressCustomField")
 
     @classmethod
@@ -2464,6 +2520,7 @@ class CartSetBillingAddressCustomTypeAction(CartUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setBillingAddressCustomType")
 
     @classmethod
@@ -2493,6 +2550,7 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
     ):
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions
+
         super().__init__(action="setCartTotalTax")
 
     @classmethod
@@ -2515,6 +2573,7 @@ class CartSetCountryAction(CartUpdateAction):
 
     def __init__(self, *, country: typing.Optional[str] = None):
         self.country = country
+
         super().__init__(action="setCountry")
 
     @classmethod
@@ -2540,6 +2599,7 @@ class CartSetCustomFieldAction(CartUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -2575,6 +2635,7 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomLineItemCustomField")
 
     @classmethod
@@ -2609,6 +2670,7 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
         self.custom_line_item_id = custom_line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomLineItemCustomType")
 
     @classmethod
@@ -2637,6 +2699,7 @@ class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setCustomLineItemShippingDetails")
 
     @classmethod
@@ -2665,6 +2728,7 @@ class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setCustomLineItemTaxAmount")
 
     @classmethod
@@ -2693,6 +2757,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
     ):
         self.custom_line_item_id = custom_line_item_id
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setCustomLineItemTaxRate")
 
     @classmethod
@@ -2728,6 +2793,7 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
         self.shipping_rate = shipping_rate
         self.tax_category = tax_category
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setCustomShippingMethod")
 
     @classmethod
@@ -2759,6 +2825,7 @@ class CartSetCustomTypeAction(CartUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -2780,6 +2847,7 @@ class CartSetCustomerEmailAction(CartUpdateAction):
 
     def __init__(self, *, email: str):
         self.email = email
+
         super().__init__(action="setCustomerEmail")
 
     @classmethod
@@ -2806,6 +2874,7 @@ class CartSetCustomerGroupAction(CartUpdateAction):
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ):
         self.customer_group = customer_group
+
         super().__init__(action="setCustomerGroup")
 
     @classmethod
@@ -2828,6 +2897,7 @@ class CartSetCustomerIdAction(CartUpdateAction):
 
     def __init__(self, *, customer_id: typing.Optional[str] = None):
         self.customer_id = customer_id
+
         super().__init__(action="setCustomerId")
 
     @classmethod
@@ -2851,6 +2921,7 @@ class CartSetDeleteDaysAfterLastModificationAction(CartUpdateAction):
         self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
+
         super().__init__(action="setDeleteDaysAfterLastModification")
 
     @classmethod
@@ -2882,6 +2953,7 @@ class CartSetDeliveryAddressCustomFieldAction(CartUpdateAction):
         self.delivery_id = delivery_id
         self.name = name
         self.value = value
+
         super().__init__(action="setDeliveryAddressCustomField")
 
     @classmethod
@@ -2916,6 +2988,7 @@ class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
         self.delivery_id = delivery_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setDeliveryAddressCustomType")
 
     @classmethod
@@ -2947,6 +3020,7 @@ class CartSetItemShippingAddressCustomFieldAction(CartUpdateAction):
         self.address_key = address_key
         self.name = name
         self.value = value
+
         super().__init__(action="setItemShippingAddressCustomField")
 
     @classmethod
@@ -2981,6 +3055,7 @@ class CartSetItemShippingAddressCustomTypeAction(CartUpdateAction):
         self.address_key = address_key
         self.type = type
         self.fields = fields
+
         super().__init__(action="setItemShippingAddressCustomType")
 
     @classmethod
@@ -3002,6 +3077,7 @@ class CartSetKeyAction(CartUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -3031,6 +3107,7 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -3065,6 +3142,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -3094,6 +3172,7 @@ class CartSetLineItemDistributionChannelAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.distribution_channel = distribution_channel
+
         super().__init__(action="setLineItemDistributionChannel")
 
     @classmethod
@@ -3121,6 +3200,7 @@ class CartSetLineItemPriceAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_price = external_price
+
         super().__init__(action="setLineItemPrice")
 
     @classmethod
@@ -3149,6 +3229,7 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setLineItemShippingDetails")
 
     @classmethod
@@ -3178,6 +3259,7 @@ class CartSetLineItemSupplyChannelAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.supply_channel = supply_channel
+
         super().__init__(action="setLineItemSupplyChannel")
 
     @classmethod
@@ -3206,6 +3288,7 @@ class CartSetLineItemTaxAmountAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setLineItemTaxAmount")
 
     @classmethod
@@ -3234,6 +3317,7 @@ class CartSetLineItemTaxRateAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setLineItemTaxRate")
 
     @classmethod
@@ -3262,6 +3346,7 @@ class CartSetLineItemTotalPriceAction(CartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.external_total_price = external_total_price
+
         super().__init__(action="setLineItemTotalPrice")
 
     @classmethod
@@ -3283,6 +3368,7 @@ class CartSetLocaleAction(CartUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -3302,6 +3388,7 @@ class CartSetShippingAddressAction(CartUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setShippingAddress")
 
     @classmethod
@@ -3329,6 +3416,7 @@ class CartSetShippingAddressCustomFieldAction(CartUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setShippingAddressCustomField")
 
     @classmethod
@@ -3360,6 +3448,7 @@ class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setShippingAddressCustomType")
 
     @classmethod
@@ -3388,6 +3477,7 @@ class CartSetShippingMethodAction(CartUpdateAction):
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingMethod")
 
     @classmethod
@@ -3411,6 +3501,7 @@ class CartSetShippingMethodTaxAmountAction(CartUpdateAction):
         self, *, external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
         self.external_tax_amount = external_tax_amount
+
         super().__init__(action="setShippingMethodTaxAmount")
 
     @classmethod
@@ -3434,6 +3525,7 @@ class CartSetShippingMethodTaxRateAction(CartUpdateAction):
         self, *, external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingMethodTaxRate")
 
     @classmethod
@@ -3461,6 +3553,7 @@ class CartSetShippingRateInputAction(CartUpdateAction):
         self, *, shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None
     ):
         self.shipping_rate_input = shipping_rate_input
+
         super().__init__(action="setShippingRateInput")
 
     @classmethod
@@ -3482,6 +3575,7 @@ class CartUpdateItemShippingAddressAction(CartUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="updateItemShippingAddress")
 
     @classmethod
@@ -3535,6 +3629,7 @@ class CustomLineItemImportDraft(_BaseType):
         self.tax_category = tax_category
         self.custom = custom
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod

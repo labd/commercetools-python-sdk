@@ -152,6 +152,7 @@ class Payment(BaseResource):
         self.interface_interactions = interface_interactions
         self.custom = custom
         self.key = key
+
         super().__init__(
             id=id,
             version=version,
@@ -244,6 +245,7 @@ class PaymentDraft(_BaseType):
         self.interface_interactions = interface_interactions
         self.custom = custom
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -281,6 +283,7 @@ class PaymentMethodInfo(_BaseType):
         self.payment_interface = payment_interface
         self.method = method
         self.name = name
+
         super().__init__()
 
     @classmethod
@@ -316,6 +319,7 @@ class PaymentPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -337,6 +341,7 @@ class PaymentReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Payment"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.PAYMENT)
 
     @classmethod
@@ -389,6 +394,7 @@ class PaymentStatus(_BaseType):
         self.interface_code = interface_code
         self.interface_text = interface_text
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -419,6 +425,7 @@ class PaymentStatusDraft(_BaseType):
         self.interface_code = interface_code
         self.interface_text = interface_text
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -440,6 +447,7 @@ class PaymentUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["PaymentUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -459,6 +467,7 @@ class PaymentUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -602,6 +611,7 @@ class Transaction(_BaseType):
         self.interaction_id = interaction_id
         self.state = state
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -647,6 +657,7 @@ class TransactionDraft(_BaseType):
         self.interaction_id = interaction_id
         self.state = state
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -688,6 +699,7 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="addInterfaceInteraction")
 
     @classmethod
@@ -709,6 +721,7 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 
     def __init__(self, *, transaction: "TransactionDraft"):
         self.transaction = transaction
+
         super().__init__(action="addTransaction")
 
     @classmethod
@@ -730,6 +743,7 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
     def __init__(self, *, amount: "Money"):
         self.amount = amount
+
         super().__init__(action="changeAmountPlanned")
 
     @classmethod
@@ -753,6 +767,7 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
     def __init__(self, *, transaction_id: str, interaction_id: str):
         self.transaction_id = transaction_id
         self.interaction_id = interaction_id
+
         super().__init__(action="changeTransactionInteractionId")
 
     @classmethod
@@ -776,6 +791,7 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
     def __init__(self, *, transaction_id: str, state: "TransactionState"):
         self.transaction_id = transaction_id
         self.state = state
+
         super().__init__(action="changeTransactionState")
 
     @classmethod
@@ -799,6 +815,7 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
     def __init__(self, *, transaction_id: str, timestamp: datetime.datetime):
         self.transaction_id = transaction_id
         self.timestamp = timestamp
+
         super().__init__(action="changeTransactionTimestamp")
 
     @classmethod
@@ -822,6 +839,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
         self.amount = amount
+
         super().__init__(action="setAmountPaid")
 
     @classmethod
@@ -845,6 +863,7 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
         self.amount = amount
+
         super().__init__(action="setAmountRefunded")
 
     @classmethod
@@ -868,6 +887,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
     def __init__(self, *, anonymous_id: typing.Optional[str] = None):
         self.anonymous_id = anonymous_id
+
         super().__init__(action="setAnonymousId")
 
     @classmethod
@@ -898,6 +918,7 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
     ):
         self.amount = amount
         self.until = until
+
         super().__init__(action="setAuthorization")
 
     @classmethod
@@ -925,6 +946,7 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -956,6 +978,7 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -980,6 +1003,7 @@ class PaymentSetCustomerAction(PaymentUpdateAction):
         self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ):
         self.customer = customer
+
         super().__init__(action="setCustomer")
 
     @classmethod
@@ -1001,6 +1025,7 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 
     def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
+
         super().__init__(action="setExternalId")
 
     @classmethod
@@ -1022,6 +1047,7 @@ class PaymentSetInterfaceIdAction(PaymentUpdateAction):
 
     def __init__(self, *, interface_id: str):
         self.interface_id = interface_id
+
         super().__init__(action="setInterfaceId")
 
     @classmethod
@@ -1046,6 +1072,7 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -1065,6 +1092,7 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
 
     def __init__(self, *, interface: str):
         self.interface = interface
+
         super().__init__(action="setMethodInfoInterface")
 
     @classmethod
@@ -1087,6 +1115,7 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
 
     def __init__(self, *, method: typing.Optional[str] = None):
         self.method = method
+
         super().__init__(action="setMethodInfoMethod")
 
     @classmethod
@@ -1109,6 +1138,7 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
         self.name = name
+
         super().__init__(action="setMethodInfoName")
 
     @classmethod
@@ -1130,6 +1160,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 
     def __init__(self, *, interface_code: typing.Optional[str] = None):
         self.interface_code = interface_code
+
         super().__init__(action="setStatusInterfaceCode")
 
     @classmethod
@@ -1151,6 +1182,7 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
     def __init__(self, *, interface_text: str):
         self.interface_text = interface_text
+
         super().__init__(action="setStatusInterfaceText")
 
     @classmethod
@@ -1187,6 +1219,7 @@ class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
         self.transaction_id = transaction_id
         self.name = name
         self.value = value
+
         super().__init__(action="setTransactionCustomField")
 
     @classmethod
@@ -1221,6 +1254,7 @@ class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
         self.transaction_id = transaction_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setTransactionCustomType")
 
     @classmethod
@@ -1246,6 +1280,7 @@ class PaymentTransitionStateAction(PaymentUpdateAction):
     ):
         self.state = state
         self.force = force
+
         super().__init__(action="transitionState")
 
     @classmethod

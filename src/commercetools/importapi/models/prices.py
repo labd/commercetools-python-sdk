@@ -34,6 +34,7 @@ class SubRate(_BaseType):
     def __init__(self, *, name: str, amount: float):
         self.name = name
         self.amount = amount
+
         super().__init__()
 
     @classmethod
@@ -76,6 +77,7 @@ class TaxRate(_BaseType):
         self.country = country
         self.state = state
         self.sub_rates = sub_rates
+
         super().__init__()
 
     @classmethod
@@ -153,6 +155,7 @@ class PriceImport(ImportResource):
         self.custom = custom
         self.product_variant = product_variant
         self.product = product
+
         super().__init__(key=key)
 
     @classmethod

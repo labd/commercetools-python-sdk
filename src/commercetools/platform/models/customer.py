@@ -185,6 +185,7 @@ class Customer(BaseResource):
         self.salutation = salutation
         self.key = key
         self.stores = stores
+
         super().__init__(
             id=id,
             version=version,
@@ -217,6 +218,7 @@ class CustomerChangePassword(_BaseType):
         self.version = version
         self.current_password = current_password
         self.new_password = new_password
+
         super().__init__()
 
     @classmethod
@@ -244,6 +246,7 @@ class CustomerCreateEmailToken(_BaseType):
         self.id = id
         self.version = version
         self.ttl_minutes = ttl_minutes
+
         super().__init__()
 
     @classmethod
@@ -267,6 +270,7 @@ class CustomerCreatePasswordResetToken(_BaseType):
     def __init__(self, *, email: str, ttl_minutes: typing.Optional[int] = None):
         self.email = email
         self.ttl_minutes = ttl_minutes
+
         super().__init__()
 
     @classmethod
@@ -394,6 +398,7 @@ class CustomerDraft(_BaseType):
         self.salutation = salutation
         self.key = key
         self.stores = stores
+
         super().__init__()
 
     @classmethod
@@ -415,6 +420,7 @@ class CustomerEmailVerify(_BaseType):
     def __init__(self, *, version: typing.Optional[int] = None, token_value: str):
         self.version = version
         self.token_value = token_value
+
         super().__init__()
 
     @classmethod
@@ -450,6 +456,7 @@ class CustomerPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -471,6 +478,7 @@ class CustomerReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Customer"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER)
 
     @classmethod
@@ -500,6 +508,7 @@ class CustomerResetPassword(_BaseType):
         self.token_value = token_value
         self.new_password = new_password
         self.version = version
+
         super().__init__()
 
     @classmethod
@@ -544,6 +553,7 @@ class CustomerSignInResult(_BaseType):
     def __init__(self, *, customer: "Customer", cart: typing.Optional["Cart"] = None):
         self.customer = customer
         self.cart = cart
+
         super().__init__()
 
     @classmethod
@@ -585,6 +595,7 @@ class CustomerSignin(_BaseType):
         self.anonymous_cart_sign_in_mode = anonymous_cart_sign_in_mode
         self.anonymous_id = anonymous_id
         self.update_product_data = update_product_data
+
         super().__init__()
 
     @classmethod
@@ -623,6 +634,7 @@ class CustomerToken(_BaseType):
         self.customer_id = customer_id
         self.expires_at = expires_at
         self.value = value
+
         super().__init__()
 
     @classmethod
@@ -644,6 +656,7 @@ class CustomerUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["CustomerUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -663,6 +676,7 @@ class CustomerUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -803,6 +817,7 @@ class MyCustomerChangePassword(_BaseType):
         self.version = version
         self.current_password = current_password
         self.new_password = new_password
+
         super().__init__()
 
     @classmethod
@@ -826,6 +841,7 @@ class MyCustomerResetPassword(_BaseType):
     def __init__(self, *, token_value: str, new_password: str):
         self.token_value = token_value
         self.new_password = new_password
+
         super().__init__()
 
     @classmethod
@@ -847,6 +863,7 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addAddress")
 
     @classmethod
@@ -875,6 +892,7 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="addBillingAddressId")
 
     @classmethod
@@ -903,6 +921,7 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="addShippingAddressId")
 
     @classmethod
@@ -924,6 +943,7 @@ class CustomerAddStoreAction(CustomerUpdateAction):
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
         self.store = store
+
         super().__init__(action="addStore")
 
     @classmethod
@@ -955,6 +975,7 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
         self.address_id = address_id
         self.address_key = address_key
         self.address = address
+
         super().__init__(action="changeAddress")
 
     @classmethod
@@ -976,6 +997,7 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 
     def __init__(self, *, email: str):
         self.email = email
+
         super().__init__(action="changeEmail")
 
     @classmethod
@@ -1004,6 +1026,7 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeAddress")
 
     @classmethod
@@ -1032,6 +1055,7 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeBillingAddressId")
 
     @classmethod
@@ -1060,6 +1084,7 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeShippingAddressId")
 
     @classmethod
@@ -1081,6 +1106,7 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
         self.store = store
+
         super().__init__(action="removeStore")
 
     @classmethod
@@ -1112,6 +1138,7 @@ class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
         self.address_id = address_id
         self.name = name
         self.value = value
+
         super().__init__(action="setAddressCustomField")
 
     @classmethod
@@ -1146,6 +1173,7 @@ class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
         self.type = type
         self.fields = fields
         self.address_id = address_id
+
         super().__init__(action="setAddressCustomType")
 
     @classmethod
@@ -1168,6 +1196,7 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
     def __init__(self, *, company_name: typing.Optional[str] = None):
         self.company_name = company_name
+
         super().__init__(action="setCompanyName")
 
     @classmethod
@@ -1195,6 +1224,7 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -1226,6 +1256,7 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -1252,6 +1283,7 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
     ):
         self.customer_group = customer_group
+
         super().__init__(action="setCustomerGroup")
 
     @classmethod
@@ -1275,6 +1307,7 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
 
     def __init__(self, *, customer_number: typing.Optional[str] = None):
         self.customer_number = customer_number
+
         super().__init__(action="setCustomerNumber")
 
     @classmethod
@@ -1297,6 +1330,7 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
 
     def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
         self.date_of_birth = date_of_birth
+
         super().__init__(action="setDateOfBirth")
 
     @classmethod
@@ -1326,6 +1360,7 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="setDefaultBillingAddress")
 
     @classmethod
@@ -1355,6 +1390,7 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="setDefaultShippingAddress")
 
     @classmethod
@@ -1377,6 +1413,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
     def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
+
         super().__init__(action="setExternalId")
 
     @classmethod
@@ -1398,6 +1435,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
 
     def __init__(self, *, first_name: typing.Optional[str] = None):
         self.first_name = first_name
+
         super().__init__(action="setFirstName")
 
     @classmethod
@@ -1420,6 +1458,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -1439,6 +1478,7 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
 
     def __init__(self, *, last_name: typing.Optional[str] = None):
         self.last_name = last_name
+
         super().__init__(action="setLastName")
 
     @classmethod
@@ -1460,6 +1500,7 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -1481,6 +1522,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
 
     def __init__(self, *, middle_name: typing.Optional[str] = None):
         self.middle_name = middle_name
+
         super().__init__(action="setMiddleName")
 
     @classmethod
@@ -1502,6 +1544,7 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
 
     def __init__(self, *, salutation: typing.Optional[str] = None):
         self.salutation = salutation
+
         super().__init__(action="setSalutation")
 
     @classmethod
@@ -1525,6 +1568,7 @@ class CustomerSetStoresAction(CustomerUpdateAction):
         self, *, stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ):
         self.stores = stores
+
         super().__init__(action="setStores")
 
     @classmethod
@@ -1546,6 +1590,7 @@ class CustomerSetTitleAction(CustomerUpdateAction):
 
     def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
+
         super().__init__(action="setTitle")
 
     @classmethod
@@ -1568,6 +1613,7 @@ class CustomerSetVatIdAction(CustomerUpdateAction):
 
     def __init__(self, *, vat_id: typing.Optional[str] = None):
         self.vat_id = vat_id
+
         super().__init__(action="setVatId")
 
     @classmethod

@@ -143,6 +143,7 @@ class ProductDraftImport(ImportResource):
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+
         super().__init__(key=key)
 
     @classmethod
@@ -183,6 +184,7 @@ class ProductVariantDraftImport(_BaseType):
         self.attributes = attributes
         self.images = images
         self.assets = assets
+
         super().__init__()
 
     @classmethod
@@ -243,6 +245,7 @@ class PriceDraftImport(_BaseType):
         self.discounted = discounted
         self.tiers = tiers
         self.key = key
+
         super().__init__()
 
     @classmethod

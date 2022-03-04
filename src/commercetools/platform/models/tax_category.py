@@ -45,6 +45,7 @@ class SubRate(_BaseType):
     def __init__(self, *, name: str, amount: float):
         self.name = name
         self.amount = amount
+
         super().__init__()
 
     @classmethod
@@ -93,6 +94,7 @@ class TaxCategory(BaseResource):
         self.description = description
         self.rates = rates
         self.key = key
+
         super().__init__(
             id=id,
             version=version,
@@ -134,6 +136,7 @@ class TaxCategoryDraft(_BaseType):
         self.description = description
         self.rates = rates
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -181,6 +184,7 @@ class TaxCategoryPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -205,6 +209,7 @@ class TaxCategoryReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["TaxCategory"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.TAX_CATEGORY)
 
     @classmethod
@@ -253,6 +258,7 @@ class TaxCategoryUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -272,6 +278,7 @@ class TaxCategoryUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -344,6 +351,7 @@ class TaxRate(_BaseType):
         self.country = country
         self.state = state
         self.sub_rates = sub_rates
+
         super().__init__()
 
     @classmethod
@@ -390,6 +398,7 @@ class TaxRateDraft(_BaseType):
         self.country = country
         self.state = state
         self.sub_rates = sub_rates
+
         super().__init__()
 
     @classmethod
@@ -410,6 +419,7 @@ class TaxCategoryAddTaxRateAction(TaxCategoryUpdateAction):
 
     def __init__(self, *, tax_rate: "TaxRateDraft"):
         self.tax_rate = tax_rate
+
         super().__init__(action="addTaxRate")
 
     @classmethod
@@ -432,6 +442,7 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -454,6 +465,7 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
     def __init__(self, *, tax_rate_id: str):
         self.tax_rate_id = tax_rate_id
+
         super().__init__(action="removeTaxRate")
 
     @classmethod
@@ -479,6 +491,7 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
     def __init__(self, *, tax_rate_id: str, tax_rate: "TaxRateDraft"):
         self.tax_rate_id = tax_rate_id
         self.tax_rate = tax_rate
+
         super().__init__(action="replaceTaxRate")
 
     @classmethod
@@ -501,6 +514,7 @@ class TaxCategorySetDescriptionAction(TaxCategoryUpdateAction):
 
     def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -523,6 +537,7 @@ class TaxCategorySetKeyAction(TaxCategoryUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod

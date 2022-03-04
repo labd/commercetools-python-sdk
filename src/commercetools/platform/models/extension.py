@@ -70,6 +70,7 @@ class Extension(BaseResource):
         self.destination = destination
         self.triggers = triggers
         self.timeout_in_ms = timeout_in_ms
+
         super().__init__(
             id=id,
             version=version,
@@ -99,6 +100,7 @@ class ExtensionDestination(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -127,6 +129,7 @@ class AWSLambdaDestination(ExtensionDestination):
         self.arn = arn
         self.access_key = access_key
         self.access_secret = access_secret
+
         super().__init__(type="AWSLambda")
 
     @classmethod
@@ -166,6 +169,7 @@ class ExtensionDraft(_BaseType):
         self.destination = destination
         self.triggers = triggers
         self.timeout_in_ms = timeout_in_ms
+
         super().__init__()
 
     @classmethod
@@ -187,6 +191,7 @@ class ExtensionInput(_BaseType):
     def __init__(self, *, action: "ExtensionAction", resource: "Reference"):
         self.action = action
         self.resource = resource
+
         super().__init__()
 
     @classmethod
@@ -222,6 +227,7 @@ class ExtensionPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -257,6 +263,7 @@ class ExtensionTrigger(_BaseType):
     ):
         self.resource_type_id = resource_type_id
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -278,6 +285,7 @@ class ExtensionUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ExtensionUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -297,6 +305,7 @@ class ExtensionUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -336,6 +345,7 @@ class HttpDestination(ExtensionDestination):
     ):
         self.url = url
         self.authentication = authentication
+
         super().__init__(type="HTTP")
 
     @classmethod
@@ -355,6 +365,7 @@ class HttpDestinationAuthentication(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -381,6 +392,7 @@ class AuthorizationHeaderAuthentication(HttpDestinationAuthentication):
 
     def __init__(self, *, header_value: str):
         self.header_value = header_value
+
         super().__init__(type="AuthorizationHeader")
 
     @classmethod
@@ -402,6 +414,7 @@ class AzureFunctionsAuthentication(HttpDestinationAuthentication):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__(type="AzureFunctions")
 
     @classmethod
@@ -423,6 +436,7 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 
     def __init__(self, *, destination: "ExtensionDestination"):
         self.destination = destination
+
         super().__init__(action="changeDestination")
 
     @classmethod
@@ -444,6 +458,7 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 
     def __init__(self, *, triggers: typing.List["ExtensionTrigger"]):
         self.triggers = triggers
+
         super().__init__(action="changeTriggers")
 
     @classmethod
@@ -466,6 +481,7 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -489,6 +505,7 @@ class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
 
     def __init__(self, *, timeout_in_ms: typing.Optional[int] = None):
         self.timeout_in_ms = timeout_in_ms
+
         super().__init__(action="setTimeoutInMs")
 
     @classmethod

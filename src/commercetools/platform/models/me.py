@@ -199,6 +199,7 @@ class MyCartDraft(_BaseType):
         self.item_shipping_addresses = item_shipping_addresses
         self.store = store
         self.discount_codes = discount_codes
+
         super().__init__()
 
     @classmethod
@@ -220,6 +221,7 @@ class MyCartUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["MyCartUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -239,6 +241,7 @@ class MyCartUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -421,6 +424,7 @@ class MyCustomerDraft(_BaseType):
         self.custom = custom
         self.locale = locale
         self.stores = stores
+
         super().__init__()
 
     @classmethod
@@ -442,6 +446,7 @@ class MyCustomerUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["MyCustomerUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -461,6 +466,7 @@ class MyCustomerUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -600,6 +606,7 @@ class MyLineItemDraft(_BaseType):
         self.custom = custom
         self.shipping_details = shipping_details
         self.sku = sku
+
         super().__init__()
 
     @classmethod
@@ -622,6 +629,7 @@ class MyOrderFromCartDraft(_BaseType):
     def __init__(self, *, id: str, version: int):
         self.id = id
         self.version = version
+
         super().__init__()
 
     @classmethod
@@ -672,6 +680,7 @@ class MyPayment(_BaseType):
         self.payment_method_info = payment_method_info
         self.transactions = transactions
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -708,6 +717,7 @@ class MyPaymentDraft(_BaseType):
         self.payment_method_info = payment_method_info
         self.custom = custom
         self.transaction = transaction
+
         super().__init__()
 
     @classmethod
@@ -743,6 +753,7 @@ class MyPaymentPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -766,6 +777,7 @@ class MyPaymentUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["MyPaymentUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -785,6 +797,7 @@ class MyPaymentUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -853,6 +866,7 @@ class MyShoppingListDraft(_BaseType):
         self.custom = custom
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.store = store
+
         super().__init__()
 
     @classmethod
@@ -876,6 +890,7 @@ class MyShoppingListUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -895,6 +910,7 @@ class MyShoppingListUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -1024,6 +1040,7 @@ class MyTransactionDraft(_BaseType):
         self.amount = amount
         self.interaction_id = interaction_id
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -1043,6 +1060,7 @@ class MyCartAddDiscountCodeAction(MyCartUpdateAction):
 
     def __init__(self, *, code: str):
         self.code = code
+
         super().__init__(action="addDiscountCode")
 
     @classmethod
@@ -1064,6 +1082,7 @@ class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addItemShippingAddress")
 
     @classmethod
@@ -1127,6 +1146,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
         self.external_total_price = external_total_price
         self.shipping_details = shipping_details
         self.added_at = added_at
+
         super().__init__(action="addLineItem")
 
     @classmethod
@@ -1148,6 +1168,7 @@ class MyCartAddPaymentAction(MyCartUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="addPayment")
 
     @classmethod
@@ -1173,6 +1194,7 @@ class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction)
     ):
         self.line_item_id = line_item_id
         self.targets_delta = targets_delta
+
         super().__init__(action="applyDeltaToLineItemShippingDetailsTargets")
 
     @classmethod
@@ -1213,6 +1235,7 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
+
         super().__init__(action="changeLineItemQuantity")
 
     @classmethod
@@ -1234,6 +1257,7 @@ class MyCartChangeTaxModeAction(MyCartUpdateAction):
 
     def __init__(self, *, tax_mode: "TaxMode"):
         self.tax_mode = tax_mode
+
         super().__init__(action="changeTaxMode")
 
     @classmethod
@@ -1255,6 +1279,7 @@ class MyCartRecalculateAction(MyCartUpdateAction):
 
     def __init__(self, *, update_product_data: typing.Optional[bool] = None):
         self.update_product_data = update_product_data
+
         super().__init__(action="recalculate")
 
     @classmethod
@@ -1276,6 +1301,7 @@ class MyCartRemoveDiscountCodeAction(MyCartUpdateAction):
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
         self.discount_code = discount_code
+
         super().__init__(action="removeDiscountCode")
 
     @classmethod
@@ -1297,6 +1323,7 @@ class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
 
     def __init__(self, *, address_key: str):
         self.address_key = address_key
+
         super().__init__(action="removeItemShippingAddress")
 
     @classmethod
@@ -1336,6 +1363,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
         self.external_price = external_price
         self.external_total_price = external_total_price
         self.shipping_details_to_remove = shipping_details_to_remove
+
         super().__init__(action="removeLineItem")
 
     @classmethod
@@ -1357,6 +1385,7 @@ class MyCartRemovePaymentAction(MyCartUpdateAction):
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
         self.payment = payment
+
         super().__init__(action="removePayment")
 
     @classmethod
@@ -1378,6 +1407,7 @@ class MyCartSetBillingAddressAction(MyCartUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setBillingAddress")
 
     @classmethod
@@ -1400,6 +1430,7 @@ class MyCartSetCountryAction(MyCartUpdateAction):
 
     def __init__(self, *, country: typing.Optional[str] = None):
         self.country = country
+
         super().__init__(action="setCountry")
 
     @classmethod
@@ -1427,6 +1458,7 @@ class MyCartSetCustomFieldAction(MyCartUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -1458,6 +1490,7 @@ class MyCartSetCustomTypeAction(MyCartUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -1479,6 +1512,7 @@ class MyCartSetCustomerEmailAction(MyCartUpdateAction):
 
     def __init__(self, *, email: typing.Optional[str] = None):
         self.email = email
+
         super().__init__(action="setCustomerEmail")
 
     @classmethod
@@ -1502,6 +1536,7 @@ class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
         self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
+
         super().__init__(action="setDeleteDaysAfterLastModification")
 
     @classmethod
@@ -1533,6 +1568,7 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -1567,6 +1603,7 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -1596,6 +1633,7 @@ class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.distribution_channel = distribution_channel
+
         super().__init__(action="setLineItemDistributionChannel")
 
     @classmethod
@@ -1624,6 +1662,7 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.shipping_details = shipping_details
+
         super().__init__(action="setLineItemShippingDetails")
 
     @classmethod
@@ -1653,6 +1692,7 @@ class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
     ):
         self.line_item_id = line_item_id
         self.supply_channel = supply_channel
+
         super().__init__(action="setLineItemSupplyChannel")
 
     @classmethod
@@ -1674,6 +1714,7 @@ class MyCartSetLocaleAction(MyCartUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -1693,6 +1734,7 @@ class MyCartSetShippingAddressAction(MyCartUpdateAction):
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
         self.address = address
+
         super().__init__(action="setShippingAddress")
 
     @classmethod
@@ -1721,6 +1763,7 @@ class MyCartSetShippingMethodAction(MyCartUpdateAction):
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
+
         super().__init__(action="setShippingMethod")
 
     @classmethod
@@ -1742,6 +1785,7 @@ class MyCartUpdateItemShippingAddressAction(MyCartUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="updateItemShippingAddress")
 
     @classmethod
@@ -1763,6 +1807,7 @@ class MyCustomerAddAddressAction(MyCustomerUpdateAction):
 
     def __init__(self, *, address: "BaseAddress"):
         self.address = address
+
         super().__init__(action="addAddress")
 
     @classmethod
@@ -1791,6 +1836,7 @@ class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="addBillingAddressId")
 
     @classmethod
@@ -1819,6 +1865,7 @@ class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="addShippingAddressId")
 
     @classmethod
@@ -1850,6 +1897,7 @@ class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
         self.address_id = address_id
         self.address_key = address_key
         self.address = address
+
         super().__init__(action="changeAddress")
 
     @classmethod
@@ -1871,6 +1919,7 @@ class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
 
     def __init__(self, *, email: str):
         self.email = email
+
         super().__init__(action="changeEmail")
 
     @classmethod
@@ -1899,6 +1948,7 @@ class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeAddress")
 
     @classmethod
@@ -1927,6 +1977,7 @@ class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeBillingAddressId")
 
     @classmethod
@@ -1955,6 +2006,7 @@ class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="removeShippingAddressId")
 
     @classmethod
@@ -1976,6 +2028,7 @@ class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
 
     def __init__(self, *, company_name: typing.Optional[str] = None):
         self.company_name = company_name
+
         super().__init__(action="setCompanyName")
 
     @classmethod
@@ -2003,6 +2056,7 @@ class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -2034,6 +2088,7 @@ class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -2055,6 +2110,7 @@ class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
 
     def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
         self.date_of_birth = date_of_birth
+
         super().__init__(action="setDateOfBirth")
 
     @classmethod
@@ -2083,6 +2139,7 @@ class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="setDefaultBillingAddress")
 
     @classmethod
@@ -2111,6 +2168,7 @@ class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
     ):
         self.address_id = address_id
         self.address_key = address_key
+
         super().__init__(action="setDefaultShippingAddress")
 
     @classmethod
@@ -2132,6 +2190,7 @@ class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
 
     def __init__(self, *, first_name: typing.Optional[str] = None):
         self.first_name = first_name
+
         super().__init__(action="setFirstName")
 
     @classmethod
@@ -2153,6 +2212,7 @@ class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
 
     def __init__(self, *, last_name: typing.Optional[str] = None):
         self.last_name = last_name
+
         super().__init__(action="setLastName")
 
     @classmethod
@@ -2174,6 +2234,7 @@ class MyCustomerSetLocaleAction(MyCustomerUpdateAction):
 
     def __init__(self, *, locale: typing.Optional[str] = None):
         self.locale = locale
+
         super().__init__(action="setLocale")
 
     @classmethod
@@ -2195,6 +2256,7 @@ class MyCustomerSetMiddleNameAction(MyCustomerUpdateAction):
 
     def __init__(self, *, middle_name: typing.Optional[str] = None):
         self.middle_name = middle_name
+
         super().__init__(action="setMiddleName")
 
     @classmethod
@@ -2216,6 +2278,7 @@ class MyCustomerSetSalutationAction(MyCustomerUpdateAction):
 
     def __init__(self, *, salutation: typing.Optional[str] = None):
         self.salutation = salutation
+
         super().__init__(action="setSalutation")
 
     @classmethod
@@ -2237,6 +2300,7 @@ class MyCustomerSetTitleAction(MyCustomerUpdateAction):
 
     def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
+
         super().__init__(action="setTitle")
 
     @classmethod
@@ -2258,6 +2322,7 @@ class MyCustomerSetVatIdAction(MyCustomerUpdateAction):
 
     def __init__(self, *, vat_id: typing.Optional[str] = None):
         self.vat_id = vat_id
+
         super().__init__(action="setVatId")
 
     @classmethod
@@ -2279,6 +2344,7 @@ class MyPaymentAddTransactionAction(MyPaymentUpdateAction):
 
     def __init__(self, *, transaction: "TransactionDraft"):
         self.transaction = transaction
+
         super().__init__(action="addTransaction")
 
     @classmethod
@@ -2302,6 +2368,7 @@ class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
 
     def __init__(self, *, amount: "Money"):
         self.amount = amount
+
         super().__init__(action="changeAmountPlanned")
 
     @classmethod
@@ -2329,6 +2396,7 @@ class MyPaymentSetCustomFieldAction(MyPaymentUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -2350,6 +2418,7 @@ class MyPaymentSetMethodInfoInterfaceAction(MyPaymentUpdateAction):
 
     def __init__(self, *, interface: str):
         self.interface = interface
+
         super().__init__(action="setMethodInfoInterface")
 
     @classmethod
@@ -2371,6 +2440,7 @@ class MyPaymentSetMethodInfoMethodAction(MyPaymentUpdateAction):
 
     def __init__(self, *, method: typing.Optional[str] = None):
         self.method = method
+
         super().__init__(action="setMethodInfoMethod")
 
     @classmethod
@@ -2392,6 +2462,7 @@ class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
         self.name = name
+
         super().__init__(action="setMethodInfoName")
 
     @classmethod
@@ -2419,6 +2490,7 @@ class MyPaymentSetTransactionCustomFieldAction(MyPaymentUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setTransactionCustomField")
 
     @classmethod
@@ -2460,6 +2532,7 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
         self.quantity = quantity
         self.added_at = added_at
         self.custom = custom
+
         super().__init__(action="addLineItem")
 
     @classmethod
@@ -2498,6 +2571,7 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
         self.quantity = quantity
         self.added_at = added_at
         self.custom = custom
+
         super().__init__(action="addTextLineItem")
 
     @classmethod
@@ -2521,6 +2595,7 @@ class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
     def __init__(self, *, line_item_id: str, quantity: int):
         self.line_item_id = line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeLineItemQuantity")
 
     @classmethod
@@ -2542,6 +2617,7 @@ class MyShoppingListChangeLineItemsOrderAction(MyShoppingListUpdateAction):
 
     def __init__(self, *, line_item_order: typing.List["str"]):
         self.line_item_order = line_item_order
+
         super().__init__(action="changeLineItemsOrder")
 
     @classmethod
@@ -2563,6 +2639,7 @@ class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -2586,6 +2663,7 @@ class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
     def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
         self.text_line_item_id = text_line_item_id
         self.name = name
+
         super().__init__(action="changeTextLineItemName")
 
     @classmethod
@@ -2609,6 +2687,7 @@ class MyShoppingListChangeTextLineItemQuantityAction(MyShoppingListUpdateAction)
     def __init__(self, *, text_line_item_id: str, quantity: int):
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeTextLineItemQuantity")
 
     @classmethod
@@ -2630,6 +2709,7 @@ class MyShoppingListChangeTextLineItemsOrderAction(MyShoppingListUpdateAction):
 
     def __init__(self, *, text_line_item_order: typing.List["str"]):
         self.text_line_item_order = text_line_item_order
+
         super().__init__(action="changeTextLineItemsOrder")
 
     @classmethod
@@ -2653,6 +2733,7 @@ class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
     def __init__(self, *, line_item_id: str, quantity: typing.Optional[int] = None):
         self.line_item_id = line_item_id
         self.quantity = quantity
+
         super().__init__(action="removeLineItem")
 
     @classmethod
@@ -2678,6 +2759,7 @@ class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
     ):
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
+
         super().__init__(action="removeTextLineItem")
 
     @classmethod
@@ -2705,6 +2787,7 @@ class MyShoppingListSetCustomFieldAction(MyShoppingListUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -2736,6 +2819,7 @@ class MyShoppingListSetCustomTypeAction(MyShoppingListUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -2761,6 +2845,7 @@ class MyShoppingListSetDeleteDaysAfterLastModificationAction(
         self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
+
         super().__init__(action="setDeleteDaysAfterLastModification")
 
     @classmethod
@@ -2786,6 +2871,7 @@ class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -2817,6 +2903,7 @@ class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -2851,6 +2938,7 @@ class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -2886,6 +2974,7 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
         self.text_line_item_id = text_line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setTextLineItemCustomField")
 
     @classmethod
@@ -2920,6 +3009,7 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
         self.text_line_item_id = text_line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setTextLineItemCustomType")
 
     @classmethod
@@ -2948,6 +3038,7 @@ class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction)
     ):
         self.text_line_item_id = text_line_item_id
         self.description = description
+
         super().__init__(action="setTextLineItemDescription")
 
     @classmethod

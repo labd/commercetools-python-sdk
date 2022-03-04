@@ -54,6 +54,7 @@ class ChangeSubscription(_BaseType):
 
     def __init__(self, *, resource_type_id: str):
         self.resource_type_id = resource_type_id
+
         super().__init__()
 
     @classmethod
@@ -73,6 +74,7 @@ class DeliveryFormat(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -97,6 +99,7 @@ class CloudEventsFormat(DeliveryFormat):
 
     def __init__(self, *, cloud_events_version: str):
         self.cloud_events_version = cloud_events_version
+
         super().__init__(type="CloudEvents")
 
     @classmethod
@@ -131,6 +134,7 @@ class DeliveryPayload(_BaseType):
         self.notification_type = notification_type
         self.resource = resource
         self.resource_user_provided_identifiers = resource_user_provided_identifiers
+
         super().__init__()
 
     @classmethod
@@ -163,6 +167,7 @@ class Destination(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -209,6 +214,7 @@ class AzureEventGridDestination(Destination):
     def __init__(self, *, uri: str, access_key: str):
         self.uri = uri
         self.access_key = access_key
+
         super().__init__(type="EventGrid")
 
     @classmethod
@@ -230,6 +236,7 @@ class AzureServiceBusDestination(Destination):
 
     def __init__(self, *, connection_string: str):
         self.connection_string = connection_string
+
         super().__init__(type="AzureServiceBus")
 
     @classmethod
@@ -257,6 +264,7 @@ class EventBridgeDestination(Destination):
     def __init__(self, *, region: str, account_id: str):
         self.region = region
         self.account_id = account_id
+
         super().__init__(type="EventBridge")
 
     @classmethod
@@ -280,6 +288,7 @@ class GoogleCloudPubSubDestination(Destination):
     def __init__(self, *, project_id: str, topic: str):
         self.project_id = project_id
         self.topic = topic
+
         super().__init__(type="GoogleCloudPubSub")
 
     @classmethod
@@ -301,6 +310,7 @@ class IronMqDestination(Destination):
 
     def __init__(self, *, uri: str):
         self.uri = uri
+
         super().__init__(type="IronMQ")
 
     @classmethod
@@ -347,6 +357,7 @@ class MessageDeliveryPayload(DeliveryPayload):
         self.sequence_number = sequence_number
         self.resource_version = resource_version
         self.payload_not_included = payload_not_included
+
         super().__init__(
             project_key=project_key,
             resource=resource,
@@ -380,6 +391,7 @@ class MessageSubscription(_BaseType):
     ):
         self.resource_type_id = resource_type_id
         self.types = types
+
         super().__init__()
 
     @classmethod
@@ -401,6 +413,7 @@ class PayloadNotIncluded(_BaseType):
     def __init__(self, *, reason: str, payload_type: str):
         self.reason = reason
         self.payload_type = payload_type
+
         super().__init__()
 
     @classmethod
@@ -449,6 +462,7 @@ class ResourceCreatedDeliveryPayload(DeliveryPayload):
     ):
         self.version = version
         self.modified_at = modified_at
+
         super().__init__(
             project_key=project_key,
             resource=resource,
@@ -490,6 +504,7 @@ class ResourceDeletedDeliveryPayload(DeliveryPayload):
         self.version = version
         self.modified_at = modified_at
         self.data_erasure = data_erasure
+
         super().__init__(
             project_key=project_key,
             resource=resource,
@@ -531,6 +546,7 @@ class ResourceUpdatedDeliveryPayload(DeliveryPayload):
         self.version = version
         self.old_version = old_version
         self.modified_at = modified_at
+
         super().__init__(
             project_key=project_key,
             resource=resource,
@@ -561,6 +577,7 @@ class SnsDestination(Destination):
         self.access_key = access_key
         self.access_secret = access_secret
         self.topic_arn = topic_arn
+
         super().__init__(type="SNS")
 
     @classmethod
@@ -588,6 +605,7 @@ class SqsDestination(Destination):
         self.access_secret = access_secret
         self.queue_url = queue_url
         self.region = region
+
         super().__init__(type="SQS")
 
     @classmethod
@@ -638,6 +656,7 @@ class Subscription(BaseResource):
         self.messages = messages
         self.format = format
         self.status = status
+
         super().__init__(
             id=id,
             version=version,
@@ -678,6 +697,7 @@ class SubscriptionDraft(_BaseType):
         self.key = key
         self.messages = messages
         self.format = format
+
         super().__init__()
 
     @classmethod
@@ -720,6 +740,7 @@ class SubscriptionPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -745,6 +766,7 @@ class SubscriptionUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -764,6 +786,7 @@ class SubscriptionUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -798,6 +821,7 @@ class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
 
     def __init__(self, *, destination: "Destination"):
         self.destination = destination
+
         super().__init__(action="changeDestination")
 
     @classmethod
@@ -821,6 +845,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
         self, *, changes: typing.Optional[typing.List["ChangeSubscription"]] = None
     ):
         self.changes = changes
+
         super().__init__(action="setChanges")
 
     @classmethod
@@ -843,6 +868,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -866,6 +892,7 @@ class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
         self, *, messages: typing.Optional[typing.List["MessageSubscription"]] = None
     ):
         self.messages = messages
+
         super().__init__(action="setMessages")
 
     @classmethod

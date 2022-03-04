@@ -61,6 +61,7 @@ class AttributeCount(_BaseType):
         self.product_type_attributes = product_type_attributes
         self.variant_attributes = variant_attributes
         self.missing_attribute_values = missing_attribute_values
+
         super().__init__()
 
     @classmethod
@@ -84,6 +85,7 @@ class AttributeCoverage(_BaseType):
     def __init__(self, *, names: float, values: float):
         self.names = names
         self.values = values
+
         super().__init__()
 
     @classmethod
@@ -112,6 +114,7 @@ class MissingAttributesDetails(_BaseType):
         self.total = total
         self.missing_attribute_names = missing_attribute_names
         self.missing_attribute_values = missing_attribute_values
+
         super().__init__()
 
     @classmethod
@@ -158,6 +161,7 @@ class MissingAttributes(_BaseType):
         self.missing_attribute_names = missing_attribute_names
         self.attribute_count = attribute_count
         self.attribute_coverage = attribute_coverage
+
         super().__init__()
 
     @classmethod
@@ -188,6 +192,7 @@ class MissingAttributesMeta(_BaseType):
         self.product_level = product_level
         self.variant_level = variant_level
         self.product_type_ids = product_type_ids
+
         super().__init__()
 
     @classmethod
@@ -258,6 +263,7 @@ class MissingAttributesSearchRequest(_BaseType):
         self.product_ids = product_ids
         self.product_type_ids = product_type_ids
         self.attribute_name = attribute_name
+
         super().__init__()
 
     @classmethod
@@ -295,6 +301,7 @@ class MissingAttributesPagedQueryResult(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -330,6 +337,7 @@ class MissingDataTaskStatus(_BaseType):
         self.state = state
         self.expires = expires
         self.result = result
+
         super().__init__()
 
     @classmethod
@@ -357,6 +365,7 @@ class MissingImages(_BaseType):
         self.product = product
         self.variant_id = variant_id
         self.image_count = image_count
+
         super().__init__()
 
     @classmethod
@@ -379,6 +388,7 @@ class MissingImagesCount(_BaseType):
     def __init__(self, *, missing_images: int, total: int):
         self.missing_images = missing_images
         self.total = total
+
         super().__init__()
 
     @classmethod
@@ -447,6 +457,7 @@ class MissingImagesMeta(_BaseType):
         self.product_level = product_level
         self.variant_level = variant_level
         self.threshold = threshold
+
         super().__init__()
 
     @classmethod
@@ -501,6 +512,7 @@ class MissingImagesSearchRequest(_BaseType):
         self.threshold = threshold
         self.product_ids = product_ids
         self.product_type_ids = product_type_ids
+
         super().__init__()
 
     @classmethod
@@ -538,6 +550,7 @@ class MissingImagesPagedQueryResult(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -573,6 +586,7 @@ class MissingImagesTaskStatus(_BaseType):
         self.state = state
         self.expires = expires
         self.result = result
+
         super().__init__()
 
     @classmethod
@@ -597,6 +611,7 @@ class MissingPrices(_BaseType):
     def __init__(self, *, product: "ProductReference", variant_id: int):
         self.product = product
         self.variant_id = variant_id
+
         super().__init__()
 
     @classmethod
@@ -618,6 +633,7 @@ class MissingPricesProductCount(_BaseType):
     def __init__(self, *, total: int, missing_prices: int):
         self.total = total
         self.missing_prices = missing_prices
+
         super().__init__()
 
     @classmethod
@@ -684,6 +700,7 @@ class MissingPricesMeta(_BaseType):
     ):
         self.product_level = product_level
         self.variant_level = variant_level
+
         super().__init__()
 
     @classmethod
@@ -746,6 +763,7 @@ class MissingPricesSearchRequest(_BaseType):
         self.valid_until = valid_until
         self.product_ids = product_ids
         self.product_type_ids = product_type_ids
+
         super().__init__()
 
     @classmethod
@@ -783,6 +801,7 @@ class MissingPricesPagedQueryResult(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -818,6 +837,7 @@ class MissingPricesTaskStatus(_BaseType):
         self.state = state
         self.expires = expires
         self.result = result
+
         super().__init__()
 
     @classmethod

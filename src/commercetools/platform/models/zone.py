@@ -43,6 +43,7 @@ class Location(_BaseType):
     def __init__(self, *, country: str, state: typing.Optional[str] = None):
         self.country = country
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -91,6 +92,7 @@ class Zone(BaseResource):
         self.name = name
         self.description = description
         self.locations = locations
+
         super().__init__(
             id=id,
             version=version,
@@ -132,6 +134,7 @@ class ZoneDraft(_BaseType):
         self.name = name
         self.description = description
         self.locations = locations
+
         super().__init__()
 
     @classmethod
@@ -179,6 +182,7 @@ class ZonePagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -203,6 +207,7 @@ class ZoneReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Zone"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.ZONE)
 
     @classmethod
@@ -249,6 +254,7 @@ class ZoneUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ZoneUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -268,6 +274,7 @@ class ZoneUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -305,6 +312,7 @@ class ZoneAddLocationAction(ZoneUpdateAction):
 
     def __init__(self, *, location: "Location"):
         self.location = location
+
         super().__init__(action="addLocation")
 
     @classmethod
@@ -325,6 +333,7 @@ class ZoneChangeNameAction(ZoneUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -345,6 +354,7 @@ class ZoneRemoveLocationAction(ZoneUpdateAction):
 
     def __init__(self, *, location: "Location"):
         self.location = location
+
         super().__init__(action="removeLocation")
 
     @classmethod
@@ -367,6 +377,7 @@ class ZoneSetDescriptionAction(ZoneUpdateAction):
 
     def __init__(self, *, description: typing.Optional[str] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -389,6 +400,7 @@ class ZoneSetKeyAction(ZoneUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod

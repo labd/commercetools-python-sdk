@@ -149,6 +149,7 @@ class CartDiscount(BaseResource):
         self.references = references
         self.stacking_mode = stacking_mode
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -227,6 +228,7 @@ class CartDiscountDraft(_BaseType):
         self.requires_discount_code = requires_discount_code
         self.stacking_mode = stacking_mode
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -262,6 +264,7 @@ class CartDiscountPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -283,6 +286,7 @@ class CartDiscountReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["CartDiscount"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CART_DISCOUNT)
 
     @classmethod
@@ -323,6 +327,7 @@ class CartDiscountTarget(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -359,6 +364,7 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
 
     def __init__(self, *, predicate: str):
         self.predicate = predicate
+
         super().__init__(type="customLineItems")
 
     @classmethod
@@ -380,6 +386,7 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
 
     def __init__(self, *, predicate: str):
         self.predicate = predicate
+
         super().__init__(type="lineItems")
 
     @classmethod
@@ -424,6 +431,7 @@ class CartDiscountUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -443,6 +451,7 @@ class CartDiscountUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -529,6 +538,7 @@ class CartDiscountValue(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -561,6 +571,7 @@ class CartDiscountValueAbsolute(CartDiscountValue):
 
     def __init__(self, *, money: typing.List["TypedMoney"]):
         self.money = money
+
         super().__init__(type="absolute")
 
     @classmethod
@@ -582,6 +593,7 @@ class CartDiscountValueDraft(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -616,6 +628,7 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
 
     def __init__(self, *, money: typing.List["Money"]):
         self.money = money
+
         super().__init__(type="absolute")
 
     @classmethod
@@ -637,6 +650,7 @@ class CartDiscountValueFixed(CartDiscountValue):
 
     def __init__(self, *, money: typing.List["TypedMoney"]):
         self.money = money
+
         super().__init__(type="fixed")
 
     @classmethod
@@ -658,6 +672,7 @@ class CartDiscountValueFixedDraft(CartDiscountValueDraft):
 
     def __init__(self, *, money: typing.List["Money"]):
         self.money = money
+
         super().__init__(type="fixed")
 
     @classmethod
@@ -694,6 +709,7 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
         self.variant_id = variant_id
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
+
         super().__init__(type="giftLineItem")
 
     @classmethod
@@ -730,6 +746,7 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
         self.variant_id = variant_id
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
+
         super().__init__(type="giftLineItem")
 
     @classmethod
@@ -751,6 +768,7 @@ class CartDiscountValueRelative(CartDiscountValue):
 
     def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
+
         super().__init__(type="relative")
 
     @classmethod
@@ -772,6 +790,7 @@ class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
 
     def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
+
         super().__init__(type="relative")
 
     @classmethod
@@ -814,6 +833,7 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
         self.discounted_quantity = discounted_quantity
         self.max_occurrence = max_occurrence
         self.selection_mode = selection_mode
+
         super().__init__(type="multiBuyCustomLineItems")
 
     @classmethod
@@ -855,6 +875,7 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
         self.discounted_quantity = discounted_quantity
         self.max_occurrence = max_occurrence
         self.selection_mode = selection_mode
+
         super().__init__(type="multiBuyLineItems")
 
     @classmethod
@@ -887,6 +908,7 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 
     def __init__(self, *, cart_predicate: str):
         self.cart_predicate = cart_predicate
+
         super().__init__(action="changeCartPredicate")
 
     @classmethod
@@ -908,6 +930,7 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
 
     def __init__(self, *, is_active: bool):
         self.is_active = is_active
+
         super().__init__(action="changeIsActive")
 
     @classmethod
@@ -929,6 +952,7 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -950,6 +974,7 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 
     def __init__(self, *, requires_discount_code: bool):
         self.requires_discount_code = requires_discount_code
+
         super().__init__(action="changeRequiresDiscountCode")
 
     @classmethod
@@ -977,6 +1002,7 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
 
     def __init__(self, *, sort_order: str):
         self.sort_order = sort_order
+
         super().__init__(action="changeSortOrder")
 
     @classmethod
@@ -998,6 +1024,7 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
 
     def __init__(self, *, stacking_mode: "StackingMode"):
         self.stacking_mode = stacking_mode
+
         super().__init__(action="changeStackingMode")
 
     @classmethod
@@ -1019,6 +1046,7 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
     def __init__(self, *, target: "CartDiscountTarget"):
         self.target = target
+
         super().__init__(action="changeTarget")
 
     @classmethod
@@ -1040,6 +1068,7 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
 
     def __init__(self, *, value: "CartDiscountValueDraft"):
         self.value = value
+
         super().__init__(action="changeValue")
 
     @classmethod
@@ -1067,6 +1096,7 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -1098,6 +1128,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -1120,6 +1151,7 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -1142,6 +1174,7 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -1164,6 +1197,7 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
+
         super().__init__(action="setValidFrom")
 
     @classmethod
@@ -1194,6 +1228,7 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__(action="setValidFromAndUntil")
 
     @classmethod
@@ -1216,6 +1251,7 @@ class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
+
         super().__init__(action="setValidUntil")
 
     @classmethod

@@ -115,6 +115,7 @@ class ProductDiscount(BaseResource):
         self.references = references
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__(
             id=id,
             version=version,
@@ -178,6 +179,7 @@ class ProductDiscountDraft(_BaseType):
         self.is_active = is_active
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__()
 
     @classmethod
@@ -205,6 +207,7 @@ class ProductDiscountMatchQuery(_BaseType):
         self.variant_id = variant_id
         self.staged = staged
         self.price = price
+
         super().__init__()
 
     @classmethod
@@ -242,6 +245,7 @@ class ProductDiscountPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -263,6 +267,7 @@ class ProductDiscountReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductDiscount"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_DISCOUNT)
 
     @classmethod
@@ -309,6 +314,7 @@ class ProductDiscountUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -328,6 +334,7 @@ class ProductDiscountUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -402,6 +409,7 @@ class ProductDiscountValue(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -430,6 +438,7 @@ class ProductDiscountValueAbsolute(ProductDiscountValue):
 
     def __init__(self, *, money: typing.List["TypedMoney"]):
         self.money = money
+
         super().__init__(type="absolute")
 
     @classmethod
@@ -451,6 +460,7 @@ class ProductDiscountValueDraft(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -487,6 +497,7 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 
     def __init__(self, *, money: typing.List["Money"]):
         self.money = money
+
         super().__init__(type="absolute")
 
     @classmethod
@@ -546,6 +557,7 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 
     def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
+
         super().__init__(type="relative")
 
     @classmethod
@@ -567,6 +579,7 @@ class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
 
     def __init__(self, *, permyriad: int):
         self.permyriad = permyriad
+
         super().__init__(type="relative")
 
     @classmethod
@@ -588,6 +601,7 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, is_active: bool):
         self.is_active = is_active
+
         super().__init__(action="changeIsActive")
 
     @classmethod
@@ -609,6 +623,7 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -631,6 +646,7 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, predicate: str):
         self.predicate = predicate
+
         super().__init__(action="changePredicate")
 
     @classmethod
@@ -658,6 +674,7 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, sort_order: str):
         self.sort_order = sort_order
+
         super().__init__(action="changeSortOrder")
 
     @classmethod
@@ -683,6 +700,7 @@ class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, value: "ProductDiscountValueDraft"):
         self.value = value
+
         super().__init__(action="changeValue")
 
     @classmethod
@@ -704,6 +722,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -727,6 +746,7 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -750,6 +770,7 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
+
         super().__init__(action="setValidFrom")
 
     @classmethod
@@ -780,6 +801,7 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__(action="setValidFromAndUntil")
 
     @classmethod
@@ -807,6 +829,7 @@ class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
+
         super().__init__(action="setValidUntil")
 
     @classmethod

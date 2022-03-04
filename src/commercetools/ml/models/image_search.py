@@ -41,6 +41,7 @@ class ImageSearchResponse(_BaseType):
         self.offset = offset
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -68,6 +69,7 @@ class ResultItem(_BaseType):
     ):
         self.image_url = image_url
         self.product_variants = product_variants
+
         super().__init__()
 
     @classmethod

@@ -51,6 +51,7 @@ class CustomObject(BaseResource):
         self.container = container
         self.key = key
         self.value = value
+
         super().__init__(
             id=id,
             version=version,
@@ -90,6 +91,7 @@ class CustomObjectDraft(_BaseType):
         self.key = key
         self.value = value
         self.version = version
+
         super().__init__()
 
     @classmethod
@@ -125,6 +127,7 @@ class CustomObjectPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -146,6 +149,7 @@ class CustomObjectReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["CustomObject"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.KEY_VALUE_DOCUMENT)
 
     @classmethod

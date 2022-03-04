@@ -83,6 +83,7 @@ class AttributeDefinition(_BaseType):
         self.input_tip = input_tip
         self.input_hint = input_hint
         self.is_searchable = is_searchable
+
         super().__init__()
 
     @classmethod
@@ -102,6 +103,7 @@ class AttributeType(_BaseType):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__()
 
     @classmethod
@@ -221,6 +223,7 @@ class AttributeEnumType(AttributeType):
 
     def __init__(self, *, values: typing.List["AttributePlainEnumValue"]):
         self.values = values
+
         super().__init__(name="enum")
 
     @classmethod
@@ -242,6 +245,7 @@ class AttributePlainEnumValue(_BaseType):
     def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -282,6 +286,7 @@ class AttributeLocalizedEnumType(AttributeType):
 
     def __init__(self, *, values: typing.List["AttributeLocalizedEnumValue"]):
         self.values = values
+
         super().__init__(name="lenum")
 
     @classmethod
@@ -312,6 +317,7 @@ class AttributeLocalizedEnumValue(_BaseType):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -351,6 +357,7 @@ class AttributeNestedType(AttributeType):
 
     def __init__(self, *, type_reference: "ProductTypeKeyReference"):
         self.type_reference = type_reference
+
         super().__init__(name="nested")
 
     @classmethod
@@ -388,6 +395,7 @@ class AttributeReferenceType(AttributeType):
 
     def __init__(self, *, reference_type_id: "ReferenceType"):
         self.reference_type_id = reference_type_id
+
         super().__init__(name="reference")
 
     @classmethod
@@ -409,6 +417,7 @@ class AttributeSetType(AttributeType):
 
     def __init__(self, *, element_type: "AttributeType"):
         self.element_type = element_type
+
         super().__init__(name="set")
 
     @classmethod
@@ -490,6 +499,7 @@ class ProductTypeImport(ImportResource):
         self.name = name
         self.description = description
         self.attributes = attributes
+
         super().__init__(key=key)
 
     @classmethod

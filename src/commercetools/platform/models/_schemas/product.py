@@ -108,25 +108,21 @@ class FacetResultsSchema(helpers.BaseSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.FacetResults(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.FacetResults(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class FacetTermSchema(helpers.BaseSchema):
@@ -1004,25 +1000,21 @@ class ProductVariantChannelAvailabilityMapSchema(helpers.BaseSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ProductVariantChannelAvailabilityMap(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ProductVariantChannelAvailabilityMap(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ProductVariantDraftSchema(helpers.BaseSchema):
@@ -1132,25 +1124,21 @@ class SearchKeywordsSchema(helpers.BaseSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SearchKeywords(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SearchKeywords(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SuggestTokenizerSchema(helpers.BaseSchema):
@@ -1208,25 +1196,21 @@ class SuggestionResultSchema(helpers.BaseSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SuggestionResult(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SuggestionResult(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class TermFacetResultSchema(FacetResultSchema):

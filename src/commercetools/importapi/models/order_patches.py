@@ -64,6 +64,7 @@ class ReturnItemDraft(_BaseType):
         self.custom_line_item_id = custom_line_item_id
         self.comment = comment
         self.shipment_state = shipment_state
+
         super().__init__()
 
     @classmethod
@@ -95,6 +96,7 @@ class ReturnInfo(_BaseType):
         self.items = items
         self.return_tracking_id = return_tracking_id
         self.return_date = return_date
+
         super().__init__()
 
     @classmethod
@@ -127,6 +129,7 @@ class DeliveryParcel(_BaseType):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+
         super().__init__()
 
     @classmethod
@@ -156,6 +159,7 @@ class DeliveryParcelDraft(_BaseType):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+
         super().__init__()
 
     @classmethod
@@ -185,6 +189,7 @@ class DeliveryDraft(_BaseType):
         self.items = items
         self.address = address
         self.parcels = parcels
+
         super().__init__()
 
     @classmethod
@@ -206,6 +211,7 @@ class DeliveryAddressDraft(_BaseType):
     def __init__(self, *, delivery_id: str, address: typing.Optional["Address"] = None):
         self.delivery_id = delivery_id
         self.address = address
+
         super().__init__()
 
     @classmethod
@@ -232,6 +238,7 @@ class ParcelMeasurementDraft(_BaseType):
     ):
         self.parcel_id = parcel_id
         self.measurements = measurements
+
         super().__init__()
 
     @classmethod
@@ -257,6 +264,7 @@ class ParcelTrackingData(_BaseType):
     ):
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
+
         super().__init__()
 
     @classmethod
@@ -283,6 +291,7 @@ class ParcelItems(_BaseType):
     ):
         self.parcel_id = parcel_id
         self.items = items
+
         super().__init__()
 
     @classmethod
@@ -302,6 +311,7 @@ class RemoveDeliveryDraft(_BaseType):
 
     def __init__(self, *, id: str):
         self.id = id
+
         super().__init__()
 
     @classmethod
@@ -321,6 +331,7 @@ class RemoveParcelFromDeliveryDraft(_BaseType):
 
     def __init__(self, *, parcel_id: str):
         self.parcel_id = parcel_id
+
         super().__init__()
 
     @classmethod
@@ -383,6 +394,7 @@ class OrderField(_BaseType):
         self.set_parcel_measurements = set_parcel_measurements
         self.set_parcel_tracking_data = set_parcel_tracking_data
         self.set_parcel_items = set_parcel_items
+
         super().__init__()
 
     @classmethod
@@ -411,6 +423,7 @@ class OrderPatchImport(_BaseType):
     def __init__(self, *, order_number: str, fields: "OrderField"):
         self.order_number = order_number
         self.fields = fields
+
         super().__init__()
 
     @classmethod

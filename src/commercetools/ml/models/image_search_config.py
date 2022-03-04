@@ -30,6 +30,7 @@ class ImageSearchConfigUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -52,6 +53,7 @@ class ChangeStatusUpdateAction(ImageSearchConfigUpdateAction):
 
     def __init__(self, *, status: "ImageSearchConfigStatus"):
         self.status = status
+
         super().__init__(action="changeStatus")
 
     @classmethod
@@ -74,6 +76,7 @@ class ImageSearchConfigRequest(_BaseType):
 
     def __init__(self, *, actions: typing.List["ImageSearchConfigUpdateAction"]):
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -100,6 +103,7 @@ class ImageSearchConfigResponse(_BaseType):
     ):
         self.status = status
         self.last_modified_at = last_modified_at
+
         super().__init__()
 
     @classmethod

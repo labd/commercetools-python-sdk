@@ -37,6 +37,7 @@ class Money(_BaseType):
     def __init__(self, *, cent_amount: int, currency_code: str):
         self.cent_amount = cent_amount
         self.currency_code = currency_code
+
         super().__init__()
 
     @classmethod
@@ -84,6 +85,7 @@ class Reference(_BaseType):
     def __init__(self, *, type_id: "ReferenceTypeId", id: str):
         self.type_id = type_id
         self.id = id
+
         super().__init__()
 
     @classmethod
@@ -172,6 +174,7 @@ class ProductVariant(_BaseType):
         self.product = product
         self.staged = staged
         self.variant_id = variant_id
+
         super().__init__()
 
     @classmethod
@@ -202,6 +205,7 @@ class TaskToken(_BaseType):
     def __init__(self, *, task_id: str, uri_path: str):
         self.task_id = task_id
         self.uri_path = uri_path
+
         super().__init__()
 
     @classmethod

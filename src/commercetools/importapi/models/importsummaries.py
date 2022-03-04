@@ -28,6 +28,7 @@ class ImportSummary(_BaseType):
     def __init__(self, *, states: "OperationStates", total: int):
         self.states = states
         self.total = total
+
         super().__init__()
 
     @classmethod
@@ -72,6 +73,7 @@ class OperationStates(_BaseType):
         self.wait_for_master_variant = wait_for_master_variant
         self.imported = imported
         self.rejected = rejected
+
         super().__init__()
 
     @classmethod

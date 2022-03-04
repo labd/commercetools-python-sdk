@@ -48,75 +48,63 @@ class ErrorObjectSchema(helpers.BaseSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ErrorObject(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ErrorObject(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class AccessDeniedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.AccessDeniedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AccessDeniedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class AnonymousIdAlreadyInUseErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.AnonymousIdAlreadyInUseError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AnonymousIdAlreadyInUseError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class AttributeDefinitionAlreadyExistsErrorSchema(ErrorObjectSchema):
@@ -133,25 +121,21 @@ class AttributeDefinitionAlreadyExistsErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.AttributeDefinitionAlreadyExistsError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AttributeDefinitionAlreadyExistsError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class AttributeDefinitionTypeConflictErrorSchema(ErrorObjectSchema):
@@ -168,25 +152,21 @@ class AttributeDefinitionTypeConflictErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.AttributeDefinitionTypeConflictError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AttributeDefinitionTypeConflictError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
@@ -197,50 +177,42 @@ class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.AttributeNameDoesNotExistError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AttributeNameDoesNotExistError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class BadGatewayErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.BadGatewayError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.BadGatewayError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ConcurrentModificationErrorSchema(ErrorObjectSchema):
@@ -254,25 +226,21 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ConcurrentModificationError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ConcurrentModificationError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
@@ -313,25 +281,21 @@ class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DiscountCodeNonApplicableError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DiscountCodeNonApplicableError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateAttributeValueErrorSchema(ErrorObjectSchema):
@@ -345,25 +309,21 @@ class DuplicateAttributeValueErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateAttributeValueError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateAttributeValueError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
@@ -378,25 +338,21 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateAttributeValuesError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateAttributeValuesError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateEnumValuesErrorSchema(ErrorObjectSchema):
@@ -407,25 +363,21 @@ class DuplicateEnumValuesErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateEnumValuesError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateEnumValuesError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
@@ -499,25 +451,21 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateFieldError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateFieldError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
@@ -585,25 +533,21 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateFieldWithConflictingResourceError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateFieldWithConflictingResourceError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
@@ -619,25 +563,21 @@ class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicatePriceScopeError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicatePriceScopeError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
@@ -652,25 +592,21 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.DuplicateVariantValuesError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateVariantValuesError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class EditPreviewFailedErrorSchema(ErrorObjectSchema):
@@ -684,25 +620,21 @@ class EditPreviewFailedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.EditPreviewFailedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.EditPreviewFailedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class EnumKeyAlreadyExistsErrorSchema(ErrorObjectSchema):
@@ -716,25 +648,21 @@ class EnumKeyAlreadyExistsErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.EnumKeyAlreadyExistsError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.EnumKeyAlreadyExistsError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class EnumKeyDoesNotExistErrorSchema(ErrorObjectSchema):
@@ -748,75 +676,63 @@ class EnumKeyDoesNotExistErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.EnumKeyDoesNotExistError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.EnumKeyDoesNotExistError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.EnumValueIsUsedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.EnumValueIsUsedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class EnumValuesMustMatchErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.EnumValuesMustMatchError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.EnumValuesMustMatchError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ErrorResponseSchema(helpers.BaseSchema):
@@ -1041,25 +957,21 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ExtensionBadResponseError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExtensionBadResponseError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
@@ -1076,25 +988,21 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ExtensionNoResponseError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExtensionNoResponseError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
@@ -1122,200 +1030,168 @@ class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ExtensionUpdateActionsFailedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExtensionUpdateActionsFailedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ExternalOAuthFailedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ExternalOAuthFailedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExternalOAuthFailedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class FeatureRemovedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.FeatureRemovedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.FeatureRemovedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class GeneralErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.GeneralError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GeneralError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InsufficientScopeErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InsufficientScopeError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InsufficientScopeError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InternalConstraintViolatedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InternalConstraintViolatedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InternalConstraintViolatedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidCredentialsErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidCredentialsError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidCredentialsError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidCurrentPasswordError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidCurrentPasswordError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidFieldErrorSchema(ErrorObjectSchema):
@@ -1334,50 +1210,42 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidFieldError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidFieldError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidInputErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidInputError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidInputError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
@@ -1389,150 +1257,126 @@ class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidItemShippingDetailsError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidItemShippingDetailsError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidJsonInputErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidJsonInputError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidJsonInputError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidOperationErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidOperationError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidOperationError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidSubjectErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidSubjectError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidSubjectError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class InvalidTokenErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.InvalidTokenError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.InvalidTokenError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.LanguageUsedInStoresError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.LanguageUsedInStoresError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
@@ -1567,25 +1411,21 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.MatchingPriceNotFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MatchingPriceNotFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
@@ -1600,25 +1440,21 @@ class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.MaxResourceLimitExceededError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MaxResourceLimitExceededError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class MissingRoleOnChannelErrorSchema(ErrorObjectSchema):
@@ -1640,25 +1476,21 @@ class MissingRoleOnChannelErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.MissingRoleOnChannelError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MissingRoleOnChannelError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
@@ -1675,100 +1507,84 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.MissingTaxRateForCountryError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MissingTaxRateForCountryError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.NoMatchingProductDiscountFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.NoMatchingProductDiscountFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class NotEnabledErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.NotEnabledError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.NotEnabledError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ObjectNotFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ObjectNotFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ObjectNotFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class OutOfStockErrorSchema(ErrorObjectSchema):
@@ -1785,75 +1601,63 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.OutOfStockError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.OutOfStockError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class OverCapacityErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.OverCapacityError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.OverCapacityError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class PendingOperationErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.PendingOperationError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.PendingOperationError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class PriceChangedErrorSchema(ErrorObjectSchema):
@@ -1868,25 +1672,21 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.PriceChangedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.PriceChangedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
@@ -1900,75 +1700,63 @@ class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ProjectNotConfiguredForLanguagesError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ProjectNotConfiguredForLanguagesError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class QueryComplexityLimitExceededErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.QueryComplexityLimitExceededError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.QueryComplexityLimitExceededError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class QueryTimedOutErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.QueryTimedOutError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.QueryTimedOutError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ReferenceExistsErrorSchema(ErrorObjectSchema):
@@ -1984,25 +1772,21 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ReferenceExistsError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ReferenceExistsError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
@@ -2019,25 +1803,21 @@ class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ReferencedResourceNotFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ReferencedResourceNotFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class RequiredFieldErrorSchema(ErrorObjectSchema):
@@ -2046,250 +1826,210 @@ class RequiredFieldErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.RequiredFieldError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.RequiredFieldError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ResourceNotFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ResourceNotFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ResourceNotFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ResourceSizeLimitExceededError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ResourceSizeLimitExceededError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SearchDeactivatedErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SearchDeactivatedError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SearchDeactivatedError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SearchExecutionFailureError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SearchExecutionFailureError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SearchFacetPathNotFoundError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SearchFacetPathNotFoundError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SearchIndexingInProgressError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SearchIndexingInProgressError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SemanticErrorErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SemanticErrorError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SemanticErrorError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class ShippingMethodDoesNotMatchCartErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.ShippingMethodDoesNotMatchCartError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ShippingMethodDoesNotMatchCartError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class SyntaxErrorErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.SyntaxErrorError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.SyntaxErrorError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
 
 
 class VariantValuesSchema(helpers.BaseSchema):
@@ -2324,22 +2064,18 @@ class WeakPasswordErrorSchema(ErrorObjectSchema):
     class Meta:
         unknown = marshmallow.EXCLUDE
 
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return models.WeakPasswordError(**data)
-
     @marshmallow.pre_load
     def pre_load(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
 
-    @marshmallow.pre_dump
-    def pre_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).preprocess(data)
-        return data
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.WeakPasswordError(**data)
 
-    @marshmallow.post_dump
-    def post_dump(self, data, **kwargs):
-        data = typing.cast(helpers.RegexField, self.fields["_regex"]).postprocess(data)
-        return data
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)

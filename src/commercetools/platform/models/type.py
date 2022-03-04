@@ -74,6 +74,7 @@ class CustomFieldEnumValue(_BaseType):
     def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -99,6 +100,7 @@ class CustomFieldLocalizedEnumValue(_BaseType):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -143,6 +145,7 @@ class CustomFields(_BaseType):
     def __init__(self, *, type: "TypeReference", fields: "FieldContainer"):
         self.type = type
         self.fields = fields
+
         super().__init__()
 
     @classmethod
@@ -173,6 +176,7 @@ class CustomFieldsDraft(_BaseType):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__()
 
     @classmethod
@@ -226,6 +230,7 @@ class FieldDefinition(_BaseType):
         self.label = label
         self.required = required
         self.input_hint = input_hint
+
         super().__init__()
 
     @classmethod
@@ -245,6 +250,7 @@ class FieldType(_BaseType):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__()
 
     @classmethod
@@ -373,6 +379,7 @@ class CustomFieldEnumType(FieldType):
 
     def __init__(self, *, values: typing.List["CustomFieldEnumValue"]):
         self.values = values
+
         super().__init__(name="Enum")
 
     @classmethod
@@ -395,6 +402,7 @@ class CustomFieldLocalizedEnumType(FieldType):
 
     def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]):
         self.values = values
+
         super().__init__(name="LocalizedEnum")
 
     @classmethod
@@ -478,6 +486,7 @@ class CustomFieldReferenceType(FieldType):
 
     def __init__(self, *, reference_type_id: "CustomFieldReferenceValue"):
         self.reference_type_id = reference_type_id
+
         super().__init__(name="Reference")
 
     @classmethod
@@ -502,6 +511,7 @@ class CustomFieldSetType(FieldType):
 
     def __init__(self, *, element_type: "FieldType"):
         self.element_type = element_type
+
         super().__init__(name="Set")
 
     @classmethod
@@ -621,6 +631,7 @@ class Type(BaseResource):
         self.description = description
         self.resource_type_ids = resource_type_ids
         self.field_definitions = field_definitions
+
         super().__init__(
             id=id,
             version=version,
@@ -666,6 +677,7 @@ class TypeDraft(_BaseType):
         self.description = description
         self.resource_type_ids = resource_type_ids
         self.field_definitions = field_definitions
+
         super().__init__()
 
     @classmethod
@@ -712,6 +724,7 @@ class TypePagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -737,6 +750,7 @@ class TypeReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Type"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.TYPE)
 
     @classmethod
@@ -791,6 +805,7 @@ class TypeUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["TypeUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -810,6 +825,7 @@ class TypeUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -895,6 +911,7 @@ class TypeAddEnumValueAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
         self.field_name = field_name
         self.value = value
+
         super().__init__(action="addEnumValue")
 
     @classmethod
@@ -917,6 +934,7 @@ class TypeAddFieldDefinitionAction(TypeUpdateAction):
 
     def __init__(self, *, field_definition: "FieldDefinition"):
         self.field_definition = field_definition
+
         super().__init__(action="addFieldDefinition")
 
     @classmethod
@@ -947,6 +965,7 @@ class TypeAddLocalizedEnumValueAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
         self.field_name = field_name
         self.value = value
+
         super().__init__(action="addLocalizedEnumValue")
 
     @classmethod
@@ -975,6 +994,7 @@ class TypeChangeEnumValueLabelAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, value: "CustomFieldEnumValue"):
         self.field_name = field_name
         self.value = value
+
         super().__init__(action="changeEnumValueLabel")
 
     @classmethod
@@ -1005,6 +1025,7 @@ class TypeChangeEnumValueOrderAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, keys: typing.List["str"]):
         self.field_name = field_name
         self.keys = keys
+
         super().__init__(action="changeEnumValueOrder")
 
     @classmethod
@@ -1031,6 +1052,7 @@ class TypeChangeFieldDefinitionLabelAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, label: "LocalizedString"):
         self.field_name = field_name
         self.label = label
+
         super().__init__(action="changeFieldDefinitionLabel")
 
     @classmethod
@@ -1053,6 +1075,7 @@ class TypeChangeFieldDefinitionOrderAction(TypeUpdateAction):
 
     def __init__(self, *, field_names: typing.List["str"]):
         self.field_names = field_names
+
         super().__init__(action="changeFieldDefinitionOrder")
 
     @classmethod
@@ -1081,6 +1104,7 @@ class TypeChangeInputHintAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, input_hint: "TypeTextInputHint"):
         self.field_name = field_name
         self.input_hint = input_hint
+
         super().__init__(action="changeInputHint")
 
     @classmethod
@@ -1104,6 +1128,7 @@ class TypeChangeKeyAction(TypeUpdateAction):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__(action="changeKey")
 
     @classmethod
@@ -1126,6 +1151,7 @@ class TypeChangeLabelAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, label: "LocalizedString"):
         self.field_name = field_name
         self.label = label
+
         super().__init__(action="changeLabel")
 
     @classmethod
@@ -1152,6 +1178,7 @@ class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, value: "CustomFieldLocalizedEnumValue"):
         self.field_name = field_name
         self.value = value
+
         super().__init__(action="changeLocalizedEnumValueLabel")
 
     @classmethod
@@ -1182,6 +1209,7 @@ class TypeChangeLocalizedEnumValueOrderAction(TypeUpdateAction):
     def __init__(self, *, field_name: str, keys: typing.List["str"]):
         self.field_name = field_name
         self.keys = keys
+
         super().__init__(action="changeLocalizedEnumValueOrder")
 
     @classmethod
@@ -1205,6 +1233,7 @@ class TypeChangeNameAction(TypeUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -1226,6 +1255,7 @@ class TypeRemoveFieldDefinitionAction(TypeUpdateAction):
 
     def __init__(self, *, field_name: str):
         self.field_name = field_name
+
         super().__init__(action="removeFieldDefinition")
 
     @classmethod
@@ -1248,6 +1278,7 @@ class TypeSetDescriptionAction(TypeUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod

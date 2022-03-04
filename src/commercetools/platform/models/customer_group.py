@@ -66,6 +66,7 @@ class CustomerGroup(BaseResource):
         self.key = key
         self.name = name
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -105,6 +106,7 @@ class CustomerGroupDraft(_BaseType):
         self.key = key
         self.group_name = group_name
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -152,6 +154,7 @@ class CustomerGroupPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -176,6 +179,7 @@ class CustomerGroupReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["CustomerGroup"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER_GROUP)
 
     @classmethod
@@ -227,6 +231,7 @@ class CustomerGroupUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -246,6 +251,7 @@ class CustomerGroupUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -281,6 +287,7 @@ class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -308,6 +315,7 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -344,6 +352,7 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -366,6 +375,7 @@ class CustomerGroupSetKeyAction(CustomerGroupUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod

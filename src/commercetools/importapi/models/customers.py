@@ -102,6 +102,7 @@ class CustomerAddress(_BaseType):
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+
         super().__init__()
 
     @classmethod
@@ -214,6 +215,7 @@ class CustomerImport(ImportResource):
         self.shipping_addresses = shipping_addresses
         self.locale = locale
         self.custom = custom
+
         super().__init__(key=key)
 
     @classmethod

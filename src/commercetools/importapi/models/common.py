@@ -99,6 +99,7 @@ class Asset(_BaseType):
         self.description = description
         self.tags = tags
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -124,6 +125,7 @@ class AssetDimensions(_BaseType):
     def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
+
         super().__init__()
 
     @classmethod
@@ -159,6 +161,7 @@ class AssetSource(_BaseType):
         self.key = key
         self.dimensions = dimensions
         self.content_type = content_type
+
         super().__init__()
 
     @classmethod
@@ -193,6 +196,7 @@ class Image(_BaseType):
         self.url = url
         self.dimensions = dimensions
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -214,6 +218,7 @@ class EnumValue(_BaseType):
     def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -242,6 +247,7 @@ class LocalizedEnumValue(_BaseType):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -272,6 +278,7 @@ class ImportResource(_BaseType):
 
     def __init__(self, *, key: str):
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -296,6 +303,7 @@ class KeyReference(_BaseType):
     def __init__(self, *, key: str, type_id: "ReferenceType"):
         self.key = key
         self.type_id = type_id
+
         super().__init__()
 
     @classmethod
@@ -771,6 +779,7 @@ class CustomObjectKeyReference(KeyReference):
 
     def __init__(self, *, key: str, container: str):
         self.container = container
+
         super().__init__(key=key, type_id=ReferenceType.KEY_VALUE_DOCUMENT)
 
     @classmethod
@@ -795,6 +804,7 @@ class UnresolvedReferences(_BaseType):
     def __init__(self, *, key: str, type_id: "ReferenceType"):
         self.key = key
         self.type_id = type_id
+
         super().__init__()
 
     @classmethod
@@ -833,6 +843,7 @@ class TypedMoney(_BaseType):
         self.fraction_digits = fraction_digits
         self.cent_amount = cent_amount
         self.currency_code = currency_code
+
         super().__init__()
 
     @classmethod
@@ -864,6 +875,7 @@ class HighPrecisionMoney(TypedMoney):
         precise_amount: int
     ):
         self.precise_amount = precise_amount
+
         super().__init__(
             fraction_digits=fraction_digits,
             cent_amount=cent_amount,
@@ -919,6 +931,7 @@ class DiscountedPrice(_BaseType):
     def __init__(self, *, value: "TypedMoney", discount: "ProductDiscountKeyReference"):
         self.value = value
         self.discount = discount
+
         super().__init__()
 
     @classmethod
@@ -944,6 +957,7 @@ class PriceTier(_BaseType):
     def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
         self.minimum_quantity = minimum_quantity
         self.value = value
+
         super().__init__()
 
     @classmethod
@@ -1091,6 +1105,7 @@ class Address(_BaseType):
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+
         super().__init__()
 
     @classmethod

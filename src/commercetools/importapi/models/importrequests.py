@@ -49,6 +49,7 @@ class ImportRequest(_BaseType):
 
     def __init__(self, *, type: "ImportResourceType"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -110,6 +111,7 @@ class ImportResponse(_BaseType):
 
     def __init__(self, *, operation_status: typing.List["ImportOperationStatus"]):
         self.operation_status = operation_status
+
         super().__init__()
 
     @classmethod
@@ -132,6 +134,7 @@ class CategoryImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["CategoryImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.CATEGORY)
 
     @classmethod
@@ -154,6 +157,7 @@ class ProductImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["ProductImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.PRODUCT)
 
     @classmethod
@@ -176,6 +180,7 @@ class ProductDraftImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["ProductDraftImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.PRODUCT_DRAFT)
 
     @classmethod
@@ -200,6 +205,7 @@ class ProductTypeImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["ProductTypeImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.PRODUCT_TYPE)
 
     @classmethod
@@ -224,6 +230,7 @@ class ProductVariantImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["ProductVariantImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.PRODUCT_VARIANT)
 
     @classmethod
@@ -248,6 +255,7 @@ class PriceImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["PriceImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.PRICE)
 
     @classmethod
@@ -270,6 +278,7 @@ class OrderImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["OrderImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.ORDER)
 
     @classmethod
@@ -292,6 +301,7 @@ class OrderPatchImportRequest(ImportRequest):
 
     def __init__(self, *, patches: typing.List["OrderPatchImport"]):
         self.patches = patches
+
         super().__init__(type=ImportResourceType.ORDER_PATCH)
 
     @classmethod
@@ -316,6 +326,7 @@ class ProductVariantPatchRequest(ImportRequest):
 
     def __init__(self, *, patches: typing.List["ProductVariantPatch"]):
         self.patches = patches
+
         super().__init__(type=ImportResourceType.PRODUCT_VARIANT_PATCH)
 
     @classmethod
@@ -340,6 +351,7 @@ class CustomerImportRequest(ImportRequest):
 
     def __init__(self, *, resources: typing.List["CustomerImport"]):
         self.resources = resources
+
         super().__init__(type=ImportResourceType.CUSTOMER)
 
     @classmethod

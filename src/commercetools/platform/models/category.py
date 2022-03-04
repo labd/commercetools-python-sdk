@@ -126,6 +126,7 @@ class Category(BaseResource):
         self.custom = custom
         self.assets = assets
         self.key = key
+
         super().__init__(
             id=id,
             version=version,
@@ -198,6 +199,7 @@ class CategoryDraft(_BaseType):
         self.custom = custom
         self.assets = assets
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -233,6 +235,7 @@ class CategoryPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -254,6 +257,7 @@ class CategoryReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Category"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.CATEGORY)
 
     @classmethod
@@ -296,6 +300,7 @@ class CategoryUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["CategoryUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -315,6 +320,7 @@ class CategoryUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -422,6 +428,7 @@ class CategoryAddAssetAction(CategoryUpdateAction):
     def __init__(self, *, asset: "AssetDraft", position: typing.Optional[int] = None):
         self.asset = asset
         self.position = position
+
         super().__init__(action="addAsset")
 
     @classmethod
@@ -453,6 +460,7 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.name = name
+
         super().__init__(action="changeAssetName")
 
     @classmethod
@@ -474,6 +482,7 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 
     def __init__(self, *, asset_order: typing.List["str"]):
         self.asset_order = asset_order
+
         super().__init__(action="changeAssetOrder")
 
     @classmethod
@@ -495,6 +504,7 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -516,6 +526,7 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 
     def __init__(self, *, order_hint: str):
         self.order_hint = order_hint
+
         super().__init__(action="changeOrderHint")
 
     @classmethod
@@ -537,6 +548,7 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 
     def __init__(self, *, parent: "CategoryResourceIdentifier"):
         self.parent = parent
+
         super().__init__(action="changeParent")
 
     @classmethod
@@ -560,6 +572,7 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
     def __init__(self, *, slug: "LocalizedString"):
         self.slug = slug
+
         super().__init__(action="changeSlug")
 
     @classmethod
@@ -588,6 +601,7 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
+
         super().__init__(action="removeAsset")
 
     @classmethod
@@ -626,6 +640,7 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
         self.asset_key = asset_key
         self.name = name
         self.value = value
+
         super().__init__(action="setAssetCustomField")
 
     @classmethod
@@ -663,6 +678,7 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
         self.asset_key = asset_key
         self.type = type
         self.fields = fields
+
         super().__init__(action="setAssetCustomType")
 
     @classmethod
@@ -694,6 +710,7 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.description = description
+
         super().__init__(action="setAssetDescription")
 
     @classmethod
@@ -719,6 +736,7 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
     def __init__(self, *, asset_id: str, asset_key: typing.Optional[str] = None):
         self.asset_id = asset_id
         self.asset_key = asset_key
+
         super().__init__(action="setAssetKey")
 
     @classmethod
@@ -750,6 +768,7 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.sources = sources
+
         super().__init__(action="setAssetSources")
 
     @classmethod
@@ -781,6 +800,7 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.tags = tags
+
         super().__init__(action="setAssetTags")
 
     @classmethod
@@ -808,6 +828,7 @@ class CategorySetCustomFieldAction(CategoryUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -839,6 +860,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -860,6 +882,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -882,6 +905,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
 
     def __init__(self, *, external_id: typing.Optional[str] = None):
         self.external_id = external_id
+
         super().__init__(action="setExternalId")
 
     @classmethod
@@ -906,6 +930,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -925,6 +950,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
 
     def __init__(self, *, meta_description: typing.Optional["LocalizedString"] = None):
         self.meta_description = meta_description
+
         super().__init__(action="setMetaDescription")
 
     @classmethod
@@ -946,6 +972,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
 
     def __init__(self, *, meta_keywords: typing.Optional["LocalizedString"] = None):
         self.meta_keywords = meta_keywords
+
         super().__init__(action="setMetaKeywords")
 
     @classmethod
@@ -967,6 +994,7 @@ class CategorySetMetaTitleAction(CategoryUpdateAction):
 
     def __init__(self, *, meta_title: typing.Optional["LocalizedString"] = None):
         self.meta_title = meta_title
+
         super().__init__(action="setMetaTitle")
 
     @classmethod

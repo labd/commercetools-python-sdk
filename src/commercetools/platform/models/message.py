@@ -269,6 +269,7 @@ class ContainerAndKey(_BaseType):
     def __init__(self, *, key: str, container: str):
         self.key = key
         self.container = container
+
         super().__init__()
 
     @classmethod
@@ -318,6 +319,7 @@ class Message(BaseResource):
         self.resource_version = resource_version
         self.type = type
         self.resource_user_provided_identifiers = resource_user_provided_identifiers
+
         super().__init__(
             id=id,
             version=version,
@@ -555,6 +557,7 @@ class CategoryCreatedMessage(Message):
         category: "Category"
     ):
         self.category = category
+
         super().__init__(
             id=id,
             version=version,
@@ -607,6 +610,7 @@ class CategorySlugChangedMessage(Message):
     ):
         self.slug = slug
         self.old_slug = old_slug
+
         super().__init__(
             id=id,
             version=version,
@@ -656,6 +660,7 @@ class CustomerAddressAddedMessage(Message):
         address: "Address"
     ):
         self.address = address
+
         super().__init__(
             id=id,
             version=version,
@@ -705,6 +710,7 @@ class CustomerAddressChangedMessage(Message):
         address: "Address"
     ):
         self.address = address
+
         super().__init__(
             id=id,
             version=version,
@@ -754,6 +760,7 @@ class CustomerAddressRemovedMessage(Message):
         address: "Address"
     ):
         self.address = address
+
         super().__init__(
             id=id,
             version=version,
@@ -803,6 +810,7 @@ class CustomerCompanyNameSetMessage(Message):
         company_name: typing.Optional[str] = None
     ):
         self.company_name = company_name
+
         super().__init__(
             id=id,
             version=version,
@@ -852,6 +860,7 @@ class CustomerCreatedMessage(Message):
         customer: "Customer"
     ):
         self.customer = customer
+
         super().__init__(
             id=id,
             version=version,
@@ -901,6 +910,7 @@ class CustomerDateOfBirthSetMessage(Message):
         date_of_birth: typing.Optional[datetime.date] = None
     ):
         self.date_of_birth = date_of_birth
+
         super().__init__(
             id=id,
             version=version,
@@ -996,6 +1006,7 @@ class CustomerEmailChangedMessage(Message):
         email: str
     ):
         self.email = email
+
         super().__init__(
             id=id,
             version=version,
@@ -1091,6 +1102,7 @@ class CustomerFirstNameSetMessage(Message):
         first_name: typing.Optional[str] = None
     ):
         self.first_name = first_name
+
         super().__init__(
             id=id,
             version=version,
@@ -1141,6 +1153,7 @@ class CustomerGroupSetMessage(Message):
         customer_group: typing.Optional["CustomerGroupReference"] = None
     ):
         self.customer_group = customer_group
+
         super().__init__(
             id=id,
             version=version,
@@ -1190,6 +1203,7 @@ class CustomerLastNameSetMessage(Message):
         last_name: typing.Optional[str] = None
     ):
         self.last_name = last_name
+
         super().__init__(
             id=id,
             version=version,
@@ -1240,6 +1254,7 @@ class CustomerPasswordUpdatedMessage(Message):
         reset: bool
     ):
         self.reset = reset
+
         super().__init__(
             id=id,
             version=version,
@@ -1289,6 +1304,7 @@ class CustomerTitleSetMessage(Message):
         title: typing.Optional[str] = None
     ):
         self.title = title
+
         super().__init__(
             id=id,
             version=version,
@@ -1338,6 +1354,7 @@ class InventoryEntryCreatedMessage(Message):
         inventory_entry: "InventoryEntry"
     ):
         self.inventory_entry = inventory_entry
+
         super().__init__(
             id=id,
             version=version,
@@ -1391,6 +1408,7 @@ class InventoryEntryDeletedMessage(Message):
     ):
         self.sku = sku
         self.supply_channel = supply_channel
+
         super().__init__(
             id=id,
             version=version,
@@ -1453,6 +1471,7 @@ class InventoryEntryQuantitySetMessage(Message):
         self.old_available_quantity = old_available_quantity
         self.new_available_quantity = new_available_quantity
         self.supply_channel = supply_channel
+
         super().__init__(
             id=id,
             version=version,
@@ -1502,6 +1521,7 @@ class MessagePagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -1533,6 +1553,7 @@ class MessagesConfiguration(_BaseType):
     ):
         self.enabled = enabled
         self.delete_days_after_creation = delete_days_after_creation
+
         super().__init__()
 
     @classmethod
@@ -1558,6 +1579,7 @@ class MessagesConfigurationDraft(_BaseType):
     def __init__(self, *, enabled: bool, delete_days_after_creation: int):
         self.enabled = enabled
         self.delete_days_after_creation = delete_days_after_creation
+
         super().__init__()
 
     @classmethod
@@ -1805,6 +1827,7 @@ class CustomLineItemStateTransitionMessage(OrderMessage):
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
+
         super().__init__(
             id=id,
             version=version,
@@ -1854,6 +1877,7 @@ class DeliveryAddedMessage(OrderMessage):
         delivery: "Delivery"
     ):
         self.delivery = delivery
+
         super().__init__(
             id=id,
             version=version,
@@ -1907,6 +1931,7 @@ class DeliveryAddressSetMessage(OrderMessage):
         self.delivery_id = delivery_id
         self.address = address
         self.old_address = old_address
+
         super().__init__(
             id=id,
             version=version,
@@ -1962,6 +1987,7 @@ class DeliveryItemsUpdatedMessage(OrderMessage):
         self.delivery_id = delivery_id
         self.items = items
         self.old_items = old_items
+
         super().__init__(
             id=id,
             version=version,
@@ -2011,6 +2037,7 @@ class DeliveryRemovedMessage(OrderMessage):
         delivery: "Delivery"
     ):
         self.delivery = delivery
+
         super().__init__(
             id=id,
             version=version,
@@ -2074,6 +2101,7 @@ class LineItemStateTransitionMessage(OrderMessage):
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
+
         super().__init__(
             id=id,
             version=version,
@@ -2126,6 +2154,7 @@ class OrderBillingAddressSetMessage(OrderMessage):
     ):
         self.address = address
         self.old_address = old_address
+
         super().__init__(
             id=id,
             version=version,
@@ -2175,6 +2204,7 @@ class OrderCreatedMessage(OrderMessage):
         order: "Order"
     ):
         self.order = order
+
         super().__init__(
             id=id,
             version=version,
@@ -2230,6 +2260,7 @@ class OrderCustomLineItemDiscountSetMessage(OrderMessage):
         self.custom_line_item_id = custom_line_item_id
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.taxed_price = taxed_price
+
         super().__init__(
             id=id,
             version=version,
@@ -2282,6 +2313,7 @@ class OrderCustomerEmailSetMessage(OrderMessage):
     ):
         self.email = email
         self.old_email = old_email
+
         super().__init__(
             id=id,
             version=version,
@@ -2336,6 +2368,7 @@ class OrderCustomerGroupSetMessage(OrderMessage):
     ):
         self.customer_group = customer_group
         self.old_customer_group = old_customer_group
+
         super().__init__(
             id=id,
             version=version,
@@ -2396,6 +2429,7 @@ class OrderCustomerSetMessage(OrderMessage):
         self.customer_group = customer_group
         self.old_customer = old_customer
         self.old_customer_group = old_customer_group
+
         super().__init__(
             id=id,
             version=version,
@@ -2445,6 +2479,7 @@ class OrderDeletedMessage(OrderMessage):
         order: "Order"
     ):
         self.order = order
+
         super().__init__(
             id=id,
             version=version,
@@ -2492,6 +2527,7 @@ class OrderDiscountCodeAddedMessage(OrderMessage):
         discount_code: "DiscountCodeReference"
     ):
         self.discount_code = discount_code
+
         super().__init__(
             id=id,
             version=version,
@@ -2541,6 +2577,7 @@ class OrderDiscountCodeRemovedMessage(OrderMessage):
         discount_code: "DiscountCodeReference"
     ):
         self.discount_code = discount_code
+
         super().__init__(
             id=id,
             version=version,
@@ -2596,6 +2633,7 @@ class OrderDiscountCodeStateSetMessage(OrderMessage):
         self.discount_code = discount_code
         self.state = state
         self.old_state = old_state
+
         super().__init__(
             id=id,
             version=version,
@@ -2648,6 +2686,7 @@ class OrderEditAppliedMessage(OrderMessage):
     ):
         self.edit = edit
         self.result = result
+
         super().__init__(
             id=id,
             version=version,
@@ -2697,6 +2736,7 @@ class OrderImportedMessage(OrderMessage):
         order: "Order"
     ):
         self.order = order
+
         super().__init__(
             id=id,
             version=version,
@@ -2747,6 +2787,7 @@ class OrderLineItemAddedMessage(OrderMessage):
     ):
         self.line_item = line_item
         self.added_quantity = added_quantity
+
         super().__init__(
             id=id,
             version=version,
@@ -2809,6 +2850,7 @@ class OrderLineItemDiscountSetMessage(OrderMessage):
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.total_price = total_price
         self.taxed_price = taxed_price
+
         super().__init__(
             id=id,
             version=version,
@@ -2862,6 +2904,7 @@ class OrderLineItemDistributionChannelSetMessage(OrderMessage):
     ):
         self.line_item_id = line_item_id
         self.distribution_channel = distribution_channel
+
         super().__init__(
             id=id,
             version=version,
@@ -2933,6 +2976,7 @@ class OrderLineItemRemovedMessage(OrderMessage):
         self.new_taxed_price = new_taxed_price
         self.new_price = new_price
         self.new_shipping_detail = new_shipping_detail
+
         super().__init__(
             id=id,
             version=version,
@@ -2982,6 +3026,7 @@ class OrderPaymentAddedMessage(Message):
         payment: "PaymentReference"
     ):
         self.payment = payment
+
         super().__init__(
             id=id,
             version=version,
@@ -3034,6 +3079,7 @@ class OrderPaymentStateChangedMessage(OrderMessage):
     ):
         self.payment_state = payment_state
         self.old_payment_state = old_payment_state
+
         super().__init__(
             id=id,
             version=version,
@@ -3083,6 +3129,7 @@ class OrderReturnInfoAddedMessage(OrderMessage):
         return_info: "ReturnInfo"
     ):
         self.return_info = return_info
+
         super().__init__(
             id=id,
             version=version,
@@ -3132,6 +3179,7 @@ class OrderReturnInfoSetMessage(OrderMessage):
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None
     ):
         self.return_info = return_info
+
         super().__init__(
             id=id,
             version=version,
@@ -3184,6 +3232,7 @@ class OrderReturnShipmentStateChangedMessage(OrderMessage):
     ):
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
+
         super().__init__(
             id=id,
             version=version,
@@ -3236,6 +3285,7 @@ class OrderShipmentStateChangedMessage(OrderMessage):
     ):
         self.shipment_state = shipment_state
         self.old_shipment_state = old_shipment_state
+
         super().__init__(
             id=id,
             version=version,
@@ -3288,6 +3338,7 @@ class OrderShippingAddressSetMessage(OrderMessage):
     ):
         self.address = address
         self.old_address = old_address
+
         super().__init__(
             id=id,
             version=version,
@@ -3340,6 +3391,7 @@ class OrderShippingInfoSetMessage(OrderMessage):
     ):
         self.shipping_info = shipping_info
         self.old_shipping_info = old_shipping_info
+
         super().__init__(
             id=id,
             version=version,
@@ -3392,6 +3444,7 @@ class OrderShippingRateInputSetMessage(OrderMessage):
     ):
         self.shipping_rate_input = shipping_rate_input
         self.old_shipping_rate_input = old_shipping_rate_input
+
         super().__init__(
             id=id,
             version=version,
@@ -3444,6 +3497,7 @@ class OrderStateChangedMessage(OrderMessage):
     ):
         self.order_state = order_state
         self.old_order_state = old_order_state
+
         super().__init__(
             id=id,
             version=version,
@@ -3501,6 +3555,7 @@ class OrderStateTransitionMessage(OrderMessage):
         self.state = state
         self.old_state = old_state
         self.force = force
+
         super().__init__(
             id=id,
             version=version,
@@ -3550,6 +3605,7 @@ class OrderStoreSetMessage(OrderMessage):
         store: "StoreKeyReference"
     ):
         self.store = store
+
         super().__init__(
             id=id,
             version=version,
@@ -3600,6 +3656,7 @@ class ParcelAddedToDeliveryMessage(OrderMessage):
     ):
         self.delivery = delivery
         self.parcel = parcel
+
         super().__init__(
             id=id,
             version=version,
@@ -3658,6 +3715,7 @@ class ParcelItemsUpdatedMessage(OrderMessage):
         self.delivery_id = delivery_id
         self.items = items
         self.old_items = old_items
+
         super().__init__(
             id=id,
             version=version,
@@ -3713,6 +3771,7 @@ class ParcelMeasurementsUpdatedMessage(OrderMessage):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
         self.measurements = measurements
+
         super().__init__(
             id=id,
             version=version,
@@ -3765,6 +3824,7 @@ class ParcelRemovedFromDeliveryMessage(OrderMessage):
     ):
         self.delivery_id = delivery_id
         self.parcel = parcel
+
         super().__init__(
             id=id,
             version=version,
@@ -3820,6 +3880,7 @@ class ParcelTrackingDataUpdatedMessage(OrderMessage):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
+
         super().__init__(
             id=id,
             version=version,
@@ -3869,6 +3930,7 @@ class PaymentCreatedMessage(Message):
         payment: "Payment"
     ):
         self.payment = payment
+
         super().__init__(
             id=id,
             version=version,
@@ -3917,6 +3979,7 @@ class PaymentInteractionAddedMessage(Message):
         interaction: "CustomFields"
     ):
         self.interaction = interaction
+
         super().__init__(
             id=id,
             version=version,
@@ -3969,6 +4032,7 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
     ):
         self.payment_id = payment_id
         self.interface_code = interface_code
+
         super().__init__(
             id=id,
             version=version,
@@ -4022,6 +4086,7 @@ class PaymentStatusStateTransitionMessage(Message):
     ):
         self.state = state
         self.force = force
+
         super().__init__(
             id=id,
             version=version,
@@ -4071,6 +4136,7 @@ class PaymentTransactionAddedMessage(Message):
         transaction: "Transaction"
     ):
         self.transaction = transaction
+
         super().__init__(
             id=id,
             version=version,
@@ -4123,6 +4189,7 @@ class PaymentTransactionStateChangedMessage(Message):
     ):
         self.transaction_id = transaction_id
         self.state = state
+
         super().__init__(
             id=id,
             version=version,
@@ -4175,6 +4242,7 @@ class ProductAddedToCategoryMessage(Message):
     ):
         self.category = category
         self.staged = staged
+
         super().__init__(
             id=id,
             version=version,
@@ -4224,6 +4292,7 @@ class ProductCreatedMessage(Message):
         product_projection: "ProductProjection"
     ):
         self.product_projection = product_projection
+
         super().__init__(
             id=id,
             version=version,
@@ -4274,6 +4343,7 @@ class ProductDeletedMessage(Message):
     ):
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
+
         super().__init__(
             id=id,
             version=version,
@@ -4327,6 +4397,7 @@ class ProductImageAddedMessage(Message):
         self.variant_id = variant_id
         self.image = image
         self.staged = staged
+
         super().__init__(
             id=id,
             version=version,
@@ -4376,6 +4447,7 @@ class ProductPriceDiscountsSetMessage(Message):
         updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
     ):
         self.updated_prices = updated_prices
+
         super().__init__(
             id=id,
             version=version,
@@ -4428,6 +4500,7 @@ class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
         self.price_id = price_id
         self.discounted = discounted
         self.staged = staged
+
         super().__init__()
 
     @classmethod
@@ -4480,6 +4553,7 @@ class ProductPriceExternalDiscountSetMessage(Message):
         self.price_id = price_id
         self.discounted = discounted
         self.staged = staged
+
         super().__init__(
             id=id,
             version=version,
@@ -4535,6 +4609,7 @@ class ProductPublishedMessage(Message):
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
         self.scope = scope
+
         super().__init__(
             id=id,
             version=version,
@@ -4587,6 +4662,7 @@ class ProductRemovedFromCategoryMessage(Message):
     ):
         self.category = category
         self.staged = staged
+
         super().__init__(
             id=id,
             version=version,
@@ -4636,6 +4712,7 @@ class ProductRevertedStagedChangesMessage(Message):
         removed_image_urls: typing.List["str"]
     ):
         self.removed_image_urls = removed_image_urls
+
         super().__init__(
             id=id,
             version=version,
@@ -4685,6 +4762,7 @@ class ProductSelectionCreatedMessage(Message):
         product_selection: "ProductSelectionType"
     ):
         self.product_selection = product_selection
+
         super().__init__(
             id=id,
             version=version,
@@ -4734,6 +4812,7 @@ class ProductSelectionDeletedMessage(Message):
         name: "LocalizedString"
     ):
         self.name = name
+
         super().__init__(
             id=id,
             version=version,
@@ -4783,6 +4862,7 @@ class ProductSelectionProductAddedMessage(Message):
         product: "ProductReference"
     ):
         self.product = product
+
         super().__init__(
             id=id,
             version=version,
@@ -4832,6 +4912,7 @@ class ProductSelectionProductRemovedMessage(Message):
         product: "ProductReference"
     ):
         self.product = product
+
         super().__init__(
             id=id,
             version=version,
@@ -4884,6 +4965,7 @@ class ProductSlugChangedMessage(Message):
     ):
         self.slug = slug
         self.old_slug = old_slug
+
         super().__init__(
             id=id,
             version=version,
@@ -4937,6 +5019,7 @@ class ProductStateTransitionMessage(Message):
     ):
         self.state = state
         self.force = force
+
         super().__init__(
             id=id,
             version=version,
@@ -5035,6 +5118,7 @@ class ProductVariantAddedMessage(Message):
     ):
         self.variant = variant
         self.staged = staged
+
         super().__init__(
             id=id,
             version=version,
@@ -5087,6 +5171,7 @@ class ProductVariantDeletedMessage(Message):
     ):
         self.variant = variant
         self.removed_image_urls = removed_image_urls
+
         super().__init__(
             id=id,
             version=version,
@@ -5136,6 +5221,7 @@ class ReviewCreatedMessage(Message):
         review: "Review"
     ):
         self.review = review
+
         super().__init__(
             id=id,
             version=version,
@@ -5192,6 +5278,7 @@ class ReviewRatingSetMessage(Message):
         self.new_rating = new_rating
         self.included_in_statistics = included_in_statistics
         self.target = target
+
         super().__init__(
             id=id,
             version=version,
@@ -5258,6 +5345,7 @@ class ReviewStateTransitionMessage(Message):
         self.new_included_in_statistics = new_included_in_statistics
         self.target = target
         self.force = force
+
         super().__init__(
             id=id,
             version=version,
@@ -5323,6 +5411,7 @@ class StoreCreatedMessage(Message):
         self.supply_channels = supply_channels
         self.product_selections = product_selections
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -5426,6 +5515,7 @@ class StoreProductSelectionsChangedMessage(Message):
         self.added_product_selections = added_product_selections
         self.removed_product_selections = removed_product_selections
         self.updated_product_selections = updated_product_selections
+
         super().__init__(
             id=id,
             version=version,
@@ -5482,6 +5572,7 @@ class UserProvidedIdentifiers(_BaseType):
         self.sku = sku
         self.slug = slug
         self.container_and_key = container_and_key
+
         super().__init__()
 
     @classmethod
@@ -5503,6 +5594,7 @@ class MessagePayload(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -5739,6 +5831,7 @@ class CategoryCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, category: "Category"):
         self.category = category
+
         super().__init__(type="CategoryCreated")
 
     @classmethod
@@ -5767,6 +5860,7 @@ class CategorySlugChangedMessagePayload(MessagePayload):
     ):
         self.slug = slug
         self.old_slug = old_slug
+
         super().__init__(type="CategorySlugChanged")
 
     @classmethod
@@ -5788,6 +5882,7 @@ class CustomerAddressAddedMessagePayload(MessagePayload):
 
     def __init__(self, *, address: "Address"):
         self.address = address
+
         super().__init__(type="CustomerAddressAdded")
 
     @classmethod
@@ -5809,6 +5904,7 @@ class CustomerAddressChangedMessagePayload(MessagePayload):
 
     def __init__(self, *, address: "Address"):
         self.address = address
+
         super().__init__(type="CustomerAddressChanged")
 
     @classmethod
@@ -5830,6 +5926,7 @@ class CustomerAddressRemovedMessagePayload(MessagePayload):
 
     def __init__(self, *, address: "Address"):
         self.address = address
+
         super().__init__(type="CustomerAddressRemoved")
 
     @classmethod
@@ -5851,6 +5948,7 @@ class CustomerCompanyNameSetMessagePayload(MessagePayload):
 
     def __init__(self, *, company_name: typing.Optional[str] = None):
         self.company_name = company_name
+
         super().__init__(type="CustomerCompanyNameSet")
 
     @classmethod
@@ -5872,6 +5970,7 @@ class CustomerCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, customer: "Customer"):
         self.customer = customer
+
         super().__init__(type="CustomerCreated")
 
     @classmethod
@@ -5893,6 +5992,7 @@ class CustomerDateOfBirthSetMessagePayload(MessagePayload):
 
     def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
         self.date_of_birth = date_of_birth
+
         super().__init__(type="CustomerDateOfBirthSet")
 
     @classmethod
@@ -5933,6 +6033,7 @@ class CustomerEmailChangedMessagePayload(MessagePayload):
 
     def __init__(self, *, email: str):
         self.email = email
+
         super().__init__(type="CustomerEmailChanged")
 
     @classmethod
@@ -5973,6 +6074,7 @@ class CustomerFirstNameSetMessagePayload(MessagePayload):
 
     def __init__(self, *, first_name: typing.Optional[str] = None):
         self.first_name = first_name
+
         super().__init__(type="CustomerFirstNameSet")
 
     @classmethod
@@ -5997,6 +6099,7 @@ class CustomerGroupSetMessagePayload(MessagePayload):
         self, *, customer_group: typing.Optional["CustomerGroupReference"] = None
     ):
         self.customer_group = customer_group
+
         super().__init__(type="CustomerGroupSet")
 
     @classmethod
@@ -6018,6 +6121,7 @@ class CustomerLastNameSetMessagePayload(MessagePayload):
 
     def __init__(self, *, last_name: typing.Optional[str] = None):
         self.last_name = last_name
+
         super().__init__(type="CustomerLastNameSet")
 
     @classmethod
@@ -6040,6 +6144,7 @@ class CustomerPasswordUpdatedMessagePayload(MessagePayload):
 
     def __init__(self, *, reset: bool):
         self.reset = reset
+
         super().__init__(type="CustomerPasswordUpdated")
 
     @classmethod
@@ -6061,6 +6166,7 @@ class CustomerTitleSetMessagePayload(MessagePayload):
 
     def __init__(self, *, title: typing.Optional[str] = None):
         self.title = title
+
         super().__init__(type="CustomerTitleSet")
 
     @classmethod
@@ -6082,6 +6188,7 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, inventory_entry: "InventoryEntry"):
         self.inventory_entry = inventory_entry
+
         super().__init__(type="InventoryEntryCreated")
 
     @classmethod
@@ -6108,6 +6215,7 @@ class InventoryEntryDeletedMessagePayload(MessagePayload):
     ):
         self.sku = sku
         self.supply_channel = supply_channel
+
         super().__init__(type="InventoryEntryDeleted")
 
     @classmethod
@@ -6146,6 +6254,7 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
         self.old_available_quantity = old_available_quantity
         self.new_available_quantity = new_available_quantity
         self.supply_channel = supply_channel
+
         super().__init__(type="InventoryEntryQuantitySet")
 
     @classmethod
@@ -6359,6 +6468,7 @@ class CustomLineItemStateTransitionMessagePayload(OrderMessagePayload):
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
+
         super().__init__(type="CustomLineItemStateTransition")
 
     @classmethod
@@ -6380,6 +6490,7 @@ class DeliveryAddedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, delivery: "Delivery"):
         self.delivery = delivery
+
         super().__init__(type="DeliveryAdded")
 
     @classmethod
@@ -6411,6 +6522,7 @@ class DeliveryAddressSetMessagePayload(OrderMessagePayload):
         self.delivery_id = delivery_id
         self.address = address
         self.old_address = old_address
+
         super().__init__(type="DeliveryAddressSet")
 
     @classmethod
@@ -6442,6 +6554,7 @@ class DeliveryItemsUpdatedMessagePayload(OrderMessagePayload):
         self.delivery_id = delivery_id
         self.items = items
         self.old_items = old_items
+
         super().__init__(type="DeliveryItemsUpdated")
 
     @classmethod
@@ -6463,6 +6576,7 @@ class DeliveryRemovedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, delivery: "Delivery"):
         self.delivery = delivery
+
         super().__init__(type="DeliveryRemoved")
 
     @classmethod
@@ -6502,6 +6616,7 @@ class LineItemStateTransitionMessagePayload(OrderMessagePayload):
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
+
         super().__init__(type="LineItemStateTransition")
 
     @classmethod
@@ -6530,6 +6645,7 @@ class OrderBillingAddressSetMessagePayload(OrderMessagePayload):
     ):
         self.address = address
         self.old_address = old_address
+
         super().__init__(type="OrderBillingAddressSet")
 
     @classmethod
@@ -6551,6 +6667,7 @@ class OrderCreatedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, order: "Order"):
         self.order = order
+
         super().__init__(type="OrderCreated")
 
     @classmethod
@@ -6584,6 +6701,7 @@ class OrderCustomLineItemDiscountSetMessagePayload(OrderMessagePayload):
         self.custom_line_item_id = custom_line_item_id
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.taxed_price = taxed_price
+
         super().__init__(type="OrderCustomLineItemDiscountSet")
 
     @classmethod
@@ -6612,6 +6730,7 @@ class OrderCustomerEmailSetMessagePayload(OrderMessagePayload):
     ):
         self.email = email
         self.old_email = old_email
+
         super().__init__(type="OrderCustomerEmailSet")
 
     @classmethod
@@ -6642,6 +6761,7 @@ class OrderCustomerGroupSetMessagePayload(OrderMessagePayload):
     ):
         self.customer_group = customer_group
         self.old_customer_group = old_customer_group
+
         super().__init__(type="OrderCustomerGroupSet")
 
     @classmethod
@@ -6678,6 +6798,7 @@ class OrderCustomerSetMessagePayload(OrderMessagePayload):
         self.customer_group = customer_group
         self.old_customer = old_customer
         self.old_customer_group = old_customer_group
+
         super().__init__(type="OrderCustomerSet")
 
     @classmethod
@@ -6699,6 +6820,7 @@ class OrderDeletedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, order: "Order"):
         self.order = order
+
         super().__init__(type="OrderDeleted")
 
     @classmethod
@@ -6720,6 +6842,7 @@ class OrderDiscountCodeAddedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
         self.discount_code = discount_code
+
         super().__init__(type="OrderDiscountCodeAdded")
 
     @classmethod
@@ -6741,6 +6864,7 @@ class OrderDiscountCodeRemovedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
         self.discount_code = discount_code
+
         super().__init__(type="OrderDiscountCodeRemoved")
 
     @classmethod
@@ -6772,6 +6896,7 @@ class OrderDiscountCodeStateSetMessagePayload(OrderMessagePayload):
         self.discount_code = discount_code
         self.state = state
         self.old_state = old_state
+
         super().__init__(type="OrderDiscountCodeStateSet")
 
     @classmethod
@@ -6795,6 +6920,7 @@ class OrderEditAppliedMessagePayload(OrderMessagePayload):
     def __init__(self, *, edit: "OrderEditReference", result: "OrderEditApplied"):
         self.edit = edit
         self.result = result
+
         super().__init__(type="OrderEditApplied")
 
     @classmethod
@@ -6816,6 +6942,7 @@ class OrderImportedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, order: "Order"):
         self.order = order
+
         super().__init__(type="OrderImported")
 
     @classmethod
@@ -6839,6 +6966,7 @@ class OrderLineItemAddedMessagePayload(OrderMessagePayload):
     def __init__(self, *, line_item: "LineItem", added_quantity: int):
         self.line_item = line_item
         self.added_quantity = added_quantity
+
         super().__init__(type="OrderLineItemAdded")
 
     @classmethod
@@ -6877,6 +7005,7 @@ class OrderLineItemDiscountSetMessagePayload(OrderMessagePayload):
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.total_price = total_price
         self.taxed_price = taxed_price
+
         super().__init__(type="OrderLineItemDiscountSet")
 
     @classmethod
@@ -6906,6 +7035,7 @@ class OrderLineItemDistributionChannelSetMessagePayload(OrderMessagePayload):
     ):
         self.line_item_id = line_item_id
         self.distribution_channel = distribution_channel
+
         super().__init__(type="OrderLineItemDistributionChannelSet")
 
     @classmethod
@@ -6957,6 +7087,7 @@ class OrderLineItemRemovedMessagePayload(OrderMessagePayload):
         self.new_taxed_price = new_taxed_price
         self.new_price = new_price
         self.new_shipping_detail = new_shipping_detail
+
         super().__init__(type="OrderLineItemRemoved")
 
     @classmethod
@@ -6978,6 +7109,7 @@ class OrderPaymentAddedMessagePayload(MessagePayload):
 
     def __init__(self, *, payment: "PaymentReference"):
         self.payment = payment
+
         super().__init__(type="OrderPaymentAdded")
 
     @classmethod
@@ -7006,6 +7138,7 @@ class OrderPaymentStateChangedMessagePayload(OrderMessagePayload):
     ):
         self.payment_state = payment_state
         self.old_payment_state = old_payment_state
+
         super().__init__(type="OrderPaymentStateChanged")
 
     @classmethod
@@ -7027,6 +7160,7 @@ class OrderReturnInfoAddedMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, return_info: "ReturnInfo"):
         self.return_info = return_info
+
         super().__init__(type="ReturnInfoAdded")
 
     @classmethod
@@ -7050,6 +7184,7 @@ class OrderReturnInfoSetMessagePayload(OrderMessagePayload):
         self, *, return_info: typing.Optional[typing.List["ReturnInfo"]] = None
     ):
         self.return_info = return_info
+
         super().__init__(type="ReturnInfoSet")
 
     @classmethod
@@ -7075,6 +7210,7 @@ class OrderReturnShipmentStateChangedMessagePayload(OrderMessagePayload):
     ):
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
+
         super().__init__(type="OrderReturnShipmentStateChanged")
 
     @classmethod
@@ -7107,6 +7243,7 @@ class OrderShipmentStateChangedMessagePayload(OrderMessagePayload):
     ):
         self.shipment_state = shipment_state
         self.old_shipment_state = old_shipment_state
+
         super().__init__(type="OrderShipmentStateChanged")
 
     @classmethod
@@ -7135,6 +7272,7 @@ class OrderShippingAddressSetMessagePayload(OrderMessagePayload):
     ):
         self.address = address
         self.old_address = old_address
+
         super().__init__(type="OrderShippingAddressSet")
 
     @classmethod
@@ -7163,6 +7301,7 @@ class OrderShippingInfoSetMessagePayload(OrderMessagePayload):
     ):
         self.shipping_info = shipping_info
         self.old_shipping_info = old_shipping_info
+
         super().__init__(type="OrderShippingInfoSet")
 
     @classmethod
@@ -7191,6 +7330,7 @@ class OrderShippingRateInputSetMessagePayload(OrderMessagePayload):
     ):
         self.shipping_rate_input = shipping_rate_input
         self.old_shipping_rate_input = old_shipping_rate_input
+
         super().__init__(type="OrderShippingRateInputSet")
 
     @classmethod
@@ -7214,6 +7354,7 @@ class OrderStateChangedMessagePayload(OrderMessagePayload):
     def __init__(self, *, order_state: "OrderState", old_order_state: "OrderState"):
         self.order_state = order_state
         self.old_order_state = old_order_state
+
         super().__init__(type="OrderStateChanged")
 
     @classmethod
@@ -7247,6 +7388,7 @@ class OrderStateTransitionMessagePayload(OrderMessagePayload):
         self.state = state
         self.old_state = old_state
         self.force = force
+
         super().__init__(type="OrderStateTransition")
 
     @classmethod
@@ -7268,6 +7410,7 @@ class OrderStoreSetMessagePayload(OrderMessagePayload):
 
     def __init__(self, *, store: "StoreKeyReference"):
         self.store = store
+
         super().__init__(type="OrderStoreSet")
 
     @classmethod
@@ -7291,6 +7434,7 @@ class ParcelAddedToDeliveryMessagePayload(OrderMessagePayload):
     def __init__(self, *, delivery: "Delivery", parcel: "Parcel"):
         self.delivery = delivery
         self.parcel = parcel
+
         super().__init__(type="ParcelAddedToDelivery")
 
     @classmethod
@@ -7325,6 +7469,7 @@ class ParcelItemsUpdatedMessagePayload(OrderMessagePayload):
         self.delivery_id = delivery_id
         self.items = items
         self.old_items = old_items
+
         super().__init__(type="ParcelItemsUpdated")
 
     @classmethod
@@ -7356,6 +7501,7 @@ class ParcelMeasurementsUpdatedMessagePayload(OrderMessagePayload):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
         self.measurements = measurements
+
         super().__init__(type="ParcelMeasurementsUpdated")
 
     @classmethod
@@ -7379,6 +7525,7 @@ class ParcelRemovedFromDeliveryMessagePayload(OrderMessagePayload):
     def __init__(self, *, delivery_id: str, parcel: "Parcel"):
         self.delivery_id = delivery_id
         self.parcel = parcel
+
         super().__init__(type="ParcelRemovedFromDelivery")
 
     @classmethod
@@ -7410,6 +7557,7 @@ class ParcelTrackingDataUpdatedMessagePayload(OrderMessagePayload):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
         self.tracking_data = tracking_data
+
         super().__init__(type="ParcelTrackingDataUpdated")
 
     @classmethod
@@ -7431,6 +7579,7 @@ class PaymentCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, payment: "Payment"):
         self.payment = payment
+
         super().__init__(type="PaymentCreated")
 
     @classmethod
@@ -7453,6 +7602,7 @@ class PaymentInteractionAddedMessagePayload(MessagePayload):
 
     def __init__(self, *, interaction: "CustomFields"):
         self.interaction = interaction
+
         super().__init__(type="PaymentInteractionAdded")
 
     @classmethod
@@ -7476,6 +7626,7 @@ class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
     def __init__(self, *, payment_id: str, interface_code: str):
         self.payment_id = payment_id
         self.interface_code = interface_code
+
         super().__init__(type="PaymentStatusInterfaceCodeSet")
 
     @classmethod
@@ -7500,6 +7651,7 @@ class PaymentStatusStateTransitionMessagePayload(MessagePayload):
     def __init__(self, *, state: "StateReference", force: bool):
         self.state = state
         self.force = force
+
         super().__init__(type="PaymentStatusStateTransition")
 
     @classmethod
@@ -7521,6 +7673,7 @@ class PaymentTransactionAddedMessagePayload(MessagePayload):
 
     def __init__(self, *, transaction: "Transaction"):
         self.transaction = transaction
+
         super().__init__(type="PaymentTransactionAdded")
 
     @classmethod
@@ -7544,6 +7697,7 @@ class PaymentTransactionStateChangedMessagePayload(MessagePayload):
     def __init__(self, *, transaction_id: str, state: "TransactionState"):
         self.transaction_id = transaction_id
         self.state = state
+
         super().__init__(type="PaymentTransactionStateChanged")
 
     @classmethod
@@ -7567,6 +7721,7 @@ class ProductAddedToCategoryMessagePayload(MessagePayload):
     def __init__(self, *, category: "CategoryReference", staged: bool):
         self.category = category
         self.staged = staged
+
         super().__init__(type="ProductAddedToCategory")
 
     @classmethod
@@ -7588,6 +7743,7 @@ class ProductCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, product_projection: "ProductProjection"):
         self.product_projection = product_projection
+
         super().__init__(type="ProductCreated")
 
     @classmethod
@@ -7616,6 +7772,7 @@ class ProductDeletedMessagePayload(MessagePayload):
     ):
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
+
         super().__init__(type="ProductDeleted")
 
     @classmethod
@@ -7641,6 +7798,7 @@ class ProductImageAddedMessagePayload(MessagePayload):
         self.variant_id = variant_id
         self.image = image
         self.staged = staged
+
         super().__init__(type="ProductImageAdded")
 
     @classmethod
@@ -7664,6 +7822,7 @@ class ProductPriceDiscountsSetMessagePayload(MessagePayload):
         self, *, updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
     ):
         self.updated_prices = updated_prices
+
         super().__init__(type="ProductPriceDiscountsSet")
 
     @classmethod
@@ -7704,6 +7863,7 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
         self.price_id = price_id
         self.discounted = discounted
         self.staged = staged
+
         super().__init__(type="ProductPriceExternalDiscountSet")
 
     @classmethod
@@ -7739,6 +7899,7 @@ class ProductPublishedMessagePayload(MessagePayload):
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
         self.scope = scope
+
         super().__init__(type="ProductPublished")
 
     @classmethod
@@ -7762,6 +7923,7 @@ class ProductRemovedFromCategoryMessagePayload(MessagePayload):
     def __init__(self, *, category: "CategoryReference", staged: bool):
         self.category = category
         self.staged = staged
+
         super().__init__(type="ProductRemovedFromCategory")
 
     @classmethod
@@ -7783,6 +7945,7 @@ class ProductRevertedStagedChangesMessagePayload(MessagePayload):
 
     def __init__(self, *, removed_image_urls: typing.List["str"]):
         self.removed_image_urls = removed_image_urls
+
         super().__init__(type="ProductRevertedStagedChanges")
 
     @classmethod
@@ -7804,6 +7967,7 @@ class ProductSelectionCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, product_selection: "ProductSelectionType"):
         self.product_selection = product_selection
+
         super().__init__(type="ProductSelectionCreated")
 
     @classmethod
@@ -7825,6 +7989,7 @@ class ProductSelectionDeletedMessagePayload(MessagePayload):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(type="ProductSelectionDeleted")
 
     @classmethod
@@ -7846,6 +8011,7 @@ class ProductSelectionProductAddedMessagePayload(MessagePayload):
 
     def __init__(self, *, product: "ProductReference"):
         self.product = product
+
         super().__init__(type="ProductSelectionProductAdded")
 
     @classmethod
@@ -7867,6 +8033,7 @@ class ProductSelectionProductRemovedMessagePayload(MessagePayload):
 
     def __init__(self, *, product: "ProductReference"):
         self.product = product
+
         super().__init__(type="ProductSelectionProductRemoved")
 
     @classmethod
@@ -7895,6 +8062,7 @@ class ProductSlugChangedMessagePayload(MessagePayload):
     ):
         self.slug = slug
         self.old_slug = old_slug
+
         super().__init__(type="ProductSlugChanged")
 
     @classmethod
@@ -7919,6 +8087,7 @@ class ProductStateTransitionMessagePayload(MessagePayload):
     def __init__(self, *, state: "StateReference", force: bool):
         self.state = state
         self.force = force
+
         super().__init__(type="ProductStateTransition")
 
     @classmethod
@@ -7961,6 +8130,7 @@ class ProductVariantAddedMessagePayload(MessagePayload):
     def __init__(self, *, variant: "ProductVariant", staged: bool):
         self.variant = variant
         self.staged = staged
+
         super().__init__(type="ProductVariantAdded")
 
     @classmethod
@@ -7986,6 +8156,7 @@ class ProductVariantDeletedMessagePayload(MessagePayload):
     ):
         self.variant = variant
         self.removed_image_urls = removed_image_urls
+
         super().__init__(type="ProductVariantDeleted")
 
     @classmethod
@@ -8007,6 +8178,7 @@ class ReviewCreatedMessagePayload(MessagePayload):
 
     def __init__(self, *, review: "Review"):
         self.review = review
+
         super().__init__(type="ReviewCreated")
 
     @classmethod
@@ -8041,6 +8213,7 @@ class ReviewRatingSetMessagePayload(MessagePayload):
         self.new_rating = new_rating
         self.included_in_statistics = included_in_statistics
         self.target = target
+
         super().__init__(type="ReviewRatingSet")
 
     @classmethod
@@ -8083,6 +8256,7 @@ class ReviewStateTransitionMessagePayload(MessagePayload):
         self.new_included_in_statistics = new_included_in_statistics
         self.target = target
         self.force = force
+
         super().__init__(type="ReviewStateTransition")
 
     @classmethod
@@ -8104,6 +8278,7 @@ class ShoppingListStoreSetMessagePayload(MessagePayload):
 
     def __init__(self, *, store: "StoreKeyReference"):
         self.store = store
+
         super().__init__(type="ShoppingListStoreSet")
 
     @classmethod
@@ -8145,6 +8320,7 @@ class StoreCreatedMessagePayload(MessagePayload):
         self.supply_channels = supply_channels
         self.product_selections = product_selections
         self.custom = custom
+
         super().__init__(type="StoreCreated")
 
     @classmethod
@@ -8201,6 +8377,7 @@ class StoreProductSelectionsChangedMessagePayload(MessagePayload):
         self.added_product_selections = added_product_selections
         self.removed_product_selections = removed_product_selections
         self.updated_product_selections = updated_product_selections
+
         super().__init__(type="StoreProductSelectionsChanged")
 
     @classmethod

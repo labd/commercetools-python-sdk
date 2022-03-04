@@ -121,6 +121,7 @@ class ShoppingList(BaseResource):
         self.text_line_items = text_line_items
         self.anonymous_id = anonymous_id
         self.store = store
+
         super().__init__(
             id=id,
             version=version,
@@ -186,6 +187,7 @@ class ShoppingListDraft(_BaseType):
         self.text_line_items = text_line_items
         self.anonymous_id = anonymous_id
         self.store = store
+
         super().__init__()
 
     @classmethod
@@ -240,6 +242,7 @@ class ShoppingListLineItem(_BaseType):
         self.quantity = quantity
         self.variant = variant
         self.variant_id = variant_id
+
         super().__init__()
 
     @classmethod
@@ -279,6 +282,7 @@ class ShoppingListLineItemDraft(_BaseType):
         self.product_id = product_id
         self.quantity = quantity
         self.variant_id = variant_id
+
         super().__init__()
 
     @classmethod
@@ -316,6 +320,7 @@ class ShoppingListPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -337,6 +342,7 @@ class ShoppingListReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["ShoppingList"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.SHOPPING_LIST)
 
     @classmethod
@@ -381,6 +387,7 @@ class ShoppingListUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -400,6 +407,7 @@ class ShoppingListUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -561,6 +569,7 @@ class TextLineItem(_BaseType):
         self.id = id
         self.name = name
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -599,6 +608,7 @@ class TextLineItemDraft(_BaseType):
         self.description = description
         self.name = name
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -638,6 +648,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
         self.quantity = quantity
         self.added_at = added_at
         self.custom = custom
+
         super().__init__(action="addLineItem")
 
     @classmethod
@@ -676,6 +687,7 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
         self.quantity = quantity
         self.added_at = added_at
         self.custom = custom
+
         super().__init__(action="addTextLineItem")
 
     @classmethod
@@ -699,6 +711,7 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
     def __init__(self, *, line_item_id: str, quantity: int):
         self.line_item_id = line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeLineItemQuantity")
 
     @classmethod
@@ -724,6 +737,7 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
 
     def __init__(self, *, line_item_order: typing.List["str"]):
         self.line_item_order = line_item_order
+
         super().__init__(action="changeLineItemsOrder")
 
     @classmethod
@@ -745,6 +759,7 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 
     def __init__(self, *, name: "LocalizedString"):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -768,6 +783,7 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
     def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
         self.text_line_item_id = text_line_item_id
         self.name = name
+
         super().__init__(action="changeTextLineItemName")
 
     @classmethod
@@ -795,6 +811,7 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
     def __init__(self, *, text_line_item_id: str, quantity: int):
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
+
         super().__init__(action="changeTextLineItemQuantity")
 
     @classmethod
@@ -820,6 +837,7 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
 
     def __init__(self, *, text_line_item_order: typing.List["str"]):
         self.text_line_item_order = text_line_item_order
+
         super().__init__(action="changeTextLineItemsOrder")
 
     @classmethod
@@ -847,6 +865,7 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
     def __init__(self, *, line_item_id: str, quantity: typing.Optional[int] = None):
         self.line_item_id = line_item_id
         self.quantity = quantity
+
         super().__init__(action="removeLineItem")
 
     @classmethod
@@ -872,6 +891,7 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
     ):
         self.text_line_item_id = text_line_item_id
         self.quantity = quantity
+
         super().__init__(action="removeTextLineItem")
 
     @classmethod
@@ -895,6 +915,7 @@ class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
 
     def __init__(self, *, anonymous_id: typing.Optional[str] = None):
         self.anonymous_id = anonymous_id
+
         super().__init__(action="setAnonymousId")
 
     @classmethod
@@ -922,6 +943,7 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -953,6 +975,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -976,6 +999,7 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
         self, *, customer: typing.Optional["CustomerResourceIdentifier"] = None
     ):
         self.customer = customer
+
         super().__init__(action="setCustomer")
 
     @classmethod
@@ -999,6 +1023,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
         self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
+
         super().__init__(action="setDeleteDaysAfterLastModification")
 
     @classmethod
@@ -1024,6 +1049,7 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -1046,6 +1072,7 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -1077,6 +1104,7 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
         self.line_item_id = line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setLineItemCustomField")
 
     @classmethod
@@ -1115,6 +1143,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
         self.line_item_id = line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setLineItemCustomType")
 
     @classmethod
@@ -1140,6 +1169,7 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
 
     def __init__(self, *, slug: typing.Optional["LocalizedString"] = None):
         self.slug = slug
+
         super().__init__(action="setSlug")
 
     @classmethod
@@ -1161,6 +1191,7 @@ class ShoppingListSetStoreAction(ShoppingListUpdateAction):
 
     def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
         self.store = store
+
         super().__init__(action="setStore")
 
     @classmethod
@@ -1196,6 +1227,7 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
         self.text_line_item_id = text_line_item_id
         self.name = name
         self.value = value
+
         super().__init__(action="setTextLineItemCustomField")
 
     @classmethod
@@ -1234,6 +1266,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
         self.text_line_item_id = text_line_item_id
         self.type = type
         self.fields = fields
+
         super().__init__(action="setTextLineItemCustomType")
 
     @classmethod
@@ -1266,6 +1299,7 @@ class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
     ):
         self.text_line_item_id = text_line_item_id
         self.description = description
+
         super().__init__(action="setTextLineItemDescription")
 
     @classmethod

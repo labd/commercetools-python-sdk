@@ -62,6 +62,7 @@ class CartsConfiguration(_BaseType):
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
+
         super().__init__()
 
     @classmethod
@@ -91,6 +92,7 @@ class ExternalOAuth(_BaseType):
     def __init__(self, *, url: str, authorization_header: str):
         self.url = url
         self.authorization_header = authorization_header
+
         super().__init__()
 
     @classmethod
@@ -174,6 +176,7 @@ class Project(_BaseType):
         self.shipping_rate_input_type = shipping_rate_input_type
         self.external_o_auth = external_o_auth
         self.search_indexing = search_indexing
+
         super().__init__()
 
     @classmethod
@@ -197,6 +200,7 @@ class ProjectUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ProjectUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -216,6 +220,7 @@ class ProjectUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -301,6 +306,7 @@ class SearchIndexingConfiguration(_BaseType):
     ):
         self.products = products
         self.orders = orders
+
         super().__init__()
 
     @classmethod
@@ -343,6 +349,7 @@ class SearchIndexingConfigurationValues(_BaseType):
         self.status = status
         self.last_modified_at = last_modified_at
         self.last_modified_by = last_modified_by
+
         super().__init__()
 
     @classmethod
@@ -365,6 +372,7 @@ class ShippingRateInputType(_BaseType):
 
     def __init__(self, *, type: "ShippingRateTierType"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -394,6 +402,7 @@ class CartClassificationType(ShippingRateInputType):
 
     def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]):
         self.values = values
+
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
 
     @classmethod
@@ -453,6 +462,7 @@ class ShoppingListsConfiguration(_BaseType):
         self, *, delete_days_after_last_modification: typing.Optional[int] = None
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
+
         super().__init__()
 
     @classmethod
@@ -475,6 +485,7 @@ class ProjectChangeCartsConfigurationAction(ProjectUpdateAction):
 
     def __init__(self, *, carts_configuration: "CartsConfiguration"):
         self.carts_configuration = carts_configuration
+
         super().__init__(action="changeCartsConfiguration")
 
     @classmethod
@@ -497,6 +508,7 @@ class ProjectChangeCountriesAction(ProjectUpdateAction):
 
     def __init__(self, *, countries: typing.List["str"]):
         self.countries = countries
+
         super().__init__(action="changeCountries")
 
     @classmethod
@@ -519,6 +531,7 @@ class ProjectChangeCountryTaxRateFallbackEnabledAction(ProjectUpdateAction):
 
     def __init__(self, *, country_tax_rate_fallback_enabled: bool):
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
+
         super().__init__(action="changeCountryTaxRateFallbackEnabled")
 
     @classmethod
@@ -545,6 +558,7 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
     def __init__(self, *, currencies: typing.List["str"]):
         self.currencies = currencies
+
         super().__init__(action="changeCurrencies")
 
     @classmethod
@@ -569,6 +583,7 @@ class ProjectChangeLanguagesAction(ProjectUpdateAction):
 
     def __init__(self, *, languages: typing.List["str"]):
         self.languages = languages
+
         super().__init__(action="changeLanguages")
 
     @classmethod
@@ -591,6 +606,7 @@ class ProjectChangeMessagesConfigurationAction(ProjectUpdateAction):
 
     def __init__(self, *, messages_configuration: "MessagesConfigurationDraft"):
         self.messages_configuration = messages_configuration
+
         super().__init__(action="changeMessagesConfiguration")
 
     @classmethod
@@ -612,6 +628,7 @@ class ProjectChangeMessagesEnabledAction(ProjectUpdateAction):
 
     def __init__(self, *, messages_enabled: bool):
         self.messages_enabled = messages_enabled
+
         super().__init__(action="changeMessagesEnabled")
 
     @classmethod
@@ -634,6 +651,7 @@ class ProjectChangeNameAction(ProjectUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -656,6 +674,7 @@ class ProjectChangeOrderSearchStatusAction(ProjectUpdateAction):
 
     def __init__(self, *, status: "OrderSearchStatus"):
         self.status = status
+
         super().__init__(action="changeOrderSearchStatus")
 
     @classmethod
@@ -680,6 +699,7 @@ class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
 
     def __init__(self, *, enabled: bool):
         self.enabled = enabled
+
         super().__init__(action="changeProductSearchIndexingEnabled")
 
     @classmethod
@@ -706,6 +726,7 @@ class ProjectChangeShoppingListsConfigurationAction(ProjectUpdateAction):
 
     def __init__(self, *, shopping_lists_configuration: "ShoppingListsConfiguration"):
         self.shopping_lists_configuration = shopping_lists_configuration
+
         super().__init__(action="changeShoppingListsConfiguration")
 
     @classmethod
@@ -732,6 +753,7 @@ class ProjectSetExternalOAuthAction(ProjectUpdateAction):
 
     def __init__(self, *, external_o_auth: typing.Optional["ExternalOAuth"] = None):
         self.external_o_auth = external_o_auth
+
         super().__init__(action="setExternalOAuth")
 
     @classmethod
@@ -758,6 +780,7 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None
     ):
         self.shipping_rate_input_type = shipping_rate_input_type
+
         super().__init__(action="setShippingRateInputType")
 
     @classmethod

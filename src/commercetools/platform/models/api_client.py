@@ -58,6 +58,7 @@ class ApiClient(_BaseType):
         self.created_at = created_at
         self.access_token_validity_seconds = access_token_validity_seconds
         self.refresh_token_validity_seconds = refresh_token_validity_seconds
+
         super().__init__()
 
     @classmethod
@@ -98,6 +99,7 @@ class ApiClientDraft(_BaseType):
         self.delete_days_after_creation = delete_days_after_creation
         self.access_token_validity_seconds = access_token_validity_seconds
         self.refresh_token_validity_seconds = refresh_token_validity_seconds
+
         super().__init__()
 
     @classmethod
@@ -145,6 +147,7 @@ class ApiClientPagedQueryResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod

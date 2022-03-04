@@ -77,6 +77,7 @@ class ErrorResponse(_BaseType):
         self.error = error
         self.error_description = error_description
         self.errors = errors
+
         super().__init__()
 
     @classmethod
@@ -98,6 +99,7 @@ class ErrorObject(_BaseType):
     def __init__(self, *, code: str, message: str):
         self.code = code
         self.message = message
+
         super().__init__()
 
     @classmethod
@@ -265,6 +267,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
     def __init__(self, *, message: str, attribute: "Attribute"):
         self.attribute = attribute
+
         super().__init__(message=message, code="DuplicateAttributeValue")
 
     @classmethod
@@ -288,6 +291,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
     def __init__(self, *, message: str, attributes: typing.List["Attribute"]):
         self.attributes = attributes
+
         super().__init__(message=message, code="DuplicateAttributeValues")
 
     @classmethod
@@ -321,6 +325,7 @@ class DuplicateFieldError(ErrorObject):
     ):
         self.field = field
         self.duplicate_value = duplicate_value
+
         super().__init__(message=message, code="DuplicateField")
 
     @classmethod
@@ -346,6 +351,7 @@ class DuplicateVariantValuesError(ErrorObject):
 
     def __init__(self, *, message: str, variant_values: "VariantValues"):
         self.variant_values = variant_values
+
         super().__init__(message=message, code="DuplicateVariantValues")
 
     @classmethod
@@ -377,6 +383,7 @@ class VariantValues(_BaseType):
         self.sku = sku
         self.prices = prices
         self.attributes = attributes
+
         super().__init__()
 
     @classmethod
@@ -473,6 +480,7 @@ class InvalidFieldError(ErrorObject):
         self.invalid_value = invalid_value
         self.allowed_values = allowed_values
         self.resource_index = resource_index
+
         super().__init__(message=message, code="InvalidField")
 
     @classmethod
@@ -537,6 +545,7 @@ class ResourceNotFoundError(ErrorObject):
 
     def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
+
         super().__init__(message=message, code="ResourceNotFound")
 
     @classmethod
@@ -556,6 +565,7 @@ class ResourceCreationError(ErrorObject):
 
     def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
+
         super().__init__(message=message, code="ResourceCreation")
 
     @classmethod
@@ -575,6 +585,7 @@ class ResourceUpdateError(ErrorObject):
 
     def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
+
         super().__init__(message=message, code="ResourceUpdate")
 
     @classmethod
@@ -594,6 +605,7 @@ class ResourceDeletionError(ErrorObject):
 
     def __init__(self, *, message: str, resource: typing.Optional[typing.Any] = None):
         self.resource = resource
+
         super().__init__(message=message, code="ResourceDeletion")
 
     @classmethod
@@ -616,6 +628,7 @@ class RequiredFieldError(ErrorObject):
 
     def __init__(self, *, message: str, field: str):
         self.field = field
+
         super().__init__(message=message, code="RequiredField")
 
     @classmethod
@@ -645,6 +658,7 @@ class InvalidStateTransitionError(ErrorObject):
     ):
         self.current_state = current_state
         self.new_state = new_state
+
         super().__init__(message=message, code="InvalidTransition")
 
     @classmethod
@@ -686,6 +700,7 @@ class ConcurrentModificationError(ErrorObject):
         self.specified_version = specified_version
         self.current_version = current_version
         self.conflicted_resource = conflicted_resource
+
         super().__init__(message=message, code="ConcurrentModification")
 
     @classmethod

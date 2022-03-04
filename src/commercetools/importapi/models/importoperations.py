@@ -78,6 +78,7 @@ class ImportOperation(_BaseType):
         self.created_at = created_at
         self.last_modified_at = last_modified_at
         self.expires_at = expires_at
+
         super().__init__()
 
     @classmethod
@@ -121,6 +122,7 @@ class ImportOperationPagedResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -163,6 +165,7 @@ class ImportOperationStatus(_BaseType):
         self.operation_id = operation_id
         self.state = state
         self.errors = errors
+
         super().__init__()
 
     @classmethod

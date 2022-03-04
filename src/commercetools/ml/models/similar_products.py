@@ -60,6 +60,7 @@ class ProductSetSelector(_BaseType):
         self.staged = staged
         self.include_variants = include_variants
         self.product_set_limit = product_set_limit
+
         super().__init__()
 
     @classmethod
@@ -102,6 +103,7 @@ class SimilarityMeasures(_BaseType):
         self.attribute = attribute
         self.variant_count = variant_count
         self.price = price
+
         super().__init__()
 
     @classmethod
@@ -152,6 +154,7 @@ class SimilarProductSearchRequest(_BaseType):
         self.product_set_selectors = product_set_selectors
         self.confidence_min = confidence_min
         self.confidence_max = confidence_max
+
         super().__init__()
 
     @classmethod
@@ -188,6 +191,7 @@ class SimilarProduct(_BaseType):
         self.product = product
         self.variant_id = variant_id
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -224,6 +228,7 @@ class SimilarProductMeta(_BaseType):
         self.description = description
         self.price = price
         self.variant_count = variant_count
+
         super().__init__()
 
     @classmethod
@@ -248,6 +253,7 @@ class SimilarProductPair(_BaseType):
     def __init__(self, *, confidence: float, products: typing.List["SimilarProduct"]):
         self.confidence = confidence
         self.products = products
+
         super().__init__()
 
     @classmethod
@@ -268,6 +274,7 @@ class SimilarProductSearchRequestMeta(_BaseType):
 
     def __init__(self, *, similarity_measures: "SimilarityMeasures"):
         self.similarity_measures = similarity_measures
+
         super().__init__()
 
     @classmethod
@@ -305,6 +312,7 @@ class SimilarProductsPagedQueryResult(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -340,6 +348,7 @@ class SimilarProductsTaskStatus(_BaseType):
         self.state = state
         self.expires = expires
         self.result = result
+
         super().__init__()
 
     @classmethod

@@ -130,6 +130,7 @@ class DiscountCode(BaseResource):
         self.valid_from = valid_from
         self.valid_until = valid_until
         self.application_version = application_version
+
         super().__init__(
             id=id,
             version=version,
@@ -202,6 +203,7 @@ class DiscountCodeDraft(_BaseType):
         self.groups = groups
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__()
 
     @classmethod
@@ -237,6 +239,7 @@ class DiscountCodePagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -258,6 +261,7 @@ class DiscountCodeReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["DiscountCode"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.DISCOUNT_CODE)
 
     @classmethod
@@ -302,6 +306,7 @@ class DiscountCodeUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -321,6 +326,7 @@ class DiscountCodeUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -401,6 +407,7 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
         self, *, cart_discounts: typing.List["CartDiscountResourceIdentifier"]
     ):
         self.cart_discounts = cart_discounts
+
         super().__init__(action="changeCartDiscounts")
 
     @classmethod
@@ -424,6 +431,7 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, groups: typing.List["str"]):
         self.groups = groups
+
         super().__init__(action="changeGroups")
 
     @classmethod
@@ -445,6 +453,7 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, is_active: bool):
         self.is_active = is_active
+
         super().__init__(action="changeIsActive")
 
     @classmethod
@@ -467,6 +476,7 @@ class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, cart_predicate: typing.Optional[str] = None):
         self.cart_predicate = cart_predicate
+
         super().__init__(action="setCartPredicate")
 
     @classmethod
@@ -494,6 +504,7 @@ class DiscountCodeSetCustomFieldAction(DiscountCodeUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -525,6 +536,7 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -547,6 +559,7 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
         self.description = description
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -569,6 +582,7 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, max_applications: typing.Optional[int] = None):
         self.max_applications = max_applications
+
         super().__init__(action="setMaxApplications")
 
     @classmethod
@@ -591,6 +605,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, max_applications_per_customer: typing.Optional[int] = None):
         self.max_applications_per_customer = max_applications_per_customer
+
         super().__init__(action="setMaxApplicationsPerCustomer")
 
     @classmethod
@@ -617,6 +632,7 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
         self.name = name
+
         super().__init__(action="setName")
 
     @classmethod
@@ -639,6 +655,7 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
         self.valid_from = valid_from
+
         super().__init__(action="setValidFrom")
 
     @classmethod
@@ -669,6 +686,7 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until
+
         super().__init__(action="setValidFromAndUntil")
 
     @classmethod
@@ -691,6 +709,7 @@ class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
         self.valid_until = valid_until
+
         super().__init__(action="setValidUntil")
 
     @classmethod

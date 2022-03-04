@@ -53,6 +53,7 @@ class ImportSink(_BaseType):
         self.version = version
         self.created_at = created_at
         self.last_modified_at = last_modified_at
+
         super().__init__()
 
     @classmethod
@@ -82,6 +83,7 @@ class ImportSinkDraft(_BaseType):
     ):
         self.key = key
         self.resource_type = resource_type
+
         super().__init__()
 
     @classmethod
@@ -113,6 +115,7 @@ class ImportSinkUpdateDraft(_BaseType):
     ):
         self.version = version
         self.resource_type = resource_type
+
         super().__init__()
 
     @classmethod
@@ -159,6 +162,7 @@ class ImportSinkPagedResponse(_BaseType):
         self.count = count
         self.total = total
         self.results = results
+
         super().__init__()
 
     @classmethod

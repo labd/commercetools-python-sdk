@@ -129,6 +129,7 @@ class Attribute(_BaseType):
     def __init__(self, *, name: str, value: typing.Any):
         self.name = name
         self.value = value
+
         super().__init__()
 
     @classmethod
@@ -183,6 +184,7 @@ class FacetRange(_BaseType):
         self.min = min
         self.max = max
         self.mean = mean
+
         super().__init__()
 
     @classmethod
@@ -202,6 +204,7 @@ class FacetResult(_BaseType):
 
     def __init__(self, *, type: "FacetTypes"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -244,6 +247,7 @@ class FacetTerm(_BaseType):
         self.term = term
         self.count = count
         self.product_count = product_count
+
         super().__init__()
 
     @classmethod
@@ -271,6 +275,7 @@ class FilteredFacetResult(FacetResult):
     def __init__(self, *, count: int, product_count: typing.Optional[int] = None):
         self.count = count
         self.product_count = product_count
+
         super().__init__(type=FacetTypes.FILTER)
 
     @classmethod
@@ -325,6 +330,7 @@ class Product(BaseResource):
         self.tax_category = tax_category
         self.state = state
         self.review_rating_statistics = review_rating_statistics
+
         super().__init__(
             id=id,
             version=version,
@@ -362,6 +368,7 @@ class ProductCatalogData(_BaseType):
         self.current = current
         self.staged = staged
         self.has_staged_changes = has_staged_changes
+
         super().__init__()
 
     @classmethod
@@ -415,6 +422,7 @@ class ProductData(_BaseType):
         self.master_variant = master_variant
         self.variants = variants
         self.search_keywords = search_keywords
+
         super().__init__()
 
     @classmethod
@@ -495,6 +503,7 @@ class ProductDraft(_BaseType):
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+
         super().__init__()
 
     @classmethod
@@ -530,6 +539,7 @@ class ProductPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -613,6 +623,7 @@ class ProductProjection(BaseResource):
         self.tax_category = tax_category
         self.state = state
         self.review_rating_statistics = review_rating_statistics
+
         super().__init__(
             id=id,
             version=version,
@@ -653,6 +664,7 @@ class ProductProjectionPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -693,6 +705,7 @@ class ProductProjectionPagedSearchResponse(_BaseType):
         self.offset = offset
         self.results = results
         self.facets = facets
+
         super().__init__()
 
     @classmethod
@@ -714,6 +727,7 @@ class ProductReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Product"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT)
 
     @classmethod
@@ -756,6 +770,7 @@ class ProductUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["ProductUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -775,6 +790,7 @@ class ProductUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -1012,6 +1028,7 @@ class ProductVariant(_BaseType):
         self.is_matching_variant = is_matching_variant
         self.scoped_price = scoped_price
         self.scoped_price_discounted = scoped_price_discounted
+
         super().__init__()
 
     @classmethod
@@ -1044,6 +1061,7 @@ class ProductVariantAvailability(_BaseType):
         self.restockable_in_days = restockable_in_days
         self.available_quantity = available_quantity
         self.channels = channels
+
         super().__init__()
 
     @classmethod
@@ -1075,6 +1093,7 @@ class ProductVariantChannelAvailability(_BaseType):
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
         self.available_quantity = available_quantity
+
         super().__init__()
 
     @classmethod
@@ -1121,6 +1140,7 @@ class ProductVariantDraft(_BaseType):
         self.attributes = attributes
         self.images = images
         self.assets = assets
+
         super().__init__()
 
     @classmethod
@@ -1140,6 +1160,7 @@ class RangeFacetResult(FacetResult):
 
     def __init__(self, *, ranges: typing.List["FacetRange"]):
         self.ranges = ranges
+
         super().__init__(type=FacetTypes.RANGE)
 
     @classmethod
@@ -1166,6 +1187,7 @@ class SearchKeyword(_BaseType):
     ):
         self.text = text
         self.suggest_tokenizer = suggest_tokenizer
+
         super().__init__()
 
     @classmethod
@@ -1189,6 +1211,7 @@ class SuggestTokenizer(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -1213,6 +1236,7 @@ class CustomTokenizer(SuggestTokenizer):
 
     def __init__(self, *, inputs: typing.List["str"]):
         self.inputs = inputs
+
         super().__init__(type="custom")
 
     @classmethod
@@ -1233,6 +1257,7 @@ class Suggestion(_BaseType):
 
     def __init__(self, *, text: str):
         self.text = text
+
         super().__init__()
 
     @classmethod
@@ -1272,6 +1297,7 @@ class TermFacetResult(FacetResult):
         self.total = total
         self.other = other
         self.terms = terms
+
         super().__init__(type=FacetTypes.TERMS)
 
     @classmethod
@@ -1334,6 +1360,7 @@ class ProductAddAssetAction(ProductUpdateAction):
         self.staged = staged
         self.asset = asset
         self.position = position
+
         super().__init__(action="addAsset")
 
     @classmethod
@@ -1366,6 +1393,7 @@ class ProductAddExternalImageAction(ProductUpdateAction):
         self.sku = sku
         self.image = image
         self.staged = staged
+
         super().__init__(action="addExternalImage")
 
     @classmethod
@@ -1400,6 +1428,7 @@ class ProductAddPriceAction(ProductUpdateAction):
         self.sku = sku
         self.price = price
         self.staged = staged
+
         super().__init__(action="addPrice")
 
     @classmethod
@@ -1429,6 +1458,7 @@ class ProductAddToCategoryAction(ProductUpdateAction):
         self.category = category
         self.order_hint = order_hint
         self.staged = staged
+
         super().__init__(action="addToCategory")
 
     @classmethod
@@ -1472,6 +1502,7 @@ class ProductAddVariantAction(ProductUpdateAction):
         self.attributes = attributes
         self.staged = staged
         self.assets = assets
+
         super().__init__(action="addVariant")
 
     @classmethod
@@ -1512,6 +1543,7 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.name = name
+
         super().__init__(action="changeAssetName")
 
     @classmethod
@@ -1546,6 +1578,7 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
         self.sku = sku
         self.staged = staged
         self.asset_order = asset_order
+
         super().__init__(action="changeAssetOrder")
 
     @classmethod
@@ -1577,6 +1610,7 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
         self.variant_id = variant_id
         self.sku = sku
         self.staged = staged
+
         super().__init__(action="changeMasterVariant")
 
     @classmethod
@@ -1602,6 +1636,7 @@ class ProductChangeNameAction(ProductUpdateAction):
     ):
         self.name = name
         self.staged = staged
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -1634,6 +1669,7 @@ class ProductChangePriceAction(ProductUpdateAction):
         self.price_id = price_id
         self.price = price
         self.staged = staged
+
         super().__init__(action="changePrice")
 
     @classmethod
@@ -1662,6 +1698,7 @@ class ProductChangeSlugAction(ProductUpdateAction):
     ):
         self.slug = slug
         self.staged = staged
+
         super().__init__(action="changeSlug")
 
     @classmethod
@@ -1685,6 +1722,7 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
     def __init__(self, *, sku: typing.Optional[str] = None, variant_id: int):
         self.sku = sku
         self.variant_id = variant_id
+
         super().__init__(action="legacySetSku")
 
     @classmethod
@@ -1723,6 +1761,7 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
         self.image_url = image_url
         self.position = position
         self.staged = staged
+
         super().__init__(action="moveImageToPosition")
 
     @classmethod
@@ -1744,6 +1783,7 @@ class ProductPublishAction(ProductUpdateAction):
 
     def __init__(self, *, scope: typing.Optional["ProductPublishScope"] = None):
         self.scope = scope
+
         super().__init__(action="publish")
 
     @classmethod
@@ -1779,6 +1819,7 @@ class ProductRemoveAssetAction(ProductUpdateAction):
         self.staged = staged
         self.asset_id = asset_id
         self.asset_key = asset_key
+
         super().__init__(action="removeAsset")
 
     @classmethod
@@ -1807,6 +1848,7 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
     ):
         self.category = category
         self.staged = staged
+
         super().__init__(action="removeFromCategory")
 
     @classmethod
@@ -1842,6 +1884,7 @@ class ProductRemoveImageAction(ProductUpdateAction):
         self.sku = sku
         self.image_url = image_url
         self.staged = staged
+
         super().__init__(action="removeImage")
 
     @classmethod
@@ -1866,6 +1909,7 @@ class ProductRemovePriceAction(ProductUpdateAction):
     def __init__(self, *, price_id: str, staged: typing.Optional[bool] = None):
         self.price_id = price_id
         self.staged = staged
+
         super().__init__(action="removePrice")
 
     @classmethod
@@ -1897,6 +1941,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
         self.id = id
         self.sku = sku
         self.staged = staged
+
         super().__init__(action="removeVariant")
 
     @classmethod
@@ -1937,6 +1982,7 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
 
     def __init__(self, *, variant_id: int):
         self.variant_id = variant_id
+
         super().__init__(action="revertStagedVariantChanges")
 
     @classmethod
@@ -1984,6 +2030,7 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
         self.asset_key = asset_key
         self.name = name
         self.value = value
+
         super().__init__(action="setAssetCustomField")
 
     @classmethod
@@ -2030,6 +2077,7 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
         self.asset_key = asset_key
         self.type = type
         self.fields = fields
+
         super().__init__(action="setAssetCustomType")
 
     @classmethod
@@ -2070,6 +2118,7 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.description = description
+
         super().__init__(action="setAssetDescription")
 
     @classmethod
@@ -2109,6 +2158,7 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
         self.staged = staged
         self.asset_id = asset_id
         self.asset_key = asset_key
+
         super().__init__(action="setAssetKey")
 
     @classmethod
@@ -2149,6 +2199,7 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.sources = sources
+
         super().__init__(action="setAssetSources")
 
     @classmethod
@@ -2189,6 +2240,7 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
         self.asset_id = asset_id
         self.asset_key = asset_key
         self.tags = tags
+
         super().__init__(action="setAssetTags")
 
     @classmethod
@@ -2229,6 +2281,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
         self.name = name
         self.value = value
         self.staged = staged
+
         super().__init__(action="setAttribute")
 
     @classmethod
@@ -2261,6 +2314,7 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
         self.name = name
         self.value = value
         self.staged = staged
+
         super().__init__(action="setAttributeInAllVariants")
 
     @classmethod
@@ -2292,6 +2346,7 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
         self.category_id = category_id
         self.order_hint = order_hint
         self.staged = staged
+
         super().__init__(action="setCategoryOrderHint")
 
     @classmethod
@@ -2320,6 +2375,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
     ):
         self.description = description
         self.staged = staged
+
         super().__init__(action="setDescription")
 
     @classmethod
@@ -2351,6 +2407,7 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
         self.price_id = price_id
         self.staged = staged
         self.discounted = discounted
+
         super().__init__(action="setDiscountedPrice")
 
     @classmethod
@@ -2391,6 +2448,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
         self.image_url = image_url
         self.label = label
         self.staged = staged
+
         super().__init__(action="setImageLabel")
 
     @classmethod
@@ -2414,6 +2472,7 @@ class ProductSetKeyAction(ProductUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod
@@ -2440,6 +2499,7 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
     ):
         self.meta_description = meta_description
         self.staged = staged
+
         super().__init__(action="setMetaDescription")
 
     @classmethod
@@ -2468,6 +2528,7 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
     ):
         self.meta_keywords = meta_keywords
         self.staged = staged
+
         super().__init__(action="setMetaKeywords")
 
     @classmethod
@@ -2496,6 +2557,7 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
     ):
         self.meta_title = meta_title
         self.staged = staged
+
         super().__init__(action="setMetaTitle")
 
     @classmethod
@@ -2530,6 +2592,7 @@ class ProductSetPricesAction(ProductUpdateAction):
         self.sku = sku
         self.prices = prices
         self.staged = staged
+
         super().__init__(action="setPrices")
 
     @classmethod
@@ -2568,6 +2631,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
         self.staged = staged
         self.name = name
         self.value = value
+
         super().__init__(action="setProductPriceCustomField")
 
     @classmethod
@@ -2605,6 +2669,7 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
         self.staged = staged
         self.type = type
         self.fields = fields
+
         super().__init__(action="setProductPriceCustomType")
 
     @classmethod
@@ -2640,6 +2705,7 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
         self.sku = sku
         self.key = key
         self.staged = staged
+
         super().__init__(action="setProductVariantKey")
 
     @classmethod
@@ -2665,6 +2731,7 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
     ):
         self.search_keywords = search_keywords
         self.staged = staged
+
         super().__init__(action="setSearchKeywords")
 
     @classmethod
@@ -2698,6 +2765,7 @@ class ProductSetSkuAction(ProductUpdateAction):
         self.variant_id = variant_id
         self.sku = sku
         self.staged = staged
+
         super().__init__(action="setSku")
 
     @classmethod
@@ -2720,6 +2788,7 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
         self, *, tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None
     ):
         self.tax_category = tax_category
+
         super().__init__(action="setTaxCategory")
 
     @classmethod
@@ -2748,6 +2817,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
     ):
         self.state = state
         self.force = force
+
         super().__init__(action="transitionState")
 
     @classmethod

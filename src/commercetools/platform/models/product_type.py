@@ -127,6 +127,7 @@ class AttributeDefinition(_BaseType):
         self.input_tip = input_tip
         self.input_hint = input_hint
         self.is_searchable = is_searchable
+
         super().__init__()
 
     @classmethod
@@ -184,6 +185,7 @@ class AttributeDefinitionDraft(_BaseType):
         self.input_tip = input_tip
         self.input_hint = input_hint
         self.is_searchable = is_searchable
+
         super().__init__()
 
     @classmethod
@@ -207,6 +209,7 @@ class AttributeLocalizedEnumValue(_BaseType):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -230,6 +233,7 @@ class AttributePlainEnumValue(_BaseType):
     def __init__(self, *, key: str, label: str):
         self.key = key
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -251,6 +255,7 @@ class AttributeType(_BaseType):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__()
 
     @classmethod
@@ -370,6 +375,7 @@ class AttributeEnumType(AttributeType):
 
     def __init__(self, *, values: typing.List["AttributePlainEnumValue"]):
         self.values = values
+
         super().__init__(name="enum")
 
     @classmethod
@@ -408,6 +414,7 @@ class AttributeLocalizedEnumType(AttributeType):
 
     def __init__(self, *, values: typing.List["AttributeLocalizedEnumValue"]):
         self.values = values
+
         super().__init__(name="lenum")
 
     @classmethod
@@ -446,6 +453,7 @@ class AttributeNestedType(AttributeType):
 
     def __init__(self, *, type_reference: "ProductTypeReference"):
         self.type_reference = type_reference
+
         super().__init__(name="nested")
 
     @classmethod
@@ -482,6 +490,7 @@ class AttributeReferenceType(AttributeType):
 
     def __init__(self, *, reference_type_id: "ReferenceTypeId"):
         self.reference_type_id = reference_type_id
+
         super().__init__(name="reference")
 
     @classmethod
@@ -503,6 +512,7 @@ class AttributeSetType(AttributeType):
 
     def __init__(self, *, element_type: "AttributeType"):
         self.element_type = element_type
+
         super().__init__(name="set")
 
     @classmethod
@@ -583,6 +593,7 @@ class ProductType(BaseResource):
         self.name = name
         self.description = description
         self.attributes = attributes
+
         super().__init__(
             id=id,
             version=version,
@@ -623,6 +634,7 @@ class ProductTypeDraft(_BaseType):
         self.name = name
         self.description = description
         self.attributes = attributes
+
         super().__init__()
 
     @classmethod
@@ -658,6 +670,7 @@ class ProductTypePagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -679,6 +692,7 @@ class ProductTypeReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductType"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
     @classmethod
@@ -723,6 +737,7 @@ class ProductTypeUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -742,6 +757,7 @@ class ProductTypeUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -871,6 +887,7 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 
     def __init__(self, *, attribute: "AttributeDefinitionDraft"):
         self.attribute = attribute
+
         super().__init__(action="addAttributeDefinition")
 
     @classmethod
@@ -894,6 +911,7 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, value: "AttributeLocalizedEnumValue"):
         self.attribute_name = attribute_name
         self.value = value
+
         super().__init__(action="addLocalizedEnumValue")
 
     @classmethod
@@ -917,6 +935,7 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, value: "AttributePlainEnumValue"):
         self.attribute_name = attribute_name
         self.value = value
+
         super().__init__(action="addPlainEnumValue")
 
     @classmethod
@@ -942,6 +961,7 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
     ):
         self.attribute_name = attribute_name
         self.new_value = new_value
+
         super().__init__(action="changeAttributeConstraint")
 
     @classmethod
@@ -969,6 +989,7 @@ class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, new_attribute_name: str):
         self.attribute_name = attribute_name
         self.new_attribute_name = new_attribute_name
+
         super().__init__(action="changeAttributeName")
 
     @classmethod
@@ -990,6 +1011,7 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 
     def __init__(self, *, attributes: typing.List["AttributeDefinition"]):
         self.attributes = attributes
+
         super().__init__(action="changeAttributeOrder")
 
     @classmethod
@@ -1011,6 +1033,7 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
 
     def __init__(self, *, attribute_names: typing.List["str"]):
         self.attribute_names = attribute_names
+
         super().__init__(action="changeAttributeOrderByName")
 
     @classmethod
@@ -1036,6 +1059,7 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
     def __init__(self, *, description: str):
         self.description = description
+
         super().__init__(action="changeDescription")
 
     @classmethod
@@ -1061,6 +1085,7 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
         self.attribute_name = attribute_name
         self.key = key
         self.new_key = new_key
+
         super().__init__(action="changeEnumKey")
 
     @classmethod
@@ -1084,6 +1109,7 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, new_value: "TextInputHint"):
         self.attribute_name = attribute_name
         self.new_value = new_value
+
         super().__init__(action="changeInputHint")
 
     @classmethod
@@ -1107,6 +1133,7 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, is_searchable: bool):
         self.attribute_name = attribute_name
         self.is_searchable = is_searchable
+
         super().__init__(action="changeIsSearchable")
 
     @classmethod
@@ -1130,6 +1157,7 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, label: "LocalizedString"):
         self.attribute_name = attribute_name
         self.label = label
+
         super().__init__(action="changeLabel")
 
     @classmethod
@@ -1155,6 +1183,7 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
     ):
         self.attribute_name = attribute_name
         self.new_value = new_value
+
         super().__init__(action="changeLocalizedEnumValueLabel")
 
     @classmethod
@@ -1184,6 +1213,7 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
     ):
         self.attribute_name = attribute_name
         self.values = values
+
         super().__init__(action="changeLocalizedEnumValueOrder")
 
     @classmethod
@@ -1209,6 +1239,7 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="changeName")
 
     @classmethod
@@ -1232,6 +1263,7 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, new_value: "AttributePlainEnumValue"):
         self.attribute_name = attribute_name
         self.new_value = new_value
+
         super().__init__(action="changePlainEnumValueLabel")
 
     @classmethod
@@ -1261,6 +1293,7 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
     ):
         self.attribute_name = attribute_name
         self.values = values
+
         super().__init__(action="changePlainEnumValueOrder")
 
     @classmethod
@@ -1287,6 +1320,7 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 
     def __init__(self, *, name: str):
         self.name = name
+
         super().__init__(action="removeAttributeDefinition")
 
     @classmethod
@@ -1314,6 +1348,7 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     def __init__(self, *, attribute_name: str, keys: typing.List["str"]):
         self.attribute_name = attribute_name
         self.keys = keys
+
         super().__init__(action="removeEnumValues")
 
     @classmethod
@@ -1342,6 +1377,7 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
     ):
         self.attribute_name = attribute_name
         self.input_tip = input_tip
+
         super().__init__(action="setInputTip")
 
     @classmethod
@@ -1364,6 +1400,7 @@ class ProductTypeSetKeyAction(ProductTypeUpdateAction):
 
     def __init__(self, *, key: typing.Optional[str] = None):
         self.key = key
+
         super().__init__(action="setKey")
 
     @classmethod

@@ -33,6 +33,7 @@ class ProjectCategoryRecommendation(_BaseType):
         self.category = category
         self.confidence = confidence
         self.path = path
+
         super().__init__()
 
     @classmethod
@@ -71,6 +72,7 @@ class ProjectCategoryRecommendationMeta(_BaseType):
         self.product_name = product_name
         self.product_image_url = product_image_url
         self.general_category_names = general_category_names
+
         super().__init__()
 
     @classmethod
@@ -112,6 +114,7 @@ class ProjectCategoryRecommendationPagedQueryResponse(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod

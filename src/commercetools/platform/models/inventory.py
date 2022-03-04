@@ -87,6 +87,7 @@ class InventoryEntry(BaseResource):
         self.restockable_in_days = restockable_in_days
         self.expected_delivery = expected_delivery
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -131,6 +132,7 @@ class InventoryEntryDraft(_BaseType):
         self.restockable_in_days = restockable_in_days
         self.expected_delivery = expected_delivery
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -150,6 +152,7 @@ class InventoryEntryReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["InventoryEntry"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.INVENTORY_ENTRY)
 
     @classmethod
@@ -196,6 +199,7 @@ class InventoryEntryUpdate(_BaseType):
     ):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -215,6 +219,7 @@ class InventoryEntryUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -285,6 +290,7 @@ class InventoryPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -306,6 +312,7 @@ class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
 
     def __init__(self, *, quantity: int):
         self.quantity = quantity
+
         super().__init__(action="addQuantity")
 
     @classmethod
@@ -327,6 +334,7 @@ class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
 
     def __init__(self, *, quantity: int):
         self.quantity = quantity
+
         super().__init__(action="changeQuantity")
 
     @classmethod
@@ -348,6 +356,7 @@ class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
 
     def __init__(self, *, quantity: int):
         self.quantity = quantity
+
         super().__init__(action="removeQuantity")
 
     @classmethod
@@ -375,6 +384,7 @@ class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -406,6 +416,7 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -427,6 +438,7 @@ class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
 
     def __init__(self, *, expected_delivery: typing.Optional[datetime.datetime] = None):
         self.expected_delivery = expected_delivery
+
         super().__init__(action="setExpectedDelivery")
 
     @classmethod
@@ -448,6 +460,7 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
 
     def __init__(self, *, restockable_in_days: typing.Optional[int] = None):
         self.restockable_in_days = restockable_in_days
+
         super().__init__(action="setRestockableInDays")
 
     @classmethod
@@ -473,6 +486,7 @@ class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
         self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.supply_channel = supply_channel
+
         super().__init__(action="setSupplyChannel")
 
     @classmethod

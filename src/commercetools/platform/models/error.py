@@ -100,6 +100,7 @@ class ErrorByExtension(_BaseType):
     def __init__(self, *, id: str, key: typing.Optional[str] = None):
         self.id = id
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -122,6 +123,7 @@ class ErrorObject(_BaseType):
         self.code = code
         self.message = message
         self.__dict__.update(kwargs)
+
         super().__init__()
 
     @classmethod
@@ -396,6 +398,7 @@ class ErrorObject(_BaseType):
 class AccessDeniedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="access_denied", **kwargs)
 
     @classmethod
@@ -413,6 +416,7 @@ class AccessDeniedError(ErrorObject):
 class AnonymousIdAlreadyInUseError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="AnonymousIdAlreadyInUse", **kwargs)
 
     @classmethod
@@ -446,6 +450,7 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
         self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="AttributeDefinitionAlreadyExists", **kwargs
         )
@@ -481,6 +486,7 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
         self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="AttributeDefinitionTypeConflict", **kwargs
         )
@@ -504,6 +510,7 @@ class AttributeNameDoesNotExistError(ErrorObject):
 
     def __init__(self, *, message: str, invalid_attribute_name: str, **kwargs):
         self.invalid_attribute_name = invalid_attribute_name
+        kwargs.pop("code", None)
         super().__init__(message=message, code="AttributeNameDoesNotExist", **kwargs)
 
     @classmethod
@@ -523,6 +530,7 @@ class AttributeNameDoesNotExistError(ErrorObject):
 class BadGatewayError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="BadGateway", **kwargs)
 
     @classmethod
@@ -544,6 +552,7 @@ class ConcurrentModificationError(ErrorObject):
         self, *, message: str, current_version: typing.Optional[int] = None, **kwargs
     ):
         self.current_version = current_version
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ConcurrentModification", **kwargs)
 
     @classmethod
@@ -586,6 +595,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
         self.valid_from = valid_from
         self.valid_until = valid_until
         self.validity_check_time = validity_check_time
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DiscountCodeNonApplicable", **kwargs)
 
     @classmethod
@@ -607,6 +617,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
     def __init__(self, *, message: str, attribute: "Attribute", **kwargs):
         self.attribute = attribute
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateAttributeValue", **kwargs)
 
     @classmethod
@@ -628,6 +639,7 @@ class DuplicateAttributeValuesError(ErrorObject):
 
     def __init__(self, *, message: str, attributes: typing.List["Attribute"], **kwargs):
         self.attributes = attributes
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateAttributeValues", **kwargs)
 
     @classmethod
@@ -649,6 +661,7 @@ class DuplicateEnumValuesError(ErrorObject):
 
     def __init__(self, *, message: str, duplicates: typing.List["str"], **kwargs):
         self.duplicates = duplicates
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateEnumValues", **kwargs)
 
     @classmethod
@@ -682,6 +695,7 @@ class DuplicateFieldError(ErrorObject):
         self.field = field
         self.duplicate_value = duplicate_value
         self.conflicting_resource = conflicting_resource
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateField", **kwargs)
 
     @classmethod
@@ -713,6 +727,7 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
         self.field = field
         self.duplicate_value = duplicate_value
         self.conflicting_resource = conflicting_resource
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="DuplicateFieldWithConflictingResource", **kwargs
         )
@@ -738,6 +753,7 @@ class DuplicatePriceScopeError(ErrorObject):
         self, *, message: str, conflicting_prices: typing.List["Price"], **kwargs
     ):
         self.conflicting_prices = conflicting_prices
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicatePriceScope", **kwargs)
 
     @classmethod
@@ -759,6 +775,7 @@ class DuplicateVariantValuesError(ErrorObject):
 
     def __init__(self, *, message: str, variant_values: "VariantValues", **kwargs):
         self.variant_values = variant_values
+        kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateVariantValues", **kwargs)
 
     @classmethod
@@ -780,6 +797,7 @@ class EditPreviewFailedError(ErrorObject):
 
     def __init__(self, *, message: str, result: "OrderEditPreviewFailure", **kwargs):
         self.result = result
+        kwargs.pop("code", None)
         super().__init__(message=message, code="EditPreviewFailed", **kwargs)
 
     @classmethod
@@ -810,6 +828,7 @@ class EnumKeyAlreadyExistsError(ErrorObject):
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
         super().__init__(message=message, code="EnumKeyAlreadyExists", **kwargs)
 
     @classmethod
@@ -840,6 +859,7 @@ class EnumKeyDoesNotExistError(ErrorObject):
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
         super().__init__(message=message, code="EnumKeyDoesNotExist", **kwargs)
 
     @classmethod
@@ -859,6 +879,7 @@ class EnumKeyDoesNotExistError(ErrorObject):
 class EnumValueIsUsedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValueIsUsed", **kwargs)
 
     @classmethod
@@ -876,6 +897,7 @@ class EnumValueIsUsedError(ErrorObject):
 class EnumValuesMustMatchError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValuesMustMatch", **kwargs)
 
     @classmethod
@@ -913,6 +935,7 @@ class ErrorResponse(_BaseType):
         self.error = error
         self.error_description = error_description
         self.errors = errors
+
         super().__init__()
 
     @classmethod
@@ -944,6 +967,7 @@ class ExtensionBadResponseError(ErrorObject):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
         self.error_by_extension = error_by_extension
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ExtensionBadResponse", **kwargs)
 
     @classmethod
@@ -974,6 +998,7 @@ class ExtensionNoResponseError(ErrorObject):
     ):
         self.extension_id = extension_id
         self.extension_key = extension_key
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ExtensionNoResponse", **kwargs)
 
     @classmethod
@@ -1007,6 +1032,7 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
         self.error_by_extension = error_by_extension
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ExtensionUpdateActionsFailed", **kwargs)
 
     @classmethod
@@ -1026,6 +1052,7 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 class ExternalOAuthFailedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ExternalOAuthFailed", **kwargs)
 
     @classmethod
@@ -1045,6 +1072,7 @@ class ExternalOAuthFailedError(ErrorObject):
 class FeatureRemovedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="FeatureRemoved", **kwargs)
 
     @classmethod
@@ -1062,6 +1090,7 @@ class FeatureRemovedError(ErrorObject):
 class GeneralError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="General", **kwargs)
 
     @classmethod
@@ -1079,6 +1108,7 @@ class GeneralError(ErrorObject):
 class InsufficientScopeError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="insufficient_scope", **kwargs)
 
     @classmethod
@@ -1098,6 +1128,7 @@ class InsufficientScopeError(ErrorObject):
 class InternalConstraintViolatedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InternalConstraintViolated", **kwargs)
 
     @classmethod
@@ -1117,6 +1148,7 @@ class InternalConstraintViolatedError(ErrorObject):
 class InvalidCredentialsError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCredentials", **kwargs)
 
     @classmethod
@@ -1136,6 +1168,7 @@ class InvalidCredentialsError(ErrorObject):
 class InvalidCurrentPasswordError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCurrentPassword", **kwargs)
 
     @classmethod
@@ -1169,6 +1202,7 @@ class InvalidFieldError(ErrorObject):
         self.field = field
         self.invalid_value = invalid_value
         self.allowed_values = allowed_values
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidField", **kwargs)
 
     @classmethod
@@ -1186,6 +1220,7 @@ class InvalidFieldError(ErrorObject):
 class InvalidInputError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidInput", **kwargs)
 
     @classmethod
@@ -1207,6 +1242,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
     def __init__(self, *, message: str, subject: str, item_id: str, **kwargs):
         self.subject = subject
         self.item_id = item_id
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidItemShippingDetails", **kwargs)
 
     @classmethod
@@ -1226,6 +1262,7 @@ class InvalidItemShippingDetailsError(ErrorObject):
 class InvalidJsonInputError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidJsonInput", **kwargs)
 
     @classmethod
@@ -1243,6 +1280,7 @@ class InvalidJsonInputError(ErrorObject):
 class InvalidOperationError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidOperation", **kwargs)
 
     @classmethod
@@ -1260,6 +1298,7 @@ class InvalidOperationError(ErrorObject):
 class InvalidSubjectError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidSubject", **kwargs)
 
     @classmethod
@@ -1277,6 +1316,7 @@ class InvalidSubjectError(ErrorObject):
 class InvalidTokenError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="invalid_token", **kwargs)
 
     @classmethod
@@ -1294,6 +1334,7 @@ class InvalidTokenError(ErrorObject):
 class LanguageUsedInStoresError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="LanguageUsedInStores", **kwargs)
 
     @classmethod
@@ -1338,6 +1379,7 @@ class MatchingPriceNotFoundError(ErrorObject):
         self.country = country
         self.customer_group = customer_group
         self.channel = channel
+        kwargs.pop("code", None)
         super().__init__(message=message, code="MatchingPriceNotFound", **kwargs)
 
     @classmethod
@@ -1359,6 +1401,7 @@ class MaxResourceLimitExceededError(ErrorObject):
 
     def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId", **kwargs):
         self.exceeded_resource = exceeded_resource
+        kwargs.pop("code", None)
         super().__init__(message=message, code="MaxResourceLimitExceeded", **kwargs)
 
     @classmethod
@@ -1391,6 +1434,7 @@ class MissingRoleOnChannelError(ErrorObject):
     ):
         self.channel = channel
         self.missing_role = missing_role
+        kwargs.pop("code", None)
         super().__init__(message=message, code="MissingRoleOnChannel", **kwargs)
 
     @classmethod
@@ -1424,6 +1468,7 @@ class MissingTaxRateForCountryError(ErrorObject):
         self.tax_category_id = tax_category_id
         self.country = country
         self.state = state
+        kwargs.pop("code", None)
         super().__init__(message=message, code="MissingTaxRateForCountry", **kwargs)
 
     @classmethod
@@ -1443,6 +1488,7 @@ class MissingTaxRateForCountryError(ErrorObject):
 class NoMatchingProductDiscountFoundError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="NoMatchingProductDiscountFound", **kwargs
         )
@@ -1464,6 +1510,7 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
 class NotEnabledError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="NotEnabled", **kwargs)
 
     @classmethod
@@ -1481,6 +1528,7 @@ class NotEnabledError(ErrorObject):
 class ObjectNotFoundError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ObjectNotFound", **kwargs)
 
     @classmethod
@@ -1509,6 +1557,7 @@ class OutOfStockError(ErrorObject):
     ):
         self.line_items = line_items
         self.skus = skus
+        kwargs.pop("code", None)
         super().__init__(message=message, code="OutOfStock", **kwargs)
 
     @classmethod
@@ -1526,6 +1575,7 @@ class OutOfStockError(ErrorObject):
 class OverCapacityError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="OverCapacity", **kwargs)
 
     @classmethod
@@ -1543,6 +1593,7 @@ class OverCapacityError(ErrorObject):
 class PendingOperationError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="PendingOperation", **kwargs)
 
     @classmethod
@@ -1566,6 +1617,7 @@ class PriceChangedError(ErrorObject):
     ):
         self.line_items = line_items
         self.shipping = shipping
+        kwargs.pop("code", None)
         super().__init__(message=message, code="PriceChanged", **kwargs)
 
     @classmethod
@@ -1591,6 +1643,7 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
         **kwargs
     ):
         self.languages = languages
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="ProjectNotConfiguredForLanguages", **kwargs
         )
@@ -1612,6 +1665,7 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 class QueryComplexityLimitExceededError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="QueryComplexityLimitExceeded", **kwargs)
 
     @classmethod
@@ -1631,6 +1685,7 @@ class QueryComplexityLimitExceededError(ErrorObject):
 class QueryTimedOutError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="QueryTimedOut", **kwargs)
 
     @classmethod
@@ -1656,6 +1711,7 @@ class ReferenceExistsError(ErrorObject):
         **kwargs
     ):
         self.referenced_by = referenced_by
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ReferenceExists", **kwargs)
 
     @classmethod
@@ -1687,6 +1743,7 @@ class ReferencedResourceNotFoundError(ErrorObject):
         self.type_id = type_id
         self.id = id
         self.key = key
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ReferencedResourceNotFound", **kwargs)
 
     @classmethod
@@ -1708,6 +1765,7 @@ class RequiredFieldError(ErrorObject):
 
     def __init__(self, *, message: str, field: str, **kwargs):
         self.field = field
+        kwargs.pop("code", None)
         super().__init__(message=message, code="RequiredField", **kwargs)
 
     @classmethod
@@ -1725,6 +1783,7 @@ class RequiredFieldError(ErrorObject):
 class ResourceNotFoundError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceNotFound", **kwargs)
 
     @classmethod
@@ -1742,6 +1801,7 @@ class ResourceNotFoundError(ErrorObject):
 class ResourceSizeLimitExceededError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceSizeLimitExceeded", **kwargs)
 
     @classmethod
@@ -1761,6 +1821,7 @@ class ResourceSizeLimitExceededError(ErrorObject):
 class SearchDeactivatedError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SearchDeactivated", **kwargs)
 
     @classmethod
@@ -1780,6 +1841,7 @@ class SearchDeactivatedError(ErrorObject):
 class SearchExecutionFailureError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SearchExecutionFailure", **kwargs)
 
     @classmethod
@@ -1799,6 +1861,7 @@ class SearchExecutionFailureError(ErrorObject):
 class SearchFacetPathNotFoundError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SearchFacetPathNotFound", **kwargs)
 
     @classmethod
@@ -1818,6 +1881,7 @@ class SearchFacetPathNotFoundError(ErrorObject):
 class SearchIndexingInProgressError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SearchIndexingInProgress", **kwargs)
 
     @classmethod
@@ -1837,6 +1901,7 @@ class SearchIndexingInProgressError(ErrorObject):
 class SemanticErrorError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SemanticError", **kwargs)
 
     @classmethod
@@ -1854,6 +1919,7 @@ class SemanticErrorError(ErrorObject):
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(
             message=message, code="ShippingMethodDoesNotMatchCart", **kwargs
         )
@@ -1875,6 +1941,7 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
 class SyntaxErrorError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="SyntaxError", **kwargs)
 
     @classmethod
@@ -1904,6 +1971,7 @@ class VariantValues(_BaseType):
         self.sku = sku
         self.prices = prices
         self.attributes = attributes
+
         super().__init__()
 
     @classmethod
@@ -1921,6 +1989,7 @@ class VariantValues(_BaseType):
 class WeakPasswordError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
+        kwargs.pop("code", None)
         super().__init__(message=message, code="WeakPassword", **kwargs)
 
     @classmethod

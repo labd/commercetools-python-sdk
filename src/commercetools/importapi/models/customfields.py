@@ -65,6 +65,7 @@ class Custom(_BaseType):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__()
 
     @classmethod
@@ -91,6 +92,7 @@ class CustomField(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -197,6 +199,7 @@ class BooleanField(CustomField):
 
     def __init__(self, *, value: bool):
         self.value = value
+
         super().__init__(type="Boolean")
 
     @classmethod
@@ -218,6 +221,7 @@ class StringField(CustomField):
 
     def __init__(self, *, value: str):
         self.value = value
+
         super().__init__(type="String")
 
     @classmethod
@@ -246,6 +250,7 @@ class LocalizedStringField(CustomField):
 
     def __init__(self, *, value: "LocalizedString"):
         self.value = value
+
         super().__init__(type="LocalizedString")
 
     @classmethod
@@ -267,6 +272,7 @@ class EnumField(CustomField):
 
     def __init__(self, *, value: str):
         self.value = value
+
         super().__init__(type="Enum")
 
     @classmethod
@@ -288,6 +294,7 @@ class LocalizedEnumField(CustomField):
 
     def __init__(self, *, value: str):
         self.value = value
+
         super().__init__(type="LocalizedEnum")
 
     @classmethod
@@ -309,6 +316,7 @@ class NumberField(CustomField):
 
     def __init__(self, *, value: float):
         self.value = value
+
         super().__init__(type="Number")
 
     @classmethod
@@ -330,6 +338,7 @@ class MoneyField(CustomField):
 
     def __init__(self, *, value: "TypedMoney"):
         self.value = value
+
         super().__init__(type="Money")
 
     @classmethod
@@ -351,6 +360,7 @@ class DateField(CustomField):
 
     def __init__(self, *, value: datetime.date):
         self.value = value
+
         super().__init__(type="Date")
 
     @classmethod
@@ -372,6 +382,7 @@ class TimeField(CustomField):
 
     def __init__(self, *, value: datetime.time):
         self.value = value
+
         super().__init__(type="Time")
 
     @classmethod
@@ -393,6 +404,7 @@ class DateTimeField(CustomField):
 
     def __init__(self, *, value: datetime.datetime):
         self.value = value
+
         super().__init__(type="DateTime")
 
     @classmethod
@@ -415,6 +427,7 @@ class ReferenceField(CustomField):
 
     def __init__(self, *, value: "KeyReference"):
         self.value = value
+
         super().__init__(type="Reference")
 
     @classmethod
@@ -436,6 +449,7 @@ class BooleanSetField(CustomField):
 
     def __init__(self, *, value: typing.List["bool"]):
         self.value = value
+
         super().__init__(type="BooleanSet")
 
     @classmethod
@@ -457,6 +471,7 @@ class StringSetField(CustomField):
 
     def __init__(self, *, value: typing.List["str"]):
         self.value = value
+
         super().__init__(type="StringSet")
 
     @classmethod
@@ -478,6 +493,7 @@ class LocalizedStringSetField(CustomField):
 
     def __init__(self, *, value: typing.List["LocalizedString"]):
         self.value = value
+
         super().__init__(type="LocalizedStringSet")
 
     @classmethod
@@ -501,6 +517,7 @@ class EnumSetField(CustomField):
 
     def __init__(self, *, value: typing.List["str"]):
         self.value = value
+
         super().__init__(type="EnumSet")
 
     @classmethod
@@ -522,6 +539,7 @@ class LocalizedEnumSetField(CustomField):
 
     def __init__(self, *, value: typing.List["str"]):
         self.value = value
+
         super().__init__(type="LocalizedEnumSet")
 
     @classmethod
@@ -543,6 +561,7 @@ class NumberSetField(CustomField):
 
     def __init__(self, *, value: typing.List["float"]):
         self.value = value
+
         super().__init__(type="NumberSet")
 
     @classmethod
@@ -564,6 +583,7 @@ class MoneySetField(CustomField):
 
     def __init__(self, *, value: typing.List["Money"]):
         self.value = value
+
         super().__init__(type="MoneySet")
 
     @classmethod
@@ -585,6 +605,7 @@ class DateSetField(CustomField):
 
     def __init__(self, *, value: typing.List["datetime.date"]):
         self.value = value
+
         super().__init__(type="DateSet")
 
     @classmethod
@@ -606,6 +627,7 @@ class TimeSetField(CustomField):
 
     def __init__(self, *, value: typing.List["datetime.time"]):
         self.value = value
+
         super().__init__(type="TimeSet")
 
     @classmethod
@@ -627,6 +649,7 @@ class DateTimeSetField(CustomField):
 
     def __init__(self, *, value: typing.List["datetime.datetime"]):
         self.value = value
+
         super().__init__(type="DateTimeSet")
 
     @classmethod
@@ -648,6 +671,7 @@ class ReferenceSetField(CustomField):
 
     def __init__(self, *, value: typing.List["KeyReference"]):
         self.value = value
+
         super().__init__(type="ReferenceSet")
 
     @classmethod

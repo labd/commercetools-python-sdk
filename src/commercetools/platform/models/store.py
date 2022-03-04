@@ -75,6 +75,7 @@ class ProductSelectionSetting(_BaseType):
     def __init__(self, *, product_selection: "ProductSelectionReference", active: bool):
         self.product_selection = product_selection
         self.active = active
+
         super().__init__()
 
     @classmethod
@@ -105,6 +106,7 @@ class ProductSelectionSettingDraft(_BaseType):
     ):
         self.product_selection = product_selection
         self.active = active
+
         super().__init__()
 
     @classmethod
@@ -171,6 +173,7 @@ class Store(BaseResource):
         self.supply_channels = supply_channels
         self.product_selections = product_selections
         self.custom = custom
+
         super().__init__(
             id=id,
             version=version,
@@ -232,6 +235,7 @@ class StoreDraft(_BaseType):
         self.supply_channels = supply_channels
         self.product_selections = product_selections
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -284,6 +288,7 @@ class StorePagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod
@@ -305,6 +310,7 @@ class StoreReference(Reference):
 
     def __init__(self, *, id: str, obj: typing.Optional["Store"] = None):
         self.obj = obj
+
         super().__init__(id=id, type_id=ReferenceTypeId.STORE)
 
     @classmethod
@@ -347,6 +353,7 @@ class StoreUpdate(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["StoreUpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -366,6 +373,7 @@ class StoreUpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -438,6 +446,7 @@ class StoreAddDistributionChannelAction(StoreUpdateAction):
 
     def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
         self.distribution_channel = distribution_channel
+
         super().__init__(action="addDistributionChannel")
 
     @classmethod
@@ -460,6 +469,7 @@ class StoreAddProductSelectionAction(StoreUpdateAction):
 
     def __init__(self, *, product_selection: "ProductSelectionSettingDraft"):
         self.product_selection = product_selection
+
         super().__init__(action="addProductSelection")
 
     @classmethod
@@ -483,6 +493,7 @@ class StoreAddSupplyChannelAction(StoreUpdateAction):
         self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.supply_channel = supply_channel
+
         super().__init__(action="addSupplyChannel")
 
     @classmethod
@@ -513,6 +524,7 @@ class StoreChangeProductSelectionAction(StoreUpdateAction):
     ):
         self.product_selection = product_selection
         self.active = active
+
         super().__init__(action="changeProductSelectionActive")
 
     @classmethod
@@ -534,6 +546,7 @@ class StoreRemoveDistributionChannelAction(StoreUpdateAction):
 
     def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
         self.distribution_channel = distribution_channel
+
         super().__init__(action="removeDistributionChannel")
 
     @classmethod
@@ -556,6 +569,7 @@ class StoreRemoveProductSelectionAction(StoreUpdateAction):
 
     def __init__(self, *, product_selection: "ResourceIdentifier"):
         self.product_selection = product_selection
+
         super().__init__(action="removeProductSelection")
 
     @classmethod
@@ -579,6 +593,7 @@ class StoreRemoveSupplyChannelAction(StoreUpdateAction):
         self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.supply_channel = supply_channel
+
         super().__init__(action="removeSupplyChannel")
 
     @classmethod
@@ -606,6 +621,7 @@ class StoreSetCustomFieldAction(StoreUpdateAction):
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
         self.name = name
         self.value = value
+
         super().__init__(action="setCustomField")
 
     @classmethod
@@ -637,6 +653,7 @@ class StoreSetCustomTypeAction(StoreUpdateAction):
     ):
         self.type = type
         self.fields = fields
+
         super().__init__(action="setCustomType")
 
     @classmethod
@@ -664,6 +681,7 @@ class StoreSetDistributionChannelsAction(StoreUpdateAction):
         ] = None
     ):
         self.distribution_channels = distribution_channels
+
         super().__init__(action="setDistributionChannels")
 
     @classmethod
@@ -685,6 +703,7 @@ class StoreSetLanguagesAction(StoreUpdateAction):
 
     def __init__(self, *, languages: typing.Optional[typing.List["str"]] = None):
         self.languages = languages
+
         super().__init__(action="setLanguages")
 
     @classmethod
@@ -707,6 +726,7 @@ class StoreSetNameAction(StoreUpdateAction):
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
         self.name = name
+
         super().__init__(action="setName")
 
     @classmethod
@@ -729,6 +749,7 @@ class StoreSetProductSelectionsAction(StoreUpdateAction):
         self, *, product_selections: typing.List["ProductSelectionSettingDraft"]
     ):
         self.product_selections = product_selections
+
         super().__init__(action="setProductSelections")
 
     @classmethod
@@ -756,6 +777,7 @@ class StoreSetSupplyChannelsAction(StoreUpdateAction):
         ] = None
     ):
         self.supply_channels = supply_channels
+
         super().__init__(action="setSupplyChannels")
 
     @classmethod

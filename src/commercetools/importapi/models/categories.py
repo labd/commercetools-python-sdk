@@ -74,6 +74,7 @@ class CategoryImport(ImportResource):
         self.meta_keywords = meta_keywords
         self.assets = assets
         self.custom = custom
+
         super().__init__(key=key)
 
     @classmethod

@@ -89,6 +89,7 @@ class ItemState(_BaseType):
     def __init__(self, *, quantity: float, state: "StateKeyReference"):
         self.quantity = quantity
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -114,6 +115,7 @@ class ItemShippingTarget(_BaseType):
     def __init__(self, *, address_key: str, quantity: float):
         self.address_key = address_key
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -134,6 +136,7 @@ class ItemShippingDetailsDraft(_BaseType):
 
     def __init__(self, *, targets: typing.List["ItemShippingTarget"]):
         self.targets = targets
+
         super().__init__()
 
     @classmethod
@@ -192,6 +195,7 @@ class LineItemPrice(_BaseType):
         self.discounted = discounted
         self.tiers = tiers
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -232,6 +236,7 @@ class LineItemProductVariantImportDraft(_BaseType):
         self.prices = prices
         self.attributes = attributes
         self.images = images
+
         super().__init__()
 
     @classmethod
@@ -304,6 +309,7 @@ class LineItemImportDraft(_BaseType):
         self.distribution_channel = distribution_channel
         self.tax_rate = tax_rate
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -329,6 +335,7 @@ class ShippingRatePriceTier(_BaseType):
 
     def __init__(self, *, type: "ShippingRateTierType"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -362,6 +369,7 @@ class CartClassificationTier(ShippingRatePriceTier):
         self.price = price
         self.tiers = tiers
         self.is_matching = is_matching
+
         super().__init__(type=ShippingRateTierType.CART_CLASSIFICATION)
 
     @classmethod
@@ -393,6 +401,7 @@ class ShippingRateDraft(_BaseType):
         self.price = price
         self.free_above = free_above
         self.tiers = tiers
+
         super().__init__()
 
     @classmethod
@@ -425,6 +434,7 @@ class ParcelMeasurements(_BaseType):
         self.length_in_millimeter = length_in_millimeter
         self.width_in_millimeter = width_in_millimeter
         self.weight_in_gram = weight_in_gram
+
         super().__init__()
 
     @classmethod
@@ -460,6 +470,7 @@ class TrackingData(_BaseType):
         self.provider = provider
         self.provider_transaction = provider_transaction
         self.is_return = is_return
+
         super().__init__()
 
     @classmethod
@@ -481,6 +492,7 @@ class DeliveryItem(_BaseType):
     def __init__(self, *, id: str, quantity: float):
         self.id = id
         self.quantity = quantity
+
         super().__init__()
 
     @classmethod
@@ -516,6 +528,7 @@ class Parcel(_BaseType):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+
         super().__init__()
 
     @classmethod
@@ -551,6 +564,7 @@ class Delivery(_BaseType):
         self.items = items
         self.parcels = parcels
         self.address = address
+
         super().__init__()
 
     @classmethod
@@ -575,6 +589,7 @@ class DiscountedLineItemPortion(_BaseType):
     ):
         self.discount = discount
         self.discounted_amount = discounted_amount
+
         super().__init__()
 
     @classmethod
@@ -603,6 +618,7 @@ class DiscountedLineItemPriceDraft(_BaseType):
     ):
         self.value = value
         self.included_discounts = included_discounts
+
         super().__init__()
 
     @classmethod
@@ -665,6 +681,7 @@ class ShippingInfoImportDraft(_BaseType):
         self.deliveries = deliveries
         self.discounted_price = discounted_price
         self.shipping_method_state = shipping_method_state
+
         super().__init__()
 
     @classmethod
@@ -705,6 +722,7 @@ class ExternalTaxRateDraft(_BaseType):
         self.state = state
         self.sub_rates = sub_rates
         self.included_in_price = included_in_price
+
         super().__init__()
 
     @classmethod
@@ -726,6 +744,7 @@ class CustomLineItemTaxedPrice(_BaseType):
     def __init__(self, *, total_net: "TypedMoney", total_gross: "TypedMoney"):
         self.total_net = total_net
         self.total_gross = total_gross
+
         super().__init__()
 
     @classmethod
@@ -796,6 +815,7 @@ class CustomLineItemDraft(_BaseType):
         self.external_tax_rate = external_tax_rate
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.shipping_details = shipping_details
+
         super().__init__()
 
     @classmethod
@@ -821,6 +841,7 @@ class TaxPortion(_BaseType):
         self.name = name
         self.rate = rate
         self.amount = amount
+
         super().__init__()
 
     @classmethod
@@ -853,6 +874,7 @@ class TaxedPrice(_BaseType):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
+
         super().__init__()
 
     @classmethod
@@ -953,6 +975,7 @@ class SyncInfo(_BaseType):
         self.channel = channel
         self.external_id = external_id
         self.synced_at = synced_at
+
         super().__init__()
 
     @classmethod
@@ -992,6 +1015,7 @@ class DiscountCodeInfo(_BaseType):
     ):
         self.discount_code = discount_code
         self.state = state
+
         super().__init__()
 
     @classmethod
@@ -1016,6 +1040,7 @@ class ShippingRateInput(_BaseType):
 
     def __init__(self, *, type: "ShippingRateInputType"):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -1049,6 +1074,7 @@ class ClassificationShippingRateInput(ShippingRateInput):
     def __init__(self, *, key: str, label: "LocalizedString"):
         self.key = key
         self.label = label
+
         super().__init__(type=ShippingRateInputType.CLASSIFICATION)
 
     @classmethod
@@ -1070,6 +1096,7 @@ class ScoreShippingRateInput(ShippingRateInput):
 
     def __init__(self, *, score: float):
         self.score = score
+
         super().__init__(type=ShippingRateInputType.SCORE)
 
     @classmethod
@@ -1189,6 +1216,7 @@ class OrderImport(_BaseType):
         self.tax_calculation_mode = tax_calculation_mode
         self.origin = origin
         self.item_shipping_addresses = item_shipping_addresses
+
         super().__init__()
 
     @classmethod

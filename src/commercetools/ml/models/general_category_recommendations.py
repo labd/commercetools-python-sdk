@@ -26,6 +26,7 @@ class GeneralCategoryRecommendation(_BaseType):
     def __init__(self, *, category_name: str, confidence: float):
         self.category_name = category_name
         self.confidence = confidence
+
         super().__init__()
 
     @classmethod
@@ -64,6 +65,7 @@ class GeneralCategoryRecommendationPagedQueryResponse(_BaseType):
         self.total = total
         self.offset = offset
         self.results = results
+
         super().__init__()
 
     @classmethod

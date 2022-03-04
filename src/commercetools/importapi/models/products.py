@@ -48,6 +48,7 @@ class SearchKeyword(_BaseType):
     ):
         self.text = text
         self.suggest_tokenizer = suggest_tokenizer
+
         super().__init__()
 
     @classmethod
@@ -69,6 +70,7 @@ class SuggestTokenizer(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -93,6 +95,7 @@ class CustomTokenizer(SuggestTokenizer):
 
     def __init__(self, *, inputs: typing.List["str"]):
         self.inputs = inputs
+
         super().__init__(type="custom")
 
     @classmethod
@@ -230,6 +233,7 @@ class ProductImport(ImportResource):
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+
         super().__init__(key=key)
 
     @classmethod

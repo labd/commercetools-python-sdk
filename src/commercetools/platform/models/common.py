@@ -85,6 +85,7 @@ class PagedQueryResponse(_BaseType):
         self.offset = offset
         self.results = results
         self.meta = meta
+
         super().__init__()
 
     @classmethod
@@ -106,6 +107,7 @@ class Update(_BaseType):
     def __init__(self, *, version: int, actions: typing.List["UpdateAction"]):
         self.version = version
         self.actions = actions
+
         super().__init__()
 
     @classmethod
@@ -125,6 +127,7 @@ class UpdateAction(_BaseType):
 
     def __init__(self, *, action: str):
         self.action = action
+
         super().__init__()
 
     @classmethod
@@ -167,6 +170,7 @@ class Asset(_BaseType):
         self.tags = tags
         self.custom = custom
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -188,6 +192,7 @@ class AssetDimensions(_BaseType):
     def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
+
         super().__init__()
 
     @classmethod
@@ -227,6 +232,7 @@ class AssetDraft(_BaseType):
         self.tags = tags
         self.custom = custom
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -259,6 +265,7 @@ class AssetSource(_BaseType):
         self.key = key
         self.dimensions = dimensions
         self.content_type = content_type
+
         super().__init__()
 
     @classmethod
@@ -355,6 +362,7 @@ class BaseAddress(_BaseType):
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+
         super().__init__()
 
     @classmethod
@@ -403,6 +411,7 @@ class Address(BaseAddress):
         custom: typing.Optional["CustomFields"] = None
     ):
         self.custom = custom
+
         super().__init__(
             id=id,
             key=key,
@@ -477,6 +486,7 @@ class AddressDraft(BaseAddress):
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.custom = custom
+
         super().__init__(
             id=id,
             key=key,
@@ -535,6 +545,7 @@ class BaseResource(_BaseType):
         self.version = version
         self.created_at = created_at
         self.last_modified_at = last_modified_at
+
         super().__init__()
 
     @classmethod
@@ -567,6 +578,7 @@ class ClientLogging(_BaseType):
         self.external_user_id = external_user_id
         self.customer = customer
         self.anonymous_id = anonymous_id
+
         super().__init__()
 
     @classmethod
@@ -618,6 +630,7 @@ class DiscountedPrice(_BaseType):
     def __init__(self, *, value: "TypedMoney", discount: "ProductDiscountReference"):
         self.value = value
         self.discount = discount
+
         super().__init__()
 
     @classmethod
@@ -641,6 +654,7 @@ class DiscountedPriceDraft(_BaseType):
     def __init__(self, *, value: "Money", discount: "ProductDiscountReference"):
         self.value = value
         self.discount = discount
+
         super().__init__()
 
     @classmethod
@@ -660,6 +674,7 @@ class GeoJson(_BaseType):
 
     def __init__(self, *, type: str):
         self.type = type
+
         super().__init__()
 
     @classmethod
@@ -680,6 +695,7 @@ class GeoJsonPoint(GeoJson):
 
     def __init__(self, *, coordinates: typing.List["float"]):
         self.coordinates = coordinates
+
         super().__init__(type="Point")
 
     @classmethod
@@ -709,6 +725,7 @@ class Image(_BaseType):
         self.url = url
         self.dimensions = dimensions
         self.label = label
+
         super().__init__()
 
     @classmethod
@@ -730,6 +747,7 @@ class ImageDimensions(_BaseType):
     def __init__(self, *, w: int, h: int):
         self.w = w
         self.h = h
+
         super().__init__()
 
     @classmethod
@@ -751,6 +769,7 @@ class KeyReference(_BaseType):
     def __init__(self, *, type_id: "ReferenceTypeId", key: str):
         self.type_id = type_id
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -816,6 +835,7 @@ class Money(_BaseType):
     def __init__(self, *, cent_amount: int, currency_code: str):
         self.cent_amount = cent_amount
         self.currency_code = currency_code
+
         super().__init__()
 
     @classmethod
@@ -878,6 +898,7 @@ class Price(_BaseType):
         self.discounted = discounted
         self.custom = custom
         self.tiers = tiers
+
         super().__init__()
 
     @classmethod
@@ -931,6 +952,7 @@ class PriceDraft(_BaseType):
         self.custom = custom
         self.tiers = tiers
         self.discounted = discounted
+
         super().__init__()
 
     @classmethod
@@ -953,6 +975,7 @@ class PriceTier(_BaseType):
     def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
         self.minimum_quantity = minimum_quantity
         self.value = value
+
         super().__init__()
 
     @classmethod
@@ -976,6 +999,7 @@ class PriceTierDraft(_BaseType):
     def __init__(self, *, minimum_quantity: int, value: "Money"):
         self.minimum_quantity = minimum_quantity
         self.value = value
+
         super().__init__()
 
     @classmethod
@@ -1032,6 +1056,7 @@ class QueryPrice(_BaseType):
         self.discounted = discounted
         self.custom = custom
         self.tiers = tiers
+
         super().__init__()
 
     @classmethod
@@ -1054,6 +1079,7 @@ class Reference(_BaseType):
     def __init__(self, *, type_id: "ReferenceTypeId", id: str):
         self.type_id = type_id
         self.id = id
+
         super().__init__()
 
     @classmethod
@@ -1209,6 +1235,7 @@ class ResourceIdentifier(_BaseType):
         self.type_id = type_id
         self.id = id
         self.key = key
+
         super().__init__()
 
     @classmethod
@@ -1358,6 +1385,7 @@ class ScopedPrice(_BaseType):
         self.valid_until = valid_until
         self.discounted = discounted
         self.custom = custom
+
         super().__init__()
 
     @classmethod
@@ -1402,6 +1430,7 @@ class TypedMoney(_BaseType):
         self.currency_code = currency_code
         self.cent_amount = cent_amount
         self.fraction_digits = fraction_digits
+
         super().__init__()
 
     @classmethod
@@ -1458,6 +1487,7 @@ class HighPrecisionMoney(TypedMoney):
         precise_amount: int
     ):
         self.precise_amount = precise_amount
+
         super().__init__(
             currency_code=currency_code,
             cent_amount=cent_amount,
@@ -1493,6 +1523,7 @@ class TypedMoneyDraft(Money):
     ):
         self.type = type
         self.fraction_digits = fraction_digits
+
         super().__init__(cent_amount=cent_amount, currency_code=currency_code)
 
     @classmethod
@@ -1557,6 +1588,7 @@ class HighPrecisionMoneyDraft(TypedMoneyDraft):
         precise_amount: int
     ):
         self.precise_amount = precise_amount
+
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,

@@ -1,5 +1,6 @@
 from commercetools.platform import models
 from commercetools.platform.client import Client as PlatformClient
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.platform.models import (
     ErrorResponse,
     ExtensionNoResponseError,
@@ -59,6 +60,8 @@ def test_extension_no_response_error():
     error = obj.errors[0]
 
     assert isinstance(error, ExtensionNoResponseError)
+    assert error.extension_id == "eff671fb-d6e9-4fac-85b3-0b39af542762"
+    assert error.extension_key == "create-cart"
 
 
 def test_query_timeout_error():
@@ -71,3 +74,47 @@ def test_query_timeout_error():
     error = obj.errors[0]
 
     assert isinstance(error, QueryTimedOutError)
+
+
+def test_error_response_serialize():
+    data = ErrorResponseSchema().dump(
+        models.ErrorResponse(
+            status_code=409,
+            message="Version mismatch. Concurrent modification.",
+            errors=[
+                models.ConcurrentModificationError(
+                    message="Version mismatch. Concurrent modification.",
+                    somethingElse="yes",
+                    current_version=4,
+                )
+            ],
+        )
+    )
+    expected = {
+        "statusCode": 409,
+        "message": "Version mismatch. Concurrent modification.",
+        "errors": [
+            {
+                "currentVersion": 4,
+                "code": "ConcurrentModification",
+                "somethingElse": "yes",
+                "message": "Version mismatch. Concurrent modification.",
+            }
+        ],
+    }
+    assert data == expected
+
+def test_error_response_deserialize():
+    data = ErrorResponseSchema().load({
+        "statusCode": 409,
+        "message": "Version mismatch. Concurrent modification.",
+        "errors": [
+            {
+                "currentVersion": 4,
+                "code": "ConcurrentModification",
+                "message": "Version mismatch. Concurrent modification.",
+                "somethingElse": "yes"
+            }
+        ],
+    })
+    assert data.errors[0].somethingElse == "yes"

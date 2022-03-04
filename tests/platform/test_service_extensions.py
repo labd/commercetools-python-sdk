@@ -4,7 +4,7 @@ from commercetools.platform import models
 def test_extension_create(old_client):
     extension = old_client.extensions.create(
         models.ExtensionDraft(
-            destination=models.ExtensionAWSLambdaDestination(
+            destination=models.AWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
             ),
             triggers=[],
@@ -16,7 +16,7 @@ def test_extension_create(old_client):
 def test_extension_get_by_id(old_client):
     extension = old_client.extensions.create(
         models.ExtensionDraft(
-            destination=models.ExtensionAWSLambdaDestination(
+            destination=models.AWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
             ),
             triggers=[],
@@ -31,7 +31,7 @@ def test_extension_get_by_id(old_client):
 def test_extension_update_change_triggers(old_client):
     extension = old_client.extensions.create(
         models.ExtensionDraft(
-            destination=models.ExtensionAWSLambdaDestination(
+            destination=models.AWSLambdaDestination(
                 arn="arn:", access_key="access", access_secret="secret"
             ),
             triggers=[],

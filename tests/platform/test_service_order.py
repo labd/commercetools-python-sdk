@@ -300,3 +300,84 @@ def test_where_query_state(commercetools_api, old_client):
     result = old_client.orders.query(where='orderState in ("Open")')
 
     assert result.results[0].id == order.id
+
+
+def test_error_handling():
+    data = {
+        "statusCode": 400,
+        "message": "The value '-1' is not valid for field 'quantity'. Negative quantity is not allowed.",
+        "errors": [
+            {
+                "code": "InvalidField",
+                "message": "The value '-1' is not valid for field 'quantity'. Negative quantity is not allowed.",
+                "action": {
+                    "action": "addDelivery",
+                    "items": [
+                        {"id": "7920d15b-9444-4555-aa17-e11b4d6316a6", "quantity": -1},
+                        {"id": "073b6814-b08f-4753-aa05-7baabba2aa3d", "quantity": -1},
+                        {"id": "4830dcf5-bdf8-4ada-a1d0-9c525a8a2292", "quantity": -1},
+                    ],
+                    "parcels": [
+                        {
+                            "trackingData": {
+                                "trackingId": "not a shipment!",
+                                "isReturn": False,
+                            },
+                            "items": [],
+                        }
+                    ],
+                },
+                "actionIndex": 4,
+                "invalidValue": -1,
+                "field": "quantity",
+            },
+            {
+                "code": "InvalidField",
+                "message": "The value '-1' is not valid for field 'quantity'. Negative quantity is not allowed.",
+                "action": {
+                    "action": "addDelivery",
+                    "items": [
+                        {"id": "7920d15b-9444-4555-aa17-e11b4d6316a6", "quantity": -1},
+                        {"id": "073b6814-b08f-4753-aa05-7baabba2aa3d", "quantity": -1},
+                        {"id": "4830dcf5-bdf8-4ada-a1d0-9c525a8a2292", "quantity": -1},
+                    ],
+                    "parcels": [
+                        {
+                            "trackingData": {
+                                "trackingId": "not a shipment!",
+                                "isReturn": False,
+                            },
+                            "items": [],
+                        }
+                    ],
+                },
+                "actionIndex": 4,
+                "invalidValue": -1,
+                "field": "quantity",
+            },
+            {
+                "code": "InvalidField",
+                "message": "The value '-1' is not valid for field 'quantity'. Negative quantity is not allowed.",
+                "action": {
+                    "action": "addDelivery",
+                    "items": [
+                        {"id": "7920d15b-9444-4555-aa17-e11b4d6316a6", "quantity": -1},
+                        {"id": "073b6814-b08f-4753-aa05-7baabba2aa3d", "quantity": -1},
+                        {"id": "4830dcf5-bdf8-4ada-a1d0-9c525a8a2292", "quantity": -1},
+                    ],
+                    "parcels": [
+                        {
+                            "trackingData": {
+                                "trackingId": "not a shipment!",
+                                "isReturn": False,
+                            },
+                            "items": [],
+                        }
+                    ],
+                },
+                "actionIndex": 4,
+                "invalidValue": -1,
+                "field": "quantity",
+            },
+        ],
+    }

@@ -1,11 +1,11 @@
 from commercetools.platform import models
 from commercetools.platform.client import Client as PlatformClient
-from commercetools.platform.models._schemas.error import ErrorResponseSchema
 from commercetools.platform.models import (
     ErrorResponse,
     ExtensionNoResponseError,
     QueryTimedOutError,
 )
+from commercetools.platform.models._schemas.error import ErrorResponseSchema
 
 
 def test_raises_exception(ct_platform_client: PlatformClient):
@@ -104,17 +104,20 @@ def test_error_response_serialize():
     }
     assert data == expected
 
+
 def test_error_response_deserialize():
-    data = ErrorResponseSchema().load({
-        "statusCode": 409,
-        "message": "Version mismatch. Concurrent modification.",
-        "errors": [
-            {
-                "currentVersion": 4,
-                "code": "ConcurrentModification",
-                "message": "Version mismatch. Concurrent modification.",
-                "somethingElse": "yes"
-            }
-        ],
-    })
+    data = ErrorResponseSchema().load(
+        {
+            "statusCode": 409,
+            "message": "Version mismatch. Concurrent modification.",
+            "errors": [
+                {
+                    "currentVersion": 4,
+                    "code": "ConcurrentModification",
+                    "message": "Version mismatch. Concurrent modification.",
+                    "somethingElse": "yes",
+                }
+            ],
+        }
+    )
     assert data.errors[0].somethingElse == "yes"

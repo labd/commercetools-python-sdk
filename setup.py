@@ -22,19 +22,19 @@ docs_require = [
 ]
 
 tests_require = [
-    "freezegun==1.0.0",
+    "freezegun==1.2.0",
     "mock==4.0.3",
     "pretend==1.0.9",
-    "coverage[toml]>=5.3",
-    "pytest-cov==2.10.1",
-    "pytest==6.2.1",
+    "coverage[toml]>=6.3.2",
+    "pytest-cov==3.0.0",
+    "pytest==7.0.1",
     # Linting
-    "isort==5.6.4",
-    "flake8==3.8.4",
-    "flake8-blind-except==0.1.1",
-    "flake8-debugger==1.4.0",
+    "isort==5.10.1",
+    "flake8==4.0.1",
+    "flake8-blind-except==0.2.0",
+    "flake8-debugger==4.0.0",
     "flake8-imports==0.1.1",
-    "mypy==0.790",
+    "mypy==0.931",
 ]
 
 

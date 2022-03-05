@@ -91,7 +91,7 @@ class FacetResultSchema(helpers.BaseSchema):
 class FacetResultsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile("^[a-z].*$"),
+        metadata={"pattern": re.compile("^[a-z].*$")},
         type=helpers.Discriminator(
             allow_none=True,
             discriminator_field=("type", "type"),
@@ -988,7 +988,7 @@ class ProductVariantChannelAvailabilitySchema(helpers.BaseSchema):
 class ProductVariantChannelAvailabilityMapSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile(""),
+        metadata={"pattern": re.compile("")},
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".ProductVariantChannelAvailabilitySchema"),
             allow_none=True,
@@ -1110,7 +1110,7 @@ class SearchKeywordSchema(helpers.BaseSchema):
 class SearchKeywordsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
+        metadata={"pattern": re.compile("^[a-z]{2}(-[A-Z]{2})?$")},
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
             allow_none=True,
@@ -1182,7 +1182,7 @@ class SuggestionSchema(helpers.BaseSchema):
 class SuggestionResultSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?"),
+        metadata={"pattern": re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?")},
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SuggestionSchema"),
             allow_none=True,

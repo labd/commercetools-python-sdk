@@ -558,7 +558,7 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
 class AttributesSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile(""),
+        metadata={"pattern": re.compile("")},
         type=helpers.Discriminator(
             allow_none=True,
             discriminator_field=("type", "type"),

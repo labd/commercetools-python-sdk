@@ -22,7 +22,7 @@ from .common import ImportResourceSchema, LocalizedStringField
 class SearchKeywordsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
+        metadata={"pattern": re.compile("^[a-z]{2}(-[A-Z]{2})?$")},
         type=helpers.LazyNestedField(
             nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
             allow_none=True,

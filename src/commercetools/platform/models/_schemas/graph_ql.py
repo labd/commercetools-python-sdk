@@ -103,7 +103,7 @@ class GraphQLResponseSchema(helpers.BaseSchema):
 class GraphQLVariablesMapSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        pattern=re.compile(""),
+        metadata={"pattern": re.compile("")},
         type=marshmallow.fields.Raw(allow_none=True, missing=None),
     )
 

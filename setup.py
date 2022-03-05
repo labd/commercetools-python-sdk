@@ -25,7 +25,7 @@ tests_require = [
     "freezegun==1.2.0",
     "mock==4.0.3",
     "pretend==1.0.9",
-    "coverage[toml]>=6.3.2",
+    "coverage[toml]>=6.2",
     "pytest-cov==3.0.0",
     "pytest==7.0.1",
     # Linting

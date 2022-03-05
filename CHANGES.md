@@ -1,23 +1,19 @@
-14.0.0 (unreleased)
+14.0.0 (2022-03-05)
 -------------------
-- Regenerated Code:
-  - Import API: 
-    - Removed `retry_count`
-    - removed delete and deleted from importsummary
-  - Project:  
-    - Add `delete_days_after_last_modification` field
-    - Change `SearchIndexingConfigurationValuesSchema` field status to type Enum
-    - Add `last_modified_at` and `last_modified_by` fields to SearchIndexingConfigurationValuesSchema
-    - Add `ProjectChangeCartsConfigurationSchema`
-  - Shipping Method:  
-    - Change `localized_description` field to `LocalizedStringField` type
 - Update the request builder pattern to match the commercetools SDK's for other languages.
   This means that the old pattern:
   ```python
+  from commercetools.client import Client
+
+  client = Client()
   product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
   ```
+
   is replaced with the new pattern:
   ```python
+  from commercetools.platform.client import Client
+
+  client = Client()
   product = (
     client
     .with_project_key("<your-project-key>")
@@ -26,6 +22,8 @@
     .get())
   ```
   The old pattern is deprecated but will remain backwards compatible for now
+- Regenerated code with latest commercetools api specs as of march 2022. This
+  means that new features like the product selections api's are now available.
 - Allow passing custom HTTP adapter to BaseClient (@lime-green)
 - Add support for custom address fields and update actions
 - Testing: Add support for `Order` imports
@@ -37,7 +35,7 @@
 - Testing: Add `setLineItemCustomField` action for cart and order
 - Testing: Fix helper function to set enum fields giving an error on fields that have no value
 
-  
+
 ## Notes on code generation
 We moved our code generation to the code generation tool from Commercetools,
 see https://github.com/commercetools/rmf-codegen

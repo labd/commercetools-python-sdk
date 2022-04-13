@@ -457,7 +457,7 @@ class ProductsBackend(ServiceBackend):
         filename = params["filename"]
 
         variant = _get_variant(target, sku=params["sku"])
-        if not variant["images"]:
+        if not variant.get("images"):
             variant["images"] = []
         image_schema = ImageSchema()
         variant["images"].append(

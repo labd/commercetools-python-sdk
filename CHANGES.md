@@ -1,3 +1,10 @@
+22.6.4
+------
+Switch to CalVer format instead of the SemVer we did earlier. Since we generate
+the code based on commercetools API specs at a specific time it makes more
+sense to use the date as the release instead of a custom version.
+
+
 14.0.0 (2022-03-05)
 -------------------
 - Update the request builder pattern to match the commercetools SDK's for other languages.

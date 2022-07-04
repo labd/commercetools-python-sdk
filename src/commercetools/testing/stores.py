@@ -33,6 +33,12 @@ class StoresModel(BaseModel):
                 self._storage._stores["channel"], draft.distribution_channels
             )
 
+        supply_channels: List[models.ChannelReference] = []
+        if draft.supply_channels:
+            supply_channels = convert_identifiers_to_references(
+                self._storage._stores["channel"], draft.supply_channels
+            )
+
         return models.Store(
             id=str(object_id),
             created_at=datetime.datetime.now(datetime.timezone.utc),
@@ -42,6 +48,8 @@ class StoresModel(BaseModel):
             name=draft.name,
             languages=draft.languages,
             distribution_channels=distribution_channels,
+            supply_channels=supply_channels,
+            product_selections=draft.product_selections,
         )
 
 

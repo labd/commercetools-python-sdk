@@ -119,7 +119,9 @@ class SimilarityMeasures(_BaseType):
 
 
 class SimilarProductSearchRequest(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
     #: language tag used to prioritize language for text comparisons.
     language: typing.Optional[str]
@@ -294,6 +296,7 @@ class SimilarProductSearchRequestMeta(_BaseType):
 class SimilarProductsPagedQueryResult(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["SimilarProductPair"]
     meta: "SimilarProductSearchRequestMeta"

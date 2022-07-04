@@ -833,6 +833,9 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "DuplicatePriceScope": helpers.absmod(
                     __name__, ".error.DuplicatePriceScopeErrorSchema"
                 ),
+                "DuplicateStandalonePriceScope": helpers.absmod(
+                    __name__, ".error.DuplicateStandalonePriceScopeErrorSchema"
+                ),
                 "DuplicateVariantValues": helpers.absmod(
                     __name__, ".error.DuplicateVariantValuesErrorSchema"
                 ),
@@ -925,6 +928,9 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "OutOfStock": helpers.absmod(__name__, ".error.OutOfStockErrorSchema"),
                 "OverCapacity": helpers.absmod(
                     __name__, ".error.OverCapacityErrorSchema"
+                ),
+                "OverlappingStandalonePriceValidity": helpers.absmod(
+                    __name__, ".error.OverlappingStandalonePriceValidityErrorSchema"
                 ),
                 "PendingOperation": helpers.absmod(
                     __name__, ".error.PendingOperationErrorSchema"
@@ -1131,6 +1137,10 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                     __name__,
                     ".message.ProductSelectionProductRemovedMessagePayloadSchema",
                 ),
+                "ProductSelectionVariantSelectionChanged": helpers.absmod(
+                    __name__,
+                    ".message.ProductSelectionVariantSelectionChangedMessagePayloadSchema",
+                ),
                 "ProductSlugChanged": helpers.absmod(
                     __name__, ".message.ProductSlugChangedMessagePayloadSchema"
                 ),
@@ -1146,6 +1156,24 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "ProductVariantDeleted": helpers.absmod(
                     __name__, ".message.ProductVariantDeletedMessagePayloadSchema"
                 ),
+                "QuoteCreated": helpers.absmod(
+                    __name__, ".message.QuoteCreatedMessagePayloadSchema"
+                ),
+                "QuoteDeleted": helpers.absmod(
+                    __name__, ".message.QuoteDeletedMessagePayloadSchema"
+                ),
+                "QuoteRequestCreated": helpers.absmod(
+                    __name__, ".message.QuoteRequestCreatedMessagePayloadSchema"
+                ),
+                "QuoteRequestDeleted": helpers.absmod(
+                    __name__, ".message.QuoteRequestDeletedMessagePayloadSchema"
+                ),
+                "QuoteRequestStateChanged": helpers.absmod(
+                    __name__, ".message.QuoteRequestStateChangedMessagePayloadSchema"
+                ),
+                "QuoteStateChanged": helpers.absmod(
+                    __name__, ".message.QuoteStateChangedMessagePayloadSchema"
+                ),
                 "ReviewCreated": helpers.absmod(
                     __name__, ".message.ReviewCreatedMessagePayloadSchema"
                 ),
@@ -1157,6 +1185,37 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 ),
                 "ShoppingListStoreSet": helpers.absmod(
                     __name__, ".message.ShoppingListStoreSetMessagePayloadSchema"
+                ),
+                "StagedQuoteCreated": helpers.absmod(
+                    __name__, ".message.StagedQuoteCreatedMessagePayloadSchema"
+                ),
+                "StagedQuoteDeleted": helpers.absmod(
+                    __name__, ".message.StagedQuoteDeletedMessagePayloadSchema"
+                ),
+                "StagedQuoteSellerCommentSet": helpers.absmod(
+                    __name__, ".message.StagedQuoteSellerCommentSetMessagePayloadSchema"
+                ),
+                "StagedQuoteStateChanged": helpers.absmod(
+                    __name__, ".message.StagedQuoteStateChangedMessagePayloadSchema"
+                ),
+                "StagedQuoteValidToSet": helpers.absmod(
+                    __name__, ".message.StagedQuoteValidToSetMessagePayloadSchema"
+                ),
+                "StandalonePriceCreated": helpers.absmod(
+                    __name__, ".message.StandalonePriceCreatedMessagePayloadSchema"
+                ),
+                "StandalonePriceDeleted": helpers.absmod(
+                    __name__, ".message.StandalonePriceDeletedMessagePayloadSchema"
+                ),
+                "StandalonePriceDiscountSet": helpers.absmod(
+                    __name__, ".message.StandalonePriceDiscountSetMessagePayloadSchema"
+                ),
+                "StandalonePriceExternalDiscountSet": helpers.absmod(
+                    __name__,
+                    ".message.StandalonePriceExternalDiscountSetMessagePayloadSchema",
+                ),
+                "StandalonePriceValueChanged": helpers.absmod(
+                    __name__, ".message.StandalonePriceValueChangedMessagePayloadSchema"
                 ),
                 "StoreCreated": helpers.absmod(
                     __name__, ".message.StoreCreatedMessagePayloadSchema"
@@ -1911,7 +1970,7 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
     name = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
     )
-    quantity = marshmallow.fields.Float(
+    quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     slug = marshmallow.fields.String(allow_none=True, missing=None)
@@ -1975,7 +2034,7 @@ class StagedOrderAddDeliveryActionSchema(StagedOrderUpdateActionSchema):
         missing=None,
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -2059,7 +2118,7 @@ class StagedOrderAddLineItemActionSchema(StagedOrderUpdateActionSchema):
     sku = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    quantity = marshmallow.fields.Float(
+    quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     added_at = marshmallow.fields.DateTime(
@@ -2253,7 +2312,7 @@ class StagedOrderChangeCustomLineItemQuantityActionSchema(
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="customLineItemId"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2268,7 +2327,7 @@ class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchem
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
@@ -2503,7 +2562,7 @@ class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="lineItemId"
     )
-    quantity = marshmallow.fields.Float(
+    quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     external_price = helpers.LazyNestedField(

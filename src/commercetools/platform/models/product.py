@@ -64,6 +64,7 @@ __all__ = [
     "ProductLegacySetSkuAction",
     "ProductMoveImageToPositionAction",
     "ProductPagedQueryResponse",
+    "ProductPriceModeEnum",
     "ProductProjection",
     "ProductProjectionPagedQueryResponse",
     "ProductProjectionPagedSearchResponse",
@@ -93,6 +94,7 @@ __all__ = [
     "ProductSetMetaDescriptionAction",
     "ProductSetMetaKeywordsAction",
     "ProductSetMetaTitleAction",
+    "ProductSetPriceModeAction",
     "ProductSetPricesAction",
     "ProductSetProductPriceCustomFieldAction",
     "ProductSetProductPriceCustomTypeAction",
@@ -295,8 +297,8 @@ class Product(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for the product.
-    #: *Product keys are different from product variant keys.*
+    #: User-defined unique identifier of the Product.
+    #: *Product keys are different from ProductVariant keys.*
     key: typing.Optional[str]
     product_type: "ProductTypeReference"
     #: The product data in the master catalog.
@@ -305,6 +307,8 @@ class Product(BaseResource):
     state: typing.Optional["StateReference"]
     #: Statistics about the review ratings taken into account for this product.
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
+    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
         self,
@@ -320,7 +324,8 @@ class Product(BaseResource):
         master_data: "ProductCatalogData",
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
-        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None
+        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -330,6 +335,7 @@ class Product(BaseResource):
         self.tax_category = tax_category
         self.state = state
         self.review_rating_statistics = review_rating_statistics
+        self.price_mode = price_mode
 
         super().__init__(
             id=id,
@@ -384,13 +390,19 @@ class ProductCatalogData(_BaseType):
 
 
 class ProductData(_BaseType):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
     categories: typing.List["CategoryReference"]
     category_order_hints: typing.Optional["CategoryOrderHints"]
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     meta_title: typing.Optional["LocalizedString"]
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     meta_description: typing.Optional["LocalizedString"]
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     meta_keywords: typing.Optional["LocalizedString"]
     master_variant: "ProductVariant"
     variants: typing.List["ProductVariant"]
@@ -447,7 +459,7 @@ class ProductDraft(_BaseType):
     #: Slugs have a maximum size of 256.
     #: Valid characters are: alphabetic characters (`A-Z, a-z`), numeric characters (`0-9`), underscores (`_`) and hyphens (`-`).
     slug: "LocalizedString"
-    #: User-specific unique identifier for the product.
+    #: User-defined unique identifier for the Product.
     key: typing.Optional[str]
     description: typing.Optional["LocalizedString"]
     #: Categories assigned to the product.
@@ -466,6 +478,8 @@ class ProductDraft(_BaseType):
     state: typing.Optional["StateResourceIdentifier"]
     #: If `true`, the product is published immediately.
     publish: typing.Optional[bool]
+    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
         self,
@@ -485,7 +499,8 @@ class ProductDraft(_BaseType):
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        publish: typing.Optional[bool] = None
+        publish: typing.Optional[bool] = None,
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None
     ):
         self.product_type = product_type
         self.name = name
@@ -503,6 +518,7 @@ class ProductDraft(_BaseType):
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+        self.price_mode = price_mode
 
         super().__init__()
 
@@ -519,9 +535,11 @@ class ProductDraft(_BaseType):
 
 
 class ProductPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Product"]
 
@@ -554,6 +572,16 @@ class ProductPagedQueryResponse(_BaseType):
         from ._schemas.product import ProductPagedQueryResponseSchema
 
         return ProductPagedQueryResponseSchema().dump(self)
+
+
+class ProductPriceModeEnum(enum.Enum):
+    """
+    This mode specifies which type of prices should be used when looking up the price of a product.
+
+    """
+
+    EMBEDDED = "Embedded"
+    STANDALONE = "Standalone"
 
 
 class ProductProjection(BaseResource):
@@ -644,9 +672,11 @@ class ProductProjection(BaseResource):
 
 
 class ProductProjectionPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["ProductProjection"]
 
@@ -682,9 +712,11 @@ class ProductProjectionPagedQueryResponse(_BaseType):
 
 
 class ProductProjectionPagedSearchResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["ProductProjection"]
     facets: "FacetResults"
@@ -723,6 +755,9 @@ class ProductProjectionPagedSearchResponse(_BaseType):
 
 
 class ProductReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product)."""
+
+    #: Contains the representation of the expanded Product. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Products.
     obj: typing.Optional["Product"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Product"] = None):
@@ -743,6 +778,8 @@ class ProductReference(Reference):
 
 
 class ProductResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -943,6 +980,10 @@ class ProductUpdateAction(_BaseType):
             from ._schemas.product import ProductSetMetaTitleActionSchema
 
             return ProductSetMetaTitleActionSchema().load(data)
+        if data["action"] == "setPriceMode":
+            from ._schemas.product import ProductSetPriceModeActionSchema
+
+            return ProductSetPriceModeActionSchema().load(data)
         if data["action"] == "setPrices":
             from ._schemas.product import ProductSetPricesActionSchema
 
@@ -987,8 +1028,11 @@ class ProductUpdateAction(_BaseType):
 
 
 class ProductVariant(_BaseType):
+    #: A unique, sequential identifier of the ProductVariant within the Product.
     id: int
     sku: typing.Optional[str]
+    #: User-defined unique identifier of the ProductVariant.
+    #: *ProductVariant keys are different from Product keys.*
     key: typing.Optional[str]
     prices: typing.Optional[typing.List["Price"]]
     attributes: typing.Optional[typing.List["Attribute"]]
@@ -1118,6 +1162,8 @@ class ProductVariantChannelAvailabilityMap(
 
 class ProductVariantDraft(_BaseType):
     sku: typing.Optional[str]
+    #: User-defined unique identifier for the ProductVariant.
+    #: *ProductVariant keys are different from Product keys.*
     key: typing.Optional[str]
     prices: typing.Optional[typing.List["PriceDraft"]]
     attributes: typing.Optional[typing.List["Attribute"]]
@@ -1654,7 +1700,7 @@ class ProductChangeNameAction(ProductUpdateAction):
 
 
 class ProductChangePriceAction(ProductUpdateAction):
-    #: ID of the [Price](#price)
+    #: ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
     price_id: str
     price: "PriceDraft"
     staged: typing.Optional[bool]
@@ -1902,7 +1948,7 @@ class ProductRemoveImageAction(ProductUpdateAction):
 
 
 class ProductRemovePriceAction(ProductUpdateAction):
-    #: ID of the [Price](#price)
+    #: ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
     price_id: str
     staged: typing.Optional[bool]
 
@@ -2572,6 +2618,29 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
         from ._schemas.product import ProductSetMetaTitleActionSchema
 
         return ProductSetMetaTitleActionSchema().dump(self)
+
+
+class ProductSetPriceModeAction(ProductUpdateAction):
+    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    price_mode: typing.Optional["ProductPriceModeEnum"]
+
+    def __init__(self, *, price_mode: typing.Optional["ProductPriceModeEnum"] = None):
+        self.price_mode = price_mode
+
+        super().__init__(action="setPriceMode")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSetPriceModeAction":
+        from ._schemas.product import ProductSetPriceModeActionSchema
+
+        return ProductSetPriceModeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product import ProductSetPriceModeActionSchema
+
+        return ProductSetPriceModeActionSchema().dump(self)
 
 
 class ProductSetPricesAction(ProductUpdateAction):

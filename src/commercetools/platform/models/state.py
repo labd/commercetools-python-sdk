@@ -42,7 +42,7 @@ class State(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the State.
+    #: User-defined unique identifier of the State.
     key: str
     #: Indicates to which resource or object types the State is assigned to.
     type: "StateTypeEnum"
@@ -165,10 +165,9 @@ class StateDraft(_BaseType):
 class StatePagedQueryResponse(_BaseType):
     """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [State](ctp:api:type:State)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -213,9 +212,9 @@ class StatePagedQueryResponse(_BaseType):
 
 
 class StateReference(Reference):
-    """[Reference](/../api/types#reference) to a [State](ctp:api:type:State)."""
+    """[Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State)."""
 
-    #: Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for State.
+    #: Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for States.
     obj: typing.Optional["State"]
 
     def __init__(self, *, id: str, obj: typing.Optional["State"] = None):
@@ -236,7 +235,7 @@ class StateReference(Reference):
 
 
 class StateResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None

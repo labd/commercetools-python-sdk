@@ -16,9 +16,10 @@ from .common import ReferenceTypeId
 if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier, ChannelRoleEnum
     from .common import LocalizedString, Price, PriceDraft, Reference, ReferenceTypeId
-    from .customer_group import CustomerGroupReference
+    from .customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from .order_edit import OrderEditPreviewFailure
     from .product import Attribute
+    from .standalone_price import StandalonePriceReference
 
 __all__ = [
     "AccessDeniedError",
@@ -35,6 +36,7 @@ __all__ = [
     "DuplicateFieldError",
     "DuplicateFieldWithConflictingResourceError",
     "DuplicatePriceScopeError",
+    "DuplicateStandalonePriceScopeError",
     "DuplicateVariantValuesError",
     "EditPreviewFailedError",
     "EnumKeyAlreadyExistsError",
@@ -71,6 +73,7 @@ __all__ = [
     "ObjectNotFoundError",
     "OutOfStockError",
     "OverCapacityError",
+    "OverlappingStandalonePriceValidityError",
     "PendingOperationError",
     "PriceChangedError",
     "ProjectNotConfiguredForLanguagesError",
@@ -94,7 +97,9 @@ __all__ = [
 
 
 class ErrorByExtension(_BaseType):
+    #: Unique identifier of the Extension.
     id: str
+    #: User-defined unique identifier of the Extension.
     key: typing.Optional[str]
 
     def __init__(self, *, id: str, key: typing.Optional[str] = None):
@@ -184,6 +189,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import DuplicatePriceScopeErrorSchema
 
             return DuplicatePriceScopeErrorSchema().load(data)
+        if data["code"] == "DuplicateStandalonePriceScope":
+            from ._schemas.error import DuplicateStandalonePriceScopeErrorSchema
+
+            return DuplicateStandalonePriceScopeErrorSchema().load(data)
         if data["code"] == "DuplicateVariantValues":
             from ._schemas.error import DuplicateVariantValuesErrorSchema
 
@@ -316,6 +325,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import OverCapacityErrorSchema
 
             return OverCapacityErrorSchema().load(data)
+        if data["code"] == "OverlappingStandalonePriceValidity":
+            from ._schemas.error import OverlappingStandalonePriceValidityErrorSchema
+
+            return OverlappingStandalonePriceValidityErrorSchema().load(data)
         if data["code"] == "PendingOperation":
             from ._schemas.error import PendingOperationErrorSchema
 
@@ -681,6 +694,7 @@ class DuplicateEnumValuesError(ErrorObject):
 class DuplicateFieldError(ErrorObject):
     field: typing.Optional[str]
     duplicate_value: typing.Optional[typing.Any]
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     conflicting_resource: typing.Optional["Reference"]
 
     def __init__(
@@ -713,6 +727,7 @@ class DuplicateFieldError(ErrorObject):
 class DuplicateFieldWithConflictingResourceError(ErrorObject):
     field: str
     duplicate_value: typing.Any
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     conflicting_resource: "Reference"
 
     def __init__(
@@ -768,6 +783,60 @@ class DuplicatePriceScopeError(ErrorObject):
         from ._schemas.error import DuplicatePriceScopeErrorSchema
 
         return DuplicatePriceScopeErrorSchema().dump(self)
+
+
+class DuplicateStandalonePriceScopeError(ErrorObject):
+    #: [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+    conflicting_standalone_price: "StandalonePriceReference"
+    sku: str
+    currency: str
+    country: typing.Optional[str]
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_standalone_price: "StandalonePriceReference",
+        sku: str,
+        currency: str,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
+        channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        **kwargs
+    ):
+        self.conflicting_standalone_price = conflicting_standalone_price
+        self.sku = sku
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        kwargs.pop("code", None)
+        super().__init__(
+            message=message, code="DuplicateStandalonePriceScope", **kwargs
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DuplicateStandalonePriceScopeError":
+        from ._schemas.error import DuplicateStandalonePriceScopeErrorSchema
+
+        return DuplicateStandalonePriceScopeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import DuplicateStandalonePriceScopeErrorSchema
+
+        return DuplicateStandalonePriceScopeErrorSchema().dump(self)
 
 
 class DuplicateVariantValuesError(ErrorObject):
@@ -951,6 +1020,7 @@ class ErrorResponse(_BaseType):
 
 
 class ExtensionBadResponseError(ErrorObject):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     localized_message: typing.Optional["LocalizedString"]
     extension_extra_info: typing.Optional[object]
     error_by_extension: "ErrorByExtension"
@@ -1016,6 +1086,7 @@ class ExtensionNoResponseError(ErrorObject):
 
 
 class ExtensionUpdateActionsFailedError(ErrorObject):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     localized_message: typing.Optional["LocalizedString"]
     extension_extra_info: typing.Optional[object]
     error_by_extension: "ErrorByExtension"
@@ -1356,9 +1427,9 @@ class MatchingPriceNotFoundError(ErrorObject):
     variant_id: int
     currency: typing.Optional[str]
     country: typing.Optional[str]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1397,6 +1468,7 @@ class MatchingPriceNotFoundError(ErrorObject):
 
 
 class MaxResourceLimitExceededError(ErrorObject):
+    #: Type of resource the value should reference. Supported resource type identifiers are:
     exceeded_resource: "ReferenceTypeId"
 
     def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId", **kwargs):
@@ -1419,7 +1491,7 @@ class MaxResourceLimitExceededError(ErrorObject):
 
 
 class MissingRoleOnChannelError(ErrorObject):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
     #: Describes the purpose and type of the Channel. A Channel can have one or more roles.
     missing_role: "ChannelRoleEnum"
@@ -1590,6 +1662,66 @@ class OverCapacityError(ErrorObject):
         return OverCapacityErrorSchema().dump(self)
 
 
+class OverlappingStandalonePriceValidityError(ErrorObject):
+    #: [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+    conflicting_standalone_price: "StandalonePriceReference"
+    sku: str
+    currency: str
+    country: typing.Optional[str]
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    valid_from: typing.Optional[datetime.datetime]
+    valid_until: typing.Optional[datetime.datetime]
+    conflicting_valid_from: typing.Optional[datetime.datetime]
+    conflicting_valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        conflicting_standalone_price: "StandalonePriceReference",
+        sku: str,
+        currency: str,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
+        channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        conflicting_valid_from: typing.Optional[datetime.datetime] = None,
+        conflicting_valid_until: typing.Optional[datetime.datetime] = None,
+        **kwargs
+    ):
+        self.conflicting_standalone_price = conflicting_standalone_price
+        self.sku = sku
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.conflicting_valid_from = conflicting_valid_from
+        self.conflicting_valid_until = conflicting_valid_until
+        kwargs.pop("code", None)
+        super().__init__(
+            message=message, code="OverlappingStandalonePriceValidity", **kwargs
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OverlappingStandalonePriceValidityError":
+        from ._schemas.error import OverlappingStandalonePriceValidityErrorSchema
+
+        return OverlappingStandalonePriceValidityErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import OverlappingStandalonePriceValidityErrorSchema
+
+        return OverlappingStandalonePriceValidityErrorSchema().dump(self)
+
+
 class PendingOperationError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
 
@@ -1701,6 +1833,7 @@ class QueryTimedOutError(ErrorObject):
 
 
 class ReferenceExistsError(ErrorObject):
+    #: Type of resource the value should reference. Supported resource type identifiers are:
     referenced_by: typing.Optional["ReferenceTypeId"]
 
     def __init__(
@@ -1727,6 +1860,7 @@ class ReferenceExistsError(ErrorObject):
 
 
 class ReferencedResourceNotFoundError(ErrorObject):
+    #: Type of resource the value should reference. Supported resource type identifiers are:
     type_id: "ReferenceTypeId"
     id: typing.Optional[str]
     key: typing.Optional[str]

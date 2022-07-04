@@ -24,13 +24,17 @@ __all__ = [
 
 
 class CustomObject(BaseResource):
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: A namespace to group custom objects.
+    #: Namespace to group CustomObjects.
     container: str
+    #: User-defined unique identifier of the CustomObject within the defined `container`.
     key: str
+    #: JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
+    #: For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
+    #: If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
     value: typing.Any
 
     def __init__(
@@ -72,11 +76,15 @@ class CustomObject(BaseResource):
 
 
 class CustomObjectDraft(_BaseType):
-    #: A namespace to group custom objects.
+    #: Namespace to group CustomObjects.
     container: str
-    #: A user-defined key that is unique within the given container.
+    #: User-defined unique identifier of the CustomObject within the defined `container`.
     key: str
+    #: JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
+    #: For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
+    #: If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
     value: typing.Any
+    #: Current version of the CustomObject.
     version: typing.Optional[int]
 
     def __init__(
@@ -107,25 +115,36 @@ class CustomObjectDraft(_BaseType):
 
 
 class CustomObjectPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [CustomObject](ctp:api:type:CustomObject)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: The total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [CustomObjects](ctp:api:type:CustomObject) matching the query.
     results: typing.List["CustomObject"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["CustomObject"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -145,6 +164,9 @@ class CustomObjectPagedQueryResponse(_BaseType):
 
 
 class CustomObjectReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [CustomObject](ctp:api:type:CustomObject)."""
+
+    #: Contains the representation of the expanded CustomObject. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomObjects.
     obj: typing.Optional["CustomObject"]
 
     def __init__(self, *, id: str, obj: typing.Optional["CustomObject"] = None):

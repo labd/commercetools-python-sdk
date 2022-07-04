@@ -53,41 +53,41 @@ __all__ = [
 
 
 class DiscountCode(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Name of the DiscountCode.
     name: typing.Optional["LocalizedString"]
+    #: Description of the DiscountCode.
     description: typing.Optional["LocalizedString"]
-    #: Unique identifier of this discount code.
-    #: This value is added to the cart
-    #: to enable the related cart discounts in the cart.
+    #: User-defined unique identifier of the DiscountCode [added to the Cart](/../api/projects/carts#add-discountcode) to apply the related [CartDiscounts](ctp:api:type:CartDiscount).
     code: str
-    #: The referenced matching cart discounts can be applied to the cart once the DiscountCode is added.
+    #: Reference to CartDiscounts that can be applied to the Cart once the DiscountCode is applied.
     cart_discounts: typing.List["CartDiscountReference"]
-    #: The discount code can only be applied to carts that match this predicate.
+    #: DiscountCode can only be applied to Carts that match this predicate.
     cart_predicate: typing.Optional[str]
+    #: Indicates if the DiscountCode is active and can be applied to the Cart.
     is_active: bool
-    #: The platform will generate this array from the cart predicate.
+    #: Array generated from the Cart predicate.
     #: It contains the references of all the resources that are addressed in the predicate.
     references: typing.List["Reference"]
-    #: The discount code can only be applied `maxApplications` times.
+    #: Number of times the DiscountCode can be applied.
+    #: DiscountCode application is counted at the time of Order creation or edit. However, Order cancellation or deletion does not decrement the count.
     max_applications: typing.Optional[int]
-    #: The discount code can only be applied `maxApplicationsPerCustomer` times per customer.
+    #: Number of times the DiscountCode can be applied per Customer (anonymous Carts are not supported).
+    #: DiscountCode application is counted at the time of Order creation or edit. However, Order cancellation or deletion does not decrement the count.
     max_applications_per_customer: typing.Optional[int]
+    #: Custom Fields of the DiscountCode.
     custom: typing.Optional["CustomFields"]
-    #: The groups to which this discount code belong.
+    #: Groups to which the DiscountCode belongs to.
     groups: typing.List["str"]
-    #: The time from which the discount can be applied on a cart.
-    #: Before that time the code is invalid.
+    #: Date and time (UTC) from which the DiscountCode is effective.
     valid_from: typing.Optional[datetime.datetime]
-    #: The time until the discount can be applied on a cart.
-    #: After that time the code is invalid.
+    #: Date and time (UTC) until which the DiscountCode is effective.
     valid_until: typing.Optional[datetime.datetime]
-    #: Used for the internal platform only and registers the reservation of use of a discount code.
-    #: Its value is managed by the platform.
-    #: It can change at any time due to internal and external factors.
-    #: It should not be used in customer logic.
+    #: Used and managed by the API and must not be used in customer logic.
+    #: The value can change at any time due to internal and external factors.
     application_version: typing.Optional[int]
 
     def __init__(
@@ -151,28 +151,30 @@ class DiscountCode(BaseResource):
 
 
 class DiscountCodeDraft(_BaseType):
+    #: Name of the DiscountCode.
     name: typing.Optional["LocalizedString"]
+    #: Description of the DiscountCode.
     description: typing.Optional["LocalizedString"]
-    #: Unique identifier of this discount code.
-    #: This value is added to the cart
-    #: to enable the related cart discounts in the cart.
+    #: User-defined unique identifier for the DiscountCode that can be [added to the Cart](/../api/projects/carts#add-discountcode) to apply the related [CartDiscounts](ctp:api:type:CartDiscount).
+    #: It cannot be modified after the DiscountCode is created.
     code: str
-    #: The referenced matching cart discounts can be applied to the cart once the discount code is added.
-    #: The number of cart discounts in a discount code is limited to **10**.
+    #: Specify what CartDiscounts the API applies when you add the DiscountCode to the Cart.
     cart_discounts: typing.List["CartDiscountResourceIdentifier"]
-    #: The discount code can only be applied to carts that match this predicate.
+    #: DiscountCode can only be applied to Carts that match this predicate.
     cart_predicate: typing.Optional[str]
+    #: Only active DiscountCodes can be applied to the Cart.
     is_active: typing.Optional[bool]
+    #: Number of times the DiscountCode can be applied.
     max_applications: typing.Optional[int]
+    #: Number of times the DiscountCode can be applied per Customer.
     max_applications_per_customer: typing.Optional[int]
+    #: Custom Fields for the DiscountCode.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: The groups to which this discount code shall belong to.
+    #: Groups to which the DiscountCode will belong to.
     groups: typing.Optional[typing.List["str"]]
-    #: The time from which the discount can be applied on a cart.
-    #: Before that time the code is invalid.
+    #: Date and time (UTC) from which the DiscountCode is effective. Must be earlier than `validUntil`.
     valid_from: typing.Optional[datetime.datetime]
-    #: The time until the discount can be applied on a cart.
-    #: After that time the code is invalid.
+    #: Date and time (UTC) until which the DiscountCode is effective. Must be later than `validFrom`.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -219,25 +221,36 @@ class DiscountCodeDraft(_BaseType):
 
 
 class DiscountCodePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [DiscountCode](ctp:api:type:DiscountCode)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [DiscountCodes](ctp:api:type:DiscountCode) matching the query.
     results: typing.List["DiscountCode"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["DiscountCode"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -257,6 +270,9 @@ class DiscountCodePagedQueryResponse(_BaseType):
 
 
 class DiscountCodeReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode)."""
+
+    #: Contains the representation of the expanded DiscountCode. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for DiscountCodes.
     obj: typing.Optional["DiscountCode"]
 
     def __init__(self, *, id: str, obj: typing.Optional["DiscountCode"] = None):
@@ -277,6 +293,8 @@ class DiscountCodeReference(Reference):
 
 
 class DiscountCodeResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountCode](ctp:api:type:DiscountCode)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -298,7 +316,10 @@ class DiscountCodeResourceIdentifier(ResourceIdentifier):
 
 
 class DiscountCodeUpdate(_BaseType):
+    #: Expected version of the DiscountCode on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the DiscountCode.
     actions: typing.List["DiscountCodeUpdateAction"]
 
     def __init__(
@@ -401,6 +422,7 @@ class DiscountCodeUpdateAction(_BaseType):
 
 
 class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
+    #: New value to set.
     cart_discounts: typing.List["CartDiscountResourceIdentifier"]
 
     def __init__(
@@ -425,8 +447,7 @@ class DiscountCodeChangeCartDiscountsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
-    #: The groups to which this discount code shall belong to.
-    #: Use empty array to remove the code from all groups.
+    #: New value to set. An empty array removes the DiscountCode from all groups.
     groups: typing.List["str"]
 
     def __init__(self, *, groups: typing.List["str"]):
@@ -449,6 +470,7 @@ class DiscountCodeChangeGroupsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
+    #: New value to set. Set to `true` to activate the DiscountCode for all matching Discounts.
     is_active: bool
 
     def __init__(self, *, is_active: bool):
@@ -471,7 +493,7 @@ class DiscountCodeChangeIsActiveAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetCartPredicateAction(DiscountCodeUpdateAction):
-    #: If the `cartPredicate` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     cart_predicate: typing.Optional[str]
 
     def __init__(self, *, cart_predicate: typing.Optional[str] = None):
@@ -554,7 +576,7 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
-    #: If the `description` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -577,7 +599,7 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
-    #: If the `maxApplications` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     max_applications: typing.Optional[int]
 
     def __init__(self, *, max_applications: typing.Optional[int] = None):
@@ -600,7 +622,7 @@ class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
-    #: If the `maxApplicationsPerCustomer` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     max_applications_per_customer: typing.Optional[int]
 
     def __init__(self, *, max_applications_per_customer: typing.Optional[int] = None):
@@ -627,7 +649,7 @@ class DiscountCodeSetMaxApplicationsPerCustomerAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
-    #: If the `name` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     name: typing.Optional["LocalizedString"]
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
@@ -650,7 +672,7 @@ class DiscountCodeSetNameAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set that must be earlier than `validUntil`. If empty, any existing value will be removed.
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
@@ -673,9 +695,9 @@ class DiscountCodeSetValidFromAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set that must be earlier than `validUntil`. If empty, any existing value will be removed.
     valid_from: typing.Optional[datetime.datetime]
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set that must be later than `validFrom`. If empty, any existing value will be removed.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -704,7 +726,7 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
 
 
 class DiscountCodeSetValidUntilAction(DiscountCodeUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set that must be later than `validFrom`. If empty, any existing value will be removed.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):

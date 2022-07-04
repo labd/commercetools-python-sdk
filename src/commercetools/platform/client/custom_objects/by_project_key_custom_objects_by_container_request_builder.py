@@ -33,13 +33,24 @@ class ByProjectKeyCustomObjectsByContainerRequestBuilder:
     def get(
         self,
         *,
+        sort: typing.List["str"] = None,
         where: typing.List["str"] = None,
-        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         expand: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObjectPagedQueryResponse"]:
-        params = {"where": where, "expand": expand}
+        params = {
+            "sort": sort,
+            "where": where,
+            "expand": expand,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+        }
         predicate_var and params.update(
             {f"var.{k}": v for k, v in predicate_var.items()}
         )

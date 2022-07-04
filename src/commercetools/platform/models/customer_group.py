@@ -41,11 +41,11 @@ class CustomerGroup(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the Customer Group.
+    #: User-defined unique identifier for the CustomerGroup.
     key: typing.Optional[str]
-    #: Unique name of the Customer Group.
+    #: Unique name of the CustomerGroup.
     name: str
-    #: Custom Fields for the Customer Group.
+    #: Custom Fields for the CustomerGroup.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -87,13 +87,12 @@ class CustomerGroup(BaseResource):
 
 
 class CustomerGroupDraft(_BaseType):
-    #: User-defined unique identifier for the Customer Group.
-    #: Keys can only contain alphanumeric characters, underscores, and hyphens.
+    #: User-defined unique identifier for the CustomerGroup.
     key: typing.Optional[str]
     #: Unique value which must be different from any value used for `name` in [CustomerGroup](ctp:api:type:CustomerGroup) in the Project.
     #: If not, a `DuplicateField` [error](/../api/errors#400-bad-request-1) is thrown.
     group_name: str
-    #: Custom Fields for the Customer Group.
+    #: Custom Fields for the CustomerGroup.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -124,10 +123,9 @@ class CustomerGroupDraft(_BaseType):
 class CustomerGroupPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [CustomerGroup](ctp:api:type:CustomerGroup)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -172,9 +170,9 @@ class CustomerGroupPagedQueryResponse(_BaseType):
 
 
 class CustomerGroupReference(Reference):
-    """[Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup)."""
+    """[Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup)."""
 
-    #: Contains the representation of the expanded Customer Group. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Customer Groups.
+    #: Contains the representation of the expanded CustomerGroup. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomerGroups.
     obj: typing.Optional["CustomerGroup"]
 
     def __init__(self, *, id: str, obj: typing.Optional["CustomerGroup"] = None):
@@ -197,7 +195,7 @@ class CustomerGroupReference(Reference):
 
 
 class CustomerGroupResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
@@ -220,10 +218,10 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerGroupUpdate(_BaseType):
-    #: Expected version of the Customer Group on which the changes should be applied.
+    #: Expected version of the CustomerGroup on which the changes should be applied.
     #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
-    #: Update actions to be performed on the Customer Group.
+    #: Update actions to be performed on the CustomerGroup.
     actions: typing.List["CustomerGroupUpdateAction"]
 
     def __init__(
@@ -282,7 +280,7 @@ class CustomerGroupUpdateAction(_BaseType):
 
 
 class CustomerGroupChangeNameAction(CustomerGroupUpdateAction):
-    #: New name of the Customer Group.
+    #: New name of the CustomerGroup.
     name: str
 
     def __init__(self, *, name: str):
@@ -333,7 +331,7 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
 
 
 class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
-    """This action sets or removes the custom type for an existing Customer Group.
+    """This action sets or removes the custom type for an existing CustomerGroup.
     If present, this action overwrites any existing [custom](/../api/projects/custom-fields) type and fields.
 
     """

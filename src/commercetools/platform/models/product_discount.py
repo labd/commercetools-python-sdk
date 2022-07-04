@@ -14,14 +14,14 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
     from .common import (
+        CentPrecisionMoney,
+        CentPrecisionMoneyDraft,
         CreatedBy,
         LastModifiedBy,
         LocalizedString,
-        Money,
         QueryPrice,
         Reference,
         ReferenceTypeId,
-        TypedMoney,
     )
 
 __all__ = [
@@ -55,32 +55,32 @@ __all__ = [
 
 
 class ProductDiscount(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Name of the ProductDiscount.
     name: "LocalizedString"
-    #: User-specific unique identifier for a product discount.
-    #: Must be unique across a project.
+    #: User-defined unique identifier of the ProductDiscount.
     key: typing.Optional[str]
+    #: Description of the ProductDiscount.
     description: typing.Optional["LocalizedString"]
+    #: Type of Discount and its corresponding value.
     value: "ProductDiscountValue"
-    #: A valid ProductDiscount Predicate.
+    #: Valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
     predicate: str
-    #: The string contains a number between 0 and 1.
-    #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
-    #: A sortOrder must be unambiguous.
+    #: Unique decimal value between 0 and 1 (stored as String literal) defining the order of Product Discounts to apply in case more than one is applicable and active.
+    #: A Product Discount with a higher value is prioritized.
     sort_order: str
-    #: Only active discount will be applied to product prices.
+    #: If `true` the Product Discount is applied to Products matching the `predicate`.
     is_active: bool
-    #: The platform will generate this array from the predicate.
-    #: It contains the references of all the resources that are addressed in the predicate.
+    #: References of all the resources that are addressed in the `predicate`.
     references: typing.List["Reference"]
-    #: The time from which the discount should be effective.
-    #: Please take Eventual Consistency into account for calculated product discount values.
+    #: Date and time (UTC) from which the Discount is effective.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
     valid_from: typing.Optional[datetime.datetime]
-    #: The time from which the discount should be ineffective.
-    #: Please take Eventual Consistency into account for calculated undiscounted values.
+    #: Date and time (UTC) until which the Discount is effective.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -136,25 +136,26 @@ class ProductDiscount(BaseResource):
 
 
 class ProductDiscountDraft(_BaseType):
+    #: Name of the ProductDiscount.
     name: "LocalizedString"
-    #: User-specific unique identifier for a product discount.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction
+    #: User-defined unique identifier for the ProductDiscount.
     key: typing.Optional[str]
+    #: Description of the ProductDiscount.
     description: typing.Optional["LocalizedString"]
+    #: Type of Discount and its corresponding value.
     value: "ProductDiscountValueDraft"
-    #: A valid ProductDiscount Predicate.
+    #: Valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
     predicate: str
-    #: The string must contain a decimal number between 0 and 1.
-    #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+    #: Decimal value between 0 and 1 (passed as String literal) that defines the order of ProductDiscounts to apply in case more than one is applicable and active. A ProductDiscount with a higher `sortOrder` is prioritized.
+    #: The value must be **unique** among all ProductDiscounts in the [Project](ctp:api:type:Project).
     sort_order: str
-    #: If set to `true` the discount will be applied to product prices.
+    #: Set to `true` to activate the ProductDiscount, set to `false` to deactivate it (even though the `predicate` matches).
     is_active: bool
-    #: The time from which the discount should be effective.
-    #: Please take Eventual Consistency into account for calculated product discount values.
+    #: Date and time (UTC) from which the Discount is effective.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
     valid_from: typing.Optional[datetime.datetime]
-    #: The time from which the discount should be effective.
-    #: Please take Eventual Consistency into account for calculated undiscounted values.
+    #: Date and time (UTC) until which the Discount is effective.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -195,9 +196,14 @@ class ProductDiscountDraft(_BaseType):
 
 
 class ProductDiscountMatchQuery(_BaseType):
+    #: ID of the specified Product.
     product_id: str
+    #: ID of the specified Product Variant.
     variant_id: int
+    #: Controls which [projected representation](/../api/projects/productProjections#current--staged) is applied for the query.
+    #: Set to `true` for the `staged` Product Projection of the specified Product Variant, set to `false` for the `current` one.
     staged: bool
+    #: Specified Price of the specified Product Variant.
     price: "QueryPrice"
 
     def __init__(
@@ -225,25 +231,36 @@ class ProductDiscountMatchQuery(_BaseType):
 
 
 class ProductDiscountPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductDiscount](ctp:api:type:ProductDiscount)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [ProductDiscounts](ctp:api:type:ProductDiscount) matching the query.
     results: typing.List["ProductDiscount"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["ProductDiscount"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -263,6 +280,9 @@ class ProductDiscountPagedQueryResponse(_BaseType):
 
 
 class ProductDiscountReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [ProductDiscount](ctp:api:type:ProductDiscount)."""
+
+    #: Contains the representation of the expanded ProductDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductDiscounts.
     obj: typing.Optional["ProductDiscount"]
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductDiscount"] = None):
@@ -285,6 +305,8 @@ class ProductDiscountReference(Reference):
 
 
 class ProductDiscountResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductDiscount](ctp:api:type:ProductDiscount)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -306,7 +328,9 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class ProductDiscountUpdate(_BaseType):
+    #: Expected version of the ProductDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the ProductDiscount.
     actions: typing.List["ProductDiscountUpdateAction"]
 
     def __init__(
@@ -434,9 +458,12 @@ class ProductDiscountValue(_BaseType):
 
 
 class ProductDiscountValueAbsolute(ProductDiscountValue):
-    money: typing.List["TypedMoney"]
+    """Discounts the Product's Price by a fixed amount, defined by the `money` field."""
 
-    def __init__(self, *, money: typing.List["TypedMoney"]):
+    #: Money values in different currencies. An absolute [ProductDiscount](ctp:api:type:ProductDiscount) will only match a price if this array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15\$.
+    money: typing.List["CentPrecisionMoney"]
+
+    def __init__(self, *, money: typing.List["CentPrecisionMoney"]):
         self.money = money
 
         super().__init__(type="absolute")
@@ -493,9 +520,12 @@ class ProductDiscountValueDraft(_BaseType):
 
 
 class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
-    money: typing.List["Money"]
+    """Discounts the Product Price by a fixed amount, defined by the `money` field."""
 
-    def __init__(self, *, money: typing.List["Money"]):
+    #: Money values in different currencies. An absolute [ProductDiscount](ctp:api:type:ProductDiscount) will only match a price if this array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15\$.
+    money: typing.List["CentPrecisionMoneyDraft"]
+
+    def __init__(self, *, money: typing.List["CentPrecisionMoneyDraft"]):
         self.money = money
 
         super().__init__(type="absolute")
@@ -515,6 +545,11 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueExternal(ProductDiscountValue):
+    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+    Used when setting discounts using an external service.
+
+    """
+
     def __init__(self):
 
         super().__init__(type="external")
@@ -534,6 +569,11 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 
 
 class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
+    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+    Use this when setting discounts using an external service.
+
+    """
+
     def __init__(self):
 
         super().__init__(type="external")
@@ -553,6 +593,9 @@ class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueRelative(ProductDiscountValue):
+    """Discounts the product price by a percentage, defined by the `permyriad` field."""
+
+    #: Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
     permyriad: int
 
     def __init__(self, *, permyriad: int):
@@ -575,6 +618,9 @@ class ProductDiscountValueRelative(ProductDiscountValue):
 
 
 class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
+    """Discounts the Product Price by a percentage, defined by the `permyriad` field."""
+
+    #: Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
     permyriad: int
 
     def __init__(self, *, permyriad: int):
@@ -597,6 +643,8 @@ class ProductDiscountValueRelativeDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
+    #: New value to set.
+    #: If set to `true`, the Discount will be applied to Product Prices.
     is_active: bool
 
     def __init__(self, *, is_active: bool):
@@ -619,6 +667,7 @@ class ProductDiscountChangeIsActiveAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -641,7 +690,7 @@ class ProductDiscountChangeNameAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
-    #: A valid ProductDiscount Predicate.
+    #: New value to set. Must be a valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
     predicate: str
 
     def __init__(self, *, predicate: str):
@@ -668,8 +717,10 @@ class ProductDiscountChangePredicateAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
-    #: The string must contain a number between 0 and 1.
-    #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+    #: New value to set.
+    #: Must not be empty.
+    #: The string value must be a number between `0` and `1`.
+    #: A Discount with a higher sortOrder is prioritized.
     sort_order: str
 
     def __init__(self, *, sort_order: str):
@@ -696,6 +747,7 @@ class ProductDiscountChangeSortOrderAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
+    #: New value to set. Must not be empty.
     value: "ProductDiscountValueDraft"
 
     def __init__(self, *, value: "ProductDiscountValueDraft"):
@@ -718,6 +770,7 @@ class ProductDiscountChangeValueAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -740,8 +793,7 @@ class ProductDiscountSetDescriptionAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
-    #: The key to set.
-    #: If you provide a `null` value or do not set this field at all, the existing `key` field is removed.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -764,8 +816,9 @@ class ProductDiscountSetKeyAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
-    #: The time from which the discount should be effective.
-    #: Please take Eventual Consistency into account for calculated product discount values.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
@@ -788,9 +841,11 @@ class ProductDiscountSetValidFromAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
+    #: Value to set.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
     valid_from: typing.Optional[datetime.datetime]
-    #: The timeframe for which the discount should be effective.
-    #: Please take Eventual Consistency into account for calculated undiscounted values.
+    #: Value to set.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -823,8 +878,9 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
 
 
 class ProductDiscountSetValidUntilAction(ProductDiscountUpdateAction):
-    #: The time from which the discount should be ineffective.
-    #: Please take Eventual Consistency into account for calculated undiscounted values.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
+    #: Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):

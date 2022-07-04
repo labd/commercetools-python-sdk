@@ -936,6 +936,14 @@ class TaxedPriceSchema(helpers.BaseSchema):
         missing=None,
         data_key="taxPortions",
     )
+    total_tax = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="totalTax",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

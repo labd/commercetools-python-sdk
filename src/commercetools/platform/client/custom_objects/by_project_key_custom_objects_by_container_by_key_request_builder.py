@@ -40,7 +40,6 @@ class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObject"]:
-        """Get CustomObject by container and key"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/custom-objects/{self._container}/{self._key}",
@@ -61,16 +60,15 @@ class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
         self,
         *,
         version: int = None,
-        data_erasure: bool = None,
         expand: typing.List["str"] = None,
+        data_erasure: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObject"]:
-        """Delete CustomObject by container and key"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/custom-objects/{self._container}/{self._key}",
-            params={"version": version, "dataErasure": data_erasure, "expand": expand},
+            params={"version": version, "expand": expand, "dataErasure": data_erasure},
             headers=headers,
             options=options,
         )

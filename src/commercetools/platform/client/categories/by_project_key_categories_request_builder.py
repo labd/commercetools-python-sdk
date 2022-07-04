@@ -60,6 +60,7 @@ class ByProjectKeyCategoriesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CategoryPagedQueryResponse"]:
+        """Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required."""
         params = {
             "expand": expand,
             "sort": sort,
@@ -95,7 +96,11 @@ class ByProjectKeyCategoriesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Category"]:
-        """Creating a category produces the CategoryCreated message."""
+        """Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+
+        Creating a Category produces the [CategoryCreatedMessage](/../api/message-types#categorycreatedmessage).
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/categories",

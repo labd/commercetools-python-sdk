@@ -38,6 +38,9 @@ class InventoryEntrySchema(BaseResourceSchema):
         missing=None,
         data_key="createdBy",
     )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     sku = marshmallow.fields.String(allow_none=True, missing=None)
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
@@ -84,6 +87,9 @@ class InventoryEntrySchema(BaseResourceSchema):
 
 class InventoryEntryDraftSchema(helpers.BaseSchema):
     sku = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
@@ -177,6 +183,7 @@ class InventoryEntryUpdateSchema(helpers.BaseSchema):
                 "setExpectedDelivery": helpers.absmod(
                     __name__, ".InventoryEntrySetExpectedDeliveryActionSchema"
                 ),
+                "setKey": helpers.absmod(__name__, ".InventoryEntrySetKeyActionSchema"),
                 "setRestockableInDays": helpers.absmod(
                     __name__, ".InventoryEntrySetRestockableInDaysActionSchema"
                 ),
@@ -212,11 +219,11 @@ class InventoryEntryUpdateActionSchema(helpers.BaseSchema):
 
 class InventoryPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".InventoryEntrySchema"),
         allow_none=True,
@@ -324,6 +331,20 @@ class InventoryEntrySetExpectedDeliveryActionSchema(InventoryEntryUpdateActionSc
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.InventoryEntrySetExpectedDeliveryAction(**data)
+
+
+class InventoryEntrySetKeyActionSchema(InventoryEntryUpdateActionSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.InventoryEntrySetKeyAction(**data)
 
 
 class InventoryEntrySetRestockableInDaysActionSchema(InventoryEntryUpdateActionSchema):

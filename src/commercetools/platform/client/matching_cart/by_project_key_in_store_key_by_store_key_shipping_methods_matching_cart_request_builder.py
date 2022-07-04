@@ -38,6 +38,11 @@ class ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShippingMethodPagedQueryResponse"]:
+        """Retrieves all the ShippingMethods that can ship to the shipping address of the given Cart in a given Store.
+        Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`.
+        This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shipping-methods/matching-cart",

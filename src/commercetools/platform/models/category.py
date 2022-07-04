@@ -63,29 +63,38 @@ __all__ = [
 
 
 class Category(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Name of the Category.
     name: "LocalizedString"
-    #: human-readable identifiers usually used as deep-link URL to the related category.
-    #: Each slug is unique across a project, but a category can have the same slug for different languages.
+    #: User-defined identifier used as a deep-link URL to the related Category per [Locale](ctp:api:type:Locale).
+    #: A Category can have the same slug for different Locales, but they are unique across the [Project](ctp:api:type:Project).
+    #: Valid slugs match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
+    #: For [good performance](/../api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in a Project.
     slug: "LocalizedString"
+    #: Description of the Category.
     description: typing.Optional["LocalizedString"]
-    #: Contains the parent path towards the root category.
+    #: Contains the parent path towards the root Category.
     ancestors: typing.List["CategoryReference"]
-    #: A category that is the parent of this category in the category tree.
+    #: Parent Category of this Category.
     parent: typing.Optional["CategoryReference"]
-    #: An attribute as base for a custom category order in one level.
+    #: Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
     order_hint: str
+    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
     external_id: typing.Optional[str]
+    #: Name of the Category used by external search engines for improved search engine performance.
     meta_title: typing.Optional["LocalizedString"]
+    #: Description of the Category used by external search engines for improved search engine performance.
     meta_description: typing.Optional["LocalizedString"]
+    #: Keywords related to the Category for improved search engine performance.
     meta_keywords: typing.Optional["LocalizedString"]
+    #: Custom Fields for the Category.
     custom: typing.Optional["CustomFields"]
-    #: Can be used to store images, icons or movies related to this category.
+    #: Media related to the Category.
     assets: typing.Optional[typing.List["Asset"]]
-    #: User-specific unique identifier for the category.
+    #: User-defined unique identifier of the Category.
     key: typing.Optional[str]
 
     def __init__(
@@ -147,28 +156,33 @@ class Category(BaseResource):
 
 
 class CategoryDraft(_BaseType):
+    #: Name of the Category.
     name: "LocalizedString"
-    #: human-readable identifier usually used as deep-link URL to the related category.
-    #: Allowed are alphabetic, numeric, underscore (`_`) and hyphen (`-`) characters.
-    #: Maximum size is 256.
-    #: **Must be unique across a project!** The same category can have the same slug for different languages.
+    #: User-defined identifier used as a deep-link URL to the related Category.
+    #: A Category can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project).
+    #: Valid slugs must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
     slug: "LocalizedString"
+    #: Description of the Category.
     description: typing.Optional["LocalizedString"]
-    #: A category that is the parent of this category in the category tree.
-    #: The parent can be set by its ID or by its key.
+    #: Parent Category of the Category.
+    #: The parent can be set by its `id` or `key`.
     parent: typing.Optional["CategoryResourceIdentifier"]
-    #: An attribute as base for a custom category order in one level.
-    #: A random value will be assigned by API if not set.
+    #: Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+    #: If not set, a random value will be assigned.
     order_hint: typing.Optional[str]
+    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
     external_id: typing.Optional[str]
+    #: Name of the Category used by external search engines for improved search engine performance.
     meta_title: typing.Optional["LocalizedString"]
+    #: Description of the Category used by external search engines for improved search engine performance.
     meta_description: typing.Optional["LocalizedString"]
+    #: Keywords related to the Category for improved search engine performance.
     meta_keywords: typing.Optional["LocalizedString"]
-    #: The custom fields.
+    #: Custom Fields for the Category.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Media related to the Category.
     assets: typing.Optional[typing.List["AssetDraft"]]
-    #: User-defined unique identifier for the category.
-    #: Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
+    #: User-defined unique identifier for the Category.
     key: typing.Optional[str]
 
     def __init__(
@@ -215,25 +229,36 @@ class CategoryDraft(_BaseType):
 
 
 class CategoryPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Category](ctp:api:type:Category)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Category](ctp:api:type:Category) matching the query.
     results: typing.List["Category"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Category"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -253,6 +278,9 @@ class CategoryPagedQueryResponse(_BaseType):
 
 
 class CategoryReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category)."""
+
+    #: Contains the representation of the expanded Category. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Categories.
     obj: typing.Optional["Category"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Category"] = None):
@@ -273,6 +301,8 @@ class CategoryReference(Reference):
 
 
 class CategoryResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -294,7 +324,10 @@ class CategoryResourceIdentifier(ResourceIdentifier):
 
 
 class CategoryUpdate(_BaseType):
+    #: Expected version of the Category on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Category.
     actions: typing.List["CategoryUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["CategoryUpdateAction"]):
@@ -421,8 +454,9 @@ class CategoryUpdateAction(_BaseType):
 
 
 class CategoryAddAssetAction(CategoryUpdateAction):
+    #: Value to append.
     asset: "AssetDraft"
-    #: When specified, the value might be `0` and should be lower than the total of the assets list.
+    #: Position in the array at which the Asset should be put. When specified, the value must be between `0` and the total number of Assets minus `1`.
     position: typing.Optional[int]
 
     def __init__(self, *, asset: "AssetDraft", position: typing.Optional[int] = None):
@@ -446,8 +480,11 @@ class CategoryAddAssetAction(CategoryUpdateAction):
 
 
 class CategoryChangeAssetNameAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(
@@ -478,6 +515,9 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
 
 
 class CategoryChangeAssetOrderAction(CategoryUpdateAction):
+    """This update action changes the order of the `assets` array. The new order is defined by listing the `id`s of the Assets."""
+
+    #: New value to set. Must contain all Asset `id`s.
     asset_order: typing.List["str"]
 
     def __init__(self, *, asset_order: typing.List["str"]):
@@ -500,6 +540,7 @@ class CategoryChangeAssetOrderAction(CategoryUpdateAction):
 
 
 class CategoryChangeNameAction(CategoryUpdateAction):
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -522,6 +563,7 @@ class CategoryChangeNameAction(CategoryUpdateAction):
 
 
 class CategoryChangeOrderHintAction(CategoryUpdateAction):
+    #: New value to set. Must be a decimal value between 0 and 1.
     order_hint: str
 
     def __init__(self, *, order_hint: str):
@@ -544,6 +586,7 @@ class CategoryChangeOrderHintAction(CategoryUpdateAction):
 
 
 class CategoryChangeParentAction(CategoryUpdateAction):
+    #: New value to set as parent.
     parent: "CategoryResourceIdentifier"
 
     def __init__(self, *, parent: "CategoryResourceIdentifier"):
@@ -566,8 +609,11 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 
 
 class CategoryChangeSlugAction(CategoryUpdateAction):
-    #: Allowed are alphabetic, numeric, underscore (&#95;) and hyphen (&#45;) characters.
-    #: Maximum size is {{ site.data.api-limits.slugLength }}.
+    """Changing the slug produces the [CategorySlugChangedMessage](ctp:api:type:CategorySlugChangedMessage)."""
+
+    #: New value to set. Must not be empty.
+    #: A Category can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project).
+    #: Valid slugs must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
     slug: "LocalizedString"
 
     def __init__(self, *, slug: "LocalizedString"):
@@ -590,7 +636,9 @@ class CategoryChangeSlugAction(CategoryUpdateAction):
 
 
 class CategoryRemoveAssetAction(CategoryUpdateAction):
+    #: Value to remove. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: Value to remove. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
 
     def __init__(
@@ -619,7 +667,9 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -658,13 +708,15 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
 
 
 class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Asset.
     type: typing.Optional["TypeResourceIdentifier"]
     #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
-    fields: typing.Optional[object]
+    fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
@@ -672,7 +724,7 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional[object] = None
+        fields: typing.Optional["FieldContainer"] = None
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -696,8 +748,11 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
 
 
 class CategorySetAssetDescriptionAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -728,9 +783,11 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetAssetKeyAction(CategoryUpdateAction):
+    """Set or remove the `key` of an [Asset](ctp:api:type:Asset)."""
+
+    #: Value to set.
     asset_id: str
-    #: User-defined identifier for the asset.
-    #: If left blank or set to `null`, the asset key is unset/removed.
+    #: Value to set. If empty, any existing value will be removed.
     asset_key: typing.Optional[str]
 
     def __init__(self, *, asset_id: str, asset_key: typing.Optional[str] = None):
@@ -754,8 +811,11 @@ class CategorySetAssetKeyAction(CategoryUpdateAction):
 
 
 class CategorySetAssetSourcesAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
+    #: Must not be empty. At least one entry is required.
     sources: typing.List["AssetSource"]
 
     def __init__(
@@ -786,8 +846,11 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
 
 
 class CategorySetAssetTagsAction(CategoryUpdateAction):
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_id: typing.Optional[str]
+    #: New value to set. Either `assetId` or `assetKey` is required.
     asset_key: typing.Optional[str]
+    #: Keywords for categorizing and organizing Assets.
     tags: typing.Optional[typing.List["str"]]
 
     def __init__(
@@ -878,6 +941,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
 
 
 class CategorySetDescriptionAction(CategoryUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -900,7 +964,9 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetExternalIdAction(CategoryUpdateAction):
-    #: If not defined, the external ID is unset.
+    """This update action sets a new ID that can be used as an additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP)."""
+
+    #: Value to set. If empty, any existing value will be removed.
     external_id: typing.Optional[str]
 
     def __init__(self, *, external_id: typing.Optional[str] = None):
@@ -923,9 +989,7 @@ class CategorySetExternalIdAction(CategoryUpdateAction):
 
 
 class CategorySetKeyAction(CategoryUpdateAction):
-    #: User-defined unique identifier for the category.
-    #: Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -946,6 +1010,7 @@ class CategorySetKeyAction(CategoryUpdateAction):
 
 
 class CategorySetMetaDescriptionAction(CategoryUpdateAction):
+    #: Value to set.
     meta_description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, meta_description: typing.Optional["LocalizedString"] = None):
@@ -968,6 +1033,7 @@ class CategorySetMetaDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetMetaKeywordsAction(CategoryUpdateAction):
+    #: Value to set.
     meta_keywords: typing.Optional["LocalizedString"]
 
     def __init__(self, *, meta_keywords: typing.Optional["LocalizedString"] = None):
@@ -990,6 +1056,7 @@ class CategorySetMetaKeywordsAction(CategoryUpdateAction):
 
 
 class CategorySetMetaTitleAction(CategoryUpdateAction):
+    #: Value to set.
     meta_title: typing.Optional["LocalizedString"]
 
     def __init__(self, *, meta_title: typing.Optional["LocalizedString"] = None):

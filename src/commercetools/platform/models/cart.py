@@ -13,7 +13,11 @@ from ._abstract import _BaseType
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
-    from .cart_discount import CartDiscountReference
+    from .cart_discount import (
+        CartDiscountReference,
+        CartDiscountTarget,
+        CartDiscountValue,
+    )
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import (
         Address,
@@ -100,6 +104,7 @@ __all__ = [
     "CartSetDeleteDaysAfterLastModificationAction",
     "CartSetDeliveryAddressCustomFieldAction",
     "CartSetDeliveryAddressCustomTypeAction",
+    "CartSetDirectDiscountsAction",
     "CartSetItemShippingAddressCustomFieldAction",
     "CartSetItemShippingAddressCustomTypeAction",
     "CartSetKeyAction",
@@ -129,6 +134,8 @@ __all__ = [
     "CustomLineItem",
     "CustomLineItemDraft",
     "CustomLineItemImportDraft",
+    "DirectDiscount",
+    "DirectDiscountDraft",
     "DiscountCodeInfo",
     "DiscountCodeState",
     "DiscountedLineItemPortion",
@@ -165,7 +172,7 @@ __all__ = [
 
 
 class Cart(BaseResource):
-    #: User-specific unique identifier of the cart.
+    #: User-defined unique identifier of the Cart.
     key: typing.Optional[str]
     #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
@@ -205,6 +212,7 @@ class Cart(BaseResource):
     #: Set automatically once the ShippingMethod is set.
     shipping_info: typing.Optional["ShippingInfo"]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
+    direct_discounts: typing.Optional[typing.List["DirectDiscount"]]
     custom: typing.Optional["CustomFields"]
     payment_info: typing.Optional["PaymentInfo"]
     locale: typing.Optional[str]
@@ -254,6 +262,7 @@ class Cart(BaseResource):
         country: typing.Optional[str] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
+        direct_discounts: typing.Optional[typing.List["DirectDiscount"]] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
@@ -286,6 +295,7 @@ class Cart(BaseResource):
         self.country = country
         self.shipping_info = shipping_info
         self.discount_codes = discount_codes
+        self.direct_discounts = direct_discounts
         self.custom = custom
         self.payment_info = payment_info
         self.locale = locale
@@ -318,7 +328,7 @@ class Cart(BaseResource):
 class CartDraft(_BaseType):
     #: A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency: str
-    #: User-specific unique identifier of the cart.
+    #: User-defined unique identifier for the Cart.
     key: typing.Optional[str]
     #: Id of an existing Customer.
     customer_id: typing.Optional[str]
@@ -449,12 +459,15 @@ class CartDraft(_BaseType):
 class CartOrigin(enum.Enum):
     CUSTOMER = "Customer"
     MERCHANT = "Merchant"
+    QUOTE = "Quote"
 
 
 class CartPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Cart"]
 
@@ -490,6 +503,9 @@ class CartPagedQueryResponse(_BaseType):
 
 
 class CartReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Cart](ctp:api:type:Cart)."""
+
+    #: Contains the representation of the expanded Cart. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Carts.
     obj: typing.Optional["Cart"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Cart"] = None):
@@ -510,6 +526,8 @@ class CartReference(Reference):
 
 
 class CartResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -740,6 +758,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartSetDeliveryAddressCustomTypeActionSchema
 
             return CartSetDeliveryAddressCustomTypeActionSchema().load(data)
+        if data["action"] == "setDirectDiscounts":
+            from ._schemas.cart import CartSetDirectDiscountsActionSchema
+
+            return CartSetDirectDiscountsActionSchema().load(data)
         if data["action"] == "setItemShippingAddressCustomField":
             from ._schemas.cart import CartSetItemShippingAddressCustomFieldActionSchema
 
@@ -832,7 +854,7 @@ class CartUpdateAction(_BaseType):
 
 
 class CustomLineItem(_BaseType):
-    #: The unique ID of this CustomLineItem.
+    #: Unique identifier of the CustomLineItem.
     id: str
     #: The name of this CustomLineItem.
     name: "LocalizedString"
@@ -961,6 +983,66 @@ class CustomLineItemDraft(_BaseType):
         return CustomLineItemDraftSchema().dump(self)
 
 
+class DirectDiscount(_BaseType):
+    #: The unique ID of the cart discount.
+    id: str
+    value: "CartDiscountValue"
+    #: Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+    target: typing.Optional["CartDiscountTarget"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        value: "CartDiscountValue",
+        target: typing.Optional["CartDiscountTarget"] = None
+    ):
+        self.id = id
+        self.value = value
+        self.target = target
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DirectDiscount":
+        from ._schemas.cart import DirectDiscountSchema
+
+        return DirectDiscountSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import DirectDiscountSchema
+
+        return DirectDiscountSchema().dump(self)
+
+
+class DirectDiscountDraft(_BaseType):
+    value: "CartDiscountValue"
+    #: Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+    target: typing.Optional["CartDiscountTarget"]
+
+    def __init__(
+        self,
+        *,
+        value: "CartDiscountValue",
+        target: typing.Optional["CartDiscountTarget"] = None
+    ):
+        self.value = value
+        self.target = target
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DirectDiscountDraft":
+        from ._schemas.cart import DirectDiscountDraftSchema
+
+        return DirectDiscountDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import DirectDiscountDraftSchema
+
+        return DirectDiscountDraftSchema().dump(self)
+
+
 class DiscountCodeInfo(_BaseType):
     discount_code: "DiscountCodeReference"
     state: "DiscountCodeState"
@@ -1050,10 +1132,10 @@ class DiscountedLineItemPrice(_BaseType):
 
 
 class DiscountedLineItemPriceForQuantity(_BaseType):
-    quantity: float
+    quantity: int
     discounted_price: "DiscountedLineItemPrice"
 
-    def __init__(self, *, quantity: float, discounted_price: "DiscountedLineItemPrice"):
+    def __init__(self, *, quantity: int, discounted_price: "DiscountedLineItemPrice"):
         self.quantity = quantity
         self.discounted_price = discounted_price
 
@@ -1236,9 +1318,9 @@ class ItemShippingTarget(_BaseType):
     #: The quantity of items that should go to the address with the specified `addressKey`.
     #: Only positive values are allowed.
     #: Using `0` as quantity is also possible in a draft object, but the element will not be present in the resulting ItemShippingDetails.
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, address_key: str, quantity: float):
+    def __init__(self, *, address_key: str, quantity: int):
         self.address_key = address_key
         self.quantity = quantity
 
@@ -1257,10 +1339,10 @@ class ItemShippingTarget(_BaseType):
 
 
 class LineItem(_BaseType):
-    #: The unique ID of this LineItem.
+    #: Unique identifier of the LineItem.
     id: str
     product_id: str
-    #: User-defined unique identifier for the [Product](ctp:api:type:Product).
+    #: User-defined unique identifier of the [Product](ctp:api:type:Product).
     #: Only present on Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the Line Item is created or updated on the Cart. On [Order](/ctp:api:type:Order) resources this field is only present when the `key` is available on the specific Product at the time the Order is created from the Cart. This field is in general not present on Carts that had no updates until 3 December 2021 and on Orders created before this date.
     product_key: typing.Optional[str]
     #: The product name.
@@ -1274,8 +1356,8 @@ class LineItem(_BaseType):
     #: The variant data is saved when the variant is added to the cart, and not updated automatically.
     #: It can manually be updated with the Recalculate update action.
     variant: "ProductVariant"
-    #: The price of a line item is selected from the prices array of the product variant.
-    #: If the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
+    #: The price of a line item is selected from the product variant according to the Product's [priceMode](ctp:api:type:Product) value.
+    #: If the `priceMode` is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) and the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
     price: "Price"
     #: Set once the `taxRate` is set.
     taxed_price: typing.Optional["TaxedItemPrice"]
@@ -1585,6 +1667,7 @@ class ShippingRateInput(_BaseType):
 
 class ClassificationShippingRateInput(ShippingRateInput):
     key: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     label: "LocalizedString"
 
     def __init__(self, *, key: str, label: "LocalizedString"):
@@ -1743,6 +1826,7 @@ class TaxPortionDraft(_BaseType):
     name: typing.Optional[str]
     rate: float
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: "Money"
 
@@ -1771,10 +1855,19 @@ class TaxedItemPrice(_BaseType):
     total_net: "TypedMoney"
     #: TaxedItemPrice fields can not be used in query predicates.
     total_gross: "TypedMoney"
+    #: Calculated automatically as the subtraction of `totalGross` - `totalNet`.
+    total_tax: typing.Optional["TypedMoney"]
 
-    def __init__(self, *, total_net: "TypedMoney", total_gross: "TypedMoney"):
+    def __init__(
+        self,
+        *,
+        total_net: "TypedMoney",
+        total_gross: "TypedMoney",
+        total_tax: typing.Optional["TypedMoney"] = None
+    ):
         self.total_net = total_net
         self.total_gross = total_gross
+        self.total_tax = total_tax
 
         super().__init__()
 
@@ -1795,17 +1888,21 @@ class TaxedPrice(_BaseType):
     total_gross: "TypedMoney"
     #: TaxedPrice fields that can be used in query predicates: `totalNet`, `totalGross`.
     tax_portions: typing.List["TaxPortion"]
+    #: Calculated automatically as the subtraction of `totalGross` - `totalNet`.
+    total_tax: typing.Optional["TypedMoney"]
 
     def __init__(
         self,
         *,
         total_net: "TypedMoney",
         total_gross: "TypedMoney",
-        tax_portions: typing.List["TaxPortion"]
+        tax_portions: typing.List["TaxPortion"],
+        total_tax: typing.Optional["TypedMoney"] = None
     ):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
+        self.total_tax = total_tax
 
         super().__init__()
 
@@ -1823,9 +1920,11 @@ class TaxedPrice(_BaseType):
 
 class TaxedPriceDraft(_BaseType):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_net: "Money"
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_gross: "Money"
     tax_portions: typing.List["TaxPortionDraft"]
@@ -1857,12 +1956,14 @@ class TaxedPriceDraft(_BaseType):
 
 class CartAddCustomLineItemAction(CartUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
     quantity: int
     slug: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
@@ -1950,16 +2051,17 @@ class CartAddItemShippingAddressAction(CartUpdateAction):
 class CartAddLineItemAction(CartUpdateAction):
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
     quantity: typing.Optional[int]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -2027,10 +2129,11 @@ class CartAddPaymentAction(CartUpdateAction):
 
 
 class CartAddShoppingListAction(CartUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
     shopping_list: "ShoppingListResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -2130,6 +2233,7 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
 class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
     custom_line_item_id: str
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
 
@@ -2181,6 +2285,7 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
     line_item_id: str
     quantity: int
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -2282,9 +2387,8 @@ class CartChangeTaxRoundingModeAction(CartUpdateAction):
 
 class CartRecalculateAction(CartUpdateAction):
     #: If set to `true`, the line item product data (`name`, `variant` and `productType`) will also be updated.
-    #: If set to `false`,
-    #: only the prices and tax rates of the line item will be updated.
-    #: The updated price of a line item may not correspond to a price in `variant.prices` anymore.
+    #: If set to `false`, only the prices and tax rates of the line item will be updated.
+    #: Notice that if the Product's [priceMode](ctp:api:type:Product) value is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum), the updated price of a line item may not correspond to a price in `variant.prices` anymore.
     update_product_data: typing.Optional[bool]
 
     def __init__(self, *, update_product_data: typing.Optional[bool] = None):
@@ -2327,6 +2431,7 @@ class CartRemoveCustomLineItemAction(CartUpdateAction):
 
 
 class CartRemoveDiscountCodeAction(CartUpdateAction):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -2374,6 +2479,7 @@ class CartRemoveLineItemAction(CartUpdateAction):
     line_item_id: str
     quantity: typing.Optional[int]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -2568,7 +2674,7 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
 
 
 class CartSetCountryAction(CartUpdateAction):
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
 
     def __init__(self, *, country: typing.Optional[str] = None):
@@ -2777,7 +2883,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
 class CartSetCustomShippingMethodAction(CartUpdateAction):
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2865,7 +2971,7 @@ class CartSetCustomerEmailAction(CartUpdateAction):
 
 
 class CartSetCustomerGroupAction(CartUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
@@ -3003,6 +3109,28 @@ class CartSetDeliveryAddressCustomTypeAction(CartUpdateAction):
         from ._schemas.cart import CartSetDeliveryAddressCustomTypeActionSchema
 
         return CartSetDeliveryAddressCustomTypeActionSchema().dump(self)
+
+
+class CartSetDirectDiscountsAction(CartUpdateAction):
+    discounts: typing.List["DirectDiscountDraft"]
+
+    def __init__(self, *, discounts: typing.List["DirectDiscountDraft"]):
+        self.discounts = discounts
+
+        super().__init__(action="setDirectDiscounts")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetDirectDiscountsAction":
+        from ._schemas.cart import CartSetDirectDiscountsActionSchema
+
+        return CartSetDirectDiscountsActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetDirectDiscountsActionSchema
+
+        return CartSetDirectDiscountsActionSchema().dump(self)
 
 
 class CartSetItemShippingAddressCustomFieldAction(CartUpdateAction):
@@ -3161,7 +3289,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
 
 class CartSetLineItemDistributionChannelAction(CartUpdateAction):
     line_item_id: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -3192,6 +3320,7 @@ class CartSetLineItemDistributionChannelAction(CartUpdateAction):
 class CartSetLineItemPriceAction(CartUpdateAction):
     line_item_id: str
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
 
@@ -3248,7 +3377,7 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
 
 class CartSetLineItemSupplyChannelAction(CartUpdateAction):
     line_item_id: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -3466,6 +3595,7 @@ class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
 
 
 class CartSetShippingMethodAction(CartUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 

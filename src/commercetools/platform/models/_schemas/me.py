@@ -305,7 +305,7 @@ class MyCustomerDraftSchema(helpers.BaseSchema):
         data_key="defaultBillingAddress",
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -679,6 +679,62 @@ class MyPaymentUpdateActionSchema(helpers.BaseSchema):
         return models.MyPaymentUpdateAction(**data)
 
 
+class MyQuoteRequestDraftSchema(helpers.BaseSchema):
+    cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    comment = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyQuoteRequestDraft(**data)
+
+
+class MyQuoteRequestUpdateSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            allow_none=True,
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "cancelQuoteRequest": helpers.absmod(
+                    __name__, ".MyQuoteRequestCancelActionSchema"
+                )
+            },
+        ),
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyQuoteRequestUpdate(**data)
+
+
+class MyQuoteRequestUpdateActionSchema(helpers.BaseSchema):
+    action = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyQuoteRequestUpdateAction(**data)
+
+
 class MyShoppingListDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
@@ -851,7 +907,7 @@ class MyTransactionDraftSchema(helpers.BaseSchema):
         data_key="interactionId",
     )
     custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -865,6 +921,82 @@ class MyTransactionDraftSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.MyTransactionDraft(**data)
+
+
+class ReplicaMyCartDraftSchema(helpers.BaseSchema):
+    reference = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "cart-discount": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountReferenceSchema"
+            ),
+            "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
+            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".custom_object.CustomObjectReferenceSchema"
+            ),
+            "customer-group": helpers.absmod(
+                __name__, ".customer_group.CustomerGroupReferenceSchema"
+            ),
+            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
+            "discount-code": helpers.absmod(
+                __name__, ".discount_code.DiscountCodeReferenceSchema"
+            ),
+            "inventory-entry": helpers.absmod(
+                __name__, ".inventory.InventoryEntryReferenceSchema"
+            ),
+            "order-edit": helpers.absmod(
+                __name__, ".order_edit.OrderEditReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+            "product-discount": helpers.absmod(
+                __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-type": helpers.absmod(
+                __name__, ".product_type.ProductTypeReferenceSchema"
+            ),
+            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
+            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
+            "shipping-method": helpers.absmod(
+                __name__, ".shipping_method.ShippingMethodReferenceSchema"
+            ),
+            "shopping-list": helpers.absmod(
+                __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
+            ),
+            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
+            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
+            "tax-category": helpers.absmod(
+                __name__, ".tax_category.TaxCategoryReferenceSchema"
+            ),
+            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
+            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
+        },
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.ReplicaMyCartDraft(**data)
 
 
 class MyCartAddDiscountCodeActionSchema(MyCartUpdateActionSchema):
@@ -1971,6 +2103,16 @@ class MyPaymentSetTransactionCustomFieldActionSchema(MyPaymentUpdateActionSchema
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyPaymentSetTransactionCustomFieldAction(**data)
+
+
+class MyQuoteRequestCancelActionSchema(MyQuoteRequestUpdateActionSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyQuoteRequestCancelAction(**data)
 
 
 class MyShoppingListAddLineItemActionSchema(MyShoppingListUpdateActionSchema):

@@ -119,10 +119,6 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
     def product_projections(
         self,
     ) -> ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder:
-        """A projected representation of a product shows the product with its current or staged data. The current or staged
-        representation of a product in a catalog is called a product projection.
-
-        """
         return ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder(
             project_key=self._project_key,
             store_key=self._store_key,

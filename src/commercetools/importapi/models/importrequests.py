@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from .common import ImportResourceType
     from .customers import CustomerImport
     from .importoperations import ImportOperationStatus
+    from .inventories import InventoryImport
     from .order_patches import OrderPatchImport
     from .orders import OrderImport
     from .prices import PriceImport
@@ -30,6 +31,7 @@ __all__ = [
     "CustomerImportRequest",
     "ImportRequest",
     "ImportResponse",
+    "InventoryImportRequest",
     "OrderImportRequest",
     "OrderPatchImportRequest",
     "PriceImportRequest",
@@ -94,6 +96,10 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import CustomerImportRequestSchema
 
             return CustomerImportRequestSchema().load(data)
+        if data["type"] == "inventory":
+            from ._schemas.importrequests import InventoryImportRequestSchema
+
+            return InventoryImportRequestSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.importrequests import ImportRequestSchema
@@ -127,7 +133,7 @@ class ImportResponse(_BaseType):
 
 
 class CategoryImportRequest(ImportRequest):
-    """The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a commercetools Project."""
+    """The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a Project."""
 
     #: The category import resources of this request.
     resources: typing.List["CategoryImport"]
@@ -150,7 +156,7 @@ class CategoryImportRequest(ImportRequest):
 
 
 class ProductImportRequest(ImportRequest):
-    """The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a commercetools Project."""
+    """The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a Project."""
 
     #: The product import resources of this request.
     resources: typing.List["ProductImport"]
@@ -173,7 +179,7 @@ class ProductImportRequest(ImportRequest):
 
 
 class ProductDraftImportRequest(ImportRequest):
-    """The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a commercetools Project."""
+    """The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a Project."""
 
     #: The product draft import resources of this request.
     resources: typing.List["ProductDraftImport"]
@@ -198,7 +204,7 @@ class ProductDraftImportRequest(ImportRequest):
 
 
 class ProductTypeImportRequest(ImportRequest):
-    """The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a commercetools Project."""
+    """The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a Project."""
 
     #: The product type import resources of this request.
     resources: typing.List["ProductTypeImport"]
@@ -223,7 +229,7 @@ class ProductTypeImportRequest(ImportRequest):
 
 
 class ProductVariantImportRequest(ImportRequest):
-    """The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a commercetools Project."""
+    """The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a Project."""
 
     #: The product variant import resources of this request.
     resources: typing.List["ProductVariantImport"]
@@ -248,7 +254,7 @@ class ProductVariantImportRequest(ImportRequest):
 
 
 class PriceImportRequest(ImportRequest):
-    """The request body to [import Prices](#import-prices). Contains data for [Prices](/../api/projects/products#price) to be created or updated in a commercetools Project."""
+    """The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a Project."""
 
     #: The price import resources of this request.
     resources: typing.List["PriceImport"]
@@ -271,7 +277,7 @@ class PriceImportRequest(ImportRequest):
 
 
 class OrderImportRequest(ImportRequest):
-    """The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a commercetools Project."""
+    """The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a Project."""
 
     #: The order import resources of this request.
     resources: typing.List["OrderImport"]
@@ -344,7 +350,7 @@ class ProductVariantPatchRequest(ImportRequest):
 
 
 class CustomerImportRequest(ImportRequest):
-    """The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a commercetools Project."""
+    """The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a Project."""
 
     #: The customer import resources of this request.
     resources: typing.List["CustomerImport"]
@@ -364,3 +370,28 @@ class CustomerImportRequest(ImportRequest):
         from ._schemas.importrequests import CustomerImportRequestSchema
 
         return CustomerImportRequestSchema().dump(self)
+
+
+class InventoryImportRequest(ImportRequest):
+    """The request body to [import Inventories](#import-inventory). Contains data for [InventoryEntries](/../api/projects/inventory#inventoryentry) to be created or updated in a commercetools Project."""
+
+    #: The inventory import resources of this request.
+    resources: typing.List["InventoryImport"]
+
+    def __init__(self, *, resources: typing.List["InventoryImport"]):
+        self.resources = resources
+
+        super().__init__(type=ImportResourceType.INVENTORY)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "InventoryImportRequest":
+        from ._schemas.importrequests import InventoryImportRequestSchema
+
+        return InventoryImportRequestSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importrequests import InventoryImportRequestSchema
+
+        return InventoryImportRequestSchema().dump(self)

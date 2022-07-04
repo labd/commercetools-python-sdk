@@ -15,6 +15,8 @@ from .payment import TransactionType
 
 if typing.TYPE_CHECKING:
     from .cart import (
+        CartReference,
+        CartResourceIdentifier,
         DiscountCodeInfo,
         ExternalLineItemTotalPrice,
         ExternalTaxRateDraft,
@@ -27,6 +29,7 @@ if typing.TYPE_CHECKING:
     from .common import BaseAddress, LocalizedString, Money, TypedMoney
     from .customer import CustomerReference
     from .discount_code import DiscountCodeReference
+    from .order import OrderReference
     from .payment import (
         PaymentMethodInfo,
         PaymentResourceIdentifier,
@@ -113,6 +116,10 @@ __all__ = [
     "MyPaymentSetTransactionCustomFieldAction",
     "MyPaymentUpdate",
     "MyPaymentUpdateAction",
+    "MyQuoteRequestCancelAction",
+    "MyQuoteRequestDraft",
+    "MyQuoteRequestUpdate",
+    "MyQuoteRequestUpdateAction",
     "MyShoppingListAddLineItemAction",
     "MyShoppingListAddTextLineItemAction",
     "MyShoppingListChangeLineItemQuantityAction",
@@ -136,6 +143,7 @@ __all__ = [
     "MyShoppingListUpdate",
     "MyShoppingListUpdateAction",
     "MyTransactionDraft",
+    "ReplicaMyCartDraft",
 ]
 
 
@@ -162,6 +170,7 @@ class MyCartDraft(_BaseType):
     #: Contains addresses for orders with multiple shipping addresses.
     #: Each address must contain a key which is unique in this cart.
     item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
     store: typing.Optional["StoreKeyReference"]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
 
@@ -386,7 +395,7 @@ class MyCustomerDraft(_BaseType):
     #: The `defaultBillingAddressId` of the customer will be set to the ID of that address.
     default_billing_address: typing.Optional[int]
     #: The custom fields.
-    custom: typing.Optional["CustomFields"]
+    custom: typing.Optional["CustomFieldsDraft"]
     locale: typing.Optional[str]
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
@@ -405,7 +414,7 @@ class MyCustomerDraft(_BaseType):
         addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         default_shipping_address: typing.Optional[int] = None,
         default_billing_address: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFields"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None,
         locale: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
     ):
@@ -622,7 +631,7 @@ class MyLineItemDraft(_BaseType):
 
 
 class MyOrderFromCartDraft(_BaseType):
-    #: The unique ID of the cart from which an order is created.
+    #: Unique identifier of the Cart that initiates an Order creation.
     id: str
     version: int
 
@@ -645,6 +654,7 @@ class MyOrderFromCartDraft(_BaseType):
 
 
 class MyPayment(_BaseType):
+    #: Unique identifier of the MyPayment.
     id: str
     version: int
     #: A reference to the customer this payment belongs to.
@@ -733,9 +743,11 @@ class MyPaymentDraft(_BaseType):
 
 
 class MyPaymentPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["MyPayment"]
 
@@ -835,6 +847,80 @@ class MyPaymentUpdateAction(_BaseType):
         from ._schemas.me import MyPaymentUpdateActionSchema
 
         return MyPaymentUpdateActionSchema().dump(self)
+
+
+class MyQuoteRequestDraft(_BaseType):
+    #: ResourceIdentifier to the Cart from which this quote request is created.
+    cart: "CartResourceIdentifier"
+    #: Current version of the Cart.
+    version: int
+    #: Text message included in the request.
+    comment: str
+
+    def __init__(self, *, cart: "CartResourceIdentifier", version: int, comment: str):
+        self.cart = cart
+        self.version = version
+        self.comment = comment
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyQuoteRequestDraft":
+        from ._schemas.me import MyQuoteRequestDraftSchema
+
+        return MyQuoteRequestDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteRequestDraftSchema
+
+        return MyQuoteRequestDraftSchema().dump(self)
+
+
+class MyQuoteRequestUpdate(_BaseType):
+    version: int
+    actions: typing.List["MyQuoteRequestUpdateAction"]
+
+    def __init__(
+        self, *, version: int, actions: typing.List["MyQuoteRequestUpdateAction"]
+    ):
+        self.version = version
+        self.actions = actions
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyQuoteRequestUpdate":
+        from ._schemas.me import MyQuoteRequestUpdateSchema
+
+        return MyQuoteRequestUpdateSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteRequestUpdateSchema
+
+        return MyQuoteRequestUpdateSchema().dump(self)
+
+
+class MyQuoteRequestUpdateAction(_BaseType):
+    action: str
+
+    def __init__(self, *, action: str):
+        self.action = action
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyQuoteRequestUpdateAction":
+        if data["action"] == "cancelQuoteRequest":
+            from ._schemas.me import MyQuoteRequestCancelActionSchema
+
+            return MyQuoteRequestCancelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteRequestUpdateActionSchema
+
+        return MyQuoteRequestUpdateActionSchema().dump(self)
 
 
 class MyShoppingListDraft(_BaseType):
@@ -1024,7 +1110,7 @@ class MyTransactionDraft(_BaseType):
     #: The `state` is set to the `Initial` TransactionState.
     interaction_id: typing.Optional[str]
     #: Custom Fields for the Transaction.
-    custom: typing.Optional["CustomFields"]
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -1033,7 +1119,7 @@ class MyTransactionDraft(_BaseType):
         type: "TransactionType",
         amount: "Money",
         interaction_id: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.timestamp = timestamp
         self.type = type
@@ -1053,6 +1139,26 @@ class MyTransactionDraft(_BaseType):
         from ._schemas.me import MyTransactionDraftSchema
 
         return MyTransactionDraftSchema().dump(self)
+
+
+class ReplicaMyCartDraft(_BaseType):
+    reference: typing.Union["CartReference", "OrderReference"]
+
+    def __init__(self, *, reference: typing.Union["CartReference", "OrderReference"]):
+        self.reference = reference
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ReplicaMyCartDraft":
+        from ._schemas.me import ReplicaMyCartDraftSchema
+
+        return ReplicaMyCartDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import ReplicaMyCartDraftSchema
+
+        return ReplicaMyCartDraftSchema().dump(self)
 
 
 class MyCartAddDiscountCodeAction(MyCartUpdateAction):
@@ -1102,16 +1208,17 @@ class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
 class MyCartAddLineItemAction(MyCartUpdateAction):
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
     quantity: typing.Optional[int]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1164,6 +1271,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
 
 
 class MyCartAddPaymentAction(MyCartUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1219,6 +1327,7 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     line_item_id: str
     quantity: int
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1297,6 +1406,7 @@ class MyCartRecalculateAction(MyCartUpdateAction):
 
 
 class MyCartRemoveDiscountCodeAction(MyCartUpdateAction):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -1344,6 +1454,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
     line_item_id: str
     quantity: typing.Optional[int]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1381,6 +1492,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
 
 
 class MyCartRemovePaymentAction(MyCartUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1425,7 +1537,7 @@ class MyCartSetBillingAddressAction(MyCartUpdateAction):
 
 
 class MyCartSetCountryAction(MyCartUpdateAction):
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
 
     def __init__(self, *, country: typing.Optional[str] = None):
@@ -1622,7 +1734,7 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
 
 class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
     line_item_id: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -1681,7 +1793,7 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
 
 class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
     line_item_id: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -1752,6 +1864,7 @@ class MyCartSetShippingAddressAction(MyCartUpdateAction):
 
 
 class MyCartSetShippingMethodAction(MyCartUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2363,6 +2476,7 @@ class MyPaymentAddTransactionAction(MyPaymentUpdateAction):
 
 class MyPaymentChangeAmountPlannedAction(MyPaymentUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: "Money"
 
@@ -2458,6 +2572,7 @@ class MyPaymentSetMethodInfoMethodAction(MyPaymentUpdateAction):
 
 
 class MyPaymentSetMethodInfoNameAction(MyPaymentUpdateAction):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: typing.Optional["LocalizedString"]
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
@@ -2507,6 +2622,27 @@ class MyPaymentSetTransactionCustomFieldAction(MyPaymentUpdateAction):
         return MyPaymentSetTransactionCustomFieldActionSchema().dump(self)
 
 
+class MyQuoteRequestCancelAction(MyQuoteRequestUpdateAction):
+    """Transitions the `quoteRequestState` of the Quote Request to `Cancelled`. Can only be used when the Quote Request is in state `Submitted`."""
+
+    def __init__(self):
+
+        super().__init__(action="cancelQuoteRequest")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyQuoteRequestCancelAction":
+        from ._schemas.me import MyQuoteRequestCancelActionSchema
+
+        return MyQuoteRequestCancelActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteRequestCancelActionSchema
+
+        return MyQuoteRequestCancelActionSchema().dump(self)
+
+
 class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
     sku: typing.Optional[str]
     product_id: typing.Optional[str]
@@ -2550,7 +2686,9 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
@@ -2635,6 +2773,7 @@ class MyShoppingListChangeLineItemsOrderAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -2658,6 +2797,7 @@ class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
 
 class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
     text_line_item_id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
 
     def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
@@ -2867,6 +3007,7 @@ class MyShoppingListSetDeleteDaysAfterLastModificationAction(
 
 
 class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -3028,6 +3169,7 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
 
 class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction):
     text_line_item_id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
 
     def __init__(

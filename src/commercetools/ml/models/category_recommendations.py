@@ -96,6 +96,7 @@ class ProjectCategoryRecommendationMeta(_BaseType):
 class ProjectCategoryRecommendationPagedQueryResponse(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["ProjectCategoryRecommendation"]
     meta: "ProjectCategoryRecommendationMeta"

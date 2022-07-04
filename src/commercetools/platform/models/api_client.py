@@ -15,25 +15,24 @@ __all__ = ["ApiClient", "ApiClientDraft", "ApiClientPagedQueryResponse"]
 
 
 class ApiClient(_BaseType):
-    #: Unique ID of the API Client.
-    #: This is the OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    #: The OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-the-composable-commerce-oauth-20-service).
     id: str
-    #: Name of the API Client.
+    #: Name of the APIClient.
     name: str
-    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-the-composable-commerce-oauth-20-service).
     scope: str
-    #: Only shown once in the response of creating the API Client.
-    #: This is the OAuth2 `client_secret` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    #: Only shown once in the response of creating the APIClient.
+    #: This is the OAuth2 `client_secret` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-the-composable-commerce-oauth-20-service).
     secret: typing.Optional[str]
-    #: Date of the last day this API Client was used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    #: Date of the last day this APIClient was used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-the-composable-commerce-oauth-20-service).
     last_used_at: typing.Optional[datetime.date]
     #: If set, the Client will be deleted on (or shortly after) this point in time.
     delete_at: typing.Optional[datetime.datetime]
-    #: Date and time (UTC) the API Client was initially created at.
+    #: Date and time (UTC) the APIClient was initially created at.
     created_at: typing.Optional[datetime.datetime]
-    #: Expiration time in seconds for each access token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+    #: Expiration time in seconds for each access token obtained by the APIClient. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
     access_token_validity_seconds: typing.Optional[int]
-    #: Inactivity expiration time in seconds for each refresh token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+    #: Inactivity expiration time in seconds for each refresh token obtained by the APIClient. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
     refresh_token_validity_seconds: typing.Optional[int]
 
     def __init__(
@@ -74,15 +73,15 @@ class ApiClient(_BaseType):
 
 
 class ApiClientDraft(_BaseType):
-    #: Name of the API Client.
+    #: Name of the APIClient.
     name: str
-    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
+    #: Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-the-composable-commerce-oauth-20-service).
     scope: str
     #: If set, the Client will be deleted after the specified amount of days.
     delete_days_after_creation: typing.Optional[int]
-    #: Expiration time in seconds for each access token obtained by the API Client. If not set the default value applies.
+    #: Expiration time in seconds for each access token obtained by the APIClient. If not set the default value applies.
     access_token_validity_seconds: typing.Optional[int]
-    #: Inactivity expiration time in seconds for each refresh token obtained by the API Client. The expiration time for refresh tokens is restarted each time the token is used. If not set the default value applies.
+    #: Inactivity expiration time in seconds for each refresh token obtained by the APIClient. The expiration time for refresh tokens is restarted each time the token is used. If not set the default value applies.
     refresh_token_validity_seconds: typing.Optional[int]
 
     def __init__(
@@ -117,10 +116,9 @@ class ApiClientDraft(_BaseType):
 class ApiClientPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [APIClient](ctp:api:type:ApiClient)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -130,7 +128,7 @@ class ApiClientPagedQueryResponse(_BaseType):
     #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
     #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
-    #: API Clients matching the query.
+    #: APIClients matching the query.
     results: typing.List["ApiClient"]
 
     def __init__(

@@ -130,10 +130,10 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Creates a cart in the store specified by {storeKey}.
-        When using this endpoint the cart's store field is always set to the store specified in the path parameter.
-        Creating a cart can fail with an InvalidOperation if the referenced shipping method
-        in the CartDraft has a predicate which does not match the cart.
+        """Creates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
+        When using this endpoint the Cart's `store` field is always set to the store specified in the path parameter.
+        Creating a Cart can fail with an [InvalidOperationError](ctp:api:type:InvalidOperationError) if the referenced [ShippingMethod](ctp:api:type:ShippingMethod)
+        in the [CartDraft](ctp:api:type:CartDraft) has a predicate which does not match the Cart.
 
         """
         headers = {} if headers is None else headers

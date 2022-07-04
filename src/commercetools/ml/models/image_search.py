@@ -22,7 +22,7 @@ class ImageSearchResponse(_BaseType):
 
     #: The maximum number of results to return from a query.
     count: int
-    #: The offset into the results matching the query. An offset of 0 is the default value indicating that no results should be skipped.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: float
     #: The total number of product images that were have been analyzed.
     total: int

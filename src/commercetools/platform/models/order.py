@@ -58,6 +58,7 @@ if typing.TYPE_CHECKING:
     from .customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from .payment import PaymentReference, PaymentResourceIdentifier
     from .product import Attribute
+    from .quote import QuoteReference, QuoteResourceIdentifier
     from .shipping_method import ShippingMethodResourceIdentifier, ShippingRateDraft
     from .state import StateReference, StateResourceIdentifier
     from .store import StoreKeyReference, StoreResourceIdentifier
@@ -88,6 +89,7 @@ __all__ = [
     "OrderChangePaymentStateAction",
     "OrderChangeShipmentStateAction",
     "OrderFromCartDraft",
+    "OrderFromQuoteDraft",
     "OrderImportCustomLineItemStateAction",
     "OrderImportDraft",
     "OrderImportLineItemStateAction",
@@ -619,7 +621,7 @@ class StagedOrderUpdateAction(_BaseType):
 
 
 class Hit(_BaseType):
-    #: Unique ID of the Order.
+    #: Unique identifier of the Order.
     id: str
     #: Current version of the Order.
     version: int
@@ -648,9 +650,9 @@ class Hit(_BaseType):
 class OrderPagedSearchResponse(_BaseType):
     #: Total number of results matching the query.
     total: int
-    #: Number of results skipped, used for pagination.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
-    #: Number of results the response should contain at maximum, used for pagination.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
     #: Actual results.
     hits: typing.List["Hit"]
@@ -685,6 +687,7 @@ class OrderPagedSearchResponse(_BaseType):
 
 
 class Delivery(_BaseType):
+    #: Unique identifier of the Delivery.
     id: str
     created_at: datetime.datetime
     #: Items which are shipped in this delivery regardless their distribution over several parcels.
@@ -727,6 +730,7 @@ class Delivery(_BaseType):
 
 
 class DeliveryItem(_BaseType):
+    #: Unique identifier of the DeliveryItem.
     id: str
     quantity: int
 
@@ -750,6 +754,7 @@ class DeliveryItem(_BaseType):
 
 class DiscountedLineItemPriceDraft(_BaseType):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     value: "Money"
     included_discounts: typing.List["DiscountedLineItemPortion"]
@@ -780,10 +785,10 @@ class DiscountedLineItemPriceDraft(_BaseType):
 
 
 class ItemState(_BaseType):
-    quantity: float
+    quantity: int
     state: "StateReference"
 
-    def __init__(self, *, quantity: float, state: "StateReference"):
+    def __init__(self, *, quantity: int, state: "StateReference"):
         self.quantity = quantity
         self.state = state
 
@@ -910,12 +915,13 @@ class Order(BaseResource):
     sync_info: typing.List["SyncInfo"]
     return_info: typing.Optional[typing.List["ReturnInfo"]]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
-    #: The sequence number of the last order message produced by changes to this order.
-    #: `0` means, that no messages were created yet.
-    last_message_sequence_number: int
+    #: Internal-only field.
+    last_message_sequence_number: typing.Optional[int]
     #: Set when this order was created from a cart.
     #: The cart will have the state `Ordered`.
     cart: typing.Optional["CartReference"]
+    #: Set when this order was created from a quote.
+    quote: typing.Optional["QuoteReference"]
     custom: typing.Optional["CustomFields"]
     payment_info: typing.Optional["PaymentInfo"]
     locale: typing.Optional[str]
@@ -963,8 +969,9 @@ class Order(BaseResource):
         sync_info: typing.List["SyncInfo"],
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: int,
+        last_message_sequence_number: typing.Optional[int] = None,
         cart: typing.Optional["CartReference"] = None,
+        quote: typing.Optional["QuoteReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
@@ -1003,6 +1010,7 @@ class Order(BaseResource):
         self.discount_codes = discount_codes
         self.last_message_sequence_number = last_message_sequence_number
         self.cart = cart
+        self.quote = quote
         self.custom = custom
         self.payment_info = payment_info
         self.locale = locale
@@ -1033,10 +1041,67 @@ class Order(BaseResource):
 
 
 class OrderFromCartDraft(_BaseType):
-    #: The unique id of the cart from which an order is created.
+    #: Unique identifier of the Cart from which you can create an Order.
     id: typing.Optional[str]
     #: ResourceIdentifier to the Cart from which this order is created.
     cart: typing.Optional["CartResourceIdentifier"]
+    version: int
+    #: String that uniquely identifies an order.
+    #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
+    #: It should be unique across a project.
+    #: Once it's set it cannot be changed.
+    #: For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+    order_number: typing.Optional[str]
+    payment_state: typing.Optional["PaymentState"]
+    shipment_state: typing.Optional["ShipmentState"]
+    #: Order will be created with `Open` status by default.
+    order_state: typing.Optional["OrderState"]
+    state: typing.Optional["StateResourceIdentifier"]
+    #: [Custom Fields](/../api/projects/custom-fields) for the Order. The Custom Field type must match the type of the Custom Fields in the referenced [Cart](/../api/projects/carts#cart).
+    #: If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
+    #: If empty, the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) are added to the Order automatically.
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        id: typing.Optional[str] = None,
+        cart: typing.Optional["CartResourceIdentifier"] = None,
+        version: int,
+        order_number: typing.Optional[str] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        state: typing.Optional["StateResourceIdentifier"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ):
+        self.id = id
+        self.cart = cart
+        self.version = version
+        self.order_number = order_number
+        self.payment_state = payment_state
+        self.shipment_state = shipment_state
+        self.order_state = order_state
+        self.state = state
+        self.custom = custom
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderFromCartDraft":
+        from ._schemas.order import OrderFromCartDraftSchema
+
+        return OrderFromCartDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderFromCartDraftSchema
+
+        return OrderFromCartDraftSchema().dump(self)
+
+
+class OrderFromQuoteDraft(_BaseType):
+    #: ResourceIdentifier to the Quote from which this order is created. If the quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
+    quote: "QuoteResourceIdentifier"
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -1053,8 +1118,7 @@ class OrderFromCartDraft(_BaseType):
     def __init__(
         self,
         *,
-        id: typing.Optional[str] = None,
-        cart: typing.Optional["CartResourceIdentifier"] = None,
+        quote: "QuoteResourceIdentifier",
         version: int,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
@@ -1062,8 +1126,7 @@ class OrderFromCartDraft(_BaseType):
         order_state: typing.Optional["OrderState"] = None,
         state: typing.Optional["StateResourceIdentifier"] = None
     ):
-        self.id = id
-        self.cart = cart
+        self.quote = quote
         self.version = version
         self.order_number = order_number
         self.payment_state = payment_state
@@ -1074,15 +1137,15 @@ class OrderFromCartDraft(_BaseType):
         super().__init__()
 
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderFromCartDraft":
-        from ._schemas.order import OrderFromCartDraftSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderFromQuoteDraft":
+        from ._schemas.order import OrderFromQuoteDraftSchema
 
-        return OrderFromCartDraftSchema().load(data)
+        return OrderFromQuoteDraftSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order import OrderFromCartDraftSchema
+        from ._schemas.order import OrderFromQuoteDraftSchema
 
-        return OrderFromCartDraftSchema().dump(self)
+        return OrderFromQuoteDraftSchema().dump(self)
 
 
 class OrderImportDraft(_BaseType):
@@ -1112,10 +1175,13 @@ class OrderImportDraft(_BaseType):
     country: typing.Optional[str]
     #: If not given the `Open` state will be assigned by default.
     order_state: typing.Optional["OrderState"]
+    #: This reference can point to a state in a custom workflow.
+    state: typing.Optional["StateReference"]
     shipment_state: typing.Optional["ShipmentState"]
     payment_state: typing.Optional["PaymentState"]
     #: Set if the ShippingMethod is set.
     shipping_info: typing.Optional["ShippingInfoImportDraft"]
+    payment_info: typing.Optional["PaymentInfo"]
     completed_at: typing.Optional[datetime.datetime]
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
@@ -1146,9 +1212,11 @@ class OrderImportDraft(_BaseType):
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         country: typing.Optional[str] = None,
         order_state: typing.Optional["OrderState"] = None,
+        state: typing.Optional["StateReference"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipping_info: typing.Optional["ShippingInfoImportDraft"] = None,
+        payment_info: typing.Optional["PaymentInfo"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
@@ -1169,9 +1237,11 @@ class OrderImportDraft(_BaseType):
         self.customer_group = customer_group
         self.country = country
         self.order_state = order_state
+        self.state = state
         self.shipment_state = shipment_state
         self.payment_state = payment_state
         self.shipping_info = shipping_info
+        self.payment_info = payment_info
         self.completed_at = completed_at
         self.custom = custom
         self.inventory_mode = inventory_mode
@@ -1195,9 +1265,11 @@ class OrderImportDraft(_BaseType):
 
 
 class OrderPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Order"]
 
@@ -1591,6 +1663,7 @@ class OrderUpdateAction(_BaseType):
 
 
 class Parcel(_BaseType):
+    #: Unique identifier of the Parcel.
     id: str
     created_at: datetime.datetime
     measurements: typing.Optional["ParcelMeasurements"]
@@ -1667,18 +1740,18 @@ class ParcelDraft(_BaseType):
 
 
 class ParcelMeasurements(_BaseType):
-    height_in_millimeter: typing.Optional[float]
-    length_in_millimeter: typing.Optional[float]
-    width_in_millimeter: typing.Optional[float]
-    weight_in_gram: typing.Optional[float]
+    height_in_millimeter: typing.Optional[int]
+    length_in_millimeter: typing.Optional[int]
+    width_in_millimeter: typing.Optional[int]
+    weight_in_gram: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        height_in_millimeter: typing.Optional[float] = None,
-        length_in_millimeter: typing.Optional[float] = None,
-        width_in_millimeter: typing.Optional[float] = None,
-        weight_in_gram: typing.Optional[float] = None
+        height_in_millimeter: typing.Optional[int] = None,
+        length_in_millimeter: typing.Optional[int] = None,
+        width_in_millimeter: typing.Optional[int] = None,
+        weight_in_gram: typing.Optional[int] = None
     ):
         self.height_in_millimeter = height_in_millimeter
         self.length_in_millimeter = length_in_millimeter
@@ -1734,7 +1807,7 @@ class ProductVariantImportDraft(_BaseType):
     id: typing.Optional[int]
     #: The SKU of the existing variant.
     sku: typing.Optional[str]
-    #: The prices of the variant.
+    #: The [EmbeddedPrices](ctp:api:type:EmbeddedPrice) of the variant.
     #: The prices should not contain two prices for the same price scope (same currency, country and customer group).
     #: If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
     prices: typing.Optional[typing.List["PriceDraft"]]
@@ -1839,6 +1912,7 @@ class ReturnInfoDraft(_BaseType):
 
 
 class ReturnItem(_BaseType):
+    #: Unique identifier of the ReturnItem.
     id: str
     quantity: int
     type: str
@@ -2129,9 +2203,11 @@ class SyncInfo(_BaseType):
 
 class TaxedItemPriceDraft(_BaseType):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_net: "Money"
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_gross: "Money"
 
@@ -2286,6 +2362,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddPaymentAction(OrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -2518,6 +2595,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemovePaymentAction(OrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -3586,6 +3664,7 @@ class OrderSetShippingAddressCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetStoreAction(OrderUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
     store: typing.Optional["StoreResourceIdentifier"]
 
     def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
@@ -3608,9 +3687,9 @@ class OrderSetStoreAction(OrderUpdateAction):
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
     custom_line_item_id: str
     quantity: int
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -3648,9 +3727,9 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
 class OrderTransitionLineItemStateAction(OrderUpdateAction):
     line_item_id: str
     quantity: int
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -3686,7 +3765,7 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
 
 
 class OrderTransitionStateAction(OrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     state: "StateResourceIdentifier"
     force: typing.Optional[bool]
 
@@ -3735,7 +3814,7 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderUpdateSyncInfoAction(OrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     channel: "ChannelResourceIdentifier"
     external_id: typing.Optional[str]
     synced_at: typing.Optional[datetime.datetime]

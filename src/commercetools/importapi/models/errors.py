@@ -260,7 +260,7 @@ class InvalidOperation(ErrorObject):
 
 
 class DuplicateAttributeValueError(ErrorObject):
-    """The `Unique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated."""
+    """The `Unique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated."""
 
     #: The attribute in conflict.
     attribute: "Attribute"
@@ -285,7 +285,7 @@ class DuplicateAttributeValueError(ErrorObject):
 
 
 class DuplicateAttributeValuesError(ErrorObject):
-    """The `CombinationUnique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated."""
+    """The `CombinationUnique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated."""
 
     attributes: typing.List["Attribute"]
 

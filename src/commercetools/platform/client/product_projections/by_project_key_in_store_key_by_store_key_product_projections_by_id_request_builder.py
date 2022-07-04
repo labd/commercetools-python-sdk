@@ -40,7 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjection"]:
-        """Gets the current or staged representation of a product by its ID from a specific Store."""
+        """Gets the current or staged representation of a [Product](ctp:api:type:Product) by its ID from the specified Store."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/product-projections/{self._id}",

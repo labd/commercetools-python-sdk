@@ -40,10 +40,15 @@ __all__ = [
     "ProductSelectionSetCustomFieldAction",
     "ProductSelectionSetCustomTypeAction",
     "ProductSelectionSetKeyAction",
+    "ProductSelectionSetVariantSelectionAction",
     "ProductSelectionType",
     "ProductSelectionTypeEnum",
     "ProductSelectionUpdate",
     "ProductSelectionUpdateAction",
+    "ProductVariantSelection",
+    "ProductVariantSelectionExclusion",
+    "ProductVariantSelectionInclusion",
+    "ProductVariantSelectionTypeEnum",
     "ProductsInStorePagedQueryResponse",
 ]
 
@@ -51,9 +56,18 @@ __all__ = [
 class AssignedProductReference(_BaseType):
     #: Reference to a Product that is assigned to the Product Selection.
     product: "ProductReference"
+    #: The Variants of the Product that are included, or excluded, from the Product Selection.
+    #: In absence of this field, all Variants are deemed to be included.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
-    def __init__(self, *, product: "ProductReference"):
+    def __init__(
+        self,
+        *,
+        product: "ProductReference",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
         self.product = product
+        self.variant_selection = variant_selection
 
         super().__init__()
 
@@ -74,9 +88,17 @@ class AssignedProductReference(_BaseType):
 class AssignedProductSelection(_BaseType):
     #: Reference to the Product Selection that this assignment is part of.
     product_selection: "ProductSelectionReference"
+    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
-    def __init__(self, *, product_selection: "ProductSelectionReference"):
+    def __init__(
+        self,
+        *,
+        product_selection: "ProductSelectionReference",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
         self.product_selection = product_selection
+        self.variant_selection = variant_selection
 
         super().__init__()
 
@@ -97,10 +119,9 @@ class AssignedProductSelection(_BaseType):
 class AssignedProductSelectionPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [AssignedProductSelection](ctp:api:type:AssignedProductSelection)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -110,7 +131,7 @@ class AssignedProductSelectionPagedQueryResponse(_BaseType):
     #: To get `total`, pass the query parameter `withTotal` set to `true`.
     #: When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
     total: typing.Optional[int]
-    #: References to Product Selection that are assigned to the Product.
+    #: References to ProductSelection that are assigned to the Product.
     results: typing.List["AssignedProductSelection"]
 
     def __init__(
@@ -149,21 +170,19 @@ class AssignedProductSelectionPagedQueryResponse(_BaseType):
 
 
 class ProductSelection(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for events not
-    #: tracked.
+    #: Present on resources updated after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for events not
-    #: tracked.
+    #: Present on resources created after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the Product Selection.
+    #: User-defined unique identifier of the ProductSelection.
     key: typing.Optional[str]
-    #: Name of the Product Selection.
+    #: Name of the ProductSelection.
     name: "LocalizedString"
-    #: Number of Products that are currently assigned to this Product Selection.
+    #: Number of Products that are currently assigned to this ProductSelection.
     product_count: int
-    #: Specifies in which way the Products are assigned to the Product Selection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
+    #: Specifies in which way the Products are assigned to the ProductSelection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
     type: "ProductSelectionTypeEnum"
-    #: Custom Fields of this Product Selection.
+    #: Custom Fields of this ProductSelection.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -209,21 +228,25 @@ class ProductSelection(BaseResource):
 
 
 class ProductSelectionAssignment(_BaseType):
-    """Specifies which Product is assigned to which Product Selection."""
+    """Specifies which Product is assigned to which ProductSelection."""
 
-    #: Reference to a Product that is assigned to the Product Selection.
+    #: Reference to a Product that is assigned to the ProductSelection.
     product: "ProductReference"
     #: Reference to the Product Selection that this assignment is part of.
     product_selection: "ProductSelectionReference"
+    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
     def __init__(
         self,
         *,
         product: "ProductReference",
-        product_selection: "ProductSelectionReference"
+        product_selection: "ProductSelectionReference",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
     ):
         self.product = product
         self.product_selection = product_selection
+        self.variant_selection = variant_selection
 
         super().__init__()
 
@@ -242,11 +265,11 @@ class ProductSelectionAssignment(_BaseType):
 
 
 class ProductSelectionDraft(_BaseType):
-    #: User-defined unique identifier for the Product Selection. You can use `key` besides `ID` to reference the Product Selection.
+    #: User-defined unique identifier for the ProductSelection.
     key: typing.Optional[str]
-    #: Name of the Product Selection. Not checked for uniqueness, but distinct names are recommended.
+    #: Name of the ProductSelection. Not checked for uniqueness, but distinct names are recommended.
     name: "LocalizedString"
-    #: Custom Fields of this Product Selection.
+    #: Custom Fields of this ProductSelection.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -277,10 +300,9 @@ class ProductSelectionDraft(_BaseType):
 class ProductSelectionPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [ProductSelection](ctp:api:type:ProductSelection)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -290,7 +312,7 @@ class ProductSelectionPagedQueryResponse(_BaseType):
     #: To get `total`, pass the query parameter `withTotal` set to `true`.
     #: When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
     total: typing.Optional[int]
-    #: The Product Selections matching the query.
+    #: [ProductSelections](ctp:api:type:ProductSelection) matching the query.
     results: typing.List["ProductSelection"]
 
     def __init__(
@@ -327,10 +349,9 @@ class ProductSelectionPagedQueryResponse(_BaseType):
 class ProductSelectionProductPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [AssignedProductReference](ctp:api:type:AssignedProductReference)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -340,7 +361,7 @@ class ProductSelectionProductPagedQueryResponse(_BaseType):
     #: To get `total`, pass the query parameter `withTotal` set to `true`.
     #: When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
     total: typing.Optional[int]
-    #: References to Products that are assigned to the Product Selection.
+    #: References to Products that are assigned to the ProductSelection.
     results: typing.List["AssignedProductReference"]
 
     def __init__(
@@ -379,7 +400,9 @@ class ProductSelectionProductPagedQueryResponse(_BaseType):
 
 
 class ProductSelectionReference(Reference):
-    #: Contains the representation of the expanded Product Selection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Product Selection.
+    """[Reference](ctp:api:type:Reference) to a [ProductSelection](ctp:api:type:ProductSelection)."""
+
+    #: Contains the representation of the expanded ProductSelection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductSelections.
     obj: typing.Optional["ProductSelection"]
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductSelection"] = None):
@@ -402,6 +425,8 @@ class ProductSelectionReference(Reference):
 
 
 class ProductSelectionResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -445,7 +470,7 @@ class ProductSelectionType(_BaseType):
 
 
 class IndividualProductSelectionType(ProductSelectionType):
-    #: The name of the Product Selection which is recommended to be unique.
+    #: The name of the ProductSelection which is recommended to be unique.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -545,6 +570,12 @@ class ProductSelectionUpdateAction(_BaseType):
             from ._schemas.product_selection import ProductSelectionSetKeyActionSchema
 
             return ProductSelectionSetKeyActionSchema().load(data)
+        if data["action"] == "setVariantSelection":
+            from ._schemas.product_selection import (
+                ProductSelectionSetVariantSelectionActionSchema,
+            )
+
+            return ProductSelectionSetVariantSelectionActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.product_selection import ProductSelectionUpdateActionSchema
@@ -552,13 +583,101 @@ class ProductSelectionUpdateAction(_BaseType):
         return ProductSelectionUpdateActionSchema().dump(self)
 
 
+class ProductVariantSelection(_BaseType):
+    """Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field."""
+
+    #: Determines whether the SKUs are to be included in, or excluded from, the Product Selection.
+    type: "ProductVariantSelectionTypeEnum"
+
+    def __init__(self, *, type: "ProductVariantSelectionTypeEnum"):
+        self.type = type
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantSelection":
+        if data["type"] == "exclusion":
+            from ._schemas.product_selection import (
+                ProductVariantSelectionExclusionSchema,
+            )
+
+            return ProductVariantSelectionExclusionSchema().load(data)
+        if data["type"] == "inclusion":
+            from ._schemas.product_selection import (
+                ProductVariantSelectionInclusionSchema,
+            )
+
+            return ProductVariantSelectionInclusionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import ProductVariantSelectionSchema
+
+        return ProductVariantSelectionSchema().dump(self)
+
+
+class ProductVariantSelectionExclusion(ProductVariantSelection):
+    """All Product Variants except the explicitly stated SKUs are part of the Product Selection."""
+
+    #: Non-empty array of SKUs representing Product Variants to be excluded from the Product Selection.
+    skus: typing.List["str"]
+
+    def __init__(self, *, skus: typing.List["str"]):
+        self.skus = skus
+
+        super().__init__(type=ProductVariantSelectionTypeEnum.EXCLUSION)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantSelectionExclusion":
+        from ._schemas.product_selection import ProductVariantSelectionExclusionSchema
+
+        return ProductVariantSelectionExclusionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import ProductVariantSelectionExclusionSchema
+
+        return ProductVariantSelectionExclusionSchema().dump(self)
+
+
+class ProductVariantSelectionInclusion(ProductVariantSelection):
+    """Only Product Variants with explicitly stated SKUs are part of the Product Selection."""
+
+    #: Non-empty array of SKUs representing Product Variants to be included into the Product Selection.
+    skus: typing.List["str"]
+
+    def __init__(self, *, skus: typing.List["str"]):
+        self.skus = skus
+
+        super().__init__(type=ProductVariantSelectionTypeEnum.INCLUSION)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantSelectionInclusion":
+        from ._schemas.product_selection import ProductVariantSelectionInclusionSchema
+
+        return ProductVariantSelectionInclusionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import ProductVariantSelectionInclusionSchema
+
+        return ProductVariantSelectionInclusionSchema().dump(self)
+
+
+class ProductVariantSelectionTypeEnum(enum.Enum):
+    INCLUSION = "inclusion"
+    EXCLUSION = "exclusion"
+
+
 class ProductsInStorePagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -568,7 +687,7 @@ class ProductsInStorePagedQueryResponse(_BaseType):
     #: To get `total`, pass the query parameter `withTotal` set to `true`.
     #: When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
     total: typing.Optional[int]
-    #: Product Selection Assignments.
+    #: ProductSelectionAssignments matching the query.
     results: typing.List["ProductSelectionAssignment"]
 
     def __init__(
@@ -603,11 +722,26 @@ class ProductsInStorePagedQueryResponse(_BaseType):
 
 
 class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
+    """Adds a Product to the Product Selection.
+    If the given Product is already assigned to the Product Selection with the same Variant Selection nothing happens
+    but if the existing Assignment has a different Variant Selection [ProductPresentWithDifferentVariantSelection](/errors#product-selections) is raised.'
+
+    """
+
     #: ResourceIdentifier to Product
     product: "ProductResourceIdentifier"
+    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    #: If not supplied all Variants are deemed to be included.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
-    def __init__(self, *, product: "ProductResourceIdentifier"):
+    def __init__(
+        self,
+        *,
+        product: "ProductResourceIdentifier",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
         self.product = product
+        self.variant_selection = variant_selection
 
         super().__init__(action="addProduct")
 
@@ -626,7 +760,7 @@ class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
 
 
 class ProductSelectionChangeNameAction(ProductSelectionUpdateAction):
-    #: The new name to be set for the Product Selection.
+    #: The new name to be set for the ProductSelection.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -764,3 +898,44 @@ class ProductSelectionSetKeyAction(ProductSelectionUpdateAction):
         from ._schemas.product_selection import ProductSelectionSetKeyActionSchema
 
         return ProductSelectionSetKeyActionSchema().dump(self)
+
+
+class ProductSelectionSetVariantSelectionAction(ProductSelectionUpdateAction):
+    """Updates the Product Variant Selection of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
+    If the given Product is not assigned to the Product Selection [ProductAssignmentMissing](/errors#product-selections) error is raised.
+
+    """
+
+    #: ResourceIdentifier to Product
+    product: "ProductResourceIdentifier"
+    #: Determines which Variants of the previously added Product are to be included in, or excluded from, the Product Selection.
+    #: Leave it empty to unset an existing Variant Selection.
+    variant_selection: typing.Optional["ProductVariantSelection"]
+
+    def __init__(
+        self,
+        *,
+        product: "ProductResourceIdentifier",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
+        self.product = product
+        self.variant_selection = variant_selection
+
+        super().__init__(action="setVariantSelection")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionSetVariantSelectionAction":
+        from ._schemas.product_selection import (
+            ProductSelectionSetVariantSelectionActionSchema,
+        )
+
+        return ProductSelectionSetVariantSelectionActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import (
+            ProductSelectionSetVariantSelectionActionSchema,
+        )
+
+        return ProductSelectionSetVariantSelectionActionSchema().dump(self)

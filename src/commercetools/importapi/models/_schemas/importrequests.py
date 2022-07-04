@@ -232,3 +232,21 @@ class CustomerImportRequestSchema(ImportRequestSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.CustomerImportRequest(**data)
+
+
+class InventoryImportRequestSchema(ImportRequestSchema):
+    resources = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".inventories.InventoryImportSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.InventoryImportRequest(**data)

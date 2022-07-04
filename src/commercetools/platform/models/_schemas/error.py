@@ -428,12 +428,22 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -511,12 +521,22 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -573,6 +593,71 @@ class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.DuplicatePriceScopeError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class DuplicateStandalonePriceScopeErrorSchema(ErrorObjectSchema):
+    conflicting_standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".standalone_price.StandalonePriceReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="conflictingStandalonePrice",
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    currency = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerGroup",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicateStandalonePriceScopeError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -789,6 +874,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "DuplicatePriceScope": helpers.absmod(
                     __name__, ".DuplicatePriceScopeErrorSchema"
                 ),
+                "DuplicateStandalonePriceScope": helpers.absmod(
+                    __name__, ".DuplicateStandalonePriceScopeErrorSchema"
+                ),
                 "DuplicateVariantValues": helpers.absmod(
                     __name__, ".DuplicateVariantValuesErrorSchema"
                 ),
@@ -874,6 +962,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 ),
                 "OutOfStock": helpers.absmod(__name__, ".OutOfStockErrorSchema"),
                 "OverCapacity": helpers.absmod(__name__, ".OverCapacityErrorSchema"),
+                "OverlappingStandalonePriceValidity": helpers.absmod(
+                    __name__, ".OverlappingStandalonePriceValidityErrorSchema"
+                ),
                 "PendingOperation": helpers.absmod(
                     __name__, ".PendingOperationErrorSchema"
                 ),
@@ -1632,6 +1723,83 @@ class OverCapacityErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.OverCapacityError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
+    conflicting_standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".standalone_price.StandalonePriceReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="conflictingStandalonePrice",
+    )
+    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    currency = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerGroup",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="validUntil",
+    )
+    conflicting_valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="conflictingValidFrom",
+    )
+    conflicting_valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="conflictingValidUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.OverlappingStandalonePriceValidityError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):

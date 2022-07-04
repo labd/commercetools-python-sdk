@@ -63,7 +63,7 @@ class Zone(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the Zone.
+    #: User-defined unique identifier of the Zone.
     key: typing.Optional[str]
     #: Name of the Zone.
     name: str
@@ -152,10 +152,9 @@ class ZoneDraft(_BaseType):
 class ZonePagedQueryResponse(_BaseType):
     """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [Zone](ctp:api:type:Zone)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -200,7 +199,7 @@ class ZonePagedQueryResponse(_BaseType):
 
 
 class ZoneReference(Reference):
-    """[Reference](/types#reference) to a [Zone](ctp:api:type:Zone)."""
+    """[Reference](ctp:api:type:Reference) to a [Zone](ctp:api:type:Zone)."""
 
     #: Contains the representation of the expanded Zone. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Zones.
     obj: typing.Optional["Zone"]
@@ -223,7 +222,7 @@ class ZoneReference(Reference):
 
 
 class ZoneResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Zone](ctp:api:type:Zone)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None

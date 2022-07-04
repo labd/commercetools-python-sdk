@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.customer import CustomerSignin, CustomerSignInResult
+from ...models.customer import CustomerSignInResult, MyCustomerSignin
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -29,7 +29,7 @@ class ByProjectKeyMeLoginRequestBuilder:
 
     def post(
         self,
-        body: "CustomerSignin",
+        body: "MyCustomerSignin",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

@@ -114,12 +114,22 @@ class ProductDiscountSchema(BaseResourceSchema):
                     __name__, ".product_type.ProductTypeReferenceSchema"
                 ),
                 "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+                "quote-request": helpers.absmod(
+                    __name__, ".quote_request.QuoteRequestReferenceSchema"
+                ),
+                "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
                 "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
                 "shipping-method": helpers.absmod(
                     __name__, ".shipping_method.ShippingMethodReferenceSchema"
                 ),
                 "shopping-list": helpers.absmod(
                     __name__, ".shopping_list.ShoppingListReferenceSchema"
+                ),
+                "staged-quote": helpers.absmod(
+                    __name__, ".staged_quote.StagedQuoteReferenceSchema"
+                ),
+                "standalone-price": helpers.absmod(
+                    __name__, ".standalone_price.StandalonePriceReferenceSchema"
                 ),
                 "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
                 "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -239,11 +249,11 @@ class ProductDiscountMatchQuerySchema(helpers.BaseSchema):
 
 class ProductDiscountPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductDiscountSchema"),
         allow_none=True,
@@ -366,20 +376,11 @@ class ProductDiscountValueSchema(helpers.BaseSchema):
 
 
 class ProductDiscountValueAbsoluteSchema(ProductDiscountValueSchema):
-    money = marshmallow.fields.List(
-        helpers.Discriminator(
-            allow_none=True,
-            discriminator_field=("type", "type"),
-            discriminator_schemas={
-                "centPrecision": helpers.absmod(
-                    __name__, ".common.CentPrecisionMoneySchema"
-                ),
-                "highPrecision": helpers.absmod(
-                    __name__, ".common.HighPrecisionMoneySchema"
-                ),
-            },
-        ),
+    money = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.CentPrecisionMoneySchema"),
         allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
         missing=None,
     )
 
@@ -406,7 +407,7 @@ class ProductDiscountValueDraftSchema(helpers.BaseSchema):
 
 class ProductDiscountValueAbsoluteDraftSchema(ProductDiscountValueDraftSchema):
     money = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        nested=helpers.absmod(__name__, ".common.CentPrecisionMoneyDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,

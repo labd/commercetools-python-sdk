@@ -69,11 +69,7 @@ class ByProjectKeyCustomObjectsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObjectPagedQueryResponse"]:
-        """The query endpoint allows to retrieve custom objects in a specific container or all custom objects.
-        For performance reasons, it is highly advisable to query only for custom objects in a container by using
-        the container field in the where predicate.
-
-        """
+        """For performance reasons, it is highly advisable to query for Custom Objects in a container by using the `container` field in the `where` predicate."""
         params = {
             "expand": expand,
             "sort": sort,
@@ -109,13 +105,10 @@ class ByProjectKeyCustomObjectsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomObject"]:
-        """Creates a new custom object or updates an existing custom object.
-        If an object with the given container/key exists,
-        the object will be replaced with the new value and the version is incremented.
-        If the request contains a version and an object with the given container/key exists then the version
-        must match the version of the existing object. Concurrent updates for the same custom object still can result
-        in a Conflict (409) even if the version is not provided.
-        Fields with null values will not be saved.
+        """If an object with the given container/key exists, the object will be replaced with the new value and the version is incremented.
+        If the request contains a version and an object with the given container/key, then the version must match the version of the existing object. Concurrent updates for the same Custom Object can result in a [409 Conflict](/../api/errors#409-conflict) even if the version is not provided.
+
+        Fields with `null` values will **not be saved**.
 
         """
         headers = {} if headers is None else headers

@@ -59,7 +59,7 @@ class Channel(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the Channel.
+    #: User-defined unique identifier of the Channel.
     key: str
     #: Roles of the Channel.
     roles: typing.List["ChannelRoleEnum"]
@@ -140,7 +140,7 @@ class ChannelDraft(_BaseType):
     #: Custom fields defined for the Channel.
     custom: typing.Optional["CustomFieldsDraft"]
     #: GeoJSON geometry object encoding the geo location of the Channel.
-    #: Currently, only the [Point](/../api/types#point) type is supported.
+    #: Currently, only the [Point](ctp:api:type:GeoJsonPoint) type is supported.
     geo_location: typing.Optional["GeoJson"]
 
     def __init__(
@@ -179,10 +179,9 @@ class ChannelDraft(_BaseType):
 class ChannelPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Channel](ctp:api:type:Channel)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -227,7 +226,7 @@ class ChannelPagedQueryResponse(_BaseType):
 
 
 class ChannelReference(Reference):
-    """[Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel)."""
+    """[Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel)."""
 
     #: Contains the representation of the expanded Channel.
     #: Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
@@ -251,7 +250,7 @@ class ChannelReference(Reference):
 
 
 class ChannelResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None

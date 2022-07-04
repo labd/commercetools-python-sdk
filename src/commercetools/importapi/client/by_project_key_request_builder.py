@@ -19,11 +19,8 @@ from .import_containers.by_project_key_import_containers_request_builder import 
 from .import_operations.by_project_key_import_operations_request_builder import (
     ByProjectKeyImportOperationsRequestBuilder,
 )
-from .import_sinks.by_project_key_import_sinks_request_builder import (
-    ByProjectKeyImportSinksRequestBuilder,
-)
-from .import_summaries.by_project_key_import_summaries_request_builder import (
-    ByProjectKeyImportSummariesRequestBuilder,
+from .inventories.by_project_key_inventories_request_builder import (
+    ByProjectKeyInventoriesRequestBuilder,
 )
 from .order_patches.by_project_key_order_patches_request_builder import (
     ByProjectKeyOrderPatchesRequestBuilder,
@@ -66,18 +63,6 @@ class ByProjectKeyRequestBuilder:
     ):
         self._project_key = project_key
         self._client = client
-
-    def import_sinks(self) -> ByProjectKeyImportSinksRequestBuilder:
-        return ByProjectKeyImportSinksRequestBuilder(
-            project_key=self._project_key,
-            client=self._client,
-        )
-
-    def import_summaries(self) -> ByProjectKeyImportSummariesRequestBuilder:
-        return ByProjectKeyImportSummariesRequestBuilder(
-            project_key=self._project_key,
-            client=self._client,
-        )
 
     def import_containers(self) -> ByProjectKeyImportContainersRequestBuilder:
         return ByProjectKeyImportContainersRequestBuilder(
@@ -149,6 +134,12 @@ class ByProjectKeyRequestBuilder:
 
     def customers(self) -> ByProjectKeyCustomersRequestBuilder:
         return ByProjectKeyCustomersRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def inventories(self) -> ByProjectKeyInventoriesRequestBuilder:
+        return ByProjectKeyInventoriesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

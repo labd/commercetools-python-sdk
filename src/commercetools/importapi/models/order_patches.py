@@ -411,13 +411,13 @@ class OrderField(_BaseType):
 
 class OrderPatchImport(_BaseType):
     """Representation for an update of an [Order](/../api/projects/orders#order). Use this type to import updates for existing
-    [Orders](/../api/projects/orders#order) in a commercetools Project.
+    [Orders](/../api/projects/orders#order) in a Project.
 
     """
 
     #: Maps to `Order.orderNumber`, String that uniquely identifies an order, unique across a project.
     order_number: str
-    #: Each field referenced must be defined in an already existing order in the commercetools project or the import operation state is set to `validationFailed`.
+    #: Each field referenced must be defined in an already existing order in the project or the import operation state is set to `validationFailed`.
     fields: "OrderField"
 
     def __init__(self, *, order_number: str, fields: "OrderField"):

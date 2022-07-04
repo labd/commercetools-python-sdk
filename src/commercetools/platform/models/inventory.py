@@ -33,6 +33,7 @@ __all__ = [
     "InventoryEntrySetCustomFieldAction",
     "InventoryEntrySetCustomTypeAction",
     "InventoryEntrySetExpectedDeliveryAction",
+    "InventoryEntrySetKeyAction",
     "InventoryEntrySetRestockableInDaysAction",
     "InventoryEntrySetSupplyChannelAction",
     "InventoryEntryUpdate",
@@ -46,19 +47,21 @@ class InventoryEntry(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: User-defined unique identifier of the InventoryEntry.
+    key: typing.Optional[str]
+    #: [ProductVariant](ctp:api:type:ProductVariant) `sku` of the InventoryEntry.
     sku: str
-    #: Connection to a particular supplier.
+    #: [Channel](ctp:api:type:Channel) that supplies this InventoryEntry.
     supply_channel: typing.Optional["ChannelReference"]
-    #: Overall amount of stock.
-    #: (available + reserved)
+    #: Overall amount of stock (`availableQuantity` + reserved).
     quantity_on_stock: int
-    #: Available amount of stock.
-    #: (available means: `quantityOnStock` - reserved quantity)
+    #: Available amount of stock (`quantityOnStock` - reserved).
     available_quantity: int
-    #: The time period in days, that tells how often this inventory entry is restocked.
+    #: How often the InventoryEntry is restocked (in days).
     restockable_in_days: typing.Optional[int]
-    #: The date and time of the next restock.
+    #: Date and time of the next restock.
     expected_delivery: typing.Optional[datetime.datetime]
+    #: Custom Fields of the InventoryEntry.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -70,6 +73,7 @@ class InventoryEntry(BaseResource):
         last_modified_at: datetime.datetime,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
+        key: typing.Optional[str] = None,
         sku: str,
         supply_channel: typing.Optional["ChannelReference"] = None,
         quantity_on_stock: int,
@@ -80,6 +84,7 @@ class InventoryEntry(BaseResource):
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
+        self.key = key
         self.sku = sku
         self.supply_channel = supply_channel
         self.quantity_on_stock = quantity_on_stock
@@ -108,18 +113,26 @@ class InventoryEntry(BaseResource):
 
 
 class InventoryEntryDraft(_BaseType):
+    #: [ProductVariant](ctp:api:type:ProductVariant) `sku` of the InventoryEntry.
     sku: str
+    #: User-defined unique identifier for the InventoryEntry.
+    key: typing.Optional[str]
+    #: [Channel](ctp:api:type:Channel) that supplies this InventoryEntry.
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Overall amount of stock.
     quantity_on_stock: int
+    #: How often the InventoryEntry is restocked (in days).
     restockable_in_days: typing.Optional[int]
+    #: Date and time of the next restock.
     expected_delivery: typing.Optional[datetime.datetime]
-    #: The custom fields.
+    #: Custom Fields of the InventoryEntry.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
         sku: str,
+        key: typing.Optional[str] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         quantity_on_stock: int,
         restockable_in_days: typing.Optional[int] = None,
@@ -127,6 +140,7 @@ class InventoryEntryDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.sku = sku
+        self.key = key
         self.supply_channel = supply_channel
         self.quantity_on_stock = quantity_on_stock
         self.restockable_in_days = restockable_in_days
@@ -148,6 +162,9 @@ class InventoryEntryDraft(_BaseType):
 
 
 class InventoryEntryReference(Reference):
+    """[Reference](ctp:api:type:Reference) to an [InventoryEntry](ctp:api:type:InventoryEntry)."""
+
+    #: Contains the representation of the expanded InventoryEntry. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for InventoryEntries.
     obj: typing.Optional["InventoryEntry"]
 
     def __init__(self, *, id: str, obj: typing.Optional["InventoryEntry"] = None):
@@ -170,6 +187,8 @@ class InventoryEntryReference(Reference):
 
 
 class InventoryEntryResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [InventoryEntry](ctp:api:type:InventoryEntry)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -191,7 +210,9 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
 
 
 class InventoryEntryUpdate(_BaseType):
+    #: Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the InventoryEntry.
     actions: typing.List["InventoryEntryUpdateAction"]
 
     def __init__(
@@ -252,6 +273,10 @@ class InventoryEntryUpdateAction(_BaseType):
             )
 
             return InventoryEntrySetExpectedDeliveryActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.inventory import InventoryEntrySetKeyActionSchema
+
+            return InventoryEntrySetKeyActionSchema().load(data)
         if data["action"] == "setRestockableInDays":
             from ._schemas.inventory import (
                 InventoryEntrySetRestockableInDaysActionSchema,
@@ -270,25 +295,34 @@ class InventoryEntryUpdateAction(_BaseType):
 
 
 class InventoryPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Inventory entries](ctp:api:type:InventoryEntry) matching the query.
     results: typing.List["InventoryEntry"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["InventoryEntry"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -308,6 +342,9 @@ class InventoryPagedQueryResponse(_BaseType):
 
 
 class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
+    """Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations."""
+
+    #: Value to add to `quantityOnStock`.
     quantity: int
 
     def __init__(self, *, quantity: int):
@@ -330,6 +367,9 @@ class InventoryEntryAddQuantityAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
+    """Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations."""
+
+    #: Value to set for `quantityOnStock`.
     quantity: int
 
     def __init__(self, *, quantity: int):
@@ -352,6 +392,9 @@ class InventoryEntryChangeQuantityAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntryRemoveQuantityAction(InventoryEntryUpdateAction):
+    """Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations."""
+
+    #: Value to remove from `quantityOnStock`.
     quantity: int
 
     def __init__(self, *, quantity: int):
@@ -434,6 +477,7 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     expected_delivery: typing.Optional[datetime.datetime]
 
     def __init__(self, *, expected_delivery: typing.Optional[datetime.datetime] = None):
@@ -455,7 +499,31 @@ class InventoryEntrySetExpectedDeliveryAction(InventoryEntryUpdateAction):
         return InventoryEntrySetExpectedDeliveryActionSchema().dump(self)
 
 
+class InventoryEntrySetKeyAction(InventoryEntryUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
+    key: typing.Optional[str]
+
+    def __init__(self, *, key: typing.Optional[str] = None):
+        self.key = key
+
+        super().__init__(action="setKey")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "InventoryEntrySetKeyAction":
+        from ._schemas.inventory import InventoryEntrySetKeyActionSchema
+
+        return InventoryEntrySetKeyActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.inventory import InventoryEntrySetKeyActionSchema
+
+        return InventoryEntrySetKeyActionSchema().dump(self)
+
+
 class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     restockable_in_days: typing.Optional[int]
 
     def __init__(self, *, restockable_in_days: typing.Optional[int] = None):
@@ -478,8 +546,9 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
-    #: If absent, the supply channel is removed.
-    #: This action will fail if an entry with the combination of sku and supplyChannel already exists.
+    """If an entry with the same `sku` and `supplyChannel` already exists, this action will fail and a [400 Bad Request](/../api/errors#400-bad-request-1) `DuplicateField` error will be returned."""
+
+    #: Value to set. If empty, any existing value will be removed.
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(

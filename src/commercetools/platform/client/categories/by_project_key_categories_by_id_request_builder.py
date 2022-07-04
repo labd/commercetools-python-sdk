@@ -37,6 +37,7 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Category"]:
+        """Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/categories/{self._id}",
@@ -61,6 +62,7 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Category"]:
+        """Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/categories/{self._id}",
@@ -86,6 +88,7 @@ class ByProjectKeyCategoriesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Category"]:
+        """Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/categories/{self._id}",

@@ -106,8 +106,7 @@ class Payment(BaseResource):
     #: Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
     interface_interactions: typing.List["CustomFields"]
     custom: typing.Optional["CustomFields"]
-    #: User-specific unique identifier for the payment (max.
-    #: 256 characters).
+    #: User-defined unique identifier of the Payment.
     key: typing.Optional[str]
 
     def __init__(
@@ -186,13 +185,16 @@ class PaymentDraft(_BaseType):
     #: The value usually matches the cart or order gross total.
     amount_planned: "Money"
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_authorized: typing.Optional["Money"]
     authorized_until: typing.Optional[str]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_paid: typing.Optional["Money"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount_refunded: typing.Optional["Money"]
     payment_method_info: typing.Optional["PaymentMethodInfo"]
@@ -205,8 +207,7 @@ class PaymentDraft(_BaseType):
     #: Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
     interface_interactions: typing.Optional[typing.List["CustomFieldsDraft"]]
     custom: typing.Optional["CustomFieldsDraft"]
-    #: User-specific unique identifier for the payment (max.
-    #: 256 characters).
+    #: User-defined unique identifier for the Payment.
     key: typing.Optional[str]
 
     def __init__(
@@ -299,9 +300,11 @@ class PaymentMethodInfo(_BaseType):
 
 
 class PaymentPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Payment"]
 
@@ -337,6 +340,9 @@ class PaymentPagedQueryResponse(_BaseType):
 
 
 class PaymentReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment)."""
+
+    #: Contains the representation of the expanded Payment. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Payments.
     obj: typing.Optional["Payment"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Payment"] = None):
@@ -357,6 +363,8 @@ class PaymentReference(Reference):
 
 
 class PaymentResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -412,7 +420,7 @@ class PaymentStatus(_BaseType):
 class PaymentStatusDraft(_BaseType):
     interface_code: typing.Optional[str]
     interface_text: typing.Optional[str]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
@@ -578,7 +586,7 @@ class PaymentUpdateAction(_BaseType):
 
 
 class Transaction(_BaseType):
-    #: The unique ID of this object.
+    #: Unique identifier of the Transaction.
     id: str
     #: The time at which the transaction took place.
     timestamp: typing.Optional[datetime.datetime]
@@ -834,6 +842,7 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
 
 class PaymentSetAmountPaidAction(PaymentUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
 
@@ -858,6 +867,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
 class PaymentSetAmountRefundedAction(PaymentUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
 
@@ -906,6 +916,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
 class PaymentSetAuthorizationAction(PaymentUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     amount: typing.Optional["Money"]
     until: typing.Optional[datetime.datetime]

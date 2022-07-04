@@ -10,6 +10,9 @@ import warnings
 from ...models.cart import Cart, CartPagedQueryResponse
 from ...models.error import ErrorResponse
 from ...models.me import MyCartDraft
+from ..replicate.by_project_key_me_carts_replicate_request_builder import (
+    ByProjectKeyMeCartsReplicateRequestBuilder,
+)
 from .by_project_key_me_carts_by_id_request_builder import (
     ByProjectKeyMeCartsByIDRequestBuilder,
 )
@@ -44,6 +47,12 @@ class ByProjectKeyMeCartsRequestBuilder:
     def with_id(self, id: str) -> ByProjectKeyMeCartsByIDRequestBuilder:
         return ByProjectKeyMeCartsByIDRequestBuilder(
             id=id,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def replicate(self) -> ByProjectKeyMeCartsReplicateRequestBuilder:
+        return ByProjectKeyMeCartsReplicateRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

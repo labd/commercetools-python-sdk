@@ -177,7 +177,7 @@ class AssetSource(_BaseType):
 
 
 class Image(_BaseType):
-    """An Image uploaded to the commercetools platform is stored in a Content Delivery Network and it's available in several pre-defined sizes. If you already have an image stored on an external service, you can save the URL when creating a new product or adding a variant, or you can add it later."""
+    """An Image uploaded to commercetools Composable Commerce is stored in a Content Delivery Network and it's available in several pre-defined sizes. If you already have an image stored on an external service, you can save the URL when creating a new product or adding a variant, or you can add it later."""
 
     #: URL of the image in its original size. The URL must be unique within a single variant. It can be used to obtain the image in different sizes.
     url: str
@@ -268,8 +268,8 @@ class LocalizedString(typing.Dict[str, str]):
 
 class ImportResource(_BaseType):
     """A representation of the resource to import.
-    Import resources are similar to commercetools draft types, but they only support key references.
-    In general, import resources are more granular then the normal commercetools resource.
+    Import resources are similar to draft types, but they only support key references.
+    In general, import resources are more granular then regular resources.
     They are optimized for incremental updates and therefore have a slightly different structure.
 
     """
@@ -985,6 +985,7 @@ class ImportResourceType(enum.Enum):
     PRODUCT_VARIANT = "product-variant"
     PRODUCT_VARIANT_PATCH = "product-variant-patch"
     CUSTOMER = "customer"
+    INVENTORY = "inventory"
 
 
 class ReferenceType(enum.Enum):

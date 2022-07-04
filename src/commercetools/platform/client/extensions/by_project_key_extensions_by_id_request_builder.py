@@ -37,7 +37,6 @@ class ByProjectKeyExtensionsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Extension"]:
-        """Retrieves the representation of an extension by its id."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/extensions/{self._id}",

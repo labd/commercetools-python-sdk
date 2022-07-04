@@ -266,7 +266,7 @@ class LocalizedStringField(CustomField):
 
 
 class EnumField(CustomField):
-    """A field with a enum value."""
+    """A field with an enum value."""
 
     value: str
 
@@ -511,7 +511,7 @@ class LocalizedStringSetField(CustomField):
 
 
 class EnumSetField(CustomField):
-    """A field with a enum set value."""
+    """A field with an enum set value."""
 
     value: typing.List["str"]
 

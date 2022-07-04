@@ -13,6 +13,7 @@ from ._abstract import _BaseType
 from .shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:
+    from .common import LastModifiedBy
     from .message import MessagesConfiguration, MessagesConfigurationDraft
     from .shipping_method import ShippingRateTierType
     from .type import CustomFieldLocalizedEnumValue
@@ -334,17 +335,17 @@ class SearchIndexingConfigurationStatus(enum.Enum):
 class SearchIndexingConfigurationValues(_BaseType):
     #: Current status of resource indexing. Present on Projects from 1 February 2019.
     status: typing.Optional["SearchIndexingConfigurationStatus"]
-    #: Date and time (UTC) the Project was last updated.
-    last_modified_at: datetime.datetime
+    #: Date and time (UTC) the Project was last updated. Only present on Projects last modified after 1 February 2019.
+    last_modified_at: typing.Optional[datetime.datetime]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
-    last_modified_by: typing.Optional[str]
+    last_modified_by: typing.Optional["LastModifiedBy"]
 
     def __init__(
         self,
         *,
         status: typing.Optional["SearchIndexingConfigurationStatus"] = None,
-        last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional[str] = None
+        last_modified_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None
     ):
         self.status = status
         self.last_modified_at = last_modified_at
@@ -367,7 +368,6 @@ class SearchIndexingConfigurationValues(_BaseType):
 
 
 class ShippingRateInputType(_BaseType):
-    #: Can be one of the following or absent.
     type: "ShippingRateTierType"
 
     def __init__(self, *, type: "ShippingRateTierType"):
@@ -397,6 +397,12 @@ class ShippingRateInputType(_BaseType):
 
 
 class CartClassificationType(ShippingRateInputType):
+    """Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
+    Only keys defined in the `values` array can be used to create a tier or to set a value of the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+    Keys must be unique.
+
+    """
+
     #: The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
@@ -420,6 +426,8 @@ class CartClassificationType(ShippingRateInputType):
 
 
 class CartScoreType(ShippingRateInputType):
+    """Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges)."""
+
     def __init__(self):
 
         super().__init__(type=ShippingRateTierType.CART_SCORE)
@@ -437,6 +445,12 @@ class CartScoreType(ShippingRateInputType):
 
 
 class CartValueType(ShippingRateInputType):
+    """Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
+    The value of the Cart is used to select a tier.
+    If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+
+    """
+
     def __init__(self):
 
         super().__init__(type=ShippingRateTierType.CART_VALUE)

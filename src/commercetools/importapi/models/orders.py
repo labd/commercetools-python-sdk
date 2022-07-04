@@ -257,7 +257,7 @@ class LineItemImportDraft(_BaseType):
     """Represents an individual Line Item in an Order. A line item is a snapshot of a product at the time it was added to the order.
 
     You cannot create an Order that includes line item operations that do not exist in the Project or have been deleted.
-    Products and Product Variants referenced by a line item must already exist in the commercetools Project.
+    Products and Product Variants referenced by a line item must already exist in the Project.
 
     """
 
@@ -863,17 +863,21 @@ class TaxedPrice(_BaseType):
     total_gross: "Money"
     #: Maps to `TaxedPrice.taxPortions`.
     tax_portions: typing.List["TaxPortion"]
+    #: Maps to `TaxedPrice.totalTax`.
+    total_tax: typing.Optional["Money"]
 
     def __init__(
         self,
         *,
         total_net: "Money",
         total_gross: "Money",
-        tax_portions: typing.List["TaxPortion"]
+        tax_portions: typing.List["TaxPortion"],
+        total_tax: typing.Optional["Money"] = None
     ):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
+        self.total_tax = total_tax
 
         super().__init__()
 

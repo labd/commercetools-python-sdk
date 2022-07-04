@@ -7,17 +7,32 @@
 import typing
 import warnings
 
+from ...models.customer import Customer
+from ...models.error import ErrorResponse
+from ...models.me import MyCustomerUpdate
 from ..active_cart.by_project_key_in_store_key_by_store_key_me_active_cart_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder,
 )
 from ..carts.by_project_key_in_store_key_by_store_key_me_carts_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder,
 )
+from ..confirm.by_project_key_in_store_key_by_store_key_me_email_confirm_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder,
+)
+from ..login.by_project_key_in_store_key_by_store_key_me_login_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeLoginRequestBuilder,
+)
 from ..orders.by_project_key_in_store_key_by_store_key_me_orders_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestBuilder,
 )
+from ..password.by_project_key_in_store_key_by_store_key_me_password_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder,
+)
 from ..shopping_lists.by_project_key_in_store_key_by_store_key_me_shopping_lists_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestBuilder,
+)
+from ..signup.by_project_key_in_store_key_by_store_key_me_signup_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder,
 )
 
 if typing.TYPE_CHECKING:
@@ -72,3 +87,110 @@ class ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
             store_key=self._store_key,
             client=self._client,
         )
+
+    def email_confirm(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def password(self) -> ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def signup(self) -> ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def login(self) -> ByProjectKeyInStoreKeyByStoreKeyMeLoginRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyMeLoginRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def get(
+        self,
+        *,
+        sort: typing.List["str"] = None,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        expand: typing.List["str"] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "Customer":
+        params = {
+            "sort": sort,
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "expand": expand,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
+        headers = {} if headers is None else headers
+        response = self._client._get(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me",
+            params=params,
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return Customer.deserialize(response.json())
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def post(
+        self,
+        body: "MyCustomerUpdate",
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "Customer":
+        """Update my customer in a store"""
+        headers = {} if headers is None else headers
+        response = self._client._post(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me",
+            params={},
+            json=body.serialize(),
+            headers={"Content-Type": "application/json", **headers},
+            options=options,
+        )
+        if response.status_code == 200:
+            return Customer.deserialize(response.json())
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def delete(
+        self,
+        *,
+        version: int,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> "Customer":
+        """Delete my Customer in a store"""
+        headers = {} if headers is None else headers
+        response = self._client._delete(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me",
+            params={"version": version},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return Customer.deserialize(response.json())
+        elif response.status_code == 409:
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        warnings.warn("Unhandled status code %d" % response.status_code)

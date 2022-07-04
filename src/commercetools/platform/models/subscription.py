@@ -117,6 +117,7 @@ class CloudEventsFormat(DeliveryFormat):
 class DeliveryPayload(_BaseType):
     project_key: str
     notification_type: str
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     resource: "Reference"
     resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
@@ -256,9 +257,9 @@ class AzureServiceBusDestination(Destination):
 class EventBridgeDestination(Destination):
     """[AWS EventBridge](https://aws.amazon.com/eventbridge/) can be used to push events and messages to a serverless event bus that can forward them to AWS SQS, SNS, Lambda, and other AWS services based on forwarding rules."""
 
-    #: AWS region to which commercetools sends the events.
+    #: AWS region of the Subscriptions that receives the events.
     region: str
-    #: ID of the AWS account that receives events from the commercetools platform.
+    #: ID of the AWS account that receives events.
     account_id: str
 
     def __init__(self, *, region: str, account_id: str):
@@ -627,6 +628,7 @@ class Subscription(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     changes: typing.List["ChangeSubscription"]
     destination: "Destination"
+    #: User-defined unique identifier of the Subscription.
     key: typing.Optional[str]
     messages: typing.List["MessageSubscription"]
     format: "DeliveryFormat"
@@ -679,6 +681,7 @@ class Subscription(BaseResource):
 class SubscriptionDraft(_BaseType):
     changes: typing.Optional[typing.List["ChangeSubscription"]]
     destination: "Destination"
+    #: User-defined unique identifier for the Subscription.
     key: typing.Optional[str]
     messages: typing.Optional[typing.List["MessageSubscription"]]
     format: typing.Optional["DeliveryFormat"]
@@ -720,9 +723,11 @@ class SubscriptionHealthStatus(enum.Enum):
 
 
 class SubscriptionPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Subscription"]
 

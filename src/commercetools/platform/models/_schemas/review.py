@@ -100,12 +100,22 @@ class ReviewSchema(BaseResourceSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -225,12 +235,22 @@ class ReviewDraftSchema(helpers.BaseSchema):
             "product": helpers.absmod(
                 __name__, ".product.ProductResourceIdentifierSchema"
             ),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestResourceIdentifierSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteResourceIdentifierSchema"),
             "review": helpers.absmod(__name__, ".ReviewResourceIdentifierSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodResourceIdentifierSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListResourceIdentifierSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteResourceIdentifierSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceResourceIdentifierSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
             "store": helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
@@ -570,12 +590,22 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
             "product": helpers.absmod(
                 __name__, ".product.ProductResourceIdentifierSchema"
             ),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestResourceIdentifierSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteResourceIdentifierSchema"),
             "review": helpers.absmod(__name__, ".ReviewResourceIdentifierSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodResourceIdentifierSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListResourceIdentifierSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteResourceIdentifierSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceResourceIdentifierSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
             "store": helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),

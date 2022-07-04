@@ -15,13 +15,13 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import (
+        CentPrecisionMoney,
         CreatedBy,
         LastModifiedBy,
         LocalizedString,
         Money,
         Reference,
         ReferenceTypeId,
-        TypedMoney,
     )
     from .product import ProductReference, ProductResourceIdentifier
     from .type import (
@@ -76,37 +76,41 @@ __all__ = [
 
 
 class CartDiscount(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Name of the CartDiscount.
     name: "LocalizedString"
-    #: User-specific unique identifier for a cart discount.
-    #: Must be unique across a project.
+    #: User-defined unique identifier of the CartDiscount.
     key: typing.Optional[str]
+    #: Description of the CartDiscount.
     description: typing.Optional["LocalizedString"]
+    #: Effect of the CartDiscount.
     value: "CartDiscountValue"
-    #: A valid Cart predicate.
+    #: Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
     cart_predicate: str
-    #: Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+    #: Sets a [CartDiscountTarget](ctp:api:type:CartDiscountTarget). Empty if `value` has type `giftLineItem`.
     target: typing.Optional["CartDiscountTarget"]
-    #: The string must contain a number between 0 and 1.
-    #: All matching cart discounts are applied to a cart in the order defined by this field.
-    #: A discount with greater sort order is prioritized higher than a discount with lower sort order.
-    #: The sort order is unambiguous among all cart discounts.
+    #: Value between `0` and `1`.
+    #: All matching CartDiscounts are applied to a Cart in the order defined by this field.
+    #: A Discount with a higher sortOrder is prioritized.
+    #: The sort order is unambiguous among all CartDiscounts.
     sort_order: str
-    #: Only active discount can be applied to the cart.
+    #: Indicates if the CartDiscount is active and can be applied to the Cart.
     is_active: bool
+    #: Date and time (UTC) from which the Discount is effective.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Discount is effective.
     valid_until: typing.Optional[datetime.datetime]
-    #: States whether the discount can only be used in a connection with a DiscountCode.
+    #: Indicates if the Discount can be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
     requires_discount_code: bool
-    #: The platform will generate this array from the predicate.
-    #: It contains the references of all the resources that are addressed in the predicate.
+    #: References of all resources that are addressed in the predicate.
+    #: The API generates this array from the predicate.
     references: typing.List["Reference"]
-    #: Specifies whether the application of this discount causes the following discounts to be ignored.
-    #: Defaults to Stacking.
+    #: Indicates whether the application of the CartDiscount causes other discounts to be ignored.
     stacking_mode: "StackingMode"
+    #: Custom Fields of the CartDiscount.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -170,32 +174,34 @@ class CartDiscount(BaseResource):
 
 
 class CartDiscountDraft(_BaseType):
+    #: Name of the CartDiscount.
     name: "LocalizedString"
-    #: User-specific unique identifier for a cart discount.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction.
+    #: User-defined unique identifier for the CartDiscount.
     key: typing.Optional[str]
+    #: Description of the CartDiscount.
     description: typing.Optional["LocalizedString"]
+    #: Effect of the CartDiscount.
+    #: For a target, relative or absolute discount values, or a fixed item price value can be specified. If no target is specified, a gift line item can be added to the cart.
     value: "CartDiscountValueDraft"
-    #: A valid Cart predicate.
+    #: Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
     cart_predicate: str
-    #: Must not be set when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget must be set.
+    #: Must not be set when the `value` has type `giftLineItem`, otherwise a [CartDiscountTarget](ctp:api:type:CartDiscountTarget) must be set.
     target: typing.Optional["CartDiscountTarget"]
-    #: The string must contain a number between 0 and 1.
-    #: A discount with greater sort order is prioritized higher than a discount with lower sort order.
-    #: The sort order must be unambiguous among all cart discounts.
+    #: Value between `0` and `1`.
+    #: A Discount with a higher sortOrder is prioritized.
+    #: The sort order must be unambiguous among all CartDiscounts.
     sort_order: str
-    #: Only active discount can be applied to the cart.
-    #: Defaults to `true`.
+    #: Only active Discounts can be applied to the Cart.
     is_active: typing.Optional[bool]
+    #: Date and time (UTC) from which the Discount is effective.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Discount is effective.
     valid_until: typing.Optional[datetime.datetime]
-    #: States whether the discount can only be used in a connection with a DiscountCode.
-    #: Defaults to `false`.
+    #: States whether the Discount can only be used in a connection with a [DiscountCode](ctp:api:type:DiscountCode).
     requires_discount_code: typing.Optional[bool]
     #: Specifies whether the application of this discount causes the following discounts to be ignored.
-    #: Defaults to Stacking.
     stacking_mode: typing.Optional["StackingMode"]
+    #: Custom Fields of the CartDiscount.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -244,25 +250,36 @@ class CartDiscountDraft(_BaseType):
 
 
 class CartDiscountPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [CartDiscount](ctp:api:type:CartDiscount)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [CartDiscounts](ctp:api:type:CartDiscount) matching the query.
     results: typing.List["CartDiscount"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["CartDiscount"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -282,6 +299,9 @@ class CartDiscountPagedQueryResponse(_BaseType):
 
 
 class CartDiscountReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [CartDiscount](ctp:api:type:CartDiscount)."""
+
+    #: Contains the representation of the expanded CartDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CartDiscounts.
     obj: typing.Optional["CartDiscount"]
 
     def __init__(self, *, id: str, obj: typing.Optional["CartDiscount"] = None):
@@ -302,6 +322,8 @@ class CartDiscountReference(Reference):
 
 
 class CartDiscountResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -360,6 +382,9 @@ class CartDiscountTarget(_BaseType):
 
 
 class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
+    """Discount is applied to [CustomLineItems](ctp:api:type:CustomLineItem) matching the `predicate`."""
+
+    #: Valid [CustomLineItem target predicate](/../api/projects/predicates#customlineitem-field-identifiers).
     predicate: str
 
     def __init__(self, *, predicate: str):
@@ -382,6 +407,9 @@ class CartDiscountCustomLineItemsTarget(CartDiscountTarget):
 
 
 class CartDiscountLineItemsTarget(CartDiscountTarget):
+    """Discount is applied to [LineItems](ctp:api:type:LineItem) matching the `predicate`."""
+
+    #: Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers).
     predicate: str
 
     def __init__(self, *, predicate: str):
@@ -404,6 +432,8 @@ class CartDiscountLineItemsTarget(CartDiscountTarget):
 
 
 class CartDiscountShippingCostTarget(CartDiscountTarget):
+    """Discount is applied to the shipping costs of the [Cart](ctp:api:type:Cart)."""
+
     def __init__(self):
 
         super().__init__(type="shipping")
@@ -423,7 +453,9 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 
 
 class CartDiscountUpdate(_BaseType):
+    #: Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the CartDiscount.
     actions: typing.List["CartDiscountUpdateAction"]
 
     def __init__(
@@ -567,9 +599,12 @@ class CartDiscountValue(_BaseType):
 
 
 class CartDiscountValueAbsolute(CartDiscountValue):
-    money: typing.List["TypedMoney"]
+    """Discounts the [CartDiscountTarget](ctp:api:type:CartDiscountTarget) by an absolute amount (not allowed for [MultiBuyLineItemsTarget](ctp:api:type:MultiBuyLineItemsTarget) and [MultiBuyCustomLineItemsTarget](ctp:api:type:MultiBuyCustomLineItemsTarget))."""
 
-    def __init__(self, *, money: typing.List["TypedMoney"]):
+    #: Cent precision money values in different currencies.
+    money: typing.List["CentPrecisionMoney"]
+
+    def __init__(self, *, money: typing.List["CentPrecisionMoney"]):
         self.money = money
 
         super().__init__(type="absolute")
@@ -624,6 +659,8 @@ class CartDiscountValueDraft(_BaseType):
 
 
 class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
+    #: Money values in different currencies.
+    #: An absolute Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$.
     money: typing.List["Money"]
 
     def __init__(self, *, money: typing.List["Money"]):
@@ -646,9 +683,12 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueFixed(CartDiscountValue):
-    money: typing.List["TypedMoney"]
+    """Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied."""
 
-    def __init__(self, *, money: typing.List["TypedMoney"]):
+    #: Cent precision money values in different currencies.
+    money: typing.List["CentPrecisionMoney"]
+
+    def __init__(self, *, money: typing.List["CentPrecisionMoney"]):
         self.money = money
 
         super().__init__(type="fixed")
@@ -668,6 +708,10 @@ class CartDiscountValueFixed(CartDiscountValue):
 
 
 class CartDiscountValueFixedDraft(CartDiscountValueDraft):
+    """Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied."""
+
+    #: Money values in different currencies.
+    #: A fixed Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$.
     money: typing.List["Money"]
 
     def __init__(self, *, money: typing.List["Money"]):
@@ -690,11 +734,13 @@ class CartDiscountValueFixedDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):
+    #: Reference to a Product.
     product: "ProductReference"
+    #: [ProductVariant](ctp:api:type:ProductVariant) of the Product.
     variant_id: int
-    #: The channel must have the role `InventorySupply`
+    #: Channel must have the [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `InventorySupply`.
     supply_channel: typing.Optional["ChannelReference"]
-    #: The channel must have the role `ProductDistribution`
+    #: Channel must have the [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `ProductDistribution`.
     distribution_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -727,11 +773,13 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
 
 class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
+    #: ResourceIdentifier of a Product.
     product: "ProductResourceIdentifier"
+    #: [ProductVariant](ctp:api:type:ProductVariant) of the Product.
     variant_id: int
-    #: The channel must have the role `InventorySupply`
+    #: Channel must have the role `InventorySupply`.
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
-    #: The channel must have the role `ProductDistribution`
+    #: Channel must have the role `ProductDistribution`.
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -764,6 +812,9 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
 
 
 class CartDiscountValueRelative(CartDiscountValue):
+    """Discounts the [CartDiscountTarget](ctp:api:type:CartDiscountTarget) relative to its price."""
+
+    #: Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
     permyriad: int
 
     def __init__(self, *, permyriad: int):
@@ -786,6 +837,7 @@ class CartDiscountValueRelative(CartDiscountValue):
 
 
 class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
+    #: Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
     permyriad: int
 
     def __init__(self, *, permyriad: int):
@@ -808,15 +860,17 @@ class CartDiscountValueRelativeDraft(CartDiscountValueDraft):
 
 
 class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
-    #: A valid custom line item target predicate. The discount will be applied to custom line items that are
-    #: matched by the predicate.
+    """This Discount target is similar to `MultiBuyLineItems`, but is applied on Custom Line Items instead of Line Items."""
+
+    #: Valid [CustomLineItems target predicate](/../api/projects/predicates#customlineitem-field-identifiers). The Discount will be applied to Custom Line Items that are matched by the predicate.
     predicate: str
-    #: Quantity of line items that need to be present in order to trigger an application of this discount.
+    #: Number of Custom Line Items to be present in order to trigger an application of this Discount.
     trigger_quantity: int
-    #: Quantity of line items that are discounted per application of this discount.
+    #: Number of Custom Line Items that are discounted per application of this Discount.
     discounted_quantity: int
-    #: Maximum number of applications of this discount.
+    #: Maximum number of times this Discount can be applied.
     max_occurrence: typing.Optional[int]
+    #: Discounts particular Line Items only according to the SelectionMode.
     selection_mode: "SelectionMode"
 
     def __init__(
@@ -851,14 +905,15 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
 
 
 class MultiBuyLineItemsTarget(CartDiscountTarget):
-    #: A valid line item target predicate. The discount will be applied to line items that are matched by the predicate.
+    #: Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers). The Discount will be applied to Line Items that are matched by the predicate.
     predicate: str
-    #: Quantity of line items that need to be present in order to trigger an application of this discount.
+    #: Number of Line Items to be present in order to trigger an application of this Discount.
     trigger_quantity: int
-    #: Quantity of line items that are discounted per application of this discount.
+    #: Number of Line Items that are discounted per application of this Discount.
     discounted_quantity: int
-    #: Maximum number of applications of this discount.
+    #: Maximum number of times this Discount can be applied.
     max_occurrence: typing.Optional[int]
+    #: Discounts particular Line Items only according to the SelectionMode.
     selection_mode: "SelectionMode"
 
     def __init__(
@@ -893,17 +948,21 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
 
 
 class SelectionMode(enum.Enum):
+    """Defines which matching items are to be discounted."""
+
     CHEAPEST = "Cheapest"
     MOST_EXPENSIVE = "MostExpensive"
 
 
 class StackingMode(enum.Enum):
+    """Describes how the Cart Discount interacts with other Discounts."""
+
     STACKING = "Stacking"
     STOP_AFTER_THIS_DISCOUNT = "StopAfterThisDiscount"
 
 
 class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
-    #: A valid Cart predicate.
+    #: New value to set.
     cart_predicate: str
 
     def __init__(self, *, cart_predicate: str):
@@ -926,6 +985,8 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
+    #: New value to set.
+    #: If set to `true`, the Discount will be applied to the Cart.
     is_active: bool
 
     def __init__(self, *, is_active: bool):
@@ -948,6 +1009,7 @@ class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeNameAction(CartDiscountUpdateAction):
+    #: New value to set.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -970,6 +1032,8 @@ class CartDiscountChangeNameAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
+    #: New value to set.
+    #: If set to `true`, the Discount can only be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
     requires_discount_code: bool
 
     def __init__(self, *, requires_discount_code: bool):
@@ -996,8 +1060,8 @@ class CartDiscountChangeRequiresDiscountCodeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
-    #: The string must contain a number between 0 and 1.
-    #: A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+    #: New value to set (between `0` and `1`).
+    #: A Discount with a higher sortOrder is prioritized.
     sort_order: str
 
     def __init__(self, *, sort_order: str):
@@ -1020,6 +1084,7 @@ class CartDiscountChangeSortOrderAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
+    #: New value to set.
     stacking_mode: "StackingMode"
 
     def __init__(self, *, stacking_mode: "StackingMode"):
@@ -1042,6 +1107,7 @@ class CartDiscountChangeStackingModeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
+    #: New value to set.
     target: "CartDiscountTarget"
 
     def __init__(self, *, target: "CartDiscountTarget"):
@@ -1064,6 +1130,7 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeValueAction(CartDiscountUpdateAction):
+    #: New value to set.
     value: "CartDiscountValueDraft"
 
     def __init__(self, *, value: "CartDiscountValueDraft"):
@@ -1146,7 +1213,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
-    #: If the `description` parameter is not included, the field will be emptied.
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -1169,7 +1236,7 @@ class CartDiscountSetDescriptionAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetKeyAction(CartDiscountUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -1192,7 +1259,8 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     valid_from: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
@@ -1215,9 +1283,11 @@ class CartDiscountSetValidFromAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     valid_from: typing.Optional[datetime.datetime]
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -1246,7 +1316,8 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
 
 
 class CartDiscountSetValidUntilAction(CartDiscountUpdateAction):
-    #: If absent, the field with the value is removed in case a value was set before.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):

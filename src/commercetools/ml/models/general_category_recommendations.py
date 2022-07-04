@@ -50,6 +50,7 @@ class GeneralCategoryRecommendation(_BaseType):
 class GeneralCategoryRecommendationPagedQueryResponse(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["GeneralCategoryRecommendation"]
 

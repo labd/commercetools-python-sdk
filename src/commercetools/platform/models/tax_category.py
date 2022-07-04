@@ -69,9 +69,9 @@ class TaxCategory(BaseResource):
     name: str
     #: Description of the TaxCategory.
     description: typing.Optional[str]
-    #: Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID assigned by the platform.
+    #: Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID.
     rates: typing.List["TaxRate"]
-    #: User-defined unique identifier for the TaxCategory.
+    #: User-defined unique identifier of the TaxCategory.
     key: typing.Optional[str]
 
     def __init__(
@@ -154,10 +154,9 @@ class TaxCategoryDraft(_BaseType):
 class TaxCategoryPagedQueryResponse(_BaseType):
     """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [TaxCategory](ctp:api:type:TaxCategory)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or the server default.
-    #: It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -202,9 +201,9 @@ class TaxCategoryPagedQueryResponse(_BaseType):
 
 
 class TaxCategoryReference(Reference):
-    """[Reference](/../api/types#reference) to a [TaxCategory](ctp:api:type:TaxCategory)."""
+    """[Reference](ctp:api:type:Reference) to a [TaxCategory](ctp:api:type:TaxCategory)."""
 
-    #: Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategory.
+    #: Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategories.
     obj: typing.Optional["TaxCategory"]
 
     def __init__(self, *, id: str, obj: typing.Optional["TaxCategory"] = None):
@@ -225,7 +224,7 @@ class TaxCategoryReference(Reference):
 
 
 class TaxCategoryResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
@@ -324,7 +323,7 @@ class TaxRate(_BaseType):
     name: str
     #: Tax rate. If subrates are used, the amount must be the sum of all subrates.
     amount: float
-    #: If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
+    #: If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
     included_in_price: bool
     #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str
@@ -373,7 +372,7 @@ class TaxRateDraft(_BaseType):
     #: Must be supplied if no `subRates` are specified.
     #: If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
     amount: typing.Optional[float]
-    #: Set to `true`, if tax should be included in [Prices](ctp:api:type:Price) and the `taxedPrice` should be present on [Line Items](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
+    #: If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
     included_in_price: bool
     #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str

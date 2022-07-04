@@ -79,6 +79,7 @@ if typing.TYPE_CHECKING:
         TrackingData,
     )
     from .payment import PaymentResourceIdentifier
+    from .quote import QuoteReference
     from .shipping_method import ShippingMethodResourceIdentifier, ShippingRateDraft
     from .shopping_list import ShoppingListResourceIdentifier
     from .state import StateReference, StateResourceIdentifier
@@ -206,7 +207,7 @@ class OrderEdit(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: Unique identifier for this edit.
+    #: User-defined unique identifier of the OrderEdit.
     key: typing.Optional[str]
     #: The order to be updated with this edit.
     resource: "OrderReference"
@@ -287,7 +288,7 @@ class OrderEditApply(_BaseType):
 
 
 class OrderEditDraft(_BaseType):
-    #: Unique identifier for this edit.
+    #: User-defined unique identifier for the OrderEdit.
     key: typing.Optional[str]
     #: The order to be updated with this edit.
     resource: "OrderReference"
@@ -332,9 +333,11 @@ class OrderEditDraft(_BaseType):
 
 
 class OrderEditPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["OrderEdit"]
 
@@ -370,6 +373,9 @@ class OrderEditPagedQueryResponse(_BaseType):
 
 
 class OrderEditReference(Reference):
+    """[Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit)."""
+
+    #: Contains the representation of the expanded OrderEdit. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for OrderEdits.
     obj: typing.Optional["OrderEdit"]
 
     def __init__(self, *, id: str, obj: typing.Optional["OrderEdit"] = None):
@@ -390,6 +396,8 @@ class OrderEditReference(Reference):
 
 
 class OrderEditResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [OrderEdit](ctp:api:type:OrderEdit)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -673,8 +681,9 @@ class StagedOrder(Order):
         sync_info: typing.List["SyncInfo"],
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: int,
+        last_message_sequence_number: typing.Optional[int] = None,
         cart: typing.Optional["CartReference"] = None,
+        quote: typing.Optional["QuoteReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
         locale: typing.Optional[str] = None,
@@ -719,6 +728,7 @@ class StagedOrder(Order):
             discount_codes=discount_codes,
             last_message_sequence_number=last_message_sequence_number,
             cart=cart,
+            quote=quote,
             custom=custom,
             payment_info=payment_info,
             locale=locale,
@@ -892,12 +902,14 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
-    quantity: typing.Optional[float]
+    quantity: typing.Optional[int]
     slug: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
@@ -908,7 +920,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         *,
         money: "Money",
         name: "LocalizedString",
-        quantity: typing.Optional[float] = None,
+        quantity: typing.Optional[int] = None,
         slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -943,7 +955,7 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
     #: Custom Fields for the Transaction.
-    custom: typing.Optional["CustomFields"]
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -951,7 +963,7 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.items = items
         self.address = address
@@ -1021,17 +1033,18 @@ class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
     sku: typing.Optional[str]
-    quantity: typing.Optional[float]
+    quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1046,7 +1059,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        quantity: typing.Optional[float] = None,
+        quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_price: typing.Optional["Money"] = None,
@@ -1118,6 +1131,7 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1172,10 +1186,11 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
     shopping_list: "ShoppingListResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -1208,6 +1223,7 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     custom_line_item_id: str
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     money: "Money"
 
@@ -1237,9 +1253,9 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
 
 class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
     custom_line_item_id: str
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, custom_line_item_id: str, quantity: float):
+    def __init__(self, *, custom_line_item_id: str, quantity: int):
         self.custom_line_item_id = custom_line_item_id
         self.quantity = quantity
 
@@ -1265,8 +1281,9 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     line_item_id: str
-    quantity: float
+    quantity: int
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1275,7 +1292,7 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
         self,
         *,
         line_item_id: str,
-        quantity: float,
+        quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
@@ -1529,6 +1546,7 @@ class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveDiscountCodeAction(StagedOrderUpdateAction):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -1578,8 +1596,9 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     line_item_id: str
-    quantity: typing.Optional[float]
+    quantity: typing.Optional[int]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
@@ -1589,7 +1608,7 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
         self,
         *,
         line_item_id: str,
-        quantity: typing.Optional[float] = None,
+        quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
@@ -1639,6 +1658,7 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1977,7 +1997,7 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
 class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -2065,7 +2085,7 @@ class StagedOrderSetCustomerEmailAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
@@ -2449,7 +2469,7 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
     line_item_id: str
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
@@ -2484,6 +2504,7 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     line_item_id: str
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_price: typing.Optional["Money"]
 
@@ -2675,6 +2696,7 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
 
 class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     external_total_gross: "Money"
     external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
@@ -3021,7 +3043,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     address: "BaseAddress"
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -3066,6 +3088,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
 
 class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateAction):
     address: "BaseAddress"
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -3169,6 +3192,7 @@ class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
@@ -3276,9 +3300,9 @@ class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
 class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
     custom_line_item_id: str
     quantity: int
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -3320,9 +3344,9 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
 class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: int
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     to_state: "StateResourceIdentifier"
     actual_transition_date: typing.Optional[datetime.datetime]
 
@@ -3358,7 +3382,7 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     state: "StateResourceIdentifier"
     force: typing.Optional[bool]
 
@@ -3411,7 +3435,7 @@ class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     channel: "ChannelResourceIdentifier"
     external_id: typing.Optional[str]
     synced_at: typing.Optional[datetime.datetime]

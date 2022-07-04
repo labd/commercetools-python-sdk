@@ -450,7 +450,7 @@ class CartClassificationTierSchema(ShippingRatePriceTierSchema):
 
 
 class CartScoreTierSchema(ShippingRatePriceTierSchema):
-    score = marshmallow.fields.Float(allow_none=True, missing=None)
+    score = marshmallow.fields.Integer(allow_none=True, missing=None)
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,

@@ -42,7 +42,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
     ) -> typing.Optional["Customer"]:
         """Returns a customer by its Key from a specific Store.
         It also considers customers that do not have the stores field.
-        If the customer exists in the commercetools project but the stores field references different stores,
+        If the customer exists in the project but the stores field references different stores,
         this method returns a ResourceNotFound error.
 
         """
@@ -70,7 +70,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """If the customer exists in the commercetools project but the stores field references a different store,
+        """If the customer exists in the project but the stores field references a different store,
         this method returns a ResourceNotFound error.
 
         """

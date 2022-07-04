@@ -72,6 +72,12 @@ from .product_types.by_project_key_product_types_request_builder import (
 from .products.by_project_key_products_request_builder import (
     ByProjectKeyProductsRequestBuilder,
 )
+from .quote_requests.by_project_key_quote_requests_request_builder import (
+    ByProjectKeyQuoteRequestsRequestBuilder,
+)
+from .quotes.by_project_key_quotes_request_builder import (
+    ByProjectKeyQuotesRequestBuilder,
+)
 from .reviews.by_project_key_reviews_request_builder import (
     ByProjectKeyReviewsRequestBuilder,
 )
@@ -80,6 +86,12 @@ from .shipping_methods.by_project_key_shipping_methods_request_builder import (
 )
 from .shopping_lists.by_project_key_shopping_lists_request_builder import (
     ByProjectKeyShoppingListsRequestBuilder,
+)
+from .staged_quotes.by_project_key_staged_quotes_request_builder import (
+    ByProjectKeyStagedQuotesRequestBuilder,
+)
+from .standalone_prices.by_project_key_standalone_prices_request_builder import (
+    ByProjectKeyStandalonePricesRequestBuilder,
 )
 from .states.by_project_key_states_request_builder import (
     ByProjectKeyStatesRequestBuilder,
@@ -163,14 +175,14 @@ class ByProjectKeyRequestBuilder:
         )
 
     def discount_codes(self) -> ByProjectKeyDiscountCodesRequestBuilder:
-        """Discount codes can be added to a discount-code to enable certain discount-code discounts."""
+        """Discount Codes can be added to a discount-code to enable certain discount-code discounts."""
         return ByProjectKeyDiscountCodesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )
 
     def graphql(self) -> ByProjectKeyGraphqlRequestBuilder:
-        """The commercetools™ platform provides a GraphQL API"""
+        """commercetools Composable Commerce provides a GraphQL API"""
         return ByProjectKeyGraphqlRequestBuilder(
             project_key=self._project_key,
             client=self._client,
@@ -261,6 +273,27 @@ class ByProjectKeyRequestBuilder:
             client=self._client,
         )
 
+    def quotes(self) -> ByProjectKeyQuotesRequestBuilder:
+        """A quote holds the negotiated offer."""
+        return ByProjectKeyQuotesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def quote_requests(self) -> ByProjectKeyQuoteRequestsRequestBuilder:
+        """A request for a quote holds product variants and can be ordered."""
+        return ByProjectKeyQuoteRequestsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def staged_quotes(self) -> ByProjectKeyStagedQuotesRequestBuilder:
+        """A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller)."""
+        return ByProjectKeyStagedQuotesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
     def reviews(self) -> ByProjectKeyReviewsRequestBuilder:
         """Reviews are used to evaluate products and channels."""
         return ByProjectKeyReviewsRequestBuilder(
@@ -269,7 +302,7 @@ class ByProjectKeyRequestBuilder:
         )
 
     def shipping_methods(self) -> ByProjectKeyShippingMethodsRequestBuilder:
-        """Shipping Methods define where orders can be shipped and what the costs are."""
+        """ShippingMethods define where orders can be shipped and what the costs are."""
         return ByProjectKeyShippingMethodsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
@@ -283,7 +316,7 @@ class ByProjectKeyRequestBuilder:
         )
 
     def states(self) -> ByProjectKeyStatesRequestBuilder:
-        """The commercetools platform allows you to model states of certain objects, such as orders, line items, products,
+        """commercetools Composable Commerce allows you to model states of certain objects, such as orders, line items, products,
         reviews, and payments in order to define finite state machines reflecting the business logic you'd like to
         implement.
 
@@ -353,6 +386,13 @@ class ByProjectKeyRequestBuilder:
     ) -> ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
         return ByProjectKeyInStoreKeyByStoreKeyRequestBuilder(
             store_key=store_key,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def standalone_prices(self) -> ByProjectKeyStandalonePricesRequestBuilder:
+        """A standalone price assigns a price to a product variant for a given scope. The API will use the standalone prices associated with a Product if its field [`priceMode`](/projects/products#pricemode) is set to `Standalone` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum)."""
+        return ByProjectKeyStandalonePricesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

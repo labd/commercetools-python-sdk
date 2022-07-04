@@ -8,6 +8,7 @@ import typing
 import warnings
 
 from ...models.error import ErrorResponse
+from ...models.product import SuggestionResult
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -38,7 +39,7 @@ class ByProjectKeyProductProjectionsSuggestRequestBuilder:
         with_total: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional[typing.Any]:
+    ) -> typing.Optional["SuggestionResult"]:
         params = {
             "fuzzy": fuzzy,
             "staged": staged,
@@ -58,7 +59,7 @@ class ByProjectKeyProductProjectionsSuggestRequestBuilder:
             options=options,
         )
         if response.status_code == 200:
-            return typing.Any.deserialize(response.json())
+            return SuggestionResult.deserialize(response.json())
         elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)

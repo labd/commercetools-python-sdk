@@ -17,6 +17,7 @@ from ..common import ReferenceTypeId
 from ..product_type import (
     AttributeConstraintEnum,
     AttributeConstraintEnumDraft,
+    AttributeReferenceTypeId,
     TextInputHint,
 )
 from .common import (
@@ -317,7 +318,7 @@ class AttributeNumberTypeSchema(AttributeTypeSchema):
 
 class AttributeReferenceTypeSchema(AttributeTypeSchema):
     reference_type_id = marshmallow_enum.EnumField(
-        ReferenceTypeId,
+        AttributeReferenceTypeId,
         by_value=True,
         allow_none=True,
         missing=None,
@@ -451,11 +452,11 @@ class ProductTypeDraftSchema(helpers.BaseSchema):
 
 class ProductTypePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductTypeSchema"),
         allow_none=True,

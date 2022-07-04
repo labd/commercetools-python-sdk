@@ -26,11 +26,11 @@ class LocalizedStringField(marshmallow.fields.Dict):
 # Marshmallow Schemas
 class PagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".BaseResourceSchema"),
         allow_none=True,
@@ -217,6 +217,7 @@ class BaseAddressSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
+    country = marshmallow.fields.String(allow_none=True, missing=None)
     title = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -268,7 +269,6 @@ class BaseAddressSchema(helpers.BaseSchema):
     state = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
     company = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
@@ -622,17 +622,17 @@ class PriceSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
-    )
     tiers = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PriceTierSchema"),
         allow_none=True,
         many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
@@ -686,8 +686,8 @@ class PriceDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="validUntil",
     )
-    custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -701,8 +701,8 @@ class PriceDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    discounted = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".DiscountedPriceDraftSchema"),
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -762,7 +762,9 @@ class PriceTierDraftSchema(helpers.BaseSchema):
 
 
 class QueryPriceSchema(helpers.BaseSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
         allow_none=True,
@@ -946,15 +948,9 @@ class ScopedPriceSchema(helpers.BaseSchema):
         return models.ScopedPrice(**data)
 
 
-class TypedMoneySchema(helpers.BaseSchema):
+class TypedMoneySchema(MoneySchema):
     type = marshmallow_enum.EnumField(
         MoneyType, by_value=True, allow_none=True, missing=None
-    )
-    currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
-    )
-    cent_amount = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="centAmount"
     )
     fraction_digits = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="fractionDigits"
@@ -995,7 +991,11 @@ class HighPrecisionMoneySchema(TypedMoneySchema):
 
 class TypedMoneyDraftSchema(MoneySchema):
     type = marshmallow_enum.EnumField(
-        MoneyType, by_value=True, allow_none=True, missing=None
+        MoneyType,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
     )
     fraction_digits = marshmallow.fields.Integer(
         allow_none=True,

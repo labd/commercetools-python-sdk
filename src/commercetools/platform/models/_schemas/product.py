@@ -15,7 +15,7 @@ from commercetools import helpers
 from ... import models
 from ..cart import ProductPublishScope
 from ..common import ReferenceTypeId
-from ..product import FacetTypes, TermFacetResultType
+from ..product import FacetTypes, ProductPriceModeEnum, TermFacetResultType
 from .common import (
     BaseResourceSchema,
     LocalizedStringField,
@@ -218,6 +218,14 @@ class ProductSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="reviewRatingStatistics",
+    )
+    price_mode = marshmallow_enum.EnumField(
+        ProductPriceModeEnum,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="priceMode",
     )
 
     class Meta:
@@ -439,6 +447,14 @@ class ProductDraftSchema(helpers.BaseSchema):
     )
     publish = marshmallow.fields.Boolean(
         allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    price_mode = marshmallow_enum.EnumField(
+        ProductPriceModeEnum,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="priceMode",
     )
 
     class Meta:
@@ -787,6 +803,9 @@ class ProductUpdateSchema(helpers.BaseSchema):
                 ),
                 "setMetaTitle": helpers.absmod(
                     __name__, ".ProductSetMetaTitleActionSchema"
+                ),
+                "setPriceMode": helpers.absmod(
+                    __name__, ".ProductSetPriceModeActionSchema"
                 ),
                 "setPrices": helpers.absmod(__name__, ".ProductSetPricesActionSchema"),
                 "setProductPriceCustomField": helpers.absmod(
@@ -2208,6 +2227,25 @@ class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProductSetMetaTitleAction(**data)
+
+
+class ProductSetPriceModeActionSchema(ProductUpdateActionSchema):
+    price_mode = marshmallow_enum.EnumField(
+        ProductPriceModeEnum,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="priceMode",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProductSetPriceModeAction(**data)
 
 
 class ProductSetPricesActionSchema(ProductUpdateActionSchema):

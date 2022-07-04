@@ -13,8 +13,8 @@ from .errors import *  # noqa
 from .importcontainers import *  # noqa
 from .importoperations import *  # noqa
 from .importrequests import *  # noqa
-from .importsinks import *  # noqa
 from .importsummaries import *  # noqa
+from .inventories import *  # noqa
 from .order_patches import *  # noqa
 from .orders import *  # noqa
 from .prices import *  # noqa

@@ -247,10 +247,15 @@ class SearchIndexingConfigurationValuesSchema(helpers.BaseSchema):
         missing=None,
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
-    )
-    last_modified_by = marshmallow.fields.String(
         allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="lastModifiedAt",
+    )
+    last_modified_by = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="lastModifiedBy",

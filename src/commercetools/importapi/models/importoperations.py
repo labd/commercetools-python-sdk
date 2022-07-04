@@ -96,10 +96,9 @@ class ImportOperation(_BaseType):
 class ImportOperationPagedResponse(_BaseType):
     """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) for Import Operations."""
 
-    #: The number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: The number of elements skipped, not a page number.
-    #: Supplied by the client or the server default.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: The actual number of results returned.
     count: int

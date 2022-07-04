@@ -38,6 +38,12 @@ class ByProjectKeyShippingMethodsMatchingLocationRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShippingMethodPagedQueryResponse"]:
+        """Retrieves all the ShippingMethods that can ship to the given [Location](/projects/zones#location).
+        If the `currency` parameter is given, then the ShippingMethods must also have a rate defined in the specified currency.
+        Each ShippingMethod contains at least one ShippingRate with the flag `isMatching` set to `true`.
+        If the `currency` parameter is given, exactly one ShippingRate will contain it.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/shipping-methods/matching-location",

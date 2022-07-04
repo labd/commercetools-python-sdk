@@ -33,14 +33,30 @@ class ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder:
     def get(
         self,
         *,
+        limit: int = None,
+        offset: int = None,
+        with_total: bool = None,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductsInStorePagedQueryResponse"]:
-        """Queries Product Selection assignments in a specific Store."""
+        """Queries Product Selection assignments in a specific Store.
+
+        The response will include duplicate Products whenever more than one active Product Selection of the Store
+        includes a Product. To make clear through which Product Selection a Product is available in the Store
+        the response contains assignments including both the Product and the Product Selection.
+        Only Products of Product Selections that are activated in Store will be returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/product-selection-assignments",
-            params={},
+            params={
+                "limit": limit,
+                "offset": offset,
+                "withTotal": with_total,
+                "expand": expand,
+            },
             headers=headers,
             options=options,
         )

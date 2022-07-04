@@ -14,7 +14,10 @@ from commercetools import helpers
 
 from ... import models
 from ..common import ReferenceTypeId
-from ..product_selection import ProductSelectionTypeEnum
+from ..product_selection import (
+    ProductSelectionTypeEnum,
+    ProductVariantSelectionTypeEnum,
+)
 from .common import (
     BaseResourceSchema,
     LocalizedStringField,
@@ -34,6 +37,21 @@ class AssignedProductReferenceSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -51,6 +69,21 @@ class AssignedProductSelectionSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="productSelection",
+    )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
     )
 
     class Meta:
@@ -145,6 +178,21 @@ class ProductSelectionAssignmentSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="productSelection",
+    )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
     )
 
     class Meta:
@@ -309,6 +357,9 @@ class ProductSelectionUpdateSchema(helpers.BaseSchema):
                 "setKey": helpers.absmod(
                     __name__, ".ProductSelectionSetKeyActionSchema"
                 ),
+                "setVariantSelection": helpers.absmod(
+                    __name__, ".ProductSelectionSetVariantSelectionActionSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -334,6 +385,48 @@ class ProductSelectionUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProductSelectionUpdateAction(**data)
+
+
+class ProductVariantSelectionSchema(helpers.BaseSchema):
+    type = marshmallow_enum.EnumField(
+        ProductVariantSelectionTypeEnum, by_value=True, allow_none=True, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductVariantSelection(**data)
+
+
+class ProductVariantSelectionExclusionSchema(ProductVariantSelectionSchema):
+    skus = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductVariantSelectionExclusion(**data)
+
+
+class ProductVariantSelectionInclusionSchema(ProductVariantSelectionSchema):
+    skus = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductVariantSelectionInclusion(**data)
 
 
 class ProductsInStorePagedQueryResponseSchema(helpers.BaseSchema):
@@ -366,6 +459,21 @@ class ProductSelectionAddProductActionSchema(ProductSelectionUpdateActionSchema)
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
+    )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
     )
 
     class Meta:
@@ -459,3 +567,37 @@ class ProductSelectionSetKeyActionSchema(ProductSelectionUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.ProductSelectionSetKeyAction(**data)
+
+
+class ProductSelectionSetVariantSelectionActionSchema(
+    ProductSelectionUpdateActionSchema
+):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProductSelectionSetVariantSelectionAction(**data)

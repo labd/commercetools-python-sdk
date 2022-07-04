@@ -26,6 +26,7 @@ if typing.TYPE_CHECKING:
 
 __all__ = [
     "AnonymousCartSignInMode",
+    "AuthenticationMode",
     "Customer",
     "CustomerAddAddressAction",
     "CustomerAddBillingAddressIdAction",
@@ -48,6 +49,7 @@ __all__ = [
     "CustomerResourceIdentifier",
     "CustomerSetAddressCustomFieldAction",
     "CustomerSetAddressCustomTypeAction",
+    "CustomerSetAuthenticationModeAction",
     "CustomerSetCompanyNameAction",
     "CustomerSetCustomFieldAction",
     "CustomerSetCustomTypeAction",
@@ -73,12 +75,18 @@ __all__ = [
     "CustomerUpdateAction",
     "MyCustomerChangePassword",
     "MyCustomerResetPassword",
+    "MyCustomerSignin",
 ]
 
 
 class AnonymousCartSignInMode(enum.Enum):
     MERGE_WITH_EXISTING_CUSTOMER_CART = "MergeWithExistingCustomerCart"
     USE_AS_NEW_ACTIVE_CUSTOMER_CART = "UseAsNewActiveCustomerCart"
+
+
+class AuthenticationMode(enum.Enum):
+    PASSWORD = "Password"
+    EXTERNAL_AUTH = "ExternalAuth"
 
 
 class Customer(BaseResource):
@@ -94,7 +102,8 @@ class Customer(BaseResource):
     #: Email addresses are either unique to the store they're specified for, _or_ for the entire project.
     #: For more information, see Email uniquenes.
     email: str
-    password: str
+    #: Only present with the default `authenticationMode`, `Password`.
+    password: typing.Optional[str]
     first_name: typing.Optional[str]
     last_name: typing.Optional[str]
     middle_name: typing.Optional[str]
@@ -118,14 +127,14 @@ class Customer(BaseResource):
     custom: typing.Optional["CustomFields"]
     locale: typing.Optional[str]
     salutation: typing.Optional[str]
-    #: User-specific unique identifier for a customer.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction
+    #: User-defined unique identifier of the Customer.
     key: typing.Optional[str]
     #: References to the stores the customer account is associated with.
     #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
     #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
     stores: typing.Optional[typing.List["StoreKeyReference"]]
+    #: Defines whether a Customer has a password.
+    authentication_mode: typing.Optional["AuthenticationMode"]
 
     def __init__(
         self,
@@ -138,7 +147,7 @@ class Customer(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         customer_number: typing.Optional[str] = None,
         email: str,
-        password: str,
+        password: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -158,7 +167,8 @@ class Customer(BaseResource):
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        stores: typing.Optional[typing.List["StoreKeyReference"]] = None
+        stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -185,6 +195,7 @@ class Customer(BaseResource):
         self.salutation = salutation
         self.key = key
         self.stores = stores
+        self.authentication_mode = authentication_mode
 
         super().__init__(
             id=id,
@@ -206,6 +217,7 @@ class Customer(BaseResource):
 
 
 class CustomerChangePassword(_BaseType):
+    #: Unique identifier of the Customer.
     id: str
     version: int
     current_password: str
@@ -236,6 +248,7 @@ class CustomerChangePassword(_BaseType):
 
 
 class CustomerCreateEmailToken(_BaseType):
+    #: Unique identifier of the email token.
     id: str
     version: typing.Optional[int]
     ttl_minutes: int
@@ -297,7 +310,8 @@ class CustomerDraft(_BaseType):
     #: Email addresses are either unique to the store they're specified for, _or_ for the entire project, and are case insensitive.
     #: For more information, see Email uniquenes.
     email: str
-    password: str
+    #: Only optional with `authenticationMode` set to `ExternalAuth`.
+    password: typing.Optional[str]
     first_name: typing.Optional[str]
     last_name: typing.Optional[str]
     middle_name: typing.Optional[str]
@@ -333,21 +347,21 @@ class CustomerDraft(_BaseType):
     #: Must be one of the languages supported for this project
     locale: typing.Optional[str]
     salutation: typing.Optional[str]
-    #: User-specific unique identifier for a customer.
-    #: Must be unique across a project.
-    #: The field can be reset using the Set Key UpdateAction
+    #: User-defined unique identifier for the Customer.
     key: typing.Optional[str]
     #: References to the stores the customer account is associated with.
     #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
     #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
+    #: Defines whether a password field is a required field for the Customer.
+    authentication_mode: typing.Optional["AuthenticationMode"]
 
     def __init__(
         self,
         *,
         customer_number: typing.Optional[str] = None,
         email: str,
-        password: str,
+        password: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
@@ -370,7 +384,8 @@ class CustomerDraft(_BaseType):
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None
     ):
         self.customer_number = customer_number
         self.email = email
@@ -398,6 +413,7 @@ class CustomerDraft(_BaseType):
         self.salutation = salutation
         self.key = key
         self.stores = stores
+        self.authentication_mode = authentication_mode
 
         super().__init__()
 
@@ -436,9 +452,11 @@ class CustomerEmailVerify(_BaseType):
 
 
 class CustomerPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Customer"]
 
@@ -474,6 +492,9 @@ class CustomerPagedQueryResponse(_BaseType):
 
 
 class CustomerReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer)."""
+
+    #: Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Customers.
     obj: typing.Optional["Customer"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Customer"] = None):
@@ -524,6 +545,8 @@ class CustomerResetPassword(_BaseType):
 
 
 class CustomerResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -572,6 +595,7 @@ class CustomerSignin(_BaseType):
     email: str
     password: str
     anonymous_cart_id: typing.Optional[str]
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart).
     anonymous_cart: typing.Optional["CartResourceIdentifier"]
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
     anonymous_id: typing.Optional[str]
@@ -611,6 +635,7 @@ class CustomerSignin(_BaseType):
 
 
 class CustomerToken(_BaseType):
+    #: Unique identifier of the CustomerToken.
     id: str
     created_at: datetime.datetime
     last_modified_at: typing.Optional[datetime.datetime]
@@ -729,6 +754,10 @@ class CustomerUpdateAction(_BaseType):
             from ._schemas.customer import CustomerSetAddressCustomTypeActionSchema
 
             return CustomerSetAddressCustomTypeActionSchema().load(data)
+        if data["action"] == "setAuthenticationMode":
+            from ._schemas.customer import CustomerSetAuthenticationModeActionSchema
+
+            return CustomerSetAuthenticationModeActionSchema().load(data)
         if data["action"] == "setCompanyName":
             from ._schemas.customer import CustomerSetCompanyNameActionSchema
 
@@ -858,6 +887,39 @@ class MyCustomerResetPassword(_BaseType):
         return MyCustomerResetPasswordSchema().dump(self)
 
 
+class MyCustomerSignin(_BaseType):
+    email: str
+    password: str
+    active_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
+    update_product_data: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        email: str,
+        password: str,
+        active_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
+        update_product_data: typing.Optional[bool] = None
+    ):
+        self.email = email
+        self.password = password
+        self.active_cart_sign_in_mode = active_cart_sign_in_mode
+        self.update_product_data = update_product_data
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyCustomerSignin":
+        from ._schemas.customer import MyCustomerSigninSchema
+
+        return MyCustomerSigninSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import MyCustomerSigninSchema
+
+        return MyCustomerSigninSchema().dump(self)
+
+
 class CustomerAddAddressAction(CustomerUpdateAction):
     address: "BaseAddress"
 
@@ -939,6 +1001,7 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddStoreAction(CustomerUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
     store: "StoreResourceIdentifier"
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
@@ -1102,6 +1165,7 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveStoreAction(CustomerUpdateAction):
+    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
     store: "StoreResourceIdentifier"
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
@@ -1188,6 +1252,33 @@ class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
         from ._schemas.customer import CustomerSetAddressCustomTypeActionSchema
 
         return CustomerSetAddressCustomTypeActionSchema().dump(self)
+
+
+class CustomerSetAuthenticationModeAction(CustomerUpdateAction):
+    auth_mode: "AuthenticationMode"
+    #: Required when `authMode` is `Password`
+    password: typing.Optional[str]
+
+    def __init__(
+        self, *, auth_mode: "AuthenticationMode", password: typing.Optional[str] = None
+    ):
+        self.auth_mode = auth_mode
+        self.password = password
+
+        super().__init__(action="setAuthenticationMode")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerSetAuthenticationModeAction":
+        from ._schemas.customer import CustomerSetAuthenticationModeActionSchema
+
+        return CustomerSetAuthenticationModeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import CustomerSetAuthenticationModeActionSchema
+
+        return CustomerSetAuthenticationModeActionSchema().dump(self)
 
 
 class CustomerSetCompanyNameAction(CustomerUpdateAction):

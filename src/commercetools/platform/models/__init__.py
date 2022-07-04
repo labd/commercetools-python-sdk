@@ -30,9 +30,13 @@ from .product_discount import *  # noqa
 from .product_selection import *  # noqa
 from .product_type import *  # noqa
 from .project import *  # noqa
+from .quote import *  # noqa
+from .quote_request import *  # noqa
 from .review import *  # noqa
 from .shipping_method import *  # noqa
 from .shopping_list import *  # noqa
+from .staged_quote import *  # noqa
+from .standalone_price import *  # noqa
 from .state import *  # noqa
 from .store import *  # noqa
 from .subscription import *  # noqa

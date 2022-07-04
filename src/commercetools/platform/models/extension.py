@@ -39,15 +39,19 @@ __all__ = [
 
 
 class Extension(BaseResource):
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: User-defined unique identifier of the Extension.
     key: typing.Optional[str]
+    #: The configuration for the Extension, including its type, location and authentication details.
     destination: "ExtensionDestination"
+    #: Describes what triggers the Extension.
     triggers: typing.List["ExtensionTrigger"]
-    #: The maximum time the commercetools platform waits for a response from the extension.
-    #: If not present, `2000` (2 seconds) is used.
+    #: Maximum time (in milliseconds) that the Extension can respond within.
+    #: If no timeout is provided, the default value is used for all types of Extensions.
+    #: The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
     timeout_in_ms: typing.Optional[int]
 
     def __init__(
@@ -91,11 +95,15 @@ class Extension(BaseResource):
 
 
 class ExtensionAction(enum.Enum):
+    """An Extension gets called during any of the following requests of an API call, but before the result is persisted."""
+
     CREATE = "Create"
     UPDATE = "Update"
 
 
 class ExtensionDestination(_BaseType):
+    """Generic type for destinations."""
+
     type: str
 
     def __init__(self, *, type: str):
@@ -121,8 +129,13 @@ class ExtensionDestination(_BaseType):
 
 
 class AWSLambdaDestination(ExtensionDestination):
+    """We recommend creating an Identify and Access Management (IAM) user with an `accessKey` and `accessSecret` pair, specifically for each Extension that only has the `lambda:InvokeFunction` permission on this function."""
+
+    #: Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`.
     arn: str
+    #: Partially hidden on retrieval for security reasons.
     access_key: str
+    #: Partially hidden on retrieval for security reasons.
     access_secret: str
 
     def __init__(self, *, arn: str, access_key: str, access_secret: str):
@@ -145,16 +158,18 @@ class AWSLambdaDestination(ExtensionDestination):
 
 
 class ExtensionDraft(_BaseType):
-    #: User-specific unique identifier for the extension
+    #: User-defined unique identifier for the Extension.
     key: typing.Optional[str]
-    #: Details where the extension can be reached
+    #: Defines where the Extension can be reached.
     destination: "ExtensionDestination"
-    #: Describes what triggers the extension
+    #: Describes what triggers the Extension.
     triggers: typing.List["ExtensionTrigger"]
-    #: The maximum time the commercetools platform waits for a response from the extension.
-    #: The maximum value is 2000 ms (2 seconds).
-    #: This limit can be increased per project after we review the performance impact.
-    #: Please contact Support via the [Support Portal](https://support.commercetools.com) and provide the region, project key and use case.
+    #: Maximum time (in milliseconds) the Extension can respond within.
+    #: If no timeout is provided, the default value is used for all types of Extensions.
+    #: The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+    #:
+    #: This limit can be increased per Project after we review the performance impact.
+    #: Please contact our support via the [Support Portal](https://support.commercetools.com) and provide the Region, Project key, and use case.
     timeout_in_ms: typing.Optional[int]
 
     def __init__(
@@ -185,7 +200,9 @@ class ExtensionDraft(_BaseType):
 
 
 class ExtensionInput(_BaseType):
+    #: `Create` or `Update` request.
     action: "ExtensionAction"
+    #: Expanded reference to the resource that triggered the Extension.
     resource: "Reference"
 
     def __init__(self, *, action: "ExtensionAction", resource: "Reference"):
@@ -207,25 +224,36 @@ class ExtensionInput(_BaseType):
 
 
 class ExtensionPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Extension](ctp:api:type:Extension)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: Extensions matching the query.
     results: typing.List["Extension"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Extension"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -245,6 +273,8 @@ class ExtensionPagedQueryResponse(_BaseType):
 
 
 class ExtensionResourceTypeId(enum.Enum):
+    """Extensions are available for:"""
+
     CART = "cart"
     ORDER = "order"
     PAYMENT = "payment"
@@ -252,17 +282,23 @@ class ExtensionResourceTypeId(enum.Enum):
 
 
 class ExtensionTrigger(_BaseType):
+    #: `cart`, `order`, `payment`, and `customer` are supported.
     resource_type_id: "ExtensionResourceTypeId"
+    #: `Create` and `Update` requests are supported.
     actions: typing.List["ExtensionAction"]
+    #: Valid [predicate](/../api/predicates/query) that controls the conditions under which the API Extension is called. The Extension is not triggered when the specified condition is not fulfilled.
+    condition: typing.Optional[str]
 
     def __init__(
         self,
         *,
         resource_type_id: "ExtensionResourceTypeId",
-        actions: typing.List["ExtensionAction"]
+        actions: typing.List["ExtensionAction"],
+        condition: typing.Optional[str] = None
     ):
         self.resource_type_id = resource_type_id
         self.actions = actions
+        self.condition = condition
 
         super().__init__()
 
@@ -279,7 +315,9 @@ class ExtensionTrigger(_BaseType):
 
 
 class ExtensionUpdate(_BaseType):
+    #: Expected version of the Extension on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Extension.
     actions: typing.List["ExtensionUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ExtensionUpdateAction"]):
@@ -334,7 +372,11 @@ class ExtensionUpdateAction(_BaseType):
 
 
 class HttpDestination(ExtensionDestination):
+    """We recommend an encrypted `HTTPS` connection for production setups. However, we also accept unencrypted `HTTP` connections for development purposes. HTTP redirects will not be followed and cache headers will be ignored."""
+
+    #: URL to the target destination.
     url: str
+    #: Authentication methods (such as `Basic` or `Bearer`).
     authentication: typing.Optional["HttpDestinationAuthentication"]
 
     def __init__(
@@ -388,6 +430,13 @@ class HttpDestinationAuthentication(_BaseType):
 
 
 class AuthorizationHeaderAuthentication(HttpDestinationAuthentication):
+    """The `Authorization` header will be set to the content of `headerValue`. The authentication scheme (such as `Basic` or `Bearer`) should be included in the `headerValue`.
+
+    For example, the `headerValue` for [Basic Authentication](https://datatracker.ietf.org/doc/html/rfc7617) should be set to `Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==`.
+
+    """
+
+    #: Partially hidden on retrieval for security reasons.
     header_value: str
 
     def __init__(self, *, header_value: str):
@@ -410,6 +459,14 @@ class AuthorizationHeaderAuthentication(HttpDestinationAuthentication):
 
 
 class AzureFunctionsAuthentication(HttpDestinationAuthentication):
+    """To protect your Azure Function, set its `authLevel` to `function` and provide the function's key to be used inside the `x-functions-key` header. For more information, see the [Azure Functions documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#keys).
+
+    To protect the secret key from being exposed, remove the code parameter and secret key from the URL. For example, use `https://foo.azurewebsites.net/api/bar` instead of
+    `https://foo.azurewebsites.net/api/bar?code=secret`.
+
+    """
+
+    #: Partially hidden on retrieval for security reasons.
     key: str
 
     def __init__(self, *, key: str):
@@ -432,6 +489,7 @@ class AzureFunctionsAuthentication(HttpDestinationAuthentication):
 
 
 class ExtensionChangeDestinationAction(ExtensionUpdateAction):
+    #: New value to set. Must not be empty.
     destination: "ExtensionDestination"
 
     def __init__(self, *, destination: "ExtensionDestination"):
@@ -454,6 +512,7 @@ class ExtensionChangeDestinationAction(ExtensionUpdateAction):
 
 
 class ExtensionChangeTriggersAction(ExtensionUpdateAction):
+    #: New value to set. Must not be empty.
     triggers: typing.List["ExtensionTrigger"]
 
     def __init__(self, *, triggers: typing.List["ExtensionTrigger"]):
@@ -476,7 +535,7 @@ class ExtensionChangeTriggersAction(ExtensionUpdateAction):
 
 
 class ExtensionSetKeyAction(ExtensionUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -497,10 +556,12 @@ class ExtensionSetKeyAction(ExtensionUpdateAction):
 
 
 class ExtensionSetTimeoutInMsAction(ExtensionUpdateAction):
-    #: The maximum time the commercetools platform waits for a response from the extension.
-    #: The maximum value is 2000 ms (2 seconds).
-    #: This limit can be increased per project after we review the performance impact.
-    #: Please contact Support via the support and provide the region, project key and use case.
+    #: Value to set. If not defined, the maximum value is used.
+    #: If no timeout is provided, the default value is used for all types of Extensions.
+    #: The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+    #:
+    #: This limit can be increased per Project after we review the performance impact.
+    #: Please contact our support via the [Support Portal](https://support.commercetools.com/) and provide the Region, Project key, and use case.
     timeout_in_ms: typing.Optional[int]
 
     def __init__(self, *, timeout_in_ms: typing.Optional[int] = None):

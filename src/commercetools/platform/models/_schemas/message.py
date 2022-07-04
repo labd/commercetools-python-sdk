@@ -16,6 +16,9 @@ from ... import models
 from ..cart import DiscountCodeState, ProductPublishScope
 from ..order import OrderState, PaymentState, ReturnShipmentState, ShipmentState
 from ..payment import TransactionState
+from ..quote import QuoteState
+from ..quote_request import QuoteRequestState
+from ..staged_quote import StagedQuoteState
 from .common import BaseResourceSchema, LocalizedStringField
 
 # Fields
@@ -93,12 +96,22 @@ class MessageSchema(BaseResourceSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -581,6 +594,9 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "ProductSelectionProductRemoved": helpers.absmod(
                     __name__, ".ProductSelectionProductRemovedMessageSchema"
                 ),
+                "ProductSelectionVariantSelectionChanged": helpers.absmod(
+                    __name__, ".ProductSelectionVariantSelectionChangedMessageSchema"
+                ),
                 "ProductSlugChanged": helpers.absmod(
                     __name__, ".ProductSlugChangedMessageSchema"
                 ),
@@ -596,6 +612,20 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 "ProductVariantDeleted": helpers.absmod(
                     __name__, ".ProductVariantDeletedMessageSchema"
                 ),
+                "QuoteCreated": helpers.absmod(__name__, ".QuoteCreatedMessageSchema"),
+                "QuoteDeleted": helpers.absmod(__name__, ".QuoteDeletedMessageSchema"),
+                "QuoteRequestCreated": helpers.absmod(
+                    __name__, ".QuoteRequestCreatedMessageSchema"
+                ),
+                "QuoteRequestDeleted": helpers.absmod(
+                    __name__, ".QuoteRequestDeletedMessageSchema"
+                ),
+                "QuoteRequestStateChanged": helpers.absmod(
+                    __name__, ".QuoteRequestStateChangedMessageSchema"
+                ),
+                "QuoteStateChanged": helpers.absmod(
+                    __name__, ".QuoteStateChangedMessageSchema"
+                ),
                 "ReviewCreated": helpers.absmod(
                     __name__, ".ReviewCreatedMessageSchema"
                 ),
@@ -604,6 +634,36 @@ class MessagePagedQueryResponseSchema(helpers.BaseSchema):
                 ),
                 "ReviewStateTransition": helpers.absmod(
                     __name__, ".ReviewStateTransitionMessageSchema"
+                ),
+                "StagedQuoteCreated": helpers.absmod(
+                    __name__, ".StagedQuoteCreatedMessageSchema"
+                ),
+                "StagedQuoteDeleted": helpers.absmod(
+                    __name__, ".StagedQuoteDeletedMessageSchema"
+                ),
+                "StagedQuoteSellerCommentSet": helpers.absmod(
+                    __name__, ".StagedQuoteSellerCommentSetMessageSchema"
+                ),
+                "StagedQuoteStateChanged": helpers.absmod(
+                    __name__, ".StagedQuoteStateChangedMessageSchema"
+                ),
+                "StagedQuoteValidToSet": helpers.absmod(
+                    __name__, ".StagedQuoteValidToSetMessageSchema"
+                ),
+                "StandalonePriceCreated": helpers.absmod(
+                    __name__, ".StandalonePriceCreatedMessageSchema"
+                ),
+                "StandalonePriceDeleted": helpers.absmod(
+                    __name__, ".StandalonePriceDeletedMessageSchema"
+                ),
+                "StandalonePriceDiscountSet": helpers.absmod(
+                    __name__, ".StandalonePriceDiscountSetMessageSchema"
+                ),
+                "StandalonePriceExternalDiscountSet": helpers.absmod(
+                    __name__, ".StandalonePriceExternalDiscountSetMessageSchema"
+                ),
+                "StandalonePriceValueChanged": helpers.absmod(
+                    __name__, ".StandalonePriceValueChangedMessageSchema"
                 ),
                 "StoreCreated": helpers.absmod(__name__, ".StoreCreatedMessageSchema"),
                 "StoreDeleted": helpers.absmod(__name__, ".StoreDeletedMessageSchema"),
@@ -2043,6 +2103,21 @@ class ProductSelectionProductAddedMessageSchema(MessageSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2068,6 +2143,53 @@ class ProductSelectionProductRemovedMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ProductSelectionProductRemovedMessage(**data)
+
+
+class ProductSelectionVariantSelectionChangedMessageSchema(MessageSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    old_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldVariantSelection",
+    )
+    new_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="newVariantSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionVariantSelectionChangedMessage(**data)
 
 
 class ProductSlugChangedMessageSchema(MessageSchema):
@@ -2160,6 +2282,92 @@ class ProductVariantDeletedMessageSchema(MessageSchema):
         return models.ProductVariantDeletedMessage(**data)
 
 
+class QuoteCreatedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteCreatedMessage(**data)
+
+
+class QuoteDeletedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteDeletedMessage(**data)
+
+
+class QuoteRequestCreatedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestCreatedMessage(**data)
+
+
+class QuoteRequestDeletedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestDeletedMessage(**data)
+
+
+class QuoteRequestStateChangedMessageSchema(MessageSchema):
+    quote_request_state = marshmallow_enum.EnumField(
+        QuoteRequestState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="quoteRequestState",
+    )
+    old_quote_request_state = marshmallow_enum.EnumField(
+        QuoteRequestState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldQuoteRequestState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestStateChangedMessage(**data)
+
+
+class QuoteStateChangedMessageSchema(MessageSchema):
+    quote_state = marshmallow_enum.EnumField(
+        QuoteState, by_value=True, allow_none=True, missing=None, data_key="quoteState"
+    )
+    old_quote_state = marshmallow_enum.EnumField(
+        QuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldQuoteState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteStateChangedMessage(**data)
+
+
 class ReviewCreatedMessageSchema(MessageSchema):
     review = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".review.ReviewSchema"),
@@ -2231,12 +2439,22 @@ class ReviewRatingSetMessageSchema(MessageSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -2318,12 +2536,22 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -2344,6 +2572,160 @@ class ReviewStateTransitionMessageSchema(MessageSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ReviewStateTransitionMessage(**data)
+
+
+class StagedQuoteCreatedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteCreatedMessage(**data)
+
+
+class StagedQuoteDeletedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteDeletedMessage(**data)
+
+
+class StagedQuoteSellerCommentSetMessageSchema(MessageSchema):
+    seller_comment = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="sellerComment"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteSellerCommentSetMessage(**data)
+
+
+class StagedQuoteStateChangedMessageSchema(MessageSchema):
+    staged_quote_state = marshmallow_enum.EnumField(
+        StagedQuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="stagedQuoteState",
+    )
+    old_staged_quote_state = marshmallow_enum.EnumField(
+        StagedQuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldStagedQuoteState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteStateChangedMessage(**data)
+
+
+class StagedQuoteValidToSetMessageSchema(MessageSchema):
+    valid_to = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validTo"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteValidToSetMessage(**data)
+
+
+class StandalonePriceCreatedMessageSchema(MessageSchema):
+    standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".standalone_price.StandalonePriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="standalonePrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceCreatedMessage(**data)
+
+
+class StandalonePriceDeletedMessageSchema(MessageSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceDeletedMessage(**data)
+
+
+class StandalonePriceDiscountSetMessageSchema(MessageSchema):
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceDiscountSetMessage(**data)
+
+
+class StandalonePriceExternalDiscountSetMessageSchema(MessageSchema):
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceExternalDiscountSetMessage(**data)
+
+
+class StandalonePriceValueChangedMessageSchema(MessageSchema):
+    value = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceValueChangedMessage(**data)
 
 
 class StoreCreatedMessageSchema(MessageSchema):
@@ -4179,6 +4561,21 @@ class ProductSelectionProductAddedMessagePayloadSchema(MessagePayloadSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
+    variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="variantSelection",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -4204,6 +4601,53 @@ class ProductSelectionProductRemovedMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ProductSelectionProductRemovedMessagePayload(**data)
+
+
+class ProductSelectionVariantSelectionChangedMessagePayloadSchema(MessagePayloadSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    old_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="oldVariantSelection",
+    )
+    new_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="newVariantSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ProductSelectionVariantSelectionChangedMessagePayload(**data)
 
 
 class ProductSlugChangedMessagePayloadSchema(MessagePayloadSchema):
@@ -4296,6 +4740,92 @@ class ProductVariantDeletedMessagePayloadSchema(MessagePayloadSchema):
         return models.ProductVariantDeletedMessagePayload(**data)
 
 
+class QuoteCreatedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteCreatedMessagePayload(**data)
+
+
+class QuoteDeletedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteDeletedMessagePayload(**data)
+
+
+class QuoteRequestCreatedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestCreatedMessagePayload(**data)
+
+
+class QuoteRequestDeletedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestDeletedMessagePayload(**data)
+
+
+class QuoteRequestStateChangedMessagePayloadSchema(MessagePayloadSchema):
+    quote_request_state = marshmallow_enum.EnumField(
+        QuoteRequestState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="quoteRequestState",
+    )
+    old_quote_request_state = marshmallow_enum.EnumField(
+        QuoteRequestState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldQuoteRequestState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteRequestStateChangedMessagePayload(**data)
+
+
+class QuoteStateChangedMessagePayloadSchema(MessagePayloadSchema):
+    quote_state = marshmallow_enum.EnumField(
+        QuoteState, by_value=True, allow_none=True, missing=None, data_key="quoteState"
+    )
+    old_quote_state = marshmallow_enum.EnumField(
+        QuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldQuoteState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.QuoteStateChangedMessagePayload(**data)
+
+
 class ReviewCreatedMessagePayloadSchema(MessagePayloadSchema):
     review = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".review.ReviewSchema"),
@@ -4367,12 +4897,22 @@ class ReviewRatingSetMessagePayloadSchema(MessagePayloadSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -4454,12 +4994,22 @@ class ReviewStateTransitionMessagePayloadSchema(MessagePayloadSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -4497,6 +5047,160 @@ class ShoppingListStoreSetMessagePayloadSchema(MessagePayloadSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.ShoppingListStoreSetMessagePayload(**data)
+
+
+class StagedQuoteCreatedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteCreatedMessagePayload(**data)
+
+
+class StagedQuoteDeletedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteDeletedMessagePayload(**data)
+
+
+class StagedQuoteSellerCommentSetMessagePayloadSchema(MessagePayloadSchema):
+    seller_comment = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="sellerComment"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteSellerCommentSetMessagePayload(**data)
+
+
+class StagedQuoteStateChangedMessagePayloadSchema(MessagePayloadSchema):
+    staged_quote_state = marshmallow_enum.EnumField(
+        StagedQuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="stagedQuoteState",
+    )
+    old_staged_quote_state = marshmallow_enum.EnumField(
+        StagedQuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="oldStagedQuoteState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteStateChangedMessagePayload(**data)
+
+
+class StagedQuoteValidToSetMessagePayloadSchema(MessagePayloadSchema):
+    valid_to = marshmallow.fields.DateTime(
+        allow_none=True, missing=None, data_key="validTo"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StagedQuoteValidToSetMessagePayload(**data)
+
+
+class StandalonePriceCreatedMessagePayloadSchema(MessagePayloadSchema):
+    standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".standalone_price.StandalonePriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="standalonePrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceCreatedMessagePayload(**data)
+
+
+class StandalonePriceDeletedMessagePayloadSchema(MessagePayloadSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceDeletedMessagePayload(**data)
+
+
+class StandalonePriceDiscountSetMessagePayloadSchema(MessagePayloadSchema):
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceDiscountSetMessagePayload(**data)
+
+
+class StandalonePriceExternalDiscountSetMessagePayloadSchema(MessagePayloadSchema):
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceExternalDiscountSetMessagePayload(**data)
+
+
+class StandalonePriceValueChangedMessagePayloadSchema(MessagePayloadSchema):
+    value = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceValueChangedMessagePayload(**data)
 
 
 class StoreCreatedMessagePayloadSchema(MessagePayloadSchema):

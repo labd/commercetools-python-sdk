@@ -54,6 +54,7 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCodePagedQueryResponse"]:
+        """Deprecated scope: `view_orders:{projectKey}`"""
         params = {
             "expand": expand,
             "sort": sort,
@@ -89,6 +90,7 @@ class ByProjectKeyDiscountCodesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
+        """Deprecated scope: `manage_orders:{projectKey}`"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/discount-codes",

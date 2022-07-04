@@ -31,6 +31,9 @@ from ..password.by_project_key_me_password_request_builder import (
 from ..payments.by_project_key_me_payments_request_builder import (
     ByProjectKeyMePaymentsRequestBuilder,
 )
+from ..quote_requests.by_project_key_me_quote_requests_request_builder import (
+    ByProjectKeyMeQuoteRequestsRequestBuilder,
+)
 from ..shopping_lists.by_project_key_me_shopping_lists_request_builder import (
     ByProjectKeyMeShoppingListsRequestBuilder,
 )
@@ -102,6 +105,13 @@ class ByProjectKeyMeRequestBuilder:
     def payments(self) -> ByProjectKeyMePaymentsRequestBuilder:
         """The My Payments endpoint creates and provides access to payments scoped to a specific user."""
         return ByProjectKeyMePaymentsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def quote_requests(self) -> ByProjectKeyMeQuoteRequestsRequestBuilder:
+        """The My Quote Requests endpoint creates and provides access to quote requests scoped to a specific user."""
+        return ByProjectKeyMeQuoteRequestsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

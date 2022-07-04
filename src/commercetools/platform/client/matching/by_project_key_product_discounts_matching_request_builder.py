@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.error import ErrorResponse
+from ...models.error import ErrorResponse, NoMatchingProductDiscountFoundError
 from ...models.product_discount import ProductDiscount, ProductDiscountMatchQuery
 
 if typing.TYPE_CHECKING:
@@ -33,7 +33,11 @@ class ByProjectKeyProductDiscountsMatchingRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["ProductDiscount"]:
+    ) -> "ProductDiscount":
+        """This endpoint can be used to simulate which Product Discounts would be applied if a specified Product Variant had a specified Price.
+        Given Product and Product Variant IDs and a Price, this endpoint will return the [ProductDiscount](ctp:api:type:ProductDiscount) that would have been applied to that Price.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/product-discounts/matching",
@@ -44,9 +48,10 @@ class ByProjectKeyProductDiscountsMatchingRequestBuilder:
         )
         if response.status_code == 200:
             return ProductDiscount.deserialize(response.json())
+        elif response.status_code == 404:
+            obj = NoMatchingProductDiscountFoundError.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
         elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
-        elif response.status_code == 404:
-            return None
         warnings.warn("Unhandled status code %d" % response.status_code)

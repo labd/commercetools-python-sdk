@@ -10,9 +10,6 @@ import warnings
 from ..import_containers.by_project_key_products_import_containers_request_builder import (
     ByProjectKeyProductsImportContainersRequestBuilder,
 )
-from .by_project_key_products_import_sink_key_by_import_sink_key_request_builder import (
-    ByProjectKeyProductsImportSinkKeyByImportSinkKeyRequestBuilder,
-)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -33,15 +30,6 @@ class ByProjectKeyProductsRequestBuilder:
 
     def import_containers(self) -> ByProjectKeyProductsImportContainersRequestBuilder:
         return ByProjectKeyProductsImportContainersRequestBuilder(
-            project_key=self._project_key,
-            client=self._client,
-        )
-
-    def import_sink_key_with_import_sink_key_value(
-        self, import_sink_key: str
-    ) -> ByProjectKeyProductsImportSinkKeyByImportSinkKeyRequestBuilder:
-        return ByProjectKeyProductsImportSinkKeyByImportSinkKeyRequestBuilder(
-            import_sink_key=import_sink_key,
             project_key=self._project_key,
             client=self._client,
         )

@@ -16,6 +16,9 @@ from ...models.inventory import (
 from .by_project_key_inventory_by_id_request_builder import (
     ByProjectKeyInventoryByIDRequestBuilder,
 )
+from .by_project_key_inventory_key_by_key_request_builder import (
+    ByProjectKeyInventoryKeyByKeyRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
@@ -37,6 +40,13 @@ class ByProjectKeyInventoryRequestBuilder:
     def with_id(self, id: str) -> ByProjectKeyInventoryByIDRequestBuilder:
         return ByProjectKeyInventoryByIDRequestBuilder(
             id=id,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def with_key(self, key: str) -> ByProjectKeyInventoryKeyByKeyRequestBuilder:
+        return ByProjectKeyInventoryKeyByKeyRequestBuilder(
+            key=key,
             project_key=self._project_key,
             client=self._client,
         )
@@ -89,6 +99,7 @@ class ByProjectKeyInventoryRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["InventoryEntry"]:
+        """Produces the [InventoryEntryCreatedMessage](ctp:api:type:InventoryEntryCreatedMessage)."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/inventory",

@@ -208,7 +208,9 @@ class MissingAttributesMeta(_BaseType):
 
 
 class MissingAttributesSearchRequest(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
     staged: typing.Optional[bool]
@@ -283,6 +285,7 @@ class MissingAttributesSearchRequest(_BaseType):
 class MissingAttributesPagedQueryResult(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["MissingAttributes"]
     meta: "MissingAttributesMeta"
@@ -473,7 +476,9 @@ class MissingImagesMeta(_BaseType):
 
 
 class MissingImagesSearchRequest(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
     staged: typing.Optional[bool]
@@ -532,6 +537,7 @@ class MissingImagesSearchRequest(_BaseType):
 class MissingImagesPagedQueryResult(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["MissingImages"]
     meta: "MissingImagesMeta"
@@ -716,7 +722,9 @@ class MissingPricesMeta(_BaseType):
 
 
 class MissingPricesSearchRequest(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
     #: If true, searches data from staged products in addition to published products.
     staged: typing.Optional[bool]
@@ -783,6 +791,7 @@ class MissingPricesSearchRequest(_BaseType):
 class MissingPricesPagedQueryResult(_BaseType):
     count: int
     total: int
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["MissingPrices"]
     meta: "MissingPricesMeta"

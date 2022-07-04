@@ -20,13 +20,7 @@ from .common import (
 
 if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
-    from .common import (
-        CreatedBy,
-        LastModifiedBy,
-        LocalizedString,
-        ReferenceTypeId,
-        ResourceIdentifier,
-    )
+    from .common import CreatedBy, LastModifiedBy, LocalizedString, ReferenceTypeId
     from .product_selection import (
         ProductSelectionReference,
         ProductSelectionResourceIdentifier,
@@ -67,9 +61,9 @@ __all__ = [
 
 
 class ProductSelectionSetting(_BaseType):
-    #: Reference to a Product Selection
+    #: Reference to a ProductSelection.
     product_selection: "ProductSelectionReference"
-    #: If `true` all Products assigned to this Product Selection are part of the Store's assortment.
+    #: If `true`, all Products assigned to this Product Selection are part of the Store's assortment.
     active: bool
 
     def __init__(self, *, product_selection: "ProductSelectionReference", active: bool):
@@ -93,9 +87,9 @@ class ProductSelectionSetting(_BaseType):
 
 
 class ProductSelectionSettingDraft(_BaseType):
-    #: Resource Identifier of a Product Selection
+    #: Resource Identifier of a ProductSelection.
     product_selection: "ProductSelectionResourceIdentifier"
-    #: If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+    #: Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
     active: typing.Optional[bool]
 
     def __init__(
@@ -124,25 +118,26 @@ class ProductSelectionSettingDraft(_BaseType):
 
 
 class Store(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for the store.
-    #: The `key` is mandatory and immutable.
-    #: It is used to reference the store.
+    #: User-defined unique and immutable identifier for the Store.
     key: str
-    #: The name of the store
+    #: Name of the Store.
     name: typing.Optional["LocalizedString"]
-    languages: typing.Optional[typing.List["str"]]
-    #: Set of References to a Channel with `ProductDistribution` role
+    #: Languages configured for the Store.
+    languages: typing.List["str"]
+    #: Product Distribution Channels allowed for the Store.
     distribution_channels: typing.List["ChannelReference"]
-    #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
-    supply_channels: typing.Optional[typing.List["ChannelReference"]]
-    #: Set of References to Product Selections along with settings.
-    #: If `productSelections` is empty all products in the project are available in this Store.
-    #: If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
-    product_selections: typing.Optional[typing.List["ProductSelectionSetting"]]
+    #: Inventory Supply Channels allowed for the Store.
+    supply_channels: typing.List["ChannelReference"]
+    #: Controls availability of Products for this Store via active Product Selections.
+    #:
+    #: - If empty all Products in the [Project](ctp:api:type:Project) are available in this Store.
+    #: - If provided, Products from `active` Product Selections are available in this Store.
+    product_selections: typing.List["ProductSelectionSetting"]
+    #: Custom fields for the Store.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -156,12 +151,10 @@ class Store(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         key: str,
         name: typing.Optional["LocalizedString"] = None,
-        languages: typing.Optional[typing.List["str"]] = None,
+        languages: typing.List["str"],
         distribution_channels: typing.List["ChannelReference"],
-        supply_channels: typing.Optional[typing.List["ChannelReference"]] = None,
-        product_selections: typing.Optional[
-            typing.List["ProductSelectionSetting"]
-        ] = None,
+        supply_channels: typing.List["ChannelReference"],
+        product_selections: typing.List["ProductSelectionSetting"],
         custom: typing.Optional["CustomFields"] = None
     ):
         self.last_modified_by = last_modified_by
@@ -194,21 +187,23 @@ class Store(BaseResource):
 
 
 class StoreDraft(_BaseType):
-    #: User-specific unique identifier for the store.
-    #: The `key` is mandatory and immutable.
-    #: It is used to reference the store.
+    #: User-defined unique and immutable identifier for the Store.
+    #: Keys can only contain alphanumeric characters, underscores, and hyphens.
     key: str
-    #: The name of the store
+    #: Name of the Store.
     name: typing.Optional["LocalizedString"]
+    #: Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
     languages: typing.Optional[typing.List["str"]]
-    #: Set of ResourceIdentifiers to a Channel with `ProductDistribution` role
+    #: ResourceIdentifier to a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
-    #: Set of ResourceIdentifiers of Channels with `InventorySupply` role
+    #: ResourceIdentifier to a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
-    #: Set of ResourceIdentifiers of Product Selections along with settings.
-    #: If `productSelections` is empty all products in the project are available in this Store.
-    #: If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+    #: Controls availability of Products for this Store via active Product Selections.
+    #:
+    #: - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
+    #: - If provided, Products from `active` Product Selections are available in this Store.
     product_selections: typing.Optional[typing.List["ProductSelectionSettingDraft"]]
+    #: Custom fields for the Store.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -251,6 +246,8 @@ class StoreDraft(_BaseType):
 
 
 class StoreKeyReference(KeyReference):
+    """[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key."""
+
     def __init__(self, *, key: str):
 
         super().__init__(key=key, type_id=ReferenceTypeId.STORE)
@@ -268,25 +265,36 @@ class StoreKeyReference(KeyReference):
 
 
 class StorePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Store](ctp:api:type:Store)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Stores](ctp:api:type:Store) matching the query.
     results: typing.List["Store"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Store"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -306,6 +314,9 @@ class StorePagedQueryResponse(_BaseType):
 
 
 class StoreReference(Reference):
+    """[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store)."""
+
+    #: Contains the representation of the expanded Store. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Stores.
     obj: typing.Optional["Store"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Store"] = None):
@@ -326,6 +337,8 @@ class StoreReference(Reference):
 
 
 class StoreResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -347,7 +360,9 @@ class StoreResourceIdentifier(ResourceIdentifier):
 
 
 class StoreUpdate(_BaseType):
+    #: Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Store.
     actions: typing.List["StoreUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["StoreUpdateAction"]):
@@ -442,6 +457,9 @@ class StoreUpdateAction(_BaseType):
 
 
 class StoreAddDistributionChannelAction(StoreUpdateAction):
+    """This action has no effect if a given distribution channel is already present in a Store."""
+
+    #: Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
     distribution_channel: "ChannelResourceIdentifier"
 
     def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
@@ -464,11 +482,21 @@ class StoreAddDistributionChannelAction(StoreUpdateAction):
 
 
 class StoreAddProductSelectionAction(StoreUpdateAction):
-    #: A Product Selection to be added to the current Product Selections of this Store.
-    product_selection: "ProductSelectionSettingDraft"
+    """To make all included Products available to your customers of a given Store, add the [Product Selections](/../api/projects/product-selections) to the respective Store. This action has no effect if the given Product Selection is already present in the Store and has the same `active` flag."""
 
-    def __init__(self, *, product_selection: "ProductSelectionSettingDraft"):
+    #: Product Selection to add to the Store either activated or deactivated.
+    product_selection: "ProductSelectionResourceIdentifier"
+    #: Set to `true` to make all Products assigned to the referenced Product Selection available in the Store.
+    active: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        product_selection: "ProductSelectionResourceIdentifier",
+        active: typing.Optional[bool] = None
+    ):
         self.product_selection = product_selection
+        self.active = active
 
         super().__init__(action="addProductSelection")
 
@@ -487,11 +515,12 @@ class StoreAddProductSelectionAction(StoreUpdateAction):
 
 
 class StoreAddSupplyChannelAction(StoreUpdateAction):
-    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    """This action has no effect if a given supply channel is already present in a Store."""
 
-    def __init__(
-        self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
-    ):
+    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+    supply_channel: "ChannelResourceIdentifier"
+
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
         self.supply_channel = supply_channel
 
         super().__init__(action="addSupplyChannel")
@@ -511,15 +540,17 @@ class StoreAddSupplyChannelAction(StoreUpdateAction):
 
 
 class StoreChangeProductSelectionAction(StoreUpdateAction):
-    #: A current Product Selection of this Store that is to be activated or deactivated.
-    product_selection: "ResourceIdentifier"
-    #: If `true` all Products assigned to the Product Selection become part of the Store's assortment.
+    """[ProductSelection](ctp:api:type:ProductSelection) in a Store can be activated or deactivated using this update action."""
+
+    #: Current Product Selection of the Store to be activated or deactivated.
+    product_selection: "ProductSelectionResourceIdentifier"
+    #: Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
     active: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        product_selection: "ResourceIdentifier",
+        product_selection: "ProductSelectionResourceIdentifier",
         active: typing.Optional[bool] = None
     ):
         self.product_selection = product_selection
@@ -542,6 +573,7 @@ class StoreChangeProductSelectionAction(StoreUpdateAction):
 
 
 class StoreRemoveDistributionChannelAction(StoreUpdateAction):
+    #: Value to remove. ResourceIdentifier of a Channel with the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     distribution_channel: "ChannelResourceIdentifier"
 
     def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
@@ -564,10 +596,12 @@ class StoreRemoveDistributionChannelAction(StoreUpdateAction):
 
 
 class StoreRemoveProductSelectionAction(StoreUpdateAction):
-    #: A Product Selection to be removed from the current Product Selections of this Store.
-    product_selection: "ResourceIdentifier"
+    """This action has no effect if the given Product Selection is not in the Store."""
 
-    def __init__(self, *, product_selection: "ResourceIdentifier"):
+    #: Value to remove. The removed Product Selection is made offline.
+    product_selection: "ProductSelectionResourceIdentifier"
+
+    def __init__(self, *, product_selection: "ProductSelectionResourceIdentifier"):
         self.product_selection = product_selection
 
         super().__init__(action="removeProductSelection")
@@ -587,11 +621,10 @@ class StoreRemoveProductSelectionAction(StoreUpdateAction):
 
 
 class StoreRemoveSupplyChannelAction(StoreUpdateAction):
-    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Value to remove. ResourceIdentifier of a Channel with the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+    supply_channel: "ChannelResourceIdentifier"
 
-    def __init__(
-        self, *, supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
-    ):
+    def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
         self.supply_channel = supply_channel
 
         super().__init__(action="removeSupplyChannel")
@@ -671,6 +704,9 @@ class StoreSetCustomTypeAction(StoreUpdateAction):
 
 
 class StoreSetDistributionChannelsAction(StoreUpdateAction):
+    #: Value to set.
+    #: If not defined, the Store's `distributionChannels` are unset.
+    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
@@ -699,6 +735,8 @@ class StoreSetDistributionChannelsAction(StoreUpdateAction):
 
 
 class StoreSetLanguagesAction(StoreUpdateAction):
+    #: Value to set.
+    #: Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
     languages: typing.Optional[typing.List["str"]]
 
     def __init__(self, *, languages: typing.Optional[typing.List["str"]] = None):
@@ -721,7 +759,7 @@ class StoreSetLanguagesAction(StoreUpdateAction):
 
 
 class StoreSetNameAction(StoreUpdateAction):
-    #: The updated name of the store
+    #: Value to set.
     name: typing.Optional["LocalizedString"]
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
@@ -742,11 +780,20 @@ class StoreSetNameAction(StoreUpdateAction):
 
 
 class StoreSetProductSelectionsAction(StoreUpdateAction):
-    #: The total of Product Selections to be set for this Store.
-    product_selections: typing.List["ProductSelectionSettingDraft"]
+    """Instead of adding or removing [Product Selections](/../api/projects/product-selections) individually, you can also change all the Store's Product Selections in one go using this update action. The Store will only contain the Product Selections specified in the request."""
+
+    #: Value to set.
+    #:
+    #: - If provided, Product Selections for which `active` is set to `true` are available in the Store.
+    #: - If not provided or provided as empty array, the action removes all Product Selections from this Store, meaning all Products in the [Project](ctp:api:type:Project) are available in this Store.
+    product_selections: typing.Optional[typing.List["ProductSelectionSettingDraft"]]
 
     def __init__(
-        self, *, product_selections: typing.List["ProductSelectionSettingDraft"]
+        self,
+        *,
+        product_selections: typing.Optional[
+            typing.List["ProductSelectionSettingDraft"]
+        ] = None
     ):
         self.product_selections = product_selections
 
@@ -767,6 +814,9 @@ class StoreSetProductSelectionsAction(StoreUpdateAction):
 
 
 class StoreSetSupplyChannelsAction(StoreUpdateAction):
+    #: Value to set.
+    #: If not defined, the Store's `supplyChannels` are unset.
+    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(

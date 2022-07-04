@@ -14,7 +14,7 @@ from commercetools import helpers
 
 from ... import models
 from ..common import ReferenceTypeId
-from ..customer import AnonymousCartSignInMode
+from ..customer import AnonymousCartSignInMode, AuthenticationMode
 from .common import BaseResourceSchema, ReferenceSchema, ResourceIdentifierSchema
 from .type import FieldContainerField
 
@@ -48,7 +48,9 @@ class CustomerSchema(BaseResourceSchema):
         data_key="customerNumber",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
-    password = marshmallow.fields.String(allow_none=True, missing=None)
+    password = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -159,6 +161,14 @@ class CustomerSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    authentication_mode = marshmallow_enum.EnumField(
+        AuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authenticationMode",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -232,7 +242,9 @@ class CustomerDraftSchema(helpers.BaseSchema):
         data_key="customerNumber",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
-    password = marshmallow.fields.String(allow_none=True, missing=None)
+    password = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -368,6 +380,14 @@ class CustomerDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
+    )
+    authentication_mode = marshmallow_enum.EnumField(
+        AuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authenticationMode",
     )
 
     class Meta:
@@ -608,6 +628,9 @@ class CustomerUpdateSchema(helpers.BaseSchema):
                 "setAddressCustomType": helpers.absmod(
                     __name__, ".CustomerSetAddressCustomTypeActionSchema"
                 ),
+                "setAuthenticationMode": helpers.absmod(
+                    __name__, ".CustomerSetAuthenticationModeActionSchema"
+                ),
                 "setCompanyName": helpers.absmod(
                     __name__, ".CustomerSetCompanyNameActionSchema"
                 ),
@@ -712,6 +735,33 @@ class MyCustomerResetPasswordSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.MyCustomerResetPassword(**data)
+
+
+class MyCustomerSigninSchema(helpers.BaseSchema):
+    email = marshmallow.fields.String(allow_none=True, missing=None)
+    password = marshmallow.fields.String(allow_none=True, missing=None)
+    active_cart_sign_in_mode = marshmallow_enum.EnumField(
+        AnonymousCartSignInMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="activeCartSignInMode",
+    )
+    update_product_data = marshmallow.fields.Boolean(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="updateProductData",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyCustomerSignin(**data)
 
 
 class CustomerAddAddressActionSchema(CustomerUpdateActionSchema):
@@ -964,6 +1014,27 @@ class CustomerSetAddressCustomTypeActionSchema(CustomerUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CustomerSetAddressCustomTypeAction(**data)
+
+
+class CustomerSetAuthenticationModeActionSchema(CustomerUpdateActionSchema):
+    auth_mode = marshmallow_enum.EnumField(
+        AuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="authMode",
+    )
+    password = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CustomerSetAuthenticationModeAction(**data)
 
 
 class CustomerSetCompanyNameActionSchema(CustomerUpdateActionSchema):

@@ -504,7 +504,7 @@ class CustomFieldReferenceType(FieldType):
 
 
 class CustomFieldSetType(FieldType):
-    """Values of a SetType Custom Field are sets of values of the specified `elementType`."""
+    """Values of a SetType Custom Field are sets of values of the specified `elementType` (without duplicate elements)."""
 
     #: Field type of the elements in the set.
     element_type: "FieldType"
@@ -581,10 +581,13 @@ class ResourceTypeId(enum.Enum):
     ORDER = "order"
     ORDER_EDIT = "order-edit"
     ORDER_DELIVERY = "order-delivery"
+    ORDER_PARCEL = "order-parcel"
+    ORDER_RETURN_ITEM = "order-return-item"
     PAYMENT = "payment"
     PAYMENT_INTERFACE_INTERACTION = "payment-interface-interaction"
     PRODUCT_PRICE = "product-price"
     PRODUCT_SELECTION = "product-selection"
+    QUOTE = "quote"
     REVIEW = "review"
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
@@ -598,7 +601,7 @@ class Type(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-defined unique identifier for the Type.
+    #: User-defined unique identifier of the Type.
     key: str
     #: Name of the Type.
     name: "LocalizedString"
@@ -695,9 +698,9 @@ class TypeDraft(_BaseType):
 class TypePagedQueryResponse(_BaseType):
     """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Types](ctp:api:type:Type)."""
 
-    #: Number of results requested in the query request.
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    #: Offset supplied by the client or server default. It is the number of elements skipped, not a page number.
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     #: Actual number of results returned.
     count: int
@@ -742,7 +745,7 @@ class TypePagedQueryResponse(_BaseType):
 
 
 class TypeReference(Reference):
-    """[Reference](/../api/types#reference) to a [Type](ctp:api:type:Type)."""
+    """[Reference](ctp:api:type:Reference) to a [Type](ctp:api:type:Type)."""
 
     #: Contains the representation of the expanded Type.
     #: Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
@@ -766,7 +769,7 @@ class TypeReference(Reference):
 
 
 class TypeResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
@@ -797,7 +800,7 @@ class TypeTextInputHint(enum.Enum):
 
 class TypeUpdate(_BaseType):
     #: Expected version of the type on which the changes should be applied.
-    #: If the expected version does not match the actual version, a 409 Conflict will be returned.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
     #: Update actions to be performed on the Type.
     actions: typing.List["TypeUpdateAction"]
@@ -1146,6 +1149,7 @@ class TypeChangeKeyAction(TypeUpdateAction):
 class TypeChangeLabelAction(TypeUpdateAction):
     #: Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
     field_name: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     label: "LocalizedString"
 
     def __init__(self, *, field_name: str, label: "LocalizedString"):
@@ -1167,7 +1171,7 @@ class TypeChangeLabelAction(TypeUpdateAction):
 
 
 class TypeChangeLocalizedEnumValueLabelAction(TypeUpdateAction):
-    """Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of an [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition."""
+    """Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition."""
 
     #: `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
     field_name: str

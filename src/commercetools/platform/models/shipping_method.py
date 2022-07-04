@@ -66,8 +66,11 @@ __all__ = [
 
 
 class PriceFunction(_BaseType):
-    #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+    #: Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency_code: str
+    #: To calculate a Price based on the score, use `+`, `-`, `*` and parentheses. The score is inserted with `x`. The function returns the cent amount.
+    #:
+    #: For example, to charge $1.99 for a score of `1`, $3.99 for a score of `2`, \$5.99 for a score of `3` and onwards, the function is: `(200 * x) - 1)`. To charge $4.50, $6.00, and \$7.50 for express shipping, the function is: `(150 * x) + 300`.
     function: str
 
     def __init__(self, *, currency_code: str, function: str):
@@ -93,18 +96,25 @@ class ShippingMethod(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for the shipping method.
+    #: User-defined unique identifier of the ShippingMethod.
     key: typing.Optional[str]
+    #: Name of the ShippingMethod.
     name: str
+    #: Localized name of the ShippingMethod.
     localized_name: typing.Optional["LocalizedString"]
+    #: Description of the ShippingMethod.
     description: typing.Optional[str]
+    #: Localized description of the ShippingMethod.
     localized_description: typing.Optional["LocalizedString"]
+    #: [TaxCategory](ctp:api:type:TaxCategory) of all ZoneRates of the ShippingMethod.
     tax_category: "TaxCategoryReference"
+    #: Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific Zones.
     zone_rates: typing.List["ZoneRate"]
-    #: One shipping method in a project can be default.
+    #: If `true` this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod.
     is_default: bool
-    #: A Cart predicate which can be used to more precisely select a shipping method for a cart.
+    #: Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
     predicate: typing.Optional[str]
+    #: Custom Fields of the ShippingMethod.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -160,17 +170,25 @@ class ShippingMethod(BaseResource):
 
 
 class ShippingMethodDraft(_BaseType):
+    #: User-defined unique identifier for the ShippingMethod.
     key: typing.Optional[str]
+    #: Name of the ShippingMethod.
     name: str
+    #: Localized name of the ShippingMethod.
     localized_name: typing.Optional["LocalizedString"]
+    #: Description of the ShippingMethod.
     description: typing.Optional[str]
+    #: Localized description of the ShippingMethod.
     localized_description: typing.Optional["LocalizedString"]
+    #: [TaxCategory](ctp:api:type:TaxCategory) for all ZoneRates of the ShippingMethod.
     tax_category: "TaxCategoryResourceIdentifier"
+    #: Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific zones.
     zone_rates: typing.List["ZoneRateDraft"]
-    #: If `true` the shipping method will be the default one in a project.
+    #: If `true` the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod.
     is_default: bool
-    #: A Cart predicate which can be used to more precisely select a shipping method for a cart.
+    #: Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
     predicate: typing.Optional[str]
+    #: Custom Fields for the ShippingMethod.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -213,10 +231,21 @@ class ShippingMethodDraft(_BaseType):
 
 
 class ShippingMethodPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [ShippingMethod](ctp:api:type:ShippingMethod)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: typing.Optional[int]
+    #: Actual number of results returned.
     count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: typing.Optional[int]
+    #: [Shipping Methods](ctp:api:type:ShippingMethod) matching the query.
     results: typing.List["ShippingMethod"]
 
     def __init__(
@@ -251,6 +280,9 @@ class ShippingMethodPagedQueryResponse(_BaseType):
 
 
 class ShippingMethodReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [ShippingMethod](ctp:api:type:ShippingMethod)."""
+
+    #: Contains the representation of the expanded ShippingMethod. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShippingMethods.
     obj: typing.Optional["ShippingMethod"]
 
     def __init__(self, *, id: str, obj: typing.Optional["ShippingMethod"] = None):
@@ -273,6 +305,8 @@ class ShippingMethodReference(Reference):
 
 
 class ShippingMethodResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -294,7 +328,9 @@ class ShippingMethodResourceIdentifier(ResourceIdentifier):
 
 
 class ShippingMethodUpdate(_BaseType):
+    #: Expected version of the ShippingMethod on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
     version: int
+    #: Update actions to be performed on the [ShippingMethod](/projects/shippingMethods#shippingmethod).
     actions: typing.List["ShippingMethodUpdateAction"]
 
     def __init__(
@@ -411,14 +447,15 @@ class ShippingMethodUpdateAction(_BaseType):
 
 
 class ShippingRate(_BaseType):
+    #: Currency amount of the ShippingRate.
     price: "TypedMoney"
-    #: The shipping is free if the order total (the sum of line item prices) exceeds the `freeAbove` value.
-    #: Note: `freeAbove` applies before any Cart or Product discounts, and can cause discounts to apply in invalid scenarios.
-    #: Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
+    #: Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
     free_above: typing.Optional["TypedMoney"]
-    #: Only appears in response to requests for shipping methods by cart or location to mark this shipping rate as one that matches the cart or location.
+    #: `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
+    #: Only appears in response to requests for [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) or
+    #: [Get ShippingMethods for a Location](#get-shippingmethods-for-a-location).
     is_matching: typing.Optional[bool]
-    #: A list of shipping rate price tiers.
+    #: Price tiers for the ShippingRate.
     tiers: typing.List["ShippingRatePriceTier"]
 
     def __init__(
@@ -449,12 +486,11 @@ class ShippingRate(_BaseType):
 
 
 class ShippingRateDraft(_BaseType):
+    #: Money value of the ShippingRate.
     price: "Money"
-    #: The shipping is free if the order total (the sum of line item prices) exceeds the freeAbove value.
-    #: Note: `freeAbove` applies before any Cart or Product discounts, and can cause discounts to apply in invalid scenarios.
-    #: Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
+    #: Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
     free_above: typing.Optional["Money"]
-    #: A list of shipping rate price tiers.
+    #: Price tiers for the ShippingRate.
     tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
 
     def __init__(
@@ -483,7 +519,6 @@ class ShippingRateDraft(_BaseType):
 
 
 class ShippingRatePriceTier(_BaseType):
-    #: Can be one of the following or absent.
     type: "ShippingRateTierType"
 
     def __init__(self, *, type: "ShippingRateTierType"):
@@ -513,10 +548,13 @@ class ShippingRatePriceTier(_BaseType):
 
 
 class CartClassificationTier(ShippingRatePriceTier):
+    """Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`)."""
+
+    #: `key` selected from the `values` of the [CartClassificationType](/projects/project#cartclassificationtype) configured in the Project.
     value: str
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Fixed shipping rate for the selected classification.
     price: "Money"
+    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
@@ -543,17 +581,24 @@ class CartClassificationTier(ShippingRatePriceTier):
 
 
 class CartScoreTier(ShippingRatePriceTier):
-    score: float
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    """Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
+    Either `price` or `priceFunction` is required.
+
+    """
+
+    #: Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Using Tiered Shipping Rates](/../tutorials/shipping-rate) for details and examples.
+    score: int
+    #: Defines a fixed price for the `score`.
     price: typing.Optional["Money"]
+    #: Dynamically calculates a Price for a range of scores.
     price_function: typing.Optional["PriceFunction"]
+    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
         self,
         *,
-        score: float,
+        score: int,
         price: typing.Optional["Money"] = None,
         price_function: typing.Optional["PriceFunction"] = None,
         is_matching: typing.Optional[bool] = None
@@ -578,10 +623,18 @@ class CartScoreTier(ShippingRatePriceTier):
 
 
 class CartValueTier(ShippingRatePriceTier):
+    """Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
+    The value of the Cart is used to select a tier.
+    If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+    Tiers contain the `centAmount` (a value of `100` in the currency `USD` corresponds to `$ 1.00`), and start at `1`.'
+
+    """
+
+    #: Minimum total price of a Cart for which a shipping rate applies.
     minimum_cent_amount: int
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Fixed shipping rate Price for a CartValue.
     price: "Money"
+    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
@@ -610,16 +663,17 @@ class CartValueTier(ShippingRatePriceTier):
 
 
 class ShippingRateTierType(enum.Enum):
-    """Can be one of the following or absent."""
-
     CART_VALUE = "CartValue"
     CART_CLASSIFICATION = "CartClassification"
     CART_SCORE = "CartScore"
 
 
 class ZoneRate(_BaseType):
+    """Defines shipping rates in different currencies for a specific [Zone](ctp:api:type:Zone)."""
+
+    #: [Zone](ctp:api:type:Zone) for which the shipping rates are valid.
     zone: "ZoneReference"
-    #: The array does not contain two shipping rates with the same currency.
+    #: Shipping rates defined per currency.
     shipping_rates: typing.List["ShippingRate"]
 
     def __init__(
@@ -643,8 +697,9 @@ class ZoneRate(_BaseType):
 
 
 class ZoneRateDraft(_BaseType):
+    #: Sets the [Zone](ctp:api:type:Zone) for which the shippng rates are valid.
     zone: "ZoneResourceIdentifier"
-    #: The array must not contain two shipping rates with the same currency.
+    #: Shipping rates for the `currencies` configured in the [Project](ctp:api:type:Project). The array must not contain two ShippingRates with the same [CurrencyCode](ctp:api:type:CurrencyCode).
     shipping_rates: typing.List["ShippingRateDraft"]
 
     def __init__(
@@ -671,7 +726,9 @@ class ZoneRateDraft(_BaseType):
 
 
 class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
+    #: [Zone](ctp:api:type:Zone) to which the ShippingRate should be added.
     zone: "ZoneResourceIdentifier"
+    #: Value to add to `shippingRates`.
     shipping_rate: "ShippingRateDraft"
 
     def __init__(
@@ -697,6 +754,7 @@ class ShippingMethodAddShippingRateAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
+    #: Value to add to `zoneRates`.
     zone: "ZoneResourceIdentifier"
 
     def __init__(self, *, zone: "ZoneResourceIdentifier"):
@@ -719,7 +777,7 @@ class ShippingMethodAddZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
-    #: Only one ShippingMethod in a project can be default.
+    #: Value to set. Only one ShippingMethod can be default in a [Project](ctp:api:type:Project).
     is_default: bool
 
     def __init__(self, *, is_default: bool):
@@ -742,6 +800,7 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
+    #: Value to set. Must not be empty.
     name: str
 
     def __init__(self, *, name: str):
@@ -764,6 +823,7 @@ class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
+    #: Value to set.
     tax_category: "TaxCategoryResourceIdentifier"
 
     def __init__(self, *, tax_category: "TaxCategoryResourceIdentifier"):
@@ -790,7 +850,9 @@ class ShippingMethodChangeTaxCategoryAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
+    #: [Zone](ctp:api:type:Zone) from which the ShippingRate should be removed.
     zone: "ZoneResourceIdentifier"
+    #: Value to remove from `shippingRates`.
     shipping_rate: "ShippingRateDraft"
 
     def __init__(
@@ -820,6 +882,7 @@ class ShippingMethodRemoveShippingRateAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
+    #: Value to remove from `zoneRates`.
     zone: "ZoneResourceIdentifier"
 
     def __init__(self, *, zone: "ZoneResourceIdentifier"):
@@ -842,6 +905,8 @@ class ShippingMethodRemoveZoneAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetCustomFieldAction(ShippingMethodUpdateAction):
+    """This action sets, overwrites, or removes any existing [Custom Field](/projects/custom-fields) for an existing ShippingMethod."""
+
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -902,6 +967,7 @@ class ShippingMethodSetCustomTypeAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional[str]
 
     def __init__(self, *, description: typing.Optional[str] = None):
@@ -924,7 +990,7 @@ class ShippingMethodSetDescriptionAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
-    #: If `key` is absent or `null`, it is removed if it exists.
+    #: If `key` is absent or `null`, the existing key, if any, will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -947,6 +1013,7 @@ class ShippingMethodSetKeyAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     localized_description: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -975,6 +1042,7 @@ class ShippingMethodSetLocalizedDescriptionAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetLocalizedNameAction(ShippingMethodUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     localized_name: typing.Optional["LocalizedString"]
 
     def __init__(self, *, localized_name: typing.Optional["LocalizedString"] = None):
@@ -997,8 +1065,7 @@ class ShippingMethodSetLocalizedNameAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodSetPredicateAction(ShippingMethodUpdateAction):
-    #: A valid Cart predicate.
-    #: If `predicate` is absent or `null`, it is removed if it exists.
+    #: A valid [Cart predicate](/projects/predicates#cart-predicates). If `predicate` is absent or `null`, it is removed if it exists.
     predicate: typing.Optional[str]
 
     def __init__(self, *, predicate: typing.Optional[str] = None):

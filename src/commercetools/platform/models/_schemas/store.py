@@ -96,10 +96,7 @@ class StoreSchema(BaseResourceSchema):
         missing=None,
     )
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True),
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
+        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
     )
     distribution_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
@@ -114,7 +111,6 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannels",
     )
@@ -123,7 +119,6 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="productSelections",
     )
@@ -214,11 +209,11 @@ class StoreKeyReferenceSchema(KeyReferenceSchema):
 
 class StorePagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StoreSchema"),
         allow_none=True,
@@ -358,11 +353,16 @@ class StoreAddDistributionChannelActionSchema(StoreUpdateActionSchema):
 
 class StoreAddProductSelectionActionSchema(StoreUpdateActionSchema):
     product_selection = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ProductSelectionSettingDraftSchema"),
+        nested=helpers.absmod(
+            __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
+        ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="productSelection",
+    )
+    active = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
 
     class Meta:
@@ -379,7 +379,6 @@ class StoreAddSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -394,68 +393,12 @@ class StoreAddSupplyChannelActionSchema(StoreUpdateActionSchema):
 
 
 class StoreChangeProductSelectionActionSchema(StoreUpdateActionSchema):
-    product_selection = helpers.Discriminator(
+    product_selection = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
+        ),
         allow_none=True,
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": helpers.absmod(
-                __name__, ".cart_discount.CartDiscountResourceIdentifierSchema"
-            ),
-            "cart": helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
-            "category": helpers.absmod(
-                __name__, ".category.CategoryResourceIdentifierSchema"
-            ),
-            "channel": helpers.absmod(
-                __name__, ".channel.ChannelResourceIdentifierSchema"
-            ),
-            "customer-group": helpers.absmod(
-                __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
-            ),
-            "customer": helpers.absmod(
-                __name__, ".customer.CustomerResourceIdentifierSchema"
-            ),
-            "discount-code": helpers.absmod(
-                __name__, ".discount_code.DiscountCodeResourceIdentifierSchema"
-            ),
-            "inventory-entry": helpers.absmod(
-                __name__, ".inventory.InventoryEntryResourceIdentifierSchema"
-            ),
-            "order-edit": helpers.absmod(
-                __name__, ".order_edit.OrderEditResourceIdentifierSchema"
-            ),
-            "order": helpers.absmod(__name__, ".order.OrderResourceIdentifierSchema"),
-            "payment": helpers.absmod(
-                __name__, ".payment.PaymentResourceIdentifierSchema"
-            ),
-            "product-discount": helpers.absmod(
-                __name__, ".product_discount.ProductDiscountResourceIdentifierSchema"
-            ),
-            "product-selection": helpers.absmod(
-                __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
-            ),
-            "product-type": helpers.absmod(
-                __name__, ".product_type.ProductTypeResourceIdentifierSchema"
-            ),
-            "product": helpers.absmod(
-                __name__, ".product.ProductResourceIdentifierSchema"
-            ),
-            "review": helpers.absmod(
-                __name__, ".review.ReviewResourceIdentifierSchema"
-            ),
-            "shipping-method": helpers.absmod(
-                __name__, ".shipping_method.ShippingMethodResourceIdentifierSchema"
-            ),
-            "shopping-list": helpers.absmod(
-                __name__, ".shopping_list.ShoppingListResourceIdentifierSchema"
-            ),
-            "state": helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
-            "store": helpers.absmod(__name__, ".StoreResourceIdentifierSchema"),
-            "tax-category": helpers.absmod(
-                __name__, ".tax_category.TaxCategoryResourceIdentifierSchema"
-            ),
-            "type": helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-            "zone": helpers.absmod(__name__, ".zone.ZoneResourceIdentifierSchema"),
-        },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="productSelection",
     )
@@ -491,68 +434,12 @@ class StoreRemoveDistributionChannelActionSchema(StoreUpdateActionSchema):
 
 
 class StoreRemoveProductSelectionActionSchema(StoreUpdateActionSchema):
-    product_selection = helpers.Discriminator(
+    product_selection = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
+        ),
         allow_none=True,
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "cart-discount": helpers.absmod(
-                __name__, ".cart_discount.CartDiscountResourceIdentifierSchema"
-            ),
-            "cart": helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
-            "category": helpers.absmod(
-                __name__, ".category.CategoryResourceIdentifierSchema"
-            ),
-            "channel": helpers.absmod(
-                __name__, ".channel.ChannelResourceIdentifierSchema"
-            ),
-            "customer-group": helpers.absmod(
-                __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
-            ),
-            "customer": helpers.absmod(
-                __name__, ".customer.CustomerResourceIdentifierSchema"
-            ),
-            "discount-code": helpers.absmod(
-                __name__, ".discount_code.DiscountCodeResourceIdentifierSchema"
-            ),
-            "inventory-entry": helpers.absmod(
-                __name__, ".inventory.InventoryEntryResourceIdentifierSchema"
-            ),
-            "order-edit": helpers.absmod(
-                __name__, ".order_edit.OrderEditResourceIdentifierSchema"
-            ),
-            "order": helpers.absmod(__name__, ".order.OrderResourceIdentifierSchema"),
-            "payment": helpers.absmod(
-                __name__, ".payment.PaymentResourceIdentifierSchema"
-            ),
-            "product-discount": helpers.absmod(
-                __name__, ".product_discount.ProductDiscountResourceIdentifierSchema"
-            ),
-            "product-selection": helpers.absmod(
-                __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
-            ),
-            "product-type": helpers.absmod(
-                __name__, ".product_type.ProductTypeResourceIdentifierSchema"
-            ),
-            "product": helpers.absmod(
-                __name__, ".product.ProductResourceIdentifierSchema"
-            ),
-            "review": helpers.absmod(
-                __name__, ".review.ReviewResourceIdentifierSchema"
-            ),
-            "shipping-method": helpers.absmod(
-                __name__, ".shipping_method.ShippingMethodResourceIdentifierSchema"
-            ),
-            "shopping-list": helpers.absmod(
-                __name__, ".shopping_list.ShoppingListResourceIdentifierSchema"
-            ),
-            "state": helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
-            "store": helpers.absmod(__name__, ".StoreResourceIdentifierSchema"),
-            "tax-category": helpers.absmod(
-                __name__, ".tax_category.TaxCategoryResourceIdentifierSchema"
-            ),
-            "type": helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
-            "zone": helpers.absmod(__name__, ".zone.ZoneResourceIdentifierSchema"),
-        },
+        unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="productSelection",
     )
@@ -571,7 +458,6 @@ class StoreRemoveSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="supplyChannel",
     )
@@ -684,6 +570,7 @@ class StoreSetProductSelectionsActionSchema(StoreUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         missing=None,
         data_key="productSelections",
     )

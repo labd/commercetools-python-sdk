@@ -62,10 +62,18 @@ __all__ = [
 
 
 class PagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
     results: typing.List["BaseResource"]
     meta: typing.Optional[object]
 
@@ -73,16 +81,16 @@ class PagedQueryResponse(_BaseType):
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["BaseResource"],
         meta: typing.Optional[object] = None
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
         self.meta = meta
 
@@ -143,13 +151,18 @@ class UpdateAction(_BaseType):
 
 
 class Asset(_BaseType):
+    #: Unique identifier of the Asset.
     id: str
     sources: typing.List["AssetSource"]
+    #: Name of the Asset.
     name: "LocalizedString"
+    #: Description of the Asset.
     description: typing.Optional["LocalizedString"]
+    #: Keywords for categorizing and organizing Assets.
     tags: typing.Optional[typing.List["str"]]
-    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+    #: Custom Fields defined for the Asset.
     custom: typing.Optional["CustomFields"]
+    #: User-defined unique identifier of the Asset.
     key: typing.Optional[str]
 
     def __init__(
@@ -186,7 +199,11 @@ class Asset(_BaseType):
 
 
 class AssetDimensions(_BaseType):
+    """Dimensions of the Asset source specified by the number of pixels."""
+
+    #: Width of the Asset source.
     w: int
+    #: Height of the Asset source.
     h: int
 
     def __init__(self, *, w: int, h: int):
@@ -209,11 +226,15 @@ class AssetDimensions(_BaseType):
 
 class AssetDraft(_BaseType):
     sources: typing.List["AssetSource"]
+    #: Name of the Asset.
     name: "LocalizedString"
+    #: Description of the Asset.
     description: typing.Optional["LocalizedString"]
+    #: Keywords for categorizing and organizing Assets.
     tags: typing.Optional[typing.List["str"]]
-    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+    #: Custom Fields defined for the Asset.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: User-defined unique identifier for the Asset.
     key: typing.Optional[str]
 
     def __init__(
@@ -248,9 +269,15 @@ class AssetDraft(_BaseType):
 
 
 class AssetSource(_BaseType):
+    """Representation of an [Asset](#asset) in a specific format, for example a video in a certain encoding, or an image in a certain resolution."""
+
+    #: URI of the AssetSource.
     uri: str
+    #: User-defined unique identifier of the AssetSource.
     key: typing.Optional[str]
+    #: Width and height of the AssetSource.
     dimensions: typing.Optional["AssetDimensions"]
+    #: Indicates the type of content, for example `application/pdf`.
     content_type: typing.Optional[str]
 
     def __init__(
@@ -281,31 +308,55 @@ class AssetSource(_BaseType):
 
 
 class BaseAddress(_BaseType):
+    #: Unique identifier of the Address.
     id: typing.Optional[str]
+    #: User-defined unique identifier of the Address.
     key: typing.Optional[str]
-    title: typing.Optional[str]
-    salutation: typing.Optional[str]
-    first_name: typing.Optional[str]
-    last_name: typing.Optional[str]
-    street_name: typing.Optional[str]
-    street_number: typing.Optional[str]
-    additional_street_info: typing.Optional[str]
-    postal_code: typing.Optional[str]
-    city: typing.Optional[str]
-    region: typing.Optional[str]
-    state: typing.Optional[str]
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: str
+    #: Title of the contact, for example 'Dr.'
+    title: typing.Optional[str]
+    #: Salutation of the contact, for example 'Mr.' or 'Ms.'
+    salutation: typing.Optional[str]
+    #: Given name (first name) of the contact.
+    first_name: typing.Optional[str]
+    #: Family name (last name) of the contact.
+    last_name: typing.Optional[str]
+    #: Name of the street.
+    street_name: typing.Optional[str]
+    #: Street number.
+    street_number: typing.Optional[str]
+    #: Further information on the street address.
+    additional_street_info: typing.Optional[str]
+    #: Postal code.
+    postal_code: typing.Optional[str]
+    #: Name of the city.
+    city: typing.Optional[str]
+    #: Name of the region.
+    region: typing.Optional[str]
+    #: Name of the state, for example, Colorado.
+    state: typing.Optional[str]
+    #: Name of the company.
     company: typing.Optional[str]
+    #: Name of the department.
     department: typing.Optional[str]
+    #: Number or name of the building.
     building: typing.Optional[str]
+    #: Number or name of the apartment.
     apartment: typing.Optional[str]
+    #: Post office box number.
     p_o_box: typing.Optional[str]
+    #: Phone number of the contact.
     phone: typing.Optional[str]
+    #: Mobile phone number of the contact.
     mobile: typing.Optional[str]
+    #: Email address of the contact.
     email: typing.Optional[str]
+    #: Fax number of the contact.
     fax: typing.Optional[str]
+    #: Further information on the Address.
     additional_address_info: typing.Optional[str]
+    #: ID for the contact used in an external system.
     external_id: typing.Optional[str]
 
     def __init__(
@@ -313,6 +364,7 @@ class BaseAddress(_BaseType):
         *,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
+        country: str,
         title: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -324,7 +376,6 @@ class BaseAddress(_BaseType):
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: str,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -339,6 +390,7 @@ class BaseAddress(_BaseType):
     ):
         self.id = id
         self.key = key
+        self.country = country
         self.title = title
         self.salutation = salutation
         self.first_name = first_name
@@ -350,7 +402,6 @@ class BaseAddress(_BaseType):
         self.city = city
         self.region = region
         self.state = state
-        self.country = country
         self.company = company
         self.department = department
         self.building = building
@@ -378,6 +429,7 @@ class BaseAddress(_BaseType):
 
 
 class Address(BaseAddress):
+    #: Custom Fields defined for the Address.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -385,6 +437,7 @@ class Address(BaseAddress):
         *,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
+        country: str,
         title: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -396,7 +449,6 @@ class Address(BaseAddress):
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: str,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -415,6 +467,7 @@ class Address(BaseAddress):
         super().__init__(
             id=id,
             key=key,
+            country=country,
             title=title,
             salutation=salutation,
             first_name=first_name,
@@ -426,7 +479,6 @@ class Address(BaseAddress):
             city=city,
             region=region,
             state=state,
-            country=country,
             company=company,
             department=department,
             building=building,
@@ -453,6 +505,7 @@ class Address(BaseAddress):
 
 
 class AddressDraft(BaseAddress):
+    #: Custom Fields defined for the Address.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -460,6 +513,7 @@ class AddressDraft(BaseAddress):
         *,
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
+        country: str,
         title: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -471,7 +525,6 @@ class AddressDraft(BaseAddress):
         city: typing.Optional[str] = None,
         region: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        country: str,
         company: typing.Optional[str] = None,
         department: typing.Optional[str] = None,
         building: typing.Optional[str] = None,
@@ -490,6 +543,7 @@ class AddressDraft(BaseAddress):
         super().__init__(
             id=id,
             key=key,
+            country=country,
             title=title,
             salutation=salutation,
             first_name=first_name,
@@ -501,7 +555,6 @@ class AddressDraft(BaseAddress):
             city=city,
             region=region,
             state=state,
-            country=country,
             company=company,
             department=department,
             building=building,
@@ -561,9 +614,15 @@ class BaseResource(_BaseType):
 
 
 class ClientLogging(_BaseType):
+    """These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/client-logging)."""
+
+    #: `id` of the [APIClient](ctp:api:type:ApiClient) which created the resource.
     client_id: typing.Optional[str]
+    #: [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
     external_user_id: typing.Optional[str]
+    #: Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
     customer: typing.Optional["CustomerReference"]
+    #: Indicates that the resource was modified during an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) with the logged ID.
     anonymous_id: typing.Optional[str]
 
     def __init__(
@@ -594,6 +653,8 @@ class ClientLogging(_BaseType):
 
 
 class CreatedBy(ClientLogging):
+    """Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked)."""
+
     def __init__(
         self,
         *,
@@ -623,8 +684,9 @@ class CreatedBy(ClientLogging):
 
 
 class DiscountedPrice(_BaseType):
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Money value of the discounted price.
     value: "TypedMoney"
+    #: [ProductDiscount](ctp:api:type:ProductDiscount) related to the discounted price.
     discount: "ProductDiscountReference"
 
     def __init__(self, *, value: "TypedMoney", discount: "ProductDiscountReference"):
@@ -646,9 +708,9 @@ class DiscountedPrice(_BaseType):
 
 
 class DiscountedPriceDraft(_BaseType):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Sets the money value for the discounted price.
     value: "Money"
+    #: Relates the referenced [ProductDiscount](ctp:api:type:ProductDiscount) to the discounted price.
     discount: "ProductDiscountReference"
 
     def __init__(self, *, value: "Money", discount: "ProductDiscountReference"):
@@ -670,6 +732,8 @@ class DiscountedPriceDraft(_BaseType):
 
 
 class GeoJson(_BaseType):
+    """GeoJSON Geometry represents a [Geometry Object](https://datatracker.ietf.org/doc/html/rfc7946#section-3.1) as defined in the GeoJSON standard."""
+
     type: str
 
     def __init__(self, *, type: str):
@@ -691,6 +755,7 @@ class GeoJson(_BaseType):
 
 
 class GeoJsonPoint(GeoJson):
+    #: Longitude (stored on index `[0]`) and latitude (stored on index `[1]`) of the [Point](https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.2).
     coordinates: typing.List["float"]
 
     def __init__(self, *, coordinates: typing.List["float"]):
@@ -763,7 +828,11 @@ class ImageDimensions(_BaseType):
 
 
 class KeyReference(_BaseType):
+    """A KeyReference represents a loose reference to another resource in the same Project identified by the resource's `key` field. If available, the `key` is immutable and mandatory. KeyReferences do not support [Reference Expansion](/general-concepts#reference-expansion)."""
+
+    #: Type of referenced resource.
     type_id: "ReferenceTypeId"
+    #: User-defined unique and immutable key of the referenced resource.
     key: str
 
     def __init__(self, *, type_id: "ReferenceTypeId", key: str):
@@ -786,6 +855,8 @@ class KeyReference(_BaseType):
 
 
 class LastModifiedBy(ClientLogging):
+    """Present on resources modified after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked)."""
+
     def __init__(
         self,
         *,
@@ -820,16 +891,17 @@ class LocalizedString(typing.Dict[str, str]):
 
 class Money(_BaseType):
     """Draft type that stores amounts in cent precision for the specified currency.
+
     For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 
     """
 
-    #: amount in the smallest indivisible unit of a currency, such as
+    #: Amount in the smallest indivisible unit of a currency, such as:
     #:
-    #: * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-    #: * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+    #: * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+    #: * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
     cent_amount: int
-    #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+    #: Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
     currency_code: str
 
     def __init__(self, *, cent_amount: int, currency_code: str):
@@ -851,28 +923,35 @@ class Money(_BaseType):
 
 
 class MoneyType(enum.Enum):
-    """The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits."""
+    """MoneyType supports two different values, one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits."""
 
     CENT_PRECISION = "centPrecision"
     HIGH_PRECISION = "highPrecision"
 
 
 class Price(_BaseType):
+    #: Unique identifier of this Price.
     id: str
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Money value of this Price.
     value: "TypedMoney"
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country for which this Price is valid.
     country: typing.Optional[str]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which this Price is valid.
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: `ProductDistribution` [Channel](ctp:api:type:Channel) for which this Price is valid.
     channel: typing.Optional["ChannelReference"]
+    #: Date and time from which this Price is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time until this Price is valid.
     valid_until: typing.Optional[datetime.datetime]
+    #: Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
+    #: If set, the API uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
+    #: When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
     discounted: typing.Optional["DiscountedPrice"]
-    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
-    custom: typing.Optional["CustomFields"]
+    #: Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
     tiers: typing.Optional[typing.List["PriceTier"]]
+    #: Custom Fields defined for the Price.
+    custom: typing.Optional["CustomFields"]
 
     def __init__(
         self,
@@ -885,8 +964,8 @@ class Price(_BaseType):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        custom: typing.Optional["CustomFields"] = None,
-        tiers: typing.Optional[typing.List["PriceTier"]] = None
+        tiers: typing.Optional[typing.List["PriceTier"]] = None,
+        custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
         self.value = value
@@ -896,8 +975,8 @@ class Price(_BaseType):
         self.valid_from = valid_from
         self.valid_until = valid_until
         self.discounted = discounted
-        self.custom = custom
         self.tiers = tiers
+        self.custom = custom
 
         super().__init__()
 
@@ -914,21 +993,31 @@ class Price(_BaseType):
 
 
 class PriceDraft(_BaseType):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Money value of this Price.
     value: "Money"
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Set this field if this Price is only valid for the specified country.
     country: typing.Optional[str]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: Set this field if this Price is only valid for the referenced [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+    #: Set this field if this Price is only valid for the referenced `ProductDistribution` [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Set this field if this Price is valid only valid from the specified date and time.
     valid_from: typing.Optional[datetime.datetime]
+    #: Set this field if this Price is valid only valid until the specified date and time.
     valid_until: typing.Optional[datetime.datetime]
-    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
-    custom: typing.Optional["CustomFieldsDraft"]
-    tiers: typing.Optional[typing.List["PriceTierDraft"]]
+    #: Set this field to add a DiscountedPrice from an external service.
+    #:
+    #: The API sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
+    #: The DiscountedPrice must reference a ProductDiscount with:
+    #:
+    #: * The `isActive` flag set to `true`.
+    #: * A [ProductDiscountValue](ctp:api:type:ProductDiscountValueExternal) of type `external`.
+    #: * A `predicate` that matches the [ProductVariant](ctp:api:type:ProductVariant) the Price is referenced from.
     discounted: typing.Optional["DiscountedPriceDraft"]
+    #: Set this field to specify different Prices for certain [LineItem](ctp:api:type:LineItem) quantities.
+    tiers: typing.Optional[typing.List["PriceTierDraft"]]
+    #: Custom Fields for the Price.
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -939,9 +1028,9 @@ class PriceDraft(_BaseType):
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
+        discounted: typing.Optional["DiscountedPriceDraft"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
-        discounted: typing.Optional["DiscountedPriceDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.value = value
         self.country = country
@@ -949,9 +1038,9 @@ class PriceDraft(_BaseType):
         self.channel = channel
         self.valid_from = valid_from
         self.valid_until = valid_until
-        self.custom = custom
-        self.tiers = tiers
         self.discounted = discounted
+        self.tiers = tiers
+        self.custom = custom
 
         super().__init__()
 
@@ -968,8 +1057,21 @@ class PriceDraft(_BaseType):
 
 
 class PriceTier(_BaseType):
+    """A Price tier is selected instead of the default Price when a certain quantity of the [ProductVariant](ctp:api:type:ProductVariant) is [added to a Cart](/projects/carts#add-lineitem) and ordered.
+    _For example: the Price can be lower if more than 10 items are ordered._
+    If no Price tier is found for the Order quantity, the base Price is used.
+    A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](/projects/carts#lineitem) in a Cart as soon as the minimum quantity for the Price tier is reached.
+    The Price tier is applied per Line Item of the Product Variant. If, for example, the same Product Variant appears in the same Cart as several Line Items, (what can be achieved by different values of a Custom Field on the Line Items) for each Line Item the minimum quantity must be reached to get the Price tier.
+
+    """
+
+    #: Minimum quantity this Price tier is valid for.
+    #:
+    #: The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
     minimum_quantity: int
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+    #:
+    #: The `currencyCode` of a Price tier is always the same as the `currencyCode` in the `value` of the related Price.
     value: "TypedMoney"
 
     def __init__(self, *, minimum_quantity: int, value: "TypedMoney"):
@@ -991,9 +1093,15 @@ class PriceTier(_BaseType):
 
 
 class PriceTierDraft(_BaseType):
+    """Specifies a Price tier that applies when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart."""
+
+    #: Minimum quantity this Price tier is valid for.
+    #:
+    #: The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
     minimum_quantity: int
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+    #:
+    #: The `currencyCode` of a Price tier must be the same as the `currencyCode` in the `value` of the related Price.
     value: "Money"
 
     def __init__(self, *, minimum_quantity: int, value: "Money"):
@@ -1015,27 +1123,31 @@ class PriceTierDraft(_BaseType):
 
 
 class QueryPrice(_BaseType):
-    id: str
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Unique identifier of the given Price.
+    id: typing.Optional[str]
+    #: Money value of the given Price.
     value: "Money"
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country for which the given Price is valid.
     country: typing.Optional[str]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which the given Price is valid.
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: `ProductDistribution` [Channel](ctp:api:type:Channel) for which the given Price is valid.
     channel: typing.Optional["ChannelReference"]
+    #: Date from which the given Price is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date until which the given Price is valid.
     valid_until: typing.Optional[datetime.datetime]
+    #: [DiscountedPrice](ctp:api:type:DiscountedPrice) you specify for the given Price.
     discounted: typing.Optional["DiscountedPriceDraft"]
-    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+    #: Custom Fields for the Price.
     custom: typing.Optional["CustomFields"]
+    #: Price tier applied when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart.
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
 
     def __init__(
         self,
         *,
-        id: str,
+        id: typing.Optional[str] = None,
         value: "Money",
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -1072,6 +1184,9 @@ class QueryPrice(_BaseType):
 
 
 class Reference(_BaseType):
+    """A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then."""
+
+    #: Type of referenced resource.
     type_id: "ReferenceTypeId"
     #: Unique ID of the referenced resource.
     id: str
@@ -1148,6 +1263,14 @@ class Reference(_BaseType):
             from ._schemas.product import ProductReferenceSchema
 
             return ProductReferenceSchema().load(data)
+        if data["typeId"] == "quote-request":
+            from ._schemas.quote_request import QuoteRequestReferenceSchema
+
+            return QuoteRequestReferenceSchema().load(data)
+        if data["typeId"] == "quote":
+            from ._schemas.quote import QuoteReferenceSchema
+
+            return QuoteReferenceSchema().load(data)
         if data["typeId"] == "review":
             from ._schemas.review import ReviewReferenceSchema
 
@@ -1160,6 +1283,14 @@ class Reference(_BaseType):
             from ._schemas.shopping_list import ShoppingListReferenceSchema
 
             return ShoppingListReferenceSchema().load(data)
+        if data["typeId"] == "staged-quote":
+            from ._schemas.staged_quote import StagedQuoteReferenceSchema
+
+            return StagedQuoteReferenceSchema().load(data)
+        if data["typeId"] == "standalone-price":
+            from ._schemas.standalone_price import StandalonePriceReferenceSchema
+
+            return StandalonePriceReferenceSchema().load(data)
         if data["typeId"] == "state":
             from ._schemas.state import StateReferenceSchema
 
@@ -1188,14 +1319,14 @@ class Reference(_BaseType):
 
 
 class ReferenceTypeId(enum.Enum):
+    """Type of resource the value should reference. Supported resource type identifiers are:"""
+
     CART = "cart"
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
     CHANNEL = "channel"
     CUSTOMER = "customer"
-    CUSTOMER_EMAIL_TOKEN = "customer-email-token"
     CUSTOMER_GROUP = "customer-group"
-    CUSTOMER_PASSWORD_TOKEN = "customer-password-token"
     DISCOUNT_CODE = "discount-code"
     EXTENSION = "extension"
     INVENTORY_ENTRY = "inventory-entry"
@@ -1205,11 +1336,15 @@ class ReferenceTypeId(enum.Enum):
     PAYMENT = "payment"
     PRODUCT = "product"
     PRODUCT_DISCOUNT = "product-discount"
+    PRODUCT_PRICE = "product-price"
     PRODUCT_SELECTION = "product-selection"
     PRODUCT_TYPE = "product-type"
+    QUOTE = "quote"
+    QUOTE_REQUEST = "quote-request"
     REVIEW = "review"
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
+    STAGED_QUOTE = "staged-quote"
     STATE = "state"
     STORE = "store"
     SUBSCRIPTION = "subscription"
@@ -1219,10 +1354,17 @@ class ReferenceTypeId(enum.Enum):
 
 
 class ResourceIdentifier(_BaseType):
+    """Draft type to create a [Reference](ctp:api:type:Reference) or a [KeyReference](ctp:api:type:KeyReference) to a resource. Provide either the `id` or (wherever supported) the `key` of the resource to reference, but depending on the API endpoint the response returns either a Reference or a KeyReference. For example, the field `parent` of a [CategoryDraft](ctp:api:type:CategoryDraft) takes a ResourceIdentifier for its value while the value of the corresponding field of a [Category](ctp:api:type:Category) is a Reference.
+
+    Each resource type has its corresponding ResourceIdentifier, like [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier).
+
+    """
+
+    #: Type of referenced resource. If given, it must match the expected [ReferenceTypeId](ctp:api:type:ReferenceTypeId) of the referenced resource.
     type_id: typing.Optional["ReferenceTypeId"]
-    #: Unique ID of the referenced resource. Either `id` or `key` is required.
+    #: Unique identifier of the referenced resource. Required if `key` is absent.
     id: typing.Optional[str]
-    #: Unique key of the referenced resource. Either `id` or `key` is required.
+    #: User-defined unique identifier of the referenced resource. Required if `id` is absent.
     key: typing.Optional[str]
 
     def __init__(
@@ -1304,6 +1446,14 @@ class ResourceIdentifier(_BaseType):
             from ._schemas.product import ProductResourceIdentifierSchema
 
             return ProductResourceIdentifierSchema().load(data)
+        if data["typeId"] == "quote-request":
+            from ._schemas.quote_request import QuoteRequestResourceIdentifierSchema
+
+            return QuoteRequestResourceIdentifierSchema().load(data)
+        if data["typeId"] == "quote":
+            from ._schemas.quote import QuoteResourceIdentifierSchema
+
+            return QuoteResourceIdentifierSchema().load(data)
         if data["typeId"] == "review":
             from ._schemas.review import ReviewResourceIdentifierSchema
 
@@ -1316,6 +1466,16 @@ class ResourceIdentifier(_BaseType):
             from ._schemas.shopping_list import ShoppingListResourceIdentifierSchema
 
             return ShoppingListResourceIdentifierSchema().load(data)
+        if data["typeId"] == "staged-quote":
+            from ._schemas.staged_quote import StagedQuoteResourceIdentifierSchema
+
+            return StagedQuoteResourceIdentifierSchema().load(data)
+        if data["typeId"] == "standalone-price":
+            from ._schemas.standalone_price import (
+                StandalonePriceResourceIdentifierSchema,
+            )
+
+            return StandalonePriceResourceIdentifierSchema().load(data)
         if data["typeId"] == "state":
             from ._schemas.state import StateResourceIdentifierSchema
 
@@ -1349,11 +1509,11 @@ class ScopedPrice(_BaseType):
     value: "TypedMoney"
     #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
     current_value: "TypedMoney"
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     country: typing.Optional[str]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelReference"]
     valid_from: typing.Optional[datetime.datetime]
     valid_until: typing.Optional[datetime.datetime]
@@ -1400,38 +1560,29 @@ class ScopedPrice(_BaseType):
         return ScopedPriceSchema().dump(self)
 
 
-class TypedMoney(_BaseType):
+class TypedMoney(Money):
     """Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field."""
 
-    #: The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
+    #: MoneyType supports two different values, one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits.
     type: "MoneyType"
-    #: The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-    currency_code: str
-    #: amount in the smallest indivisible unit of a currency, such as
+    #: Number of digits after the decimal separator:
     #:
-    #: * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-    #: * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
-    cent_amount: int
-    #: number of digits after the decimal separator
-    #:
-    #: * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
-    #: * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+    #: * Equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
+    #: * Greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
     fraction_digits: int
 
     def __init__(
         self,
         *,
-        type: "MoneyType",
-        currency_code: str,
         cent_amount: int,
+        currency_code: str,
+        type: "MoneyType",
         fraction_digits: int
     ):
         self.type = type
-        self.currency_code = currency_code
-        self.cent_amount = cent_amount
         self.fraction_digits = fraction_digits
 
-        super().__init__()
+        super().__init__(cent_amount=cent_amount, currency_code=currency_code)
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypedMoney":
@@ -1451,11 +1602,13 @@ class TypedMoney(_BaseType):
 
 
 class CentPrecisionMoney(TypedMoney):
-    def __init__(self, *, currency_code: str, cent_amount: int, fraction_digits: int):
+    """Object that stores cent amounts in a specific currency."""
+
+    def __init__(self, *, cent_amount: int, currency_code: str, fraction_digits: int):
 
         super().__init__(
-            currency_code=currency_code,
             cent_amount=cent_amount,
+            currency_code=currency_code,
             fraction_digits=fraction_digits,
             type=MoneyType.CENT_PRECISION,
         )
@@ -1475,22 +1628,22 @@ class CentPrecisionMoney(TypedMoney):
 class HighPrecisionMoney(TypedMoney):
     """Money object that stores an amount of a fraction of the smallest indivisible unit of the specified currency."""
 
-    #: amount in 1 / (10 ^ `fractionDigits`) of a currency.
+    #: Amount in 1 / (10 ^ `fractionDigits`) of a currency.
     precise_amount: int
 
     def __init__(
         self,
         *,
-        currency_code: str,
         cent_amount: int,
+        currency_code: str,
         fraction_digits: int,
         precise_amount: int
     ):
         self.precise_amount = precise_amount
 
         super().__init__(
-            currency_code=currency_code,
             cent_amount=cent_amount,
+            currency_code=currency_code,
             fraction_digits=fraction_digits,
             type=MoneyType.HIGH_PRECISION,
         )
@@ -1508,8 +1661,7 @@ class HighPrecisionMoney(TypedMoney):
 
 
 class TypedMoneyDraft(Money):
-    #: The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
-    type: "MoneyType"
+    type: typing.Optional["MoneyType"]
     #: Must be equal to the default number of fraction digits for the specified currency.
     fraction_digits: typing.Optional[int]
 
@@ -1518,7 +1670,7 @@ class TypedMoneyDraft(Money):
         *,
         cent_amount: int,
         currency_code: str,
-        type: "MoneyType",
+        type: typing.Optional["MoneyType"] = None,
         fraction_digits: typing.Optional[int] = None
     ):
         self.type = type
@@ -1576,15 +1728,15 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
 class HighPrecisionMoneyDraft(TypedMoneyDraft):
     """Money draft object to store an amount of a fraction of the smallest indivisible unit of the specified currency."""
 
-    #: amount in 1 / (10 ^ `fractionDigits`) of a currency.
+    #: Amount in 1 / (10 ^ `fractionDigits`) of a currency.
     precise_amount: int
 
     def __init__(
         self,
         *,
-        cent_amount: int,
+        cent_amount: typing.Optional[int] = None,
         currency_code: str,
-        fraction_digits: typing.Optional[int] = None,
+        fraction_digits: int,
         precise_amount: int
     ):
         self.precise_amount = precise_amount

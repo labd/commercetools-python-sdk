@@ -86,6 +86,7 @@ class ByProjectKeyInventoryByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["InventoryEntry"]:
+        """Produces the [InventoryEntryDeletedMessage](ctp:api:type:InventoryEntryDeletedMessage)."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/inventory/{self._id}",

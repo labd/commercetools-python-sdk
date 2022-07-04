@@ -14,6 +14,9 @@ from .cart import DiscountCodeState, ProductPublishScope
 from .common import BaseResource
 from .order import OrderState, PaymentState, ReturnShipmentState, ShipmentState
 from .payment import TransactionState
+from .quote import QuoteState
+from .quote_request import QuoteRequestState
+from .staged_quote import StagedQuoteState
 
 if typing.TYPE_CHECKING:
     from .cart import (
@@ -61,8 +64,12 @@ if typing.TYPE_CHECKING:
     from .order_edit import OrderEditApplied, OrderEditReference
     from .payment import Payment, PaymentReference, Transaction, TransactionState
     from .product import ProductProjection, ProductReference, ProductVariant
-    from .product_selection import ProductSelectionType
+    from .product_selection import ProductSelectionType, ProductVariantSelection
+    from .quote import QuoteState
+    from .quote_request import QuoteRequestState
     from .review import Review
+    from .staged_quote import StagedQuoteState
+    from .standalone_price import StandalonePrice
     from .state import StateReference
     from .store import ProductSelectionSetting, StoreKeyReference
     from .type import CustomFields
@@ -231,6 +238,8 @@ __all__ = [
     "ProductSelectionProductAddedMessagePayload",
     "ProductSelectionProductRemovedMessage",
     "ProductSelectionProductRemovedMessagePayload",
+    "ProductSelectionVariantSelectionChangedMessage",
+    "ProductSelectionVariantSelectionChangedMessagePayload",
     "ProductSlugChangedMessage",
     "ProductSlugChangedMessagePayload",
     "ProductStateTransitionMessage",
@@ -241,6 +250,18 @@ __all__ = [
     "ProductVariantAddedMessagePayload",
     "ProductVariantDeletedMessage",
     "ProductVariantDeletedMessagePayload",
+    "QuoteCreatedMessage",
+    "QuoteCreatedMessagePayload",
+    "QuoteDeletedMessage",
+    "QuoteDeletedMessagePayload",
+    "QuoteRequestCreatedMessage",
+    "QuoteRequestCreatedMessagePayload",
+    "QuoteRequestDeletedMessage",
+    "QuoteRequestDeletedMessagePayload",
+    "QuoteRequestStateChangedMessage",
+    "QuoteRequestStateChangedMessagePayload",
+    "QuoteStateChangedMessage",
+    "QuoteStateChangedMessagePayload",
     "ReviewCreatedMessage",
     "ReviewCreatedMessagePayload",
     "ReviewRatingSetMessage",
@@ -248,6 +269,26 @@ __all__ = [
     "ReviewStateTransitionMessage",
     "ReviewStateTransitionMessagePayload",
     "ShoppingListStoreSetMessagePayload",
+    "StagedQuoteCreatedMessage",
+    "StagedQuoteCreatedMessagePayload",
+    "StagedQuoteDeletedMessage",
+    "StagedQuoteDeletedMessagePayload",
+    "StagedQuoteSellerCommentSetMessage",
+    "StagedQuoteSellerCommentSetMessagePayload",
+    "StagedQuoteStateChangedMessage",
+    "StagedQuoteStateChangedMessagePayload",
+    "StagedQuoteValidToSetMessage",
+    "StagedQuoteValidToSetMessagePayload",
+    "StandalonePriceCreatedMessage",
+    "StandalonePriceCreatedMessagePayload",
+    "StandalonePriceDeletedMessage",
+    "StandalonePriceDeletedMessagePayload",
+    "StandalonePriceDiscountSetMessage",
+    "StandalonePriceDiscountSetMessagePayload",
+    "StandalonePriceExternalDiscountSetMessage",
+    "StandalonePriceExternalDiscountSetMessagePayload",
+    "StandalonePriceValueChangedMessage",
+    "StandalonePriceValueChangedMessagePayload",
     "StoreCreatedMessage",
     "StoreCreatedMessagePayload",
     "StoreDeletedMessage",
@@ -290,6 +331,7 @@ class Message(BaseResource):
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     sequence_number: int
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     resource: "Reference"
     resource_version: int
     type: str
@@ -485,6 +527,12 @@ class Message(BaseResource):
             from ._schemas.message import ProductSelectionProductRemovedMessageSchema
 
             return ProductSelectionProductRemovedMessageSchema().load(data)
+        if data["type"] == "ProductSelectionVariantSelectionChanged":
+            from ._schemas.message import (
+                ProductSelectionVariantSelectionChangedMessageSchema,
+            )
+
+            return ProductSelectionVariantSelectionChangedMessageSchema().load(data)
         if data["type"] == "ProductSlugChanged":
             from ._schemas.message import ProductSlugChangedMessageSchema
 
@@ -505,6 +553,30 @@ class Message(BaseResource):
             from ._schemas.message import ProductVariantDeletedMessageSchema
 
             return ProductVariantDeletedMessageSchema().load(data)
+        if data["type"] == "QuoteCreated":
+            from ._schemas.message import QuoteCreatedMessageSchema
+
+            return QuoteCreatedMessageSchema().load(data)
+        if data["type"] == "QuoteDeleted":
+            from ._schemas.message import QuoteDeletedMessageSchema
+
+            return QuoteDeletedMessageSchema().load(data)
+        if data["type"] == "QuoteRequestCreated":
+            from ._schemas.message import QuoteRequestCreatedMessageSchema
+
+            return QuoteRequestCreatedMessageSchema().load(data)
+        if data["type"] == "QuoteRequestDeleted":
+            from ._schemas.message import QuoteRequestDeletedMessageSchema
+
+            return QuoteRequestDeletedMessageSchema().load(data)
+        if data["type"] == "QuoteRequestStateChanged":
+            from ._schemas.message import QuoteRequestStateChangedMessageSchema
+
+            return QuoteRequestStateChangedMessageSchema().load(data)
+        if data["type"] == "QuoteStateChanged":
+            from ._schemas.message import QuoteStateChangedMessageSchema
+
+            return QuoteStateChangedMessageSchema().load(data)
         if data["type"] == "ReviewCreated":
             from ._schemas.message import ReviewCreatedMessageSchema
 
@@ -517,6 +589,48 @@ class Message(BaseResource):
             from ._schemas.message import ReviewStateTransitionMessageSchema
 
             return ReviewStateTransitionMessageSchema().load(data)
+        if data["type"] == "StagedQuoteCreated":
+            from ._schemas.message import StagedQuoteCreatedMessageSchema
+
+            return StagedQuoteCreatedMessageSchema().load(data)
+        if data["type"] == "StagedQuoteDeleted":
+            from ._schemas.message import StagedQuoteDeletedMessageSchema
+
+            return StagedQuoteDeletedMessageSchema().load(data)
+        if data["type"] == "StagedQuoteSellerCommentSet":
+            from ._schemas.message import StagedQuoteSellerCommentSetMessageSchema
+
+            return StagedQuoteSellerCommentSetMessageSchema().load(data)
+        if data["type"] == "StagedQuoteStateChanged":
+            from ._schemas.message import StagedQuoteStateChangedMessageSchema
+
+            return StagedQuoteStateChangedMessageSchema().load(data)
+        if data["type"] == "StagedQuoteValidToSet":
+            from ._schemas.message import StagedQuoteValidToSetMessageSchema
+
+            return StagedQuoteValidToSetMessageSchema().load(data)
+        if data["type"] == "StandalonePriceCreated":
+            from ._schemas.message import StandalonePriceCreatedMessageSchema
+
+            return StandalonePriceCreatedMessageSchema().load(data)
+        if data["type"] == "StandalonePriceDeleted":
+            from ._schemas.message import StandalonePriceDeletedMessageSchema
+
+            return StandalonePriceDeletedMessageSchema().load(data)
+        if data["type"] == "StandalonePriceDiscountSet":
+            from ._schemas.message import StandalonePriceDiscountSetMessageSchema
+
+            return StandalonePriceDiscountSetMessageSchema().load(data)
+        if data["type"] == "StandalonePriceExternalDiscountSet":
+            from ._schemas.message import (
+                StandalonePriceExternalDiscountSetMessageSchema,
+            )
+
+            return StandalonePriceExternalDiscountSetMessageSchema().load(data)
+        if data["type"] == "StandalonePriceValueChanged":
+            from ._schemas.message import StandalonePriceValueChangedMessageSchema
+
+            return StandalonePriceValueChangedMessageSchema().load(data)
         if data["type"] == "StoreCreated":
             from ._schemas.message import StoreCreatedMessageSchema
 
@@ -587,7 +701,9 @@ class CategoryCreatedMessage(Message):
 
 
 class CategorySlugChangedMessage(Message):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -1132,7 +1248,7 @@ class CustomerFirstNameSetMessage(Message):
 
 
 class CustomerGroupSetMessage(Message):
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -1385,7 +1501,7 @@ class InventoryEntryCreatedMessage(Message):
 
 class InventoryEntryDeletedMessage(Message):
     sku: str
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1442,7 +1558,7 @@ class InventoryEntryQuantitySetMessage(Message):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1501,9 +1617,11 @@ class InventoryEntryQuantitySetMessage(Message):
 
 
 class MessagePagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Message"]
 
@@ -1796,9 +1914,9 @@ class CustomLineItemStateTransitionMessage(OrderMessage):
     custom_line_item_id: str
     transition_date: datetime.datetime
     quantity: int
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -2070,9 +2188,9 @@ class LineItemStateTransitionMessage(OrderMessage):
     line_item_id: str
     transition_date: datetime.datetime
     quantity: int
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -2343,9 +2461,9 @@ class OrderCustomerEmailSetMessage(OrderMessage):
 
 
 class OrderCustomerGroupSetMessage(OrderMessage):
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -2398,11 +2516,13 @@ class OrderCustomerGroupSetMessage(OrderMessage):
 
 
 class OrderCustomerSetMessage(OrderMessage):
+    #: [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
     customer: typing.Optional["CustomerReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
     old_customer: typing.Optional["CustomerReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -2507,6 +2627,7 @@ class OrderDeletedMessage(OrderMessage):
 
 
 class OrderDiscountCodeAddedMessage(OrderMessage):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(
@@ -2557,6 +2678,7 @@ class OrderDiscountCodeAddedMessage(OrderMessage):
 
 
 class OrderDiscountCodeRemovedMessage(OrderMessage):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(
@@ -2607,6 +2729,7 @@ class OrderDiscountCodeRemovedMessage(OrderMessage):
 
 
 class OrderDiscountCodeStateSetMessage(OrderMessage):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
     state: "DiscountCodeState"
     old_state: typing.Optional["DiscountCodeState"]
@@ -2663,6 +2786,7 @@ class OrderDiscountCodeStateSetMessage(OrderMessage):
 
 
 class OrderEditAppliedMessage(OrderMessage):
+    #: [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
     edit: "OrderEditReference"
     result: "OrderEditApplied"
 
@@ -2820,6 +2944,7 @@ class OrderLineItemDiscountSetMessage(OrderMessage):
     line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_price: "Money"
     taxed_price: typing.Optional["TaxedItemPrice"]
@@ -2881,7 +3006,7 @@ class OrderLineItemDiscountSetMessage(OrderMessage):
 
 class OrderLineItemDistributionChannelSetMessage(OrderMessage):
     line_item_id: str
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -3006,6 +3131,7 @@ class OrderLineItemRemovedMessage(OrderMessage):
 
 
 class OrderPaymentAddedMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentReference"
 
     def __init__(
@@ -3527,9 +3653,9 @@ class OrderStateChangedMessage(OrderMessage):
 
 
 class OrderStateTransitionMessage(OrderMessage):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     old_state: typing.Optional["StateReference"]
     force: bool
 
@@ -3585,6 +3711,7 @@ class OrderStateTransitionMessage(OrderMessage):
 
 
 class OrderStoreSetMessage(OrderMessage):
+    #: [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
     store: "StoreKeyReference"
 
     def __init__(
@@ -4062,7 +4189,7 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
 
 
 class PaymentStatusStateTransitionMessage(Message):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -4219,6 +4346,7 @@ class PaymentTransactionStateChangedMessage(Message):
 
 
 class ProductAddedToCategoryMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
     category: "CategoryReference"
     staged: bool
 
@@ -4639,6 +4767,7 @@ class ProductPublishedMessage(Message):
 
 
 class ProductRemovedFromCategoryMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
     category: "CategoryReference"
     staged: bool
 
@@ -4792,6 +4921,7 @@ class ProductSelectionCreatedMessage(Message):
 
 
 class ProductSelectionDeletedMessage(Message):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
 
     def __init__(
@@ -4842,7 +4972,10 @@ class ProductSelectionDeletedMessage(Message):
 
 
 class ProductSelectionProductAddedMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
     product: "ProductReference"
+    #: Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
     def __init__(
         self,
@@ -4859,9 +4992,11 @@ class ProductSelectionProductAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        product: "ProductReference"
+        product: "ProductReference",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
     ):
         self.product = product
+        self.variant_selection = variant_selection
 
         super().__init__(
             id=id,
@@ -4892,6 +5027,7 @@ class ProductSelectionProductAddedMessage(Message):
 
 
 class ProductSelectionProductRemovedMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
     product: "ProductReference"
 
     def __init__(
@@ -4941,8 +5077,73 @@ class ProductSelectionProductRemovedMessage(Message):
         return ProductSelectionProductRemovedMessageSchema().dump(self)
 
 
+class ProductSelectionVariantSelectionChangedMessage(Message):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+    product: "ProductReference"
+    #: The former Product Variant Selection if any.
+    old_variant_selection: typing.Optional["ProductVariantSelection"]
+    #: The updated Product Variant Selection if any.
+    new_variant_selection: typing.Optional["ProductVariantSelection"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        product: "ProductReference",
+        old_variant_selection: typing.Optional["ProductVariantSelection"] = None,
+        new_variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
+        self.product = product
+        self.old_variant_selection = old_variant_selection
+        self.new_variant_selection = new_variant_selection
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="ProductSelectionVariantSelectionChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionVariantSelectionChangedMessage":
+        from ._schemas.message import (
+            ProductSelectionVariantSelectionChangedMessageSchema,
+        )
+
+        return ProductSelectionVariantSelectionChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import (
+            ProductSelectionVariantSelectionChangedMessageSchema,
+        )
+
+        return ProductSelectionVariantSelectionChangedMessageSchema().dump(self)
+
+
 class ProductSlugChangedMessage(Message):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -4995,7 +5196,7 @@ class ProductSlugChangedMessage(Message):
 
 
 class ProductStateTransitionMessage(Message):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -5200,6 +5401,296 @@ class ProductVariantDeletedMessage(Message):
         return ProductVariantDeletedMessageSchema().dump(self)
 
 
+class QuoteCreatedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteCreated",
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "QuoteCreatedMessage":
+        from ._schemas.message import QuoteCreatedMessageSchema
+
+        return QuoteCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteCreatedMessageSchema
+
+        return QuoteCreatedMessageSchema().dump(self)
+
+
+class QuoteDeletedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteDeleted",
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "QuoteDeletedMessage":
+        from ._schemas.message import QuoteDeletedMessageSchema
+
+        return QuoteDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteDeletedMessageSchema
+
+        return QuoteDeletedMessageSchema().dump(self)
+
+
+class QuoteRequestCreatedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteRequestCreated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestCreatedMessage":
+        from ._schemas.message import QuoteRequestCreatedMessageSchema
+
+        return QuoteRequestCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestCreatedMessageSchema
+
+        return QuoteRequestCreatedMessageSchema().dump(self)
+
+
+class QuoteRequestDeletedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteRequestDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestDeletedMessage":
+        from ._schemas.message import QuoteRequestDeletedMessageSchema
+
+        return QuoteRequestDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestDeletedMessageSchema
+
+        return QuoteRequestDeletedMessageSchema().dump(self)
+
+
+class QuoteRequestStateChangedMessage(Message):
+    #: Predefined states tracking the status of the Quote Request in the negotiation process.
+    quote_request_state: "QuoteRequestState"
+    #: Predefined states tracking the status of the Quote Request in the negotiation process.
+    old_quote_request_state: "QuoteRequestState"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        quote_request_state: "QuoteRequestState",
+        old_quote_request_state: "QuoteRequestState"
+    ):
+        self.quote_request_state = quote_request_state
+        self.old_quote_request_state = old_quote_request_state
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteRequestStateChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestStateChangedMessage":
+        from ._schemas.message import QuoteRequestStateChangedMessageSchema
+
+        return QuoteRequestStateChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestStateChangedMessageSchema
+
+        return QuoteRequestStateChangedMessageSchema().dump(self)
+
+
+class QuoteStateChangedMessage(Message):
+    #: Predefined states tracking the status of the Quote.
+    quote_state: "QuoteState"
+    #: Predefined states tracking the status of the Quote.
+    old_quote_state: "QuoteState"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        quote_state: "QuoteState",
+        old_quote_state: "QuoteState"
+    ):
+        self.quote_state = quote_state
+        self.old_quote_state = old_quote_state
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="QuoteStateChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteStateChangedMessage":
+        from ._schemas.message import QuoteStateChangedMessageSchema
+
+        return QuoteStateChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteStateChangedMessageSchema
+
+        return QuoteStateChangedMessageSchema().dump(self)
+
+
 class ReviewCreatedMessage(Message):
     review: "Review"
 
@@ -5252,6 +5743,7 @@ class ReviewRatingSetMessage(Message):
     old_rating: typing.Optional[float]
     new_rating: typing.Optional[float]
     included_in_statistics: bool
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     target: typing.Optional["Reference"]
 
     def __init__(
@@ -5308,12 +5800,13 @@ class ReviewRatingSetMessage(Message):
 
 
 class ReviewStateTransitionMessage(Message):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     old_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     new_state: "StateReference"
     old_included_in_statistics: bool
     new_included_in_statistics: bool
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     target: "Reference"
     force: bool
 
@@ -5374,7 +5867,515 @@ class ReviewStateTransitionMessage(Message):
         return ReviewStateTransitionMessageSchema().dump(self)
 
 
+class StagedQuoteCreatedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StagedQuoteCreated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteCreatedMessage":
+        from ._schemas.message import StagedQuoteCreatedMessageSchema
+
+        return StagedQuoteCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteCreatedMessageSchema
+
+        return StagedQuoteCreatedMessageSchema().dump(self)
+
+
+class StagedQuoteDeletedMessage(Message):
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StagedQuoteDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteDeletedMessage":
+        from ._schemas.message import StagedQuoteDeletedMessageSchema
+
+        return StagedQuoteDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteDeletedMessageSchema
+
+        return StagedQuoteDeletedMessageSchema().dump(self)
+
+
+class StagedQuoteSellerCommentSetMessage(Message):
+    seller_comment: str
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        seller_comment: str
+    ):
+        self.seller_comment = seller_comment
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StagedQuoteSellerCommentSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteSellerCommentSetMessage":
+        from ._schemas.message import StagedQuoteSellerCommentSetMessageSchema
+
+        return StagedQuoteSellerCommentSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteSellerCommentSetMessageSchema
+
+        return StagedQuoteSellerCommentSetMessageSchema().dump(self)
+
+
+class StagedQuoteStateChangedMessage(Message):
+    #: Predefined states tracking the status of the Staged Quote.
+    staged_quote_state: "StagedQuoteState"
+    #: Predefined states tracking the status of the Staged Quote.
+    old_staged_quote_state: "StagedQuoteState"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        staged_quote_state: "StagedQuoteState",
+        old_staged_quote_state: "StagedQuoteState"
+    ):
+        self.staged_quote_state = staged_quote_state
+        self.old_staged_quote_state = old_staged_quote_state
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StagedQuoteStateChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteStateChangedMessage":
+        from ._schemas.message import StagedQuoteStateChangedMessageSchema
+
+        return StagedQuoteStateChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteStateChangedMessageSchema
+
+        return StagedQuoteStateChangedMessageSchema().dump(self)
+
+
+class StagedQuoteValidToSetMessage(Message):
+    valid_to: datetime.datetime
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        valid_to: datetime.datetime
+    ):
+        self.valid_to = valid_to
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StagedQuoteValidToSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteValidToSetMessage":
+        from ._schemas.message import StagedQuoteValidToSetMessageSchema
+
+        return StagedQuoteValidToSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteValidToSetMessageSchema
+
+        return StagedQuoteValidToSetMessageSchema().dump(self)
+
+
+class StandalonePriceCreatedMessage(Message):
+    """Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request."""
+
+    #: The Standalone Price as it was created.
+    standalone_price: "StandalonePrice"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        standalone_price: "StandalonePrice"
+    ):
+        self.standalone_price = standalone_price
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StandalonePriceCreated",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceCreatedMessage":
+        from ._schemas.message import StandalonePriceCreatedMessageSchema
+
+        return StandalonePriceCreatedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceCreatedMessageSchema
+
+        return StandalonePriceCreatedMessageSchema().dump(self)
+
+
+class StandalonePriceDeletedMessage(Message):
+    """Generated after a successful [Delete StandalonePrice](/../api/projects/standalone-prices#delete-standaloneprice) request."""
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None
+    ):
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StandalonePriceDeleted",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceDeletedMessage":
+        from ._schemas.message import StandalonePriceDeletedMessageSchema
+
+        return StandalonePriceDeletedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceDeletedMessageSchema
+
+        return StandalonePriceDeletedMessageSchema().dump(self)
+
+
+class StandalonePriceDiscountSetMessage(Message):
+    """Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied."""
+
+    #: The new `discounted` value of the updated StandalonePrice.
+    discounted: typing.Optional["DiscountedPrice"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        discounted: typing.Optional["DiscountedPrice"] = None
+    ):
+        self.discounted = discounted
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StandalonePriceDiscountSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceDiscountSetMessage":
+        from ._schemas.message import StandalonePriceDiscountSetMessageSchema
+
+        return StandalonePriceDiscountSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceDiscountSetMessageSchema
+
+        return StandalonePriceDiscountSetMessageSchema().dump(self)
+
+
+class StandalonePriceExternalDiscountSetMessage(Message):
+    """This Message is the result of the Standalone Price [SetDiscountedPrice](/../api/projects/standalone-prices#set-discounted-price) update action."""
+
+    #: The new `discounted` value of the updated StandalonePrice.
+    discounted: typing.Optional["DiscountedPrice"]
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        discounted: typing.Optional["DiscountedPrice"] = None
+    ):
+        self.discounted = discounted
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StandalonePriceExternalDiscountSet",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceExternalDiscountSetMessage":
+        from ._schemas.message import StandalonePriceExternalDiscountSetMessageSchema
+
+        return StandalonePriceExternalDiscountSetMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceExternalDiscountSetMessageSchema
+
+        return StandalonePriceExternalDiscountSetMessageSchema().dump(self)
+
+
+class StandalonePriceValueChangedMessage(Message):
+    """Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action."""
+
+    #: The new value of the updated StandalonePrice.
+    value: "Money"
+
+    def __init__(
+        self,
+        *,
+        id: str,
+        version: int,
+        created_at: datetime.datetime,
+        last_modified_at: datetime.datetime,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None,
+        sequence_number: int,
+        resource: "Reference",
+        resource_version: int,
+        resource_user_provided_identifiers: typing.Optional[
+            "UserProvidedIdentifiers"
+        ] = None,
+        value: "Money"
+    ):
+        self.value = value
+
+        super().__init__(
+            id=id,
+            version=version,
+            created_at=created_at,
+            last_modified_at=last_modified_at,
+            last_modified_by=last_modified_by,
+            created_by=created_by,
+            sequence_number=sequence_number,
+            resource=resource,
+            resource_version=resource_version,
+            resource_user_provided_identifiers=resource_user_provided_identifiers,
+            type="StandalonePriceValueChanged",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceValueChangedMessage":
+        from ._schemas.message import StandalonePriceValueChangedMessageSchema
+
+        return StandalonePriceValueChangedMessageSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceValueChangedMessageSchema
+
+        return StandalonePriceValueChangedMessageSchema().dump(self)
+
+
 class StoreCreatedMessage(Message):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: typing.Optional["LocalizedString"]
     languages: typing.List["str"]
     distribution_channels: typing.List["ChannelReference"]
@@ -5545,11 +6546,13 @@ class StoreProductSelectionsChangedMessage(Message):
 
 
 class UserProvidedIdentifiers(_BaseType):
+    #: User-provided unique identifier of the resource.
     key: typing.Optional[str]
     external_id: typing.Optional[str]
     order_number: typing.Optional[str]
     customer_number: typing.Optional[str]
     sku: typing.Optional[str]
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: typing.Optional["LocalizedString"]
     #: Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
     container_and_key: typing.Optional["ContainerAndKey"]
@@ -5769,6 +6772,14 @@ class MessagePayload(_BaseType):
             )
 
             return ProductSelectionProductRemovedMessagePayloadSchema().load(data)
+        if data["type"] == "ProductSelectionVariantSelectionChanged":
+            from ._schemas.message import (
+                ProductSelectionVariantSelectionChangedMessagePayloadSchema,
+            )
+
+            return ProductSelectionVariantSelectionChangedMessagePayloadSchema().load(
+                data
+            )
         if data["type"] == "ProductSlugChanged":
             from ._schemas.message import ProductSlugChangedMessagePayloadSchema
 
@@ -5789,6 +6800,30 @@ class MessagePayload(_BaseType):
             from ._schemas.message import ProductVariantDeletedMessagePayloadSchema
 
             return ProductVariantDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteCreated":
+            from ._schemas.message import QuoteCreatedMessagePayloadSchema
+
+            return QuoteCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteDeleted":
+            from ._schemas.message import QuoteDeletedMessagePayloadSchema
+
+            return QuoteDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteRequestCreated":
+            from ._schemas.message import QuoteRequestCreatedMessagePayloadSchema
+
+            return QuoteRequestCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteRequestDeleted":
+            from ._schemas.message import QuoteRequestDeletedMessagePayloadSchema
+
+            return QuoteRequestDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteRequestStateChanged":
+            from ._schemas.message import QuoteRequestStateChangedMessagePayloadSchema
+
+            return QuoteRequestStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "QuoteStateChanged":
+            from ._schemas.message import QuoteStateChangedMessagePayloadSchema
+
+            return QuoteStateChangedMessagePayloadSchema().load(data)
         if data["type"] == "ReviewCreated":
             from ._schemas.message import ReviewCreatedMessagePayloadSchema
 
@@ -5805,6 +6840,52 @@ class MessagePayload(_BaseType):
             from ._schemas.message import ShoppingListStoreSetMessagePayloadSchema
 
             return ShoppingListStoreSetMessagePayloadSchema().load(data)
+        if data["type"] == "StagedQuoteCreated":
+            from ._schemas.message import StagedQuoteCreatedMessagePayloadSchema
+
+            return StagedQuoteCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "StagedQuoteDeleted":
+            from ._schemas.message import StagedQuoteDeletedMessagePayloadSchema
+
+            return StagedQuoteDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "StagedQuoteSellerCommentSet":
+            from ._schemas.message import (
+                StagedQuoteSellerCommentSetMessagePayloadSchema,
+            )
+
+            return StagedQuoteSellerCommentSetMessagePayloadSchema().load(data)
+        if data["type"] == "StagedQuoteStateChanged":
+            from ._schemas.message import StagedQuoteStateChangedMessagePayloadSchema
+
+            return StagedQuoteStateChangedMessagePayloadSchema().load(data)
+        if data["type"] == "StagedQuoteValidToSet":
+            from ._schemas.message import StagedQuoteValidToSetMessagePayloadSchema
+
+            return StagedQuoteValidToSetMessagePayloadSchema().load(data)
+        if data["type"] == "StandalonePriceCreated":
+            from ._schemas.message import StandalonePriceCreatedMessagePayloadSchema
+
+            return StandalonePriceCreatedMessagePayloadSchema().load(data)
+        if data["type"] == "StandalonePriceDeleted":
+            from ._schemas.message import StandalonePriceDeletedMessagePayloadSchema
+
+            return StandalonePriceDeletedMessagePayloadSchema().load(data)
+        if data["type"] == "StandalonePriceDiscountSet":
+            from ._schemas.message import StandalonePriceDiscountSetMessagePayloadSchema
+
+            return StandalonePriceDiscountSetMessagePayloadSchema().load(data)
+        if data["type"] == "StandalonePriceExternalDiscountSet":
+            from ._schemas.message import (
+                StandalonePriceExternalDiscountSetMessagePayloadSchema,
+            )
+
+            return StandalonePriceExternalDiscountSetMessagePayloadSchema().load(data)
+        if data["type"] == "StandalonePriceValueChanged":
+            from ._schemas.message import (
+                StandalonePriceValueChangedMessagePayloadSchema,
+            )
+
+            return StandalonePriceValueChangedMessagePayloadSchema().load(data)
         if data["type"] == "StoreCreated":
             from ._schemas.message import StoreCreatedMessagePayloadSchema
 
@@ -5849,7 +6930,9 @@ class CategoryCreatedMessagePayload(MessagePayload):
 
 
 class CategorySlugChangedMessagePayload(MessagePayload):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -6092,7 +7175,7 @@ class CustomerFirstNameSetMessagePayload(MessagePayload):
 
 
 class CustomerGroupSetMessagePayload(MessagePayload):
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -6207,7 +7290,7 @@ class InventoryEntryCreatedMessagePayload(MessagePayload):
 
 class InventoryEntryDeletedMessagePayload(MessagePayload):
     sku: str
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -6237,7 +7320,7 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
     new_quantity_on_stock: int
     old_available_quantity: int
     new_available_quantity: int
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -6449,9 +7532,9 @@ class CustomLineItemStateTransitionMessagePayload(OrderMessagePayload):
     custom_line_item_id: str
     transition_date: datetime.datetime
     quantity: int
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -6597,9 +7680,9 @@ class LineItemStateTransitionMessagePayload(OrderMessagePayload):
     line_item_id: str
     transition_date: datetime.datetime
     quantity: int
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     from_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     to_state: "StateReference"
 
     def __init__(
@@ -6748,9 +7831,9 @@ class OrderCustomerEmailSetMessagePayload(OrderMessagePayload):
 
 
 class OrderCustomerGroupSetMessagePayload(OrderMessagePayload):
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -6779,11 +7862,13 @@ class OrderCustomerGroupSetMessagePayload(OrderMessagePayload):
 
 
 class OrderCustomerSetMessagePayload(OrderMessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
     customer: typing.Optional["CustomerReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
     old_customer: typing.Optional["CustomerReference"]
-    #: [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
     old_customer_group: typing.Optional["CustomerGroupReference"]
 
     def __init__(
@@ -6838,6 +7923,7 @@ class OrderDeletedMessagePayload(OrderMessagePayload):
 
 
 class OrderDiscountCodeAddedMessagePayload(OrderMessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -6860,6 +7946,7 @@ class OrderDiscountCodeAddedMessagePayload(OrderMessagePayload):
 
 
 class OrderDiscountCodeRemovedMessagePayload(OrderMessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
 
     def __init__(self, *, discount_code: "DiscountCodeReference"):
@@ -6882,6 +7969,7 @@ class OrderDiscountCodeRemovedMessagePayload(OrderMessagePayload):
 
 
 class OrderDiscountCodeStateSetMessagePayload(OrderMessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
     discount_code: "DiscountCodeReference"
     state: "DiscountCodeState"
     old_state: typing.Optional["DiscountCodeState"]
@@ -6914,6 +8002,7 @@ class OrderDiscountCodeStateSetMessagePayload(OrderMessagePayload):
 
 
 class OrderEditAppliedMessagePayload(OrderMessagePayload):
+    #: [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
     edit: "OrderEditReference"
     result: "OrderEditApplied"
 
@@ -6987,6 +8076,7 @@ class OrderLineItemDiscountSetMessagePayload(OrderMessagePayload):
     line_item_id: str
     discounted_price_per_quantity: typing.List["DiscountedLineItemPriceForQuantity"]
     #: Draft type that stores amounts in cent precision for the specified currency.
+    #:
     #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
     total_price: "Money"
     taxed_price: typing.Optional["TaxedItemPrice"]
@@ -7024,7 +8114,7 @@ class OrderLineItemDiscountSetMessagePayload(OrderMessagePayload):
 
 class OrderLineItemDistributionChannelSetMessagePayload(OrderMessagePayload):
     line_item_id: str
-    #: [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -7105,6 +8195,7 @@ class OrderLineItemRemovedMessagePayload(OrderMessagePayload):
 
 
 class OrderPaymentAddedMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
     payment: "PaymentReference"
 
     def __init__(self, *, payment: "PaymentReference"):
@@ -7372,9 +8463,9 @@ class OrderStateChangedMessagePayload(OrderMessagePayload):
 
 
 class OrderStateTransitionMessagePayload(OrderMessagePayload):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     old_state: typing.Optional["StateReference"]
     force: bool
 
@@ -7406,6 +8497,7 @@ class OrderStateTransitionMessagePayload(OrderMessagePayload):
 
 
 class OrderStoreSetMessagePayload(OrderMessagePayload):
+    #: [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
     store: "StoreKeyReference"
 
     def __init__(self, *, store: "StoreKeyReference"):
@@ -7644,7 +8736,7 @@ class PaymentStatusInterfaceCodeSetMessagePayload(MessagePayload):
 
 
 class PaymentStatusStateTransitionMessagePayload(MessagePayload):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -7715,6 +8807,7 @@ class PaymentTransactionStateChangedMessagePayload(MessagePayload):
 
 
 class ProductAddedToCategoryMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
     category: "CategoryReference"
     staged: bool
 
@@ -7917,6 +9010,7 @@ class ProductPublishedMessagePayload(MessagePayload):
 
 
 class ProductRemovedFromCategoryMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
     category: "CategoryReference"
     staged: bool
 
@@ -7985,6 +9079,7 @@ class ProductSelectionCreatedMessagePayload(MessagePayload):
 
 
 class ProductSelectionDeletedMessagePayload(MessagePayload):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -8007,10 +9102,19 @@ class ProductSelectionDeletedMessagePayload(MessagePayload):
 
 
 class ProductSelectionProductAddedMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
     product: "ProductReference"
+    #: Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field.
+    variant_selection: typing.Optional["ProductVariantSelection"]
 
-    def __init__(self, *, product: "ProductReference"):
+    def __init__(
+        self,
+        *,
+        product: "ProductReference",
+        variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
         self.product = product
+        self.variant_selection = variant_selection
 
         super().__init__(type="ProductSelectionProductAdded")
 
@@ -8029,6 +9133,7 @@ class ProductSelectionProductAddedMessagePayload(MessagePayload):
 
 
 class ProductSelectionProductRemovedMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
     product: "ProductReference"
 
     def __init__(self, *, product: "ProductReference"):
@@ -8050,8 +9155,49 @@ class ProductSelectionProductRemovedMessagePayload(MessagePayload):
         return ProductSelectionProductRemovedMessagePayloadSchema().dump(self)
 
 
+class ProductSelectionVariantSelectionChangedMessagePayload(MessagePayload):
+    #: [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+    product: "ProductReference"
+    #: The former Product Variant Selection if any.
+    old_variant_selection: typing.Optional["ProductVariantSelection"]
+    #: The updated Product Variant Selection if any.
+    new_variant_selection: typing.Optional["ProductVariantSelection"]
+
+    def __init__(
+        self,
+        *,
+        product: "ProductReference",
+        old_variant_selection: typing.Optional["ProductVariantSelection"] = None,
+        new_variant_selection: typing.Optional["ProductVariantSelection"] = None
+    ):
+        self.product = product
+        self.old_variant_selection = old_variant_selection
+        self.new_variant_selection = new_variant_selection
+
+        super().__init__(type="ProductSelectionVariantSelectionChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionVariantSelectionChangedMessagePayload":
+        from ._schemas.message import (
+            ProductSelectionVariantSelectionChangedMessagePayloadSchema,
+        )
+
+        return ProductSelectionVariantSelectionChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import (
+            ProductSelectionVariantSelectionChangedMessagePayloadSchema,
+        )
+
+        return ProductSelectionVariantSelectionChangedMessagePayloadSchema().dump(self)
+
+
 class ProductSlugChangedMessagePayload(MessagePayload):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     slug: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     old_slug: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -8080,7 +9226,7 @@ class ProductSlugChangedMessagePayload(MessagePayload):
 
 
 class ProductStateTransitionMessagePayload(MessagePayload):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: "StateReference"
     force: bool
 
@@ -8173,6 +9319,139 @@ class ProductVariantDeletedMessagePayload(MessagePayload):
         return ProductVariantDeletedMessagePayloadSchema().dump(self)
 
 
+class QuoteCreatedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="QuoteCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteCreatedMessagePayload":
+        from ._schemas.message import QuoteCreatedMessagePayloadSchema
+
+        return QuoteCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteCreatedMessagePayloadSchema
+
+        return QuoteCreatedMessagePayloadSchema().dump(self)
+
+
+class QuoteDeletedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="QuoteDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteDeletedMessagePayload":
+        from ._schemas.message import QuoteDeletedMessagePayloadSchema
+
+        return QuoteDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteDeletedMessagePayloadSchema
+
+        return QuoteDeletedMessagePayloadSchema().dump(self)
+
+
+class QuoteRequestCreatedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="QuoteRequestCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestCreatedMessagePayload":
+        from ._schemas.message import QuoteRequestCreatedMessagePayloadSchema
+
+        return QuoteRequestCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestCreatedMessagePayloadSchema
+
+        return QuoteRequestCreatedMessagePayloadSchema().dump(self)
+
+
+class QuoteRequestDeletedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="QuoteRequestDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestDeletedMessagePayload":
+        from ._schemas.message import QuoteRequestDeletedMessagePayloadSchema
+
+        return QuoteRequestDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestDeletedMessagePayloadSchema
+
+        return QuoteRequestDeletedMessagePayloadSchema().dump(self)
+
+
+class QuoteRequestStateChangedMessagePayload(MessagePayload):
+    #: Predefined states tracking the status of the Quote Request in the negotiation process.
+    quote_request_state: "QuoteRequestState"
+    #: Predefined states tracking the status of the Quote Request in the negotiation process.
+    old_quote_request_state: "QuoteRequestState"
+
+    def __init__(
+        self,
+        *,
+        quote_request_state: "QuoteRequestState",
+        old_quote_request_state: "QuoteRequestState"
+    ):
+        self.quote_request_state = quote_request_state
+        self.old_quote_request_state = old_quote_request_state
+
+        super().__init__(type="QuoteRequestStateChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestStateChangedMessagePayload":
+        from ._schemas.message import QuoteRequestStateChangedMessagePayloadSchema
+
+        return QuoteRequestStateChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteRequestStateChangedMessagePayloadSchema
+
+        return QuoteRequestStateChangedMessagePayloadSchema().dump(self)
+
+
+class QuoteStateChangedMessagePayload(MessagePayload):
+    #: Predefined states tracking the status of the Quote.
+    quote_state: "QuoteState"
+    #: Predefined states tracking the status of the Quote.
+    old_quote_state: "QuoteState"
+
+    def __init__(self, *, quote_state: "QuoteState", old_quote_state: "QuoteState"):
+        self.quote_state = quote_state
+        self.old_quote_state = old_quote_state
+
+        super().__init__(type="QuoteStateChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteStateChangedMessagePayload":
+        from ._schemas.message import QuoteStateChangedMessagePayloadSchema
+
+        return QuoteStateChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import QuoteStateChangedMessagePayloadSchema
+
+        return QuoteStateChangedMessagePayloadSchema().dump(self)
+
+
 class ReviewCreatedMessagePayload(MessagePayload):
     review: "Review"
 
@@ -8199,6 +9478,7 @@ class ReviewRatingSetMessagePayload(MessagePayload):
     old_rating: typing.Optional[float]
     new_rating: typing.Optional[float]
     included_in_statistics: bool
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     target: typing.Optional["Reference"]
 
     def __init__(
@@ -8231,12 +9511,13 @@ class ReviewRatingSetMessagePayload(MessagePayload):
 
 
 class ReviewStateTransitionMessagePayload(MessagePayload):
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     old_state: "StateReference"
-    #: [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     new_state: "StateReference"
     old_included_in_statistics: bool
     new_included_in_statistics: bool
+    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     target: "Reference"
     force: bool
 
@@ -8274,6 +9555,7 @@ class ReviewStateTransitionMessagePayload(MessagePayload):
 
 
 class ShoppingListStoreSetMessagePayload(MessagePayload):
+    #: [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
     store: "StoreKeyReference"
 
     def __init__(self, *, store: "StoreKeyReference"):
@@ -8295,7 +9577,246 @@ class ShoppingListStoreSetMessagePayload(MessagePayload):
         return ShoppingListStoreSetMessagePayloadSchema().dump(self)
 
 
+class StagedQuoteCreatedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="StagedQuoteCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteCreatedMessagePayload":
+        from ._schemas.message import StagedQuoteCreatedMessagePayloadSchema
+
+        return StagedQuoteCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteCreatedMessagePayloadSchema
+
+        return StagedQuoteCreatedMessagePayloadSchema().dump(self)
+
+
+class StagedQuoteDeletedMessagePayload(MessagePayload):
+    def __init__(self):
+
+        super().__init__(type="StagedQuoteDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteDeletedMessagePayload":
+        from ._schemas.message import StagedQuoteDeletedMessagePayloadSchema
+
+        return StagedQuoteDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteDeletedMessagePayloadSchema
+
+        return StagedQuoteDeletedMessagePayloadSchema().dump(self)
+
+
+class StagedQuoteSellerCommentSetMessagePayload(MessagePayload):
+    seller_comment: str
+
+    def __init__(self, *, seller_comment: str):
+        self.seller_comment = seller_comment
+
+        super().__init__(type="StagedQuoteSellerCommentSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteSellerCommentSetMessagePayload":
+        from ._schemas.message import StagedQuoteSellerCommentSetMessagePayloadSchema
+
+        return StagedQuoteSellerCommentSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteSellerCommentSetMessagePayloadSchema
+
+        return StagedQuoteSellerCommentSetMessagePayloadSchema().dump(self)
+
+
+class StagedQuoteStateChangedMessagePayload(MessagePayload):
+    #: Predefined states tracking the status of the Staged Quote.
+    staged_quote_state: "StagedQuoteState"
+    #: Predefined states tracking the status of the Staged Quote.
+    old_staged_quote_state: "StagedQuoteState"
+
+    def __init__(
+        self,
+        *,
+        staged_quote_state: "StagedQuoteState",
+        old_staged_quote_state: "StagedQuoteState"
+    ):
+        self.staged_quote_state = staged_quote_state
+        self.old_staged_quote_state = old_staged_quote_state
+
+        super().__init__(type="StagedQuoteStateChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteStateChangedMessagePayload":
+        from ._schemas.message import StagedQuoteStateChangedMessagePayloadSchema
+
+        return StagedQuoteStateChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteStateChangedMessagePayloadSchema
+
+        return StagedQuoteStateChangedMessagePayloadSchema().dump(self)
+
+
+class StagedQuoteValidToSetMessagePayload(MessagePayload):
+    valid_to: datetime.datetime
+
+    def __init__(self, *, valid_to: datetime.datetime):
+        self.valid_to = valid_to
+
+        super().__init__(type="StagedQuoteValidToSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteValidToSetMessagePayload":
+        from ._schemas.message import StagedQuoteValidToSetMessagePayloadSchema
+
+        return StagedQuoteValidToSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StagedQuoteValidToSetMessagePayloadSchema
+
+        return StagedQuoteValidToSetMessagePayloadSchema().dump(self)
+
+
+class StandalonePriceCreatedMessagePayload(MessagePayload):
+    """Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request."""
+
+    #: The Standalone Price as it was created.
+    standalone_price: "StandalonePrice"
+
+    def __init__(self, *, standalone_price: "StandalonePrice"):
+        self.standalone_price = standalone_price
+
+        super().__init__(type="StandalonePriceCreated")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceCreatedMessagePayload":
+        from ._schemas.message import StandalonePriceCreatedMessagePayloadSchema
+
+        return StandalonePriceCreatedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceCreatedMessagePayloadSchema
+
+        return StandalonePriceCreatedMessagePayloadSchema().dump(self)
+
+
+class StandalonePriceDeletedMessagePayload(MessagePayload):
+    """Generated after a successful [Delete StandalonePrice](/../api/projects/standalone-prices#delete-standaloneprice) request."""
+
+    def __init__(self):
+
+        super().__init__(type="StandalonePriceDeleted")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceDeletedMessagePayload":
+        from ._schemas.message import StandalonePriceDeletedMessagePayloadSchema
+
+        return StandalonePriceDeletedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceDeletedMessagePayloadSchema
+
+        return StandalonePriceDeletedMessagePayloadSchema().dump(self)
+
+
+class StandalonePriceDiscountSetMessagePayload(MessagePayload):
+    """Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied."""
+
+    #: The new `discounted` value of the updated StandalonePrice.
+    discounted: typing.Optional["DiscountedPrice"]
+
+    def __init__(self, *, discounted: typing.Optional["DiscountedPrice"] = None):
+        self.discounted = discounted
+
+        super().__init__(type="StandalonePriceDiscountSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceDiscountSetMessagePayload":
+        from ._schemas.message import StandalonePriceDiscountSetMessagePayloadSchema
+
+        return StandalonePriceDiscountSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceDiscountSetMessagePayloadSchema
+
+        return StandalonePriceDiscountSetMessagePayloadSchema().dump(self)
+
+
+class StandalonePriceExternalDiscountSetMessagePayload(MessagePayload):
+    """This Message is the result of the Standalone Price [SetDiscountedPrice](/../api/projects/standalone-prices#set-discounted-price) update action."""
+
+    #: The new `discounted` value of the updated StandalonePrice.
+    discounted: typing.Optional["DiscountedPrice"]
+
+    def __init__(self, *, discounted: typing.Optional["DiscountedPrice"] = None):
+        self.discounted = discounted
+
+        super().__init__(type="StandalonePriceExternalDiscountSet")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceExternalDiscountSetMessagePayload":
+        from ._schemas.message import (
+            StandalonePriceExternalDiscountSetMessagePayloadSchema,
+        )
+
+        return StandalonePriceExternalDiscountSetMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import (
+            StandalonePriceExternalDiscountSetMessagePayloadSchema,
+        )
+
+        return StandalonePriceExternalDiscountSetMessagePayloadSchema().dump(self)
+
+
+class StandalonePriceValueChangedMessagePayload(MessagePayload):
+    """Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action."""
+
+    #: The new value of the updated StandalonePrice.
+    value: "Money"
+
+    def __init__(self, *, value: "Money"):
+        self.value = value
+
+        super().__init__(type="StandalonePriceValueChanged")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceValueChangedMessagePayload":
+        from ._schemas.message import StandalonePriceValueChangedMessagePayloadSchema
+
+        return StandalonePriceValueChangedMessagePayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.message import StandalonePriceValueChangedMessagePayloadSchema
+
+        return StandalonePriceValueChangedMessagePayloadSchema().dump(self)
+
+
 class StoreCreatedMessagePayload(MessagePayload):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: typing.Optional["LocalizedString"]
     languages: typing.List["str"]
     distribution_channels: typing.List["ChannelReference"]

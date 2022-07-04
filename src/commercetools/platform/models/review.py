@@ -53,7 +53,7 @@ class Review(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for the review.
+    #: User-defined unique identifier of the Review.
     key: typing.Optional[str]
     uniqueness_value: typing.Optional[str]
     locale: typing.Optional[str]
@@ -133,7 +133,7 @@ class Review(BaseResource):
 
 
 class ReviewDraft(_BaseType):
-    #: User-specific unique identifier for the review.
+    #: User-defined unique identifier for the Review.
     key: typing.Optional[str]
     #: If set, this value must be unique among reviews.
     #: For example, if you want to have only one review per customer and per product, you can set the value to `customer's id` and `product's id`.
@@ -201,9 +201,11 @@ class ReviewDraft(_BaseType):
 
 
 class ReviewPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["Review"]
 
@@ -285,6 +287,9 @@ class ReviewRatingStatistics(_BaseType):
 
 
 class ReviewReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [Review](ctp:api:type:Review)."""
+
+    #: Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Reviews.
     obj: typing.Optional["Review"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Review"] = None):
@@ -305,6 +310,8 @@ class ReviewReference(Reference):
 
 
 class ReviewResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):

@@ -74,7 +74,7 @@ class ShoppingList(BaseResource):
     #: The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
     delete_days_after_last_modification: typing.Optional[int]
     description: typing.Optional["LocalizedString"]
-    #: User-specific unique identifier for the shopping list.
+    #: User-defined unique identifier of the ShoppingList.
     key: typing.Optional[str]
     line_items: typing.Optional[typing.List["ShoppingListLineItem"]]
     name: "LocalizedString"
@@ -148,7 +148,7 @@ class ShoppingListDraft(_BaseType):
     #: The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
     delete_days_after_last_modification: typing.Optional[int]
     description: typing.Optional["LocalizedString"]
-    #: User-specific unique identifier for the shopping list.
+    #: User-defined unique identifier for the ShoppingList.
     key: typing.Optional[str]
     line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
     name: "LocalizedString"
@@ -207,10 +207,14 @@ class ShoppingListLineItem(_BaseType):
     #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
     custom: typing.Optional["CustomFields"]
     deactivated_at: typing.Optional[datetime.datetime]
+    #: Unique identifier of the ShoppingListLineItem.
     id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
     product_id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     product_slug: typing.Optional["LocalizedString"]
+    #: [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
     product_type: "ProductTypeReference"
     quantity: int
     variant: typing.Optional["ProductVariant"]
@@ -300,9 +304,11 @@ class ShoppingListLineItemDraft(_BaseType):
 
 
 class ShoppingListPagedQueryResponse(_BaseType):
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
     count: int
     total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
     results: typing.List["ShoppingList"]
 
@@ -338,6 +344,9 @@ class ShoppingListPagedQueryResponse(_BaseType):
 
 
 class ShoppingListReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [ShoppingList](ctp:api:type:ShoppingList)."""
+
+    #: Contains the representation of the expanded ShoppingList. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShoppingLists.
     obj: typing.Optional["ShoppingList"]
 
     def __init__(self, *, id: str, obj: typing.Optional["ShoppingList"] = None):
@@ -358,6 +367,8 @@ class ShoppingListReference(Reference):
 
 
 class ShoppingListResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -548,7 +559,7 @@ class TextLineItem(_BaseType):
     added_at: datetime.datetime
     custom: typing.Optional["CustomFields"]
     description: typing.Optional["LocalizedString"]
-    #: The unique ID of this TextLineItem.
+    #: Unique identifier of the TextLineItem.
     id: str
     name: "LocalizedString"
     quantity: int
@@ -666,7 +677,9 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
     quantity: typing.Optional[int]
     added_at: typing.Optional[datetime.datetime]
@@ -778,6 +791,7 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 
 class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
     text_line_item_id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
 
     def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
@@ -1289,6 +1303,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
 
 class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
     text_line_item_id: str
+    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     description: typing.Optional["LocalizedString"]
 
     def __init__(

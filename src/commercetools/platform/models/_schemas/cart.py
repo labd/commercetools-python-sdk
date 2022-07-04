@@ -193,6 +193,15 @@ class CartSchema(BaseResourceSchema):
         missing=None,
         data_key="discountCodes",
     )
+    direct_discounts = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".DirectDiscountSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="directDiscounts",
+    )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
@@ -628,6 +637,9 @@ class CartUpdateSchema(helpers.BaseSchema):
                 "setDeliveryAddressCustomType": helpers.absmod(
                     __name__, ".CartSetDeliveryAddressCustomTypeActionSchema"
                 ),
+                "setDirectDiscounts": helpers.absmod(
+                    __name__, ".CartSetDirectDiscountsActionSchema"
+                ),
                 "setItemShippingAddressCustomField": helpers.absmod(
                     __name__, ".CartSetItemShippingAddressCustomFieldActionSchema"
                 ),
@@ -867,6 +879,113 @@ class CustomLineItemDraftSchema(helpers.BaseSchema):
         return models.CustomLineItemDraft(**data)
 
 
+class DirectDiscountSchema(helpers.BaseSchema):
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    value = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "absolute": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueAbsoluteSchema"
+            ),
+            "fixed": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueFixedSchema"
+            ),
+            "giftLineItem": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueGiftLineItemSchema"
+            ),
+            "relative": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueRelativeSchema"
+            ),
+        },
+        missing=None,
+    )
+    target = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "customLineItems": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountCustomLineItemsTargetSchema"
+            ),
+            "lineItems": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountLineItemsTargetSchema"
+            ),
+            "shipping": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountShippingCostTargetSchema"
+            ),
+            "multiBuyCustomLineItems": helpers.absmod(
+                __name__, ".cart_discount.MultiBuyCustomLineItemsTargetSchema"
+            ),
+            "multiBuyLineItems": helpers.absmod(
+                __name__, ".cart_discount.MultiBuyLineItemsTargetSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.DirectDiscount(**data)
+
+
+class DirectDiscountDraftSchema(helpers.BaseSchema):
+    value = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "absolute": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueAbsoluteSchema"
+            ),
+            "fixed": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueFixedSchema"
+            ),
+            "giftLineItem": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueGiftLineItemSchema"
+            ),
+            "relative": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountValueRelativeSchema"
+            ),
+        },
+        missing=None,
+    )
+    target = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "customLineItems": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountCustomLineItemsTargetSchema"
+            ),
+            "lineItems": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountLineItemsTargetSchema"
+            ),
+            "shipping": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountShippingCostTargetSchema"
+            ),
+            "multiBuyCustomLineItems": helpers.absmod(
+                __name__, ".cart_discount.MultiBuyCustomLineItemsTargetSchema"
+            ),
+            "multiBuyLineItems": helpers.absmod(
+                __name__, ".cart_discount.MultiBuyLineItemsTargetSchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.DirectDiscountDraft(**data)
+
+
 class DiscountCodeInfoSchema(helpers.BaseSchema):
     discount_code = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".discount_code.DiscountCodeReferenceSchema"),
@@ -952,7 +1071,7 @@ class DiscountedLineItemPriceSchema(helpers.BaseSchema):
 
 
 class DiscountedLineItemPriceForQuantitySchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
     discounted_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DiscountedLineItemPriceSchema"),
         allow_none=True,
@@ -1094,7 +1213,7 @@ class ItemShippingTargetSchema(helpers.BaseSchema):
     address_key = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="addressKey"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1381,12 +1500,22 @@ class ReplicaCartDraftSchema(helpers.BaseSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -1655,6 +1784,21 @@ class TaxedItemPriceSchema(helpers.BaseSchema):
         missing=None,
         data_key="totalGross",
     )
+    total_tax = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": helpers.absmod(
+                __name__, ".common.CentPrecisionMoneySchema"
+            ),
+            "highPrecision": helpers.absmod(
+                __name__, ".common.HighPrecisionMoneySchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="totalTax",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1701,6 +1845,21 @@ class TaxedPriceSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
         data_key="taxPortions",
+    )
+    total_tax = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": helpers.absmod(
+                __name__, ".common.CentPrecisionMoneySchema"
+            ),
+            "highPrecision": helpers.absmod(
+                __name__, ".common.HighPrecisionMoneySchema"
+            ),
+        },
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="totalTax",
     )
 
     class Meta:
@@ -2657,6 +2816,24 @@ class CartSetDeliveryAddressCustomTypeActionSchema(CartUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.CartSetDeliveryAddressCustomTypeAction(**data)
+
+
+class CartSetDirectDiscountsActionSchema(CartUpdateActionSchema):
+    discounts = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".DirectDiscountDraftSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.CartSetDirectDiscountsAction(**data)
 
 
 class CartSetItemShippingAddressCustomFieldActionSchema(CartUpdateActionSchema):

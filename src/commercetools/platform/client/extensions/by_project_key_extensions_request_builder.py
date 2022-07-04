@@ -95,7 +95,6 @@ class ByProjectKeyExtensionsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Extension"]:
-        """Currently, a maximum of 25 extensions can be created per project."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/extensions",

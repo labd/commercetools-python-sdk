@@ -180,12 +180,22 @@ class ExtensionInputSchema(helpers.BaseSchema):
                 __name__, ".product_type.ProductTypeReferenceSchema"
             ),
             "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
             "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
             "shipping-method": helpers.absmod(
                 __name__, ".shipping_method.ShippingMethodReferenceSchema"
             ),
             "shopping-list": helpers.absmod(
                 __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
             ),
             "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
             "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
@@ -209,11 +219,11 @@ class ExtensionInputSchema(helpers.BaseSchema):
 
 class ExtensionPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExtensionSchema"),
         allow_none=True,
@@ -243,6 +253,9 @@ class ExtensionTriggerSchema(helpers.BaseSchema):
         marshmallow_enum.EnumField(ExtensionAction, by_value=True, allow_none=True),
         allow_none=True,
         missing=None,
+    )
+    condition = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
 
     class Meta:

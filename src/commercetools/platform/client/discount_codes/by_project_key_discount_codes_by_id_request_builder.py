@@ -37,6 +37,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
+        """Deprecated scope: `view_orders:{projectKey}`"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
@@ -61,6 +62,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
+        """Deprecated scope: `manage_orders:{projectKey}`"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",
@@ -87,6 +89,7 @@ class ByProjectKeyDiscountCodesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["DiscountCode"]:
+        """Deprecated scope: `manage_orders:{projectKey}`"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/discount-codes/{self._id}",

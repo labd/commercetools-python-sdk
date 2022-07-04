@@ -41,7 +41,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder:
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
         """Returns a cart by its key from a specific Store.
-        If the cart exists in the commercetools project but does not have the store field,
+        If the cart exists in the project but does not have the store field,
         or the store field references a different store, this method returns a ResourceNotFound error.
         The cart may not contain up-to-date prices, discounts etc.
         If you want to ensure they're up-to-date, send an Update request with the Recalculate update action instead.
@@ -71,9 +71,9 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Updates a cart in the store specified by {storeKey}.
-        If the cart exists in the commercetools project but does not have the store field,
-        or the store field references a different store, this method returns a ResourceNotFound error.
+        """Updates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
+        If the Cart exists in the Project but does not have the store field,
+        or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFound) error.
 
         """
         headers = {} if headers is None else headers

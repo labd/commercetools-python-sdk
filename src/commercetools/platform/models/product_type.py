@@ -32,6 +32,7 @@ __all__ = [
     "AttributeNumberType",
     "AttributePlainEnumValue",
     "AttributeReferenceType",
+    "AttributeReferenceTypeId",
     "AttributeSetType",
     "AttributeTextType",
     "AttributeTimeType",
@@ -69,6 +70,8 @@ __all__ = [
 
 
 class AttributeConstraintEnum(enum.Enum):
+    """Specifies how an Attribute (or a set of Attributes) should be validated across all variants of a Product:"""
+
     NONE = "None"
     UNIQUE = "Unique"
     COMBINATION_UNIQUE = "CombinationUnique"
@@ -80,31 +83,28 @@ class AttributeConstraintEnumDraft(enum.Enum):
 
 
 class AttributeDefinition(_BaseType):
-    #: Describes the type of the attribute.
+    """Describes a Product Attribute and allows you to define meta-information associated with the Attribute (like whether it should be searchable, or its constraints)."""
+
+    #: Describes the Type of the Attribute.
     type: "AttributeType"
-    #: The unique name of the attribute used in the API.
-    #: The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-    #: When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types, otherwise an AttributeDefinitionAlreadyExists error code will be returned.
-    #: An exception to this are the values of an `enum` or `lenum` type and sets thereof.
+    #: User-defined name of the Attribute that is unique within the [Project](ctp:api:type:Project).
     name: str
-    #: A human-readable label for the attribute.
+    #: Human-readable label for the Attribute.
     label: "LocalizedString"
-    #: Whether the attribute is required to have a value.
+    #: If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
     is_required: bool
-    #: Describes how an attribute or a set of attributes should be validated across all variants of a product.
+    #: Specifies how Attributes are validated across all variants of a Product.
     attribute_constraint: "AttributeConstraintEnum"
-    #: Additional information about the attribute that aids content managers when setting product details.
+    #: Provides additional Attribute information to aid content managers configure Product details.
     input_tip: typing.Optional["LocalizedString"]
-    #: Provides a visual representation type for this attribute.
-    #: only relevant for text-based attribute types
-    #: like TextType and LocalizableTextType.
+    #: Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
     input_hint: "TextInputHint"
-    #: Whether the attribute's values should generally be enabled in product search.
-    #: This determines whether the value is stored in products for matching terms in the context of full-text search queries  and can be used in facets & filters as part of product search queries.
-    #: The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
-    #: The max size of a searchable field is **restricted to 10922 characters**.
-    #: This constraint is enforced at both product creation and product update.
-    #: If the length of the input exceeds the maximum size an InvalidField error is returned.
+    #: If `true`, the Attribute's values are available for the [Product Projections Search API](/../api/projects/products-search) for use in full-text search queries, filters, and facets.
+    #:
+    #: Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
+    #: The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
+    #: This constraint is enforced at both [Product creation](/../api/projects/products#create-a-product) and [Product update](/../api/projects/products#update-product).
+    #: If the length of the input exceeds the maximum size, an [InvalidFieldError](ctp:api:type:InvalidFieldError) is returned.
     is_searchable: bool
 
     def __init__(
@@ -143,26 +143,29 @@ class AttributeDefinition(_BaseType):
 
 
 class AttributeDefinitionDraft(_BaseType):
-    #: Describes the type of the attribute.
+    """Specify the Attribute to be created with the [ProductTypeDraft](ctp:api:type:ProductTypeDraft)."""
+
+    #: Describes the Type of the Attribute.
     type: "AttributeType"
-    #: The unique name of the attribute used in the API.
-    #: The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-    #: When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types.
+    #: User-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+    #: When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. Otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+    #: An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
     name: str
-    #: A human-readable label for the attribute.
+    #: Human-readable label for the Attribute.
     label: "LocalizedString"
-    #: Whether the attribute is required to have a value.
+    #: Set to `true` if the Attribute is required to have a value on a [ProductVariant](ctp:api:type:ProductVariant).
     is_required: bool
-    #: Describes how an attribute or a set of attributes should be validated across all variants of a product.
+    #: Specifies how an Attribute or a combination of Attributes should be validated across all variants of a Product.
     attribute_constraint: typing.Optional["AttributeConstraintEnum"]
-    #: Additional information about the attribute that aids content managers when setting product details.
+    #: Provides additional information about the Attribute that aids content managers when setting Product details.
     input_tip: typing.Optional["LocalizedString"]
-    #: Provides a visual representation type for this attribute.
-    #: only relevant for text-based attribute types like TextType and LocalizableTextType.
+    #: Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
     input_hint: typing.Optional["TextInputHint"]
-    #: Whether the attribute's values should generally be enabled in product search.
-    #: This determines whether the value is stored in products for matching terms in the context of full-text search queries and can be used in facets & filters as part of product search queries.
-    #: The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
+    #: Set to `true` if the Attribute's values should be available in the [Product Projections Search API](/../api/projects/products-search) and can be used in full-text search queries, filters, and facets.
+    #: Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
+    #: The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
+    #: This constraint is enforced at both Product creation and Product update.
+    #: If the length of the input exceeds the maximum size, an InvalidField error is returned.
     is_searchable: typing.Optional[bool]
 
     def __init__(
@@ -203,7 +206,11 @@ class AttributeDefinitionDraft(_BaseType):
 
 
 class AttributeLocalizedEnumValue(_BaseType):
+    """Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected."""
+
+    #: Key of the value used as a programmatic identifier, for example in facets & filters.
     key: str
+    #: Descriptive, localized label of the value.
     label: "LocalizedString"
 
     def __init__(self, *, key: str, label: "LocalizedString"):
@@ -227,7 +234,11 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributePlainEnumValue(_BaseType):
+    """A plain enum value must be unique within the enum, otherwise a [DuplicateEnumValues](/errors#product-types-400-duplicate-enum-values) error will be returned."""
+
+    #: Key of the value used as a programmatic identifier, for example in facets & filters.
     key: str
+    #: Descriptive label of the value.
     label: str
 
     def __init__(self, *, key: str, label: str):
@@ -250,7 +261,26 @@ class AttributePlainEnumValue(_BaseType):
         return AttributePlainEnumValueSchema().dump(self)
 
 
+class AttributeReferenceTypeId(enum.Enum):
+    """Name of the resource type that the value should reference. Supported resource type identifiers:"""
+
+    CART = "cart"
+    CATEGORY = "category"
+    CHANNEL = "channel"
+    CUSTOMER = "customer"
+    KEY_VALUE_DOCUMENT = "key-value-document"
+    ORDER = "order"
+    PRODUCT = "product"
+    PRODUCT_TYPE = "product-type"
+    REVIEW = "review"
+    SHIPPING_METHOD = "shipping-method"
+    STATE = "state"
+    ZONE = "zone"
+
+
 class AttributeType(_BaseType):
+    """Umbrellla type for specific attribute types discriminated by property `name`."""
+
     name: str
 
     def __init__(self, *, name: str):
@@ -320,6 +350,8 @@ class AttributeType(_BaseType):
 
 
 class AttributeBooleanType(AttributeType):
+    """Attribute type for Boolean values. Valid values for the Attribute are `true` and `false` (JSON Boolean)."""
+
     def __init__(self):
 
         super().__init__(name="boolean")
@@ -371,6 +403,9 @@ class AttributeDateType(AttributeType):
 
 
 class AttributeEnumType(AttributeType):
+    """Attribute type for plain enum values. Useful for predefined language-agnostic values selectable in drop downs when only one value should be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType instead if multiple values can be selected from the list."""
+
+    #: Available values that can be assigned to Products.
     values: typing.List["AttributePlainEnumValue"]
 
     def __init__(self, *, values: typing.List["AttributePlainEnumValue"]):
@@ -391,6 +426,8 @@ class AttributeEnumType(AttributeType):
 
 
 class AttributeLocalizableTextType(AttributeType):
+    """Attribute type for [LocalizedString](ctp:api:type:LocalizedString) values."""
+
     def __init__(self):
 
         super().__init__(name="ltext")
@@ -410,6 +447,7 @@ class AttributeLocalizableTextType(AttributeType):
 
 
 class AttributeLocalizedEnumType(AttributeType):
+    #: Available values that can be assigned to Products.
     values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(self, *, values: typing.List["AttributeLocalizedEnumValue"]):
@@ -449,6 +487,9 @@ class AttributeMoneyType(AttributeType):
 
 
 class AttributeNestedType(AttributeType):
+    """Attribute type for nesting Attributes based on some existing ProductType. It does not support `isSearchable` and is not supported in queries. The only supported AttributeConstraint is `None`."""
+
+    #: Attributes that can be stored as nested Attributes of the current Attribute.
     type_reference: "ProductTypeReference"
 
     def __init__(self, *, type_reference: "ProductTypeReference"):
@@ -486,9 +527,10 @@ class AttributeNumberType(AttributeType):
 
 
 class AttributeReferenceType(AttributeType):
-    reference_type_id: "ReferenceTypeId"
+    #: Name of the resource type that the value should reference.
+    reference_type_id: "AttributeReferenceTypeId"
 
-    def __init__(self, *, reference_type_id: "ReferenceTypeId"):
+    def __init__(self, *, reference_type_id: "AttributeReferenceTypeId"):
         self.reference_type_id = reference_type_id
 
         super().__init__(name="reference")
@@ -508,6 +550,9 @@ class AttributeReferenceType(AttributeType):
 
 
 class AttributeSetType(AttributeType):
+    """AttributeType that defines a set (without duplicate elements) with values of the given `elementType`. It does not support `isRequired`. Since this type itself is an AttributeType, it is possible to construct an AttributeSetType of an AttributeSetType of any AttributeType, and to continue with this iteration until terminating with any non-AttributeSetType. In case the AttributeSetType iteration terminates with an [AttributeNestedType](ctp:api:type:AttributeNestedType), the iteration can have 5 steps at maximum."""
+
+    #: Attribute type of the elements in the set.
     element_type: "AttributeType"
 
     def __init__(self, *, element_type: "AttributeType"):
@@ -528,6 +573,8 @@ class AttributeSetType(AttributeType):
 
 
 class AttributeTextType(AttributeType):
+    """Attribute type for plain text values."""
+
     def __init__(self):
 
         super().__init__(name="text")
@@ -566,11 +613,13 @@ class ProductType(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: User-specific unique identifier for the product type (max.
-    #: 256 characters).
+    #: User-defined unique identifier of the ProductType.
     key: typing.Optional[str]
+    #: Name of the ProductType.
     name: str
+    #: Description of the ProductType.
     description: str
+    #: Attributes specified for the ProductType.
     attributes: typing.Optional[typing.List["AttributeDefinition"]]
 
     def __init__(
@@ -614,12 +663,13 @@ class ProductType(BaseResource):
 
 
 class ProductTypeDraft(_BaseType):
-    #: User-specific unique identifier for the product type (min.
-    #: 2 and max.
-    #: 256 characters).
+    #: User-defined unique identifier for the ProductType.
     key: typing.Optional[str]
+    #: Name of the ProductType.
     name: str
+    #: Description of the ProductType.
     description: str
+    #: Attributes to specify for the ProductType. Products of this ProductType have these Attributes available on their [ProductVariants](ctp:api:type:ProductVariant).
     attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]]
 
     def __init__(
@@ -650,25 +700,36 @@ class ProductTypeDraft(_BaseType):
 
 
 class ProductTypePagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductType](ctp:api:type:ProductType)."""
+
+    #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
+    #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [ProductTypes](ctp:api:type:ProductType) matching the query.
     results: typing.List["ProductType"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["ProductType"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -688,6 +749,9 @@ class ProductTypePagedQueryResponse(_BaseType):
 
 
 class ProductTypeReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType)."""
+
+    #: Contains the representation of the expanded ProductType. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductTypes.
     obj: typing.Optional["ProductType"]
 
     def __init__(self, *, id: str, obj: typing.Optional["ProductType"] = None):
@@ -708,6 +772,8 @@ class ProductTypeReference(Reference):
 
 
 class ProductTypeResourceIdentifier(ResourceIdentifier):
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType)."""
+
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
@@ -729,7 +795,9 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 
 
 class ProductTypeUpdate(_BaseType):
+    #: Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the ProductType.
     actions: typing.List["ProductTypeUpdateAction"]
 
     def __init__(
@@ -878,11 +946,14 @@ class ProductTypeUpdateAction(_BaseType):
 
 
 class TextInputHint(enum.Enum):
+    """A text input hint is a string with one of the following values:"""
+
     SINGLE_LINE = "SingleLine"
     MULTI_LINE = "MultiLine"
 
 
 class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
+    #: Value to append to `attributes`.
     attribute: "AttributeDefinitionDraft"
 
     def __init__(self, *, attribute: "AttributeDefinitionDraft"):
@@ -905,7 +976,11 @@ class ProductTypeAddAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
+    """Adds a localizable enum to the values of [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType). It can update an AttributeLocalizedEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Value to append to the array.
     value: "AttributeLocalizedEnumValue"
 
     def __init__(self, *, attribute_name: str, value: "AttributeLocalizedEnumValue"):
@@ -929,7 +1004,11 @@ class ProductTypeAddLocalizedEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
+    """Adds an enum to the values of [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Value to append to the array.
     value: "AttributePlainEnumValue"
 
     def __init__(self, *, attribute_name: str, value: "AttributePlainEnumValue"):
@@ -953,7 +1032,11 @@ class ProductTypeAddPlainEnumValueAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
+    """Updates the `attributeConstraint` of an [AttributeDefinition](ctp:api:type:AttributeDefinition). For now only following changes are supported: `SameForAll` to `None` and `Unique` to `None`."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: `None`
     new_value: "AttributeConstraintEnumDraft"
 
     def __init__(
@@ -983,7 +1066,13 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
+    """Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency)."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: New user-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+    #: When using the same `name` for an Attribute in two or more ProductTypes all fields of the AttributeDefinition of this Attribute need to be the same across the ProductTypes, otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+    #: An exception to this are the values of an `enum` or `lenum` type and sets thereof.
     new_attribute_name: str
 
     def __init__(self, *, attribute_name: str, new_attribute_name: str):
@@ -1029,6 +1118,7 @@ class ProductTypeChangeAttributeOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
+    #: Names of Attributes to reorder. This array must include all Attributes currently present on a ProductType in a different order.
     attribute_names: typing.List["str"]
 
     def __init__(self, *, attribute_names: typing.List["str"]):
@@ -1055,6 +1145,7 @@ class ProductTypeChangeAttributeOrderByNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
+    #: New value to set.
     description: str
 
     def __init__(self, *, description: str):
@@ -1077,8 +1168,17 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
+    """Updates the key of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition, or AttributeSetType of AttributeLocalizedEnumType AttributeDefinition.
+
+    All Products will be updated to the new key in an [eventually consistent](/general-concepts#eventual-consistency) way.
+
+    """
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Existing key to be changed.
     key: str
+    #: New key to be set.
     new_key: str
 
     def __init__(self, *, attribute_name: str, key: str, new_key: str):
@@ -1103,7 +1203,11 @@ class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
+    """Updates the `inputHint` of an [AttributeDefinition](ctp:api:type:AttributeDefinition)."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: `SingleLine` or `MultiLine`
     new_value: "TextInputHint"
 
     def __init__(self, *, attribute_name: str, new_value: "TextInputHint"):
@@ -1127,7 +1231,11 @@ class ProductTypeChangeInputHintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
+    """Following this update the Products are reindexed asynchronously to reflect this change on the search endpoint. When enabling search on an existing Attribute type definition, the constraint regarding the maximum size of a searchable Attribute will not be enforced. Instead, Product AttributeDefinitions exceeding this limit will be treated as not searchable and will not be available for full-text search."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Determines whether the Attribute's values can be used in full-text search queries, filters, and facets. See [AttributeDefinition](ctp:api:type:AttributeDefinition) for details.
     is_searchable: bool
 
     def __init__(self, *, attribute_name: str, is_searchable: bool):
@@ -1151,7 +1259,9 @@ class ProductTypeChangeIsSearchableAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: New value to set. Must not be empty.
     label: "LocalizedString"
 
     def __init__(self, *, attribute_name: str, label: "LocalizedString"):
@@ -1175,7 +1285,15 @@ class ProductTypeChangeLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
+    """Updates the label of a single enum `value` in an [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition.
+
+    All Products will be updated to the new label in an [eventually consistent](/general-concepts#eventual-consistency) way.
+
+    """
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: New value to set. Must be different from the existing value.
     new_value: "AttributeLocalizedEnumValue"
 
     def __init__(
@@ -1205,7 +1323,11 @@ class ProductTypeChangeLocalizedEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
+    """Updates the order of localized enum `values` in an [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition. It can update an AttributeLocalizedEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
     values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
@@ -1235,6 +1357,7 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeNameAction(ProductTypeUpdateAction):
+    #: New value to set.
     name: str
 
     def __init__(self, *, name: str):
@@ -1257,7 +1380,15 @@ class ProductTypeChangeNameAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
+    """Updates the label of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition.
+
+    All Products will be updated to the new label in an [eventually consistent](/general-concepts#eventual-consistency) way.
+
+    """
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: New value to set. Must be different from the existing value.
     new_value: "AttributePlainEnumValue"
 
     def __init__(self, *, attribute_name: str, new_value: "AttributePlainEnumValue"):
@@ -1285,7 +1416,11 @@ class ProductTypeChangePlainEnumValueLabelAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
+    """Updates the order of enum `values` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition. It can update an AttributeEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition."""
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
     values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
@@ -1315,7 +1450,13 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 
 
 class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
-    #: The name of the attribute to remove.
+    """Removes an AttributeDefinition and also deletes all corresponding Attributes on all [Products](/projects/products) with this ProductType. The removal of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
+
+    The `CombinationUnique` constraint is not checked when an Attribute is removed, and uniqueness violations may occur when you remove an Attribute with a `CombinationUnique` constraint.
+
+    """
+
+    #: Name of the Attribute to remove.
     name: str
 
     def __init__(self, *, name: str):
@@ -1342,7 +1483,15 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 
 
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
+    """Removes enum values from an AttributeDefinition of [AttributeEnumType](ctp:api:type:AttributeEnumType), [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType), [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType, or AttributeSetType of AttributeLocalizedEnumType.
+
+    If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation will fail with the [EnumValueIsUsed](/errors#product-types-400-enum-value-is-used) error code.
+
+    """
+
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Keys of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) to remove.
     keys: typing.List["str"]
 
     def __init__(self, *, attribute_name: str, keys: typing.List["str"]):
@@ -1366,7 +1515,9 @@ class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
 
 
 class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
+    #: Name of the AttributeDefinition to update.
     attribute_name: str
+    #: Value to set. If empty, any existing value will be removed.
     input_tip: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -1395,7 +1546,7 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
 
 
 class ProductTypeSetKeyAction(ProductTypeUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):

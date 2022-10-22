@@ -272,6 +272,9 @@ class StateTypeEnum(enum.Enum):
     PRODUCT_STATE = "ProductState"
     REVIEW_STATE = "ReviewState"
     PAYMENT_STATE = "PaymentState"
+    QUOTE_REQUEST_STATE = "QuoteRequestState"
+    STAGED_QUOTE_STATE = "StagedQuoteState"
+    QUOTE_STATE = "QuoteState"
 
 
 class StateUpdate(_BaseType):

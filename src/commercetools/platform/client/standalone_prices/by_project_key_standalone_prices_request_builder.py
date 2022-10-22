@@ -99,7 +99,7 @@ class ByProjectKeyStandalonePricesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["StandalonePrice"]:
-        """Produces the [StandalonePriceCreatedMessage](ctp:api:type:StandalonePriceCreatedMessage)."""
+        """Produces the [StandalonePriceCreated](ctp:api:type:StandalonePriceCreatedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/standalone-prices",

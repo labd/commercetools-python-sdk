@@ -10,12 +10,13 @@ import enum
 import typing
 
 from ._abstract import _BaseType
-from .common import ImportResource
+from .common import ImportResource, ProductPriceModeEnum
 
 if typing.TYPE_CHECKING:
     from .common import (
         CategoryKeyReference,
         LocalizedString,
+        ProductPriceModeEnum,
         ProductTypeKeyReference,
         StateKeyReference,
         TaxCategoryKeyReference,
@@ -203,6 +204,8 @@ class ProductImport(ImportResource):
     #: If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
     #: However, if the import data contains no update, that is, if it matches the staged projection of the existing Product, the import induces no change in the existing Product whether `publish` is set or not.
     publish: typing.Optional[bool]
+    #: Determines the type of Prices the API uses. See [ProductPriceMode](/../api/projects/products#productpricemode) for more details. If not provided, the existing `Product.priceMode` is not changed.
+    price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
         self,
@@ -219,7 +222,8 @@ class ProductImport(ImportResource):
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateKeyReference"] = None,
-        publish: typing.Optional[bool] = None
+        publish: typing.Optional[bool] = None,
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None
     ):
         self.name = name
         self.product_type = product_type
@@ -233,6 +237,7 @@ class ProductImport(ImportResource):
         self.search_keywords = search_keywords
         self.state = state
         self.publish = publish
+        self.price_mode = price_mode
 
         super().__init__(key=key)
 

@@ -50,40 +50,32 @@ class ByProjectKeyProductsRequestBuilder:
     def get(
         self,
         *,
+        where: typing.List["str"] = None,
         price_currency: str = None,
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
-        store_projection: str = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
-        where: typing.List["str"] = None,
         predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductPagedQueryResponse"]:
-        """You can use the query endpoint to get the full representations of products.
-        REMARK: We suggest to use the performance optimized search endpoint which has a bunch functionalities,
-        the query API lacks like sorting on custom attributes, etc.
-
-        """
+        """If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response."""
         params = {
+            "where": where,
             "priceCurrency": price_currency,
             "priceCountry": price_country,
             "priceCustomerGroup": price_customer_group,
             "priceChannel": price_channel,
-            "localeProjection": locale_projection,
-            "storeProjection": store_projection,
             "expand": expand,
             "sort": sort,
             "limit": limit,
             "offset": offset,
             "withTotal": with_total,
-            "where": where,
         }
         predicate_var and params.update(
             {f"var.{k}": v for k, v in predicate_var.items()}
@@ -107,14 +99,15 @@ class ByProjectKeyProductsRequestBuilder:
     def head(
         self,
         *,
+        where: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional[None]:
-        """Checks if products exist."""
+        """Check if Products exist. Responds with a `200 OK` status if any Products match the Query Predicate, or `404 Not Found` otherwise."""
         headers = {} if headers is None else headers
         response = self._client._head(
             endpoint=f"/{self._project_key}/products",
-            params={},
+            params={"where": where},
             headers=headers,
             options=options,
         )
@@ -135,15 +128,13 @@ class ByProjectKeyProductsRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
-        store_projection: str = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Product"]:
-        """To create a new product, send a representation that is going to become the initial staged representation
-        of the new product in the master catalog. If price selection query parameters are provided,
-        the selected prices will be added to the response.
+        """To create a new Product, send a representation that is going to become the initial _staged_ representation of the new Product in the master catalog.
+        If [Price Selection](ctp:api:type:ProductPriceSelection) query parameters are provided, selected Prices will be added to the response.
+        Produces the [ProductCreated](/projects/messages#product-created) Message.
 
         """
         headers = {} if headers is None else headers
@@ -154,8 +145,6 @@ class ByProjectKeyProductsRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
-                "localeProjection": locale_projection,
-                "storeProjection": store_projection,
                 "expand": expand,
             },
             json=body.serialize(),

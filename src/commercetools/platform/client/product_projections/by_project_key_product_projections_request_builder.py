@@ -82,7 +82,7 @@ class ByProjectKeyProductProjectionsRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
+        locale_projection: typing.List["str"] = None,
         store_projection: str = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,

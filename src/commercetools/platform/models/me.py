@@ -10,14 +10,21 @@ import enum
 import typing
 
 from ._abstract import _BaseType
+from .business_unit import BusinessUnitType
 from .cart import InventoryMode, TaxMode
 from .payment import TransactionType
 
 if typing.TYPE_CHECKING:
+    from .business_unit import (
+        AssociateDraft,
+        BusinessUnitKeyReference,
+        BusinessUnitResourceIdentifier,
+        BusinessUnitType,
+        BusinessUnitUpdateAction,
+    )
     from .cart import (
         CartReference,
         CartResourceIdentifier,
-        DiscountCodeInfo,
         ExternalLineItemTotalPrice,
         ExternalTaxRateDraft,
         InventoryMode,
@@ -27,7 +34,7 @@ if typing.TYPE_CHECKING:
     )
     from .channel import ChannelResourceIdentifier
     from .common import BaseAddress, LocalizedString, Money, TypedMoney
-    from .customer import CustomerReference
+    from .customer import CustomerReference, CustomerResourceIdentifier
     from .discount_code import DiscountCodeReference
     from .order import OrderReference
     from .payment import (
@@ -48,6 +55,28 @@ if typing.TYPE_CHECKING:
     )
 
 __all__ = [
+    "MyBusinessUnitAddAddressAction",
+    "MyBusinessUnitAddBillingAddressIdAction",
+    "MyBusinessUnitAddShippingAddressIdAction",
+    "MyBusinessUnitAssociateDraft",
+    "MyBusinessUnitChangeAddressAction",
+    "MyBusinessUnitChangeAssociateAction",
+    "MyBusinessUnitChangeNameAction",
+    "MyBusinessUnitChangeParentUnitAction",
+    "MyBusinessUnitDraft",
+    "MyBusinessUnitRemoveAddressAction",
+    "MyBusinessUnitRemoveAssociateAction",
+    "MyBusinessUnitRemoveBillingAddressIdAction",
+    "MyBusinessUnitRemoveShippingAddressIdAction",
+    "MyBusinessUnitSetAddressCustomFieldAction",
+    "MyBusinessUnitSetAddressCustomTypeAction",
+    "MyBusinessUnitSetContactEmailAction",
+    "MyBusinessUnitSetCustomFieldAction",
+    "MyBusinessUnitSetCustomTypeAction",
+    "MyBusinessUnitSetDefaultBillingAddressAction",
+    "MyBusinessUnitSetDefaultShippingAddressAction",
+    "MyBusinessUnitUpdate",
+    "MyBusinessUnitUpdateAction",
     "MyCartAddDiscountCodeAction",
     "MyCartAddItemShippingAddressAction",
     "MyCartAddLineItemAction",
@@ -78,6 +107,7 @@ __all__ = [
     "MyCartUpdate",
     "MyCartUpdateAction",
     "MyCartUpdateItemShippingAddressAction",
+    "MyCompanyDraft",
     "MyCustomerAddAddressAction",
     "MyCustomerAddBillingAddressIdAction",
     "MyCustomerAddShippingAddressIdAction",
@@ -102,6 +132,7 @@ __all__ = [
     "MyCustomerSetVatIdAction",
     "MyCustomerUpdate",
     "MyCustomerUpdateAction",
+    "MyDivisionDraft",
     "MyLineItemDraft",
     "MyOrderFromCartDraft",
     "MyPayment",
@@ -116,10 +147,14 @@ __all__ = [
     "MyPaymentSetTransactionCustomFieldAction",
     "MyPaymentUpdate",
     "MyPaymentUpdateAction",
+    "MyQuoteChangeMyQuoteStateAction",
     "MyQuoteRequestCancelAction",
     "MyQuoteRequestDraft",
     "MyQuoteRequestUpdate",
     "MyQuoteRequestUpdateAction",
+    "MyQuoteState",
+    "MyQuoteUpdate",
+    "MyQuoteUpdateAction",
     "MyShoppingListAddLineItemAction",
     "MyShoppingListAddTextLineItemAction",
     "MyShoppingListChangeLineItemQuantityAction",
@@ -147,6 +182,218 @@ __all__ = [
 ]
 
 
+class MyBusinessUnitAssociateDraft(_BaseType):
+    #: Expected version of the BusinessUnit on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    version: int
+    #: [Customer](ctp:api:type:Customer) to create and assign to the Business Unit.
+    customer: "MyCustomerDraft"
+
+    def __init__(self, *, version: int, customer: "MyCustomerDraft"):
+        self.version = version
+        self.customer = customer
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitAssociateDraft":
+        from ._schemas.me import MyBusinessUnitAssociateDraftSchema
+
+        return MyBusinessUnitAssociateDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitAssociateDraftSchema
+
+        return MyBusinessUnitAssociateDraftSchema().dump(self)
+
+
+class MyBusinessUnitDraft(_BaseType):
+    #: User-defined unique identifier for the BusinessUnit.
+    key: str
+    #: Type of the Business Unit indicating its position in a hierarchy.
+    unit_type: "BusinessUnitType"
+    #: Name of the Business Unit.
+    name: str
+    #: Email address of the Business Unit.
+    contact_email: typing.Optional[str]
+    #: Custom Fields for the Business Unit.
+    custom: typing.Optional["CustomFields"]
+    #: Addresses used by the Business Unit.
+    addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: Indexes of entries in `addresses` to set as shipping addresses.
+    #: The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+    shipping_addresses: typing.Optional[typing.List["int"]]
+    #: Index of the entry in `addresses` to set as the default shipping address.
+    default_shiping_address: typing.Optional[int]
+    #: Indexes of entries in `addresses` to set as billing addresses.
+    #: The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+    billing_addresses: typing.Optional[typing.List["int"]]
+    #: Index of the entry in `addresses` to set as the default billing address.
+    default_billing_address: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        unit_type: "BusinessUnitType",
+        name: str,
+        contact_email: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        shipping_addresses: typing.Optional[typing.List["int"]] = None,
+        default_shiping_address: typing.Optional[int] = None,
+        billing_addresses: typing.Optional[typing.List["int"]] = None,
+        default_billing_address: typing.Optional[int] = None
+    ):
+        self.key = key
+        self.unit_type = unit_type
+        self.name = name
+        self.contact_email = contact_email
+        self.custom = custom
+        self.addresses = addresses
+        self.shipping_addresses = shipping_addresses
+        self.default_shiping_address = default_shiping_address
+        self.billing_addresses = billing_addresses
+        self.default_billing_address = default_billing_address
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyBusinessUnitDraft":
+        if data["unitType"] == "Company":
+            from ._schemas.me import MyCompanyDraftSchema
+
+            return MyCompanyDraftSchema().load(data)
+        if data["unitType"] == "Division":
+            from ._schemas.me import MyDivisionDraftSchema
+
+            return MyDivisionDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitDraftSchema
+
+        return MyBusinessUnitDraftSchema().dump(self)
+
+
+class MyBusinessUnitUpdate(_BaseType):
+    #: Expected version of the BusinessUnit on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    version: int
+    #: Update actions to be performed on the BusinessUnit.
+    actions: typing.List["BusinessUnitUpdateAction"]
+
+    def __init__(
+        self, *, version: int, actions: typing.List["BusinessUnitUpdateAction"]
+    ):
+        self.version = version
+        self.actions = actions
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyBusinessUnitUpdate":
+        from ._schemas.me import MyBusinessUnitUpdateSchema
+
+        return MyBusinessUnitUpdateSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitUpdateSchema
+
+        return MyBusinessUnitUpdateSchema().dump(self)
+
+
+class MyBusinessUnitUpdateAction(_BaseType):
+    action: str
+
+    def __init__(self, *, action: str):
+        self.action = action
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitUpdateAction":
+        if data["action"] == "addAddress":
+            from ._schemas.me import MyBusinessUnitAddAddressActionSchema
+
+            return MyBusinessUnitAddAddressActionSchema().load(data)
+        if data["action"] == "addBillingAddressId":
+            from ._schemas.me import MyBusinessUnitAddBillingAddressIdActionSchema
+
+            return MyBusinessUnitAddBillingAddressIdActionSchema().load(data)
+        if data["action"] == "addShippingAddressId":
+            from ._schemas.me import MyBusinessUnitAddShippingAddressIdActionSchema
+
+            return MyBusinessUnitAddShippingAddressIdActionSchema().load(data)
+        if data["action"] == "changeAddress":
+            from ._schemas.me import MyBusinessUnitChangeAddressActionSchema
+
+            return MyBusinessUnitChangeAddressActionSchema().load(data)
+        if data["action"] == "changeAssociate":
+            from ._schemas.me import MyBusinessUnitChangeAssociateActionSchema
+
+            return MyBusinessUnitChangeAssociateActionSchema().load(data)
+        if data["action"] == "changeName":
+            from ._schemas.me import MyBusinessUnitChangeNameActionSchema
+
+            return MyBusinessUnitChangeNameActionSchema().load(data)
+        if data["action"] == "changeParentUnit":
+            from ._schemas.me import MyBusinessUnitChangeParentUnitActionSchema
+
+            return MyBusinessUnitChangeParentUnitActionSchema().load(data)
+        if data["action"] == "removeAddress":
+            from ._schemas.me import MyBusinessUnitRemoveAddressActionSchema
+
+            return MyBusinessUnitRemoveAddressActionSchema().load(data)
+        if data["action"] == "removeAssociate":
+            from ._schemas.me import MyBusinessUnitRemoveAssociateActionSchema
+
+            return MyBusinessUnitRemoveAssociateActionSchema().load(data)
+        if data["action"] == "removeBillingAddressId":
+            from ._schemas.me import MyBusinessUnitRemoveBillingAddressIdActionSchema
+
+            return MyBusinessUnitRemoveBillingAddressIdActionSchema().load(data)
+        if data["action"] == "removeShippingAddressId":
+            from ._schemas.me import MyBusinessUnitRemoveShippingAddressIdActionSchema
+
+            return MyBusinessUnitRemoveShippingAddressIdActionSchema().load(data)
+        if data["action"] == "setAddressCustomField":
+            from ._schemas.me import MyBusinessUnitSetAddressCustomFieldActionSchema
+
+            return MyBusinessUnitSetAddressCustomFieldActionSchema().load(data)
+        if data["action"] == "setAddressCustomType":
+            from ._schemas.me import MyBusinessUnitSetAddressCustomTypeActionSchema
+
+            return MyBusinessUnitSetAddressCustomTypeActionSchema().load(data)
+        if data["action"] == "setContactEmail":
+            from ._schemas.me import MyBusinessUnitSetContactEmailActionSchema
+
+            return MyBusinessUnitSetContactEmailActionSchema().load(data)
+        if data["action"] == "setCustomField":
+            from ._schemas.me import MyBusinessUnitSetCustomFieldActionSchema
+
+            return MyBusinessUnitSetCustomFieldActionSchema().load(data)
+        if data["action"] == "setCustomType":
+            from ._schemas.me import MyBusinessUnitSetCustomTypeActionSchema
+
+            return MyBusinessUnitSetCustomTypeActionSchema().load(data)
+        if data["action"] == "setDefaultBillingAddress":
+            from ._schemas.me import MyBusinessUnitSetDefaultBillingAddressActionSchema
+
+            return MyBusinessUnitSetDefaultBillingAddressActionSchema().load(data)
+        if data["action"] == "setDefaultShippingAddress":
+            from ._schemas.me import MyBusinessUnitSetDefaultShippingAddressActionSchema
+
+            return MyBusinessUnitSetDefaultShippingAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitUpdateActionSchema
+
+        return MyBusinessUnitUpdateActionSchema().dump(self)
+
+
 class MyCartDraft(_BaseType):
     #: A three-digit currency code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     currency: str
@@ -170,9 +417,12 @@ class MyCartDraft(_BaseType):
     #: Contains addresses for orders with multiple shipping addresses.
     #: Each address must contain a key which is unique in this cart.
     item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: The BusinessUnit the cart will belong to.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
     #: [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
     store: typing.Optional["StoreKeyReference"]
-    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
+    #: The code of existing DiscountCodes.
+    discount_codes: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
@@ -190,8 +440,9 @@ class MyCartDraft(_BaseType):
         tax_mode: typing.Optional["TaxMode"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         store: typing.Optional["StoreKeyReference"] = None,
-        discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None
+        discount_codes: typing.Optional[typing.List["str"]] = None
     ):
         self.currency = currency
         self.customer_email = customer_email
@@ -206,6 +457,7 @@ class MyCartDraft(_BaseType):
         self.tax_mode = tax_mode
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.item_shipping_addresses = item_shipping_addresses
+        self.business_unit = business_unit
         self.store = store
         self.discount_codes = discount_codes
 
@@ -374,6 +626,51 @@ class MyCartUpdateAction(_BaseType):
         from ._schemas.me import MyCartUpdateActionSchema
 
         return MyCartUpdateActionSchema().dump(self)
+
+
+class MyCompanyDraft(MyBusinessUnitDraft):
+    """Draft type to represent the top level of a business.
+    Contains the fields and values of the generic [MyBusinessUnitDraft](ctp:api:type:BusinessUnitDraft) that are used specifically for creating a [Company](ctp:api:type:Company).
+
+    """
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        name: str,
+        contact_email: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        shipping_addresses: typing.Optional[typing.List["int"]] = None,
+        default_shiping_address: typing.Optional[int] = None,
+        billing_addresses: typing.Optional[typing.List["int"]] = None,
+        default_billing_address: typing.Optional[int] = None
+    ):
+
+        super().__init__(
+            key=key,
+            name=name,
+            contact_email=contact_email,
+            custom=custom,
+            addresses=addresses,
+            shipping_addresses=shipping_addresses,
+            default_shiping_address=default_shiping_address,
+            billing_addresses=billing_addresses,
+            default_billing_address=default_billing_address,
+            unit_type=BusinessUnitType.COMPANY,
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyCompanyDraft":
+        from ._schemas.me import MyCompanyDraftSchema
+
+        return MyCompanyDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyCompanyDraftSchema
+
+        return MyCompanyDraftSchema().dump(self)
 
 
 class MyCustomerDraft(_BaseType):
@@ -571,6 +868,56 @@ class MyCustomerUpdateAction(_BaseType):
         from ._schemas.me import MyCustomerUpdateActionSchema
 
         return MyCustomerUpdateActionSchema().dump(self)
+
+
+class MyDivisionDraft(MyBusinessUnitDraft):
+    """Draft type to model divisions that are part of the [Company](ctp:api:type:Company) or a higher order [Division](ctp:api:type:Division).
+    Contains the fields and values of the generic [MyBusinessUnitDraft](ctp:api:type:MyBusinessUnitDraft) that are used specifically for creating a Division.
+
+    """
+
+    #: The parent unit of this Division. Can be a Company or a Division.
+    parent_unit: "BusinessUnitResourceIdentifier"
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        name: str,
+        contact_email: typing.Optional[str] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        shipping_addresses: typing.Optional[typing.List["int"]] = None,
+        default_shiping_address: typing.Optional[int] = None,
+        billing_addresses: typing.Optional[typing.List["int"]] = None,
+        default_billing_address: typing.Optional[int] = None,
+        parent_unit: "BusinessUnitResourceIdentifier"
+    ):
+        self.parent_unit = parent_unit
+
+        super().__init__(
+            key=key,
+            name=name,
+            contact_email=contact_email,
+            custom=custom,
+            addresses=addresses,
+            shipping_addresses=shipping_addresses,
+            default_shiping_address=default_shiping_address,
+            billing_addresses=billing_addresses,
+            default_billing_address=default_billing_address,
+            unit_type=BusinessUnitType.DIVISION,
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyDivisionDraft":
+        from ._schemas.me import MyDivisionDraftSchema
+
+        return MyDivisionDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyDivisionDraftSchema
+
+        return MyDivisionDraftSchema().dump(self)
 
 
 class MyLineItemDraft(_BaseType):
@@ -850,11 +1197,11 @@ class MyPaymentUpdateAction(_BaseType):
 
 
 class MyQuoteRequestDraft(_BaseType):
-    #: ResourceIdentifier to the Cart from which this quote request is created.
+    #: ResourceIdentifier of the Cart from which the Quote Request is created.
     cart: "CartResourceIdentifier"
     #: Current version of the Cart.
     version: int
-    #: Text message included in the request.
+    #: Message from the Buyer included in the Quote Request.
     comment: str
 
     def __init__(self, *, cart: "CartResourceIdentifier", version: int, comment: str):
@@ -921,6 +1268,59 @@ class MyQuoteRequestUpdateAction(_BaseType):
         from ._schemas.me import MyQuoteRequestUpdateActionSchema
 
         return MyQuoteRequestUpdateActionSchema().dump(self)
+
+
+class MyQuoteState(enum.Enum):
+    """[QuoteStates](ctp:api:type:QuoteState) that can be set using the [Change My Quote State](ctp:api:type:MyQuoteChangeMyQuoteStateAction) update action."""
+
+    DECLINED = "Declined"
+    ACCEPTED = "Accepted"
+
+
+class MyQuoteUpdate(_BaseType):
+    #: Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    version: int
+    #: Update actions to be performed on the [Quote](ctp:api:type:Quote).
+    actions: typing.List["MyQuoteUpdateAction"]
+
+    def __init__(self, *, version: int, actions: typing.List["MyQuoteUpdateAction"]):
+        self.version = version
+        self.actions = actions
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyQuoteUpdate":
+        from ._schemas.me import MyQuoteUpdateSchema
+
+        return MyQuoteUpdateSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteUpdateSchema
+
+        return MyQuoteUpdateSchema().dump(self)
+
+
+class MyQuoteUpdateAction(_BaseType):
+    action: str
+
+    def __init__(self, *, action: str):
+        self.action = action
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyQuoteUpdateAction":
+        if data["action"] == "changeMyQuoteState":
+            from ._schemas.me import MyQuoteChangeMyQuoteStateActionSchema
+
+            return MyQuoteChangeMyQuoteStateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteUpdateActionSchema
+
+        return MyQuoteUpdateActionSchema().dump(self)
 
 
 class MyShoppingListDraft(_BaseType):
@@ -1159,6 +1559,554 @@ class ReplicaMyCartDraft(_BaseType):
         from ._schemas.me import ReplicaMyCartDraftSchema
 
         return ReplicaMyCartDraftSchema().dump(self)
+
+
+class MyBusinessUnitAddAddressAction(MyBusinessUnitUpdateAction):
+    """Adding an address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitAddressAdded](ctp:api:type:BusinessUnitAddressAddedMessage) Message."""
+
+    #: The address to add to `addresses`.
+    address: "BaseAddress"
+
+    def __init__(self, *, address: "BaseAddress"):
+        self.address = address
+
+        super().__init__(action="addAddress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitAddAddressAction":
+        from ._schemas.me import MyBusinessUnitAddAddressActionSchema
+
+        return MyBusinessUnitAddAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitAddAddressActionSchema
+
+        return MyBusinessUnitAddAddressActionSchema().dump(self)
+
+
+class MyBusinessUnitAddBillingAddressIdAction(MyBusinessUnitUpdateAction):
+    """Adding a billing address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitBillingAddressAdded](ctp:api:type:BusinessUnitBillingAddressAddedMessage) Message."""
+
+    #: ID of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="addBillingAddressId")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitAddBillingAddressIdAction":
+        from ._schemas.me import MyBusinessUnitAddBillingAddressIdActionSchema
+
+        return MyBusinessUnitAddBillingAddressIdActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitAddBillingAddressIdActionSchema
+
+        return MyBusinessUnitAddBillingAddressIdActionSchema().dump(self)
+
+
+class MyBusinessUnitAddShippingAddressIdAction(MyBusinessUnitUpdateAction):
+    """Adding a shipping address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitShippingAddressAdded](ctp:api:type:BusinessUnitShippingAddressAddedMessage) Message."""
+
+    #: ID of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="addShippingAddressId")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitAddShippingAddressIdAction":
+        from ._schemas.me import MyBusinessUnitAddShippingAddressIdActionSchema
+
+        return MyBusinessUnitAddShippingAddressIdActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitAddShippingAddressIdActionSchema
+
+        return MyBusinessUnitAddShippingAddressIdActionSchema().dump(self)
+
+
+class MyBusinessUnitChangeAddressAction(MyBusinessUnitUpdateAction):
+    """Changing the address on a Business Unit generates the [BusinessUnitAddressChanged](ctp:api:type:BusinessUnitAddressChangedMessage) Message."""
+
+    #: ID of the address to change. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to change. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+    #: New address to set.
+    address: "BaseAddress"
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None,
+        address: "BaseAddress"
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+        self.address = address
+
+        super().__init__(action="changeAddress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitChangeAddressAction":
+        from ._schemas.me import MyBusinessUnitChangeAddressActionSchema
+
+        return MyBusinessUnitChangeAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitChangeAddressActionSchema
+
+        return MyBusinessUnitChangeAddressActionSchema().dump(self)
+
+
+class MyBusinessUnitChangeAssociateAction(MyBusinessUnitUpdateAction):
+    """Updating the [Associate](ctp:api:type:Associate) on a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitAssociateChanged](ctp:api:type:BusinessUnitAssociateChangedMessage) Message."""
+
+    #: The Associate to add.
+    associate: "AssociateDraft"
+
+    def __init__(self, *, associate: "AssociateDraft"):
+        self.associate = associate
+
+        super().__init__(action="changeAssociate")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitChangeAssociateAction":
+        from ._schemas.me import MyBusinessUnitChangeAssociateActionSchema
+
+        return MyBusinessUnitChangeAssociateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitChangeAssociateActionSchema
+
+        return MyBusinessUnitChangeAssociateActionSchema().dump(self)
+
+
+class MyBusinessUnitChangeNameAction(MyBusinessUnitUpdateAction):
+    """Updating the name on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitNameChanged](ctp:api:type:BusinessUnitNameChangedMessage) Message."""
+
+    #: New name to set.
+    name: str
+
+    def __init__(self, *, name: str):
+        self.name = name
+
+        super().__init__(action="changeName")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitChangeNameAction":
+        from ._schemas.me import MyBusinessUnitChangeNameActionSchema
+
+        return MyBusinessUnitChangeNameActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitChangeNameActionSchema
+
+        return MyBusinessUnitChangeNameActionSchema().dump(self)
+
+
+class MyBusinessUnitChangeParentUnitAction(MyBusinessUnitUpdateAction):
+    """Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message. The user must be an Associate with the `Admin` role in the new parent unit."""
+
+    #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+    parent_unit: "BusinessUnitResourceIdentifier"
+
+    def __init__(self, *, parent_unit: "BusinessUnitResourceIdentifier"):
+        self.parent_unit = parent_unit
+
+        super().__init__(action="changeParentUnit")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitChangeParentUnitAction":
+        from ._schemas.me import MyBusinessUnitChangeParentUnitActionSchema
+
+        return MyBusinessUnitChangeParentUnitActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitChangeParentUnitActionSchema
+
+        return MyBusinessUnitChangeParentUnitActionSchema().dump(self)
+
+
+class MyBusinessUnitRemoveAddressAction(MyBusinessUnitUpdateAction):
+    """Removing the address from a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitAddressRemoved](ctp:api:type:BusinessUnitAddressRemovedMessage) Message."""
+
+    #: ID of the address to be removed. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to be removed. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="removeAddress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitRemoveAddressAction":
+        from ._schemas.me import MyBusinessUnitRemoveAddressActionSchema
+
+        return MyBusinessUnitRemoveAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitRemoveAddressActionSchema
+
+        return MyBusinessUnitRemoveAddressActionSchema().dump(self)
+
+
+class MyBusinessUnitRemoveAssociateAction(MyBusinessUnitUpdateAction):
+    """Removing an [Associate](ctp:api:type:Associate) from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitAssociateRemoved](ctp:api:type:BusinessUnitAssociateRemovedMessage) Message."""
+
+    #: [Associate](ctp:api:type:Associate) to remove.
+    customer: "CustomerResourceIdentifier"
+
+    def __init__(self, *, customer: "CustomerResourceIdentifier"):
+        self.customer = customer
+
+        super().__init__(action="removeAssociate")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitRemoveAssociateAction":
+        from ._schemas.me import MyBusinessUnitRemoveAssociateActionSchema
+
+        return MyBusinessUnitRemoveAssociateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitRemoveAssociateActionSchema
+
+        return MyBusinessUnitRemoveAssociateActionSchema().dump(self)
+
+
+class MyBusinessUnitRemoveBillingAddressIdAction(MyBusinessUnitUpdateAction):
+    """Removing a billing address from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitBillingAddressRemoved](ctp:api:type:BusinessUnitBillingAddressRemovedMessage) Message."""
+
+    #: ID of the billing address to be removed. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the billing address to be removed. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="removeBillingAddressId")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitRemoveBillingAddressIdAction":
+        from ._schemas.me import MyBusinessUnitRemoveBillingAddressIdActionSchema
+
+        return MyBusinessUnitRemoveBillingAddressIdActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitRemoveBillingAddressIdActionSchema
+
+        return MyBusinessUnitRemoveBillingAddressIdActionSchema().dump(self)
+
+
+class MyBusinessUnitRemoveShippingAddressIdAction(MyBusinessUnitUpdateAction):
+    """Removing a shipping address from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitShippingAddressRemoved](ctp:api:type:BusinessUnitShippingAddressRemovedMessage) Message."""
+
+    #: ID of the shipping address to be removed. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the shipping address to be removed. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="removeShippingAddressId")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitRemoveShippingAddressIdAction":
+        from ._schemas.me import MyBusinessUnitRemoveShippingAddressIdActionSchema
+
+        return MyBusinessUnitRemoveShippingAddressIdActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitRemoveShippingAddressIdActionSchema
+
+        return MyBusinessUnitRemoveShippingAddressIdActionSchema().dump(self)
+
+
+class MyBusinessUnitSetAddressCustomFieldAction(MyBusinessUnitUpdateAction):
+    #: ID of the `address` to be extended.
+    address_id: str
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
+    name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self, *, address_id: str, name: str, value: typing.Optional[typing.Any] = None
+    ):
+        self.address_id = address_id
+        self.name = name
+        self.value = value
+
+        super().__init__(action="setAddressCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetAddressCustomFieldAction":
+        from ._schemas.me import MyBusinessUnitSetAddressCustomFieldActionSchema
+
+        return MyBusinessUnitSetAddressCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetAddressCustomFieldActionSchema
+
+        return MyBusinessUnitSetAddressCustomFieldActionSchema().dump(self)
+
+
+class MyBusinessUnitSetAddressCustomTypeAction(MyBusinessUnitUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `address`.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+    fields: typing.Optional["FieldContainer"]
+    #: ID of the `address` to be extended.
+    address_id: str
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None,
+        address_id: str
+    ):
+        self.type = type
+        self.fields = fields
+        self.address_id = address_id
+
+        super().__init__(action="setAddressCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetAddressCustomTypeAction":
+        from ._schemas.me import MyBusinessUnitSetAddressCustomTypeActionSchema
+
+        return MyBusinessUnitSetAddressCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetAddressCustomTypeActionSchema
+
+        return MyBusinessUnitSetAddressCustomTypeActionSchema().dump(self)
+
+
+class MyBusinessUnitSetContactEmailAction(MyBusinessUnitUpdateAction):
+    """Setting the contact email on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitContactEmailSet](ctp:api:type:BusinessUnitContactEmailSetMessage) Message."""
+
+    #: Email to set.
+    #: If `contactEmail` is absent or `null`, the existing contact email, if any, will be removed.
+    contact_email: typing.Optional[str]
+
+    def __init__(self, *, contact_email: typing.Optional[str] = None):
+        self.contact_email = contact_email
+
+        super().__init__(action="setContactEmail")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetContactEmailAction":
+        from ._schemas.me import MyBusinessUnitSetContactEmailActionSchema
+
+        return MyBusinessUnitSetContactEmailActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetContactEmailActionSchema
+
+        return MyBusinessUnitSetContactEmailActionSchema().dump(self)
+
+
+class MyBusinessUnitSetCustomFieldAction(MyBusinessUnitUpdateAction):
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
+    name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
+    value: typing.Optional[typing.Any]
+
+    def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
+        self.name = name
+        self.value = value
+
+        super().__init__(action="setCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetCustomFieldAction":
+        from ._schemas.me import MyBusinessUnitSetCustomFieldActionSchema
+
+        return MyBusinessUnitSetCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetCustomFieldActionSchema
+
+        return MyBusinessUnitSetCustomFieldActionSchema().dump(self)
+
+
+class MyBusinessUnitSetCustomTypeAction(MyBusinessUnitUpdateAction):
+    #: Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.type = type
+        self.fields = fields
+
+        super().__init__(action="setCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetCustomTypeAction":
+        from ._schemas.me import MyBusinessUnitSetCustomTypeActionSchema
+
+        return MyBusinessUnitSetCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetCustomTypeActionSchema
+
+        return MyBusinessUnitSetCustomTypeActionSchema().dump(self)
+
+
+class MyBusinessUnitSetDefaultBillingAddressAction(MyBusinessUnitUpdateAction):
+    """Setting the default billing address on a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitDefaultBillingAddressSet](ctp:api:type:BusinessUnitDefaultBillingAddressSetMessage) Message."""
+
+    #: ID of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="setDefaultBillingAddress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetDefaultBillingAddressAction":
+        from ._schemas.me import MyBusinessUnitSetDefaultBillingAddressActionSchema
+
+        return MyBusinessUnitSetDefaultBillingAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetDefaultBillingAddressActionSchema
+
+        return MyBusinessUnitSetDefaultBillingAddressActionSchema().dump(self)
+
+
+class MyBusinessUnitSetDefaultShippingAddressAction(MyBusinessUnitUpdateAction):
+    """Setting the default shipping address on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitDefaultShippingAddressSet](ctp:api:type:BusinessUnitDefaultShippingAddressSetMessage) Message."""
+
+    #: ID of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+    address_id: typing.Optional[str]
+    #: Key of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+    address_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        address_id: typing.Optional[str] = None,
+        address_key: typing.Optional[str] = None
+    ):
+        self.address_id = address_id
+        self.address_key = address_key
+
+        super().__init__(action="setDefaultShippingAddress")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyBusinessUnitSetDefaultShippingAddressAction":
+        from ._schemas.me import MyBusinessUnitSetDefaultShippingAddressActionSchema
+
+        return MyBusinessUnitSetDefaultShippingAddressActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyBusinessUnitSetDefaultShippingAddressActionSchema
+
+        return MyBusinessUnitSetDefaultShippingAddressActionSchema().dump(self)
 
 
 class MyCartAddDiscountCodeAction(MyCartUpdateAction):
@@ -2620,6 +3568,29 @@ class MyPaymentSetTransactionCustomFieldAction(MyPaymentUpdateAction):
         from ._schemas.me import MyPaymentSetTransactionCustomFieldActionSchema
 
         return MyPaymentSetTransactionCustomFieldActionSchema().dump(self)
+
+
+class MyQuoteChangeMyQuoteStateAction(MyQuoteUpdateAction):
+    #: New state to be set for the Quote.
+    quote_state: "MyQuoteState"
+
+    def __init__(self, *, quote_state: "MyQuoteState"):
+        self.quote_state = quote_state
+
+        super().__init__(action="changeMyQuoteState")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MyQuoteChangeMyQuoteStateAction":
+        from ._schemas.me import MyQuoteChangeMyQuoteStateActionSchema
+
+        return MyQuoteChangeMyQuoteStateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.me import MyQuoteChangeMyQuoteStateActionSchema
+
+        return MyQuoteChangeMyQuoteStateActionSchema().dump(self)
 
 
 class MyQuoteRequestCancelAction(MyQuoteRequestUpdateAction):

@@ -13,13 +13,35 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..project import OrderSearchStatus, SearchIndexingConfigurationStatus
+from ..project import (
+    BusinessUnitConfigurationStatus,
+    OrderSearchStatus,
+    SearchIndexingConfigurationStatus,
+)
 from ..shipping_method import ShippingRateTierType
 
 # Fields
 
 
 # Marshmallow Schemas
+class BusinessUnitConfigurationSchema(helpers.BaseSchema):
+    my_business_unit_status_on_creation = marshmallow_enum.EnumField(
+        BusinessUnitConfigurationStatus,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="myBusinessUnitStatusOnCreation",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.BusinessUnitConfiguration(**data)
+
+
 class CartsConfigurationSchema(helpers.BaseSchema):
     delete_days_after_last_modification = marshmallow.fields.Integer(
         allow_none=True,
@@ -130,6 +152,14 @@ class ProjectSchema(helpers.BaseSchema):
         missing=None,
         data_key="searchIndexing",
     )
+    business_units = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".BusinessUnitConfigurationSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="businessUnits",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -147,6 +177,9 @@ class ProjectUpdateSchema(helpers.BaseSchema):
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "changeMyBusinessUnitStatusOnCreation": helpers.absmod(
+                    __name__, ".ProjectChangeBusinessUnitStatusOnCreationActionSchema"
+                ),
                 "changeCartsConfiguration": helpers.absmod(
                     __name__, ".ProjectChangeCartsConfigurationActionSchema"
                 ),
@@ -337,6 +370,20 @@ class ShoppingListsConfigurationSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.ShoppingListsConfiguration(**data)
+
+
+class ProjectChangeBusinessUnitStatusOnCreationActionSchema(ProjectUpdateActionSchema):
+    status = marshmallow_enum.EnumField(
+        BusinessUnitConfigurationStatus, by_value=True, allow_none=True, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProjectChangeBusinessUnitStatusOnCreationAction(**data)
 
 
 class ProjectChangeCartsConfigurationActionSchema(ProjectUpdateActionSchema):

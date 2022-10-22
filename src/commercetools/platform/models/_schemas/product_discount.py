@@ -76,6 +76,9 @@ class ProductDiscountSchema(BaseResourceSchema):
             allow_none=True,
             discriminator_field=("typeId", "type_id"),
             discriminator_schemas={
+                "business-unit": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitReferenceSchema"
+                ),
                 "cart-discount": helpers.absmod(
                     __name__, ".cart_discount.CartDiscountReferenceSchema"
                 ),
@@ -407,7 +410,7 @@ class ProductDiscountValueDraftSchema(helpers.BaseSchema):
 
 class ProductDiscountValueAbsoluteDraftSchema(ProductDiscountValueDraftSchema):
     money = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.CentPrecisionMoneyDraftSchema"),
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,

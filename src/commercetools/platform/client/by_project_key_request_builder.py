@@ -12,6 +12,9 @@ from ..models.project import Project, ProjectUpdate
 from .api_clients.by_project_key_api_clients_request_builder import (
     ByProjectKeyApiClientsRequestBuilder,
 )
+from .business_units.by_project_key_business_units_request_builder import (
+    ByProjectKeyBusinessUnitsRequestBuilder,
+)
 from .cart_discounts.by_project_key_cart_discounts_request_builder import (
     ByProjectKeyCartDiscountsRequestBuilder,
 )
@@ -39,6 +42,9 @@ from .extensions.by_project_key_extensions_request_builder import (
 )
 from .graphql.by_project_key_graphql_request_builder import (
     ByProjectKeyGraphqlRequestBuilder,
+)
+from .in_business_unit.by_project_key_in_business_unit_key_by_business_unit_key_request_builder import (
+    ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder,
 )
 from .in_store.by_project_key_in_store_key_by_store_key_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyRequestBuilder,
@@ -124,6 +130,13 @@ class ByProjectKeyRequestBuilder:
     ):
         self._project_key = project_key
         self._client = client
+
+    def business_units(self) -> ByProjectKeyBusinessUnitsRequestBuilder:
+        """A Business Unit can represent a Company or a Division."""
+        return ByProjectKeyBusinessUnitsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
 
     def categories(self) -> ByProjectKeyCategoriesRequestBuilder:
         """Categories are used to organize products in a hierarchical structure."""
@@ -224,10 +237,7 @@ class ByProjectKeyRequestBuilder:
         )
 
     def products(self) -> ByProjectKeyProductsRequestBuilder:
-        """Products are the sellable goods in an e-commerce project on CTP. This document explains some design concepts
-        of products on CTP and describes the available HTTP APIs for working with them.
-
-        """
+        """Products themselves are not sellable. Instead, they act as a parent structure for sellable Product Variants."""
         return ByProjectKeyProductsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
@@ -281,7 +291,7 @@ class ByProjectKeyRequestBuilder:
         )
 
     def quote_requests(self) -> ByProjectKeyQuoteRequestsRequestBuilder:
-        """A request for a quote holds product variants and can be ordered."""
+        """A request for a Quote holds product variants and can be ordered."""
         return ByProjectKeyQuoteRequestsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
@@ -393,6 +403,15 @@ class ByProjectKeyRequestBuilder:
     def standalone_prices(self) -> ByProjectKeyStandalonePricesRequestBuilder:
         """A standalone price assigns a price to a product variant for a given scope. The API will use the standalone prices associated with a Product if its field [`priceMode`](/projects/products#pricemode) is set to `Standalone` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum)."""
         return ByProjectKeyStandalonePricesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def in_business_unit_key_with_business_unit_key_value(
+        self, business_unit_key: str
+    ) -> ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder:
+        return ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder(
+            business_unit_key=business_unit_key,
             project_key=self._project_key,
             client=self._client,
         )

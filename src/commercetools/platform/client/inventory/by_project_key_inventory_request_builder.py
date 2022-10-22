@@ -99,7 +99,7 @@ class ByProjectKeyInventoryRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["InventoryEntry"]:
-        """Produces the [InventoryEntryCreatedMessage](ctp:api:type:InventoryEntryCreatedMessage)."""
+        """Produces the [InventoryEntryCreated](ctp:api:type:InventoryEntryCreatedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/inventory",

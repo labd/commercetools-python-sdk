@@ -13,6 +13,9 @@ from ...models.me import MyCustomerUpdate
 from ..active_cart.by_project_key_me_active_cart_request_builder import (
     ByProjectKeyMeActiveCartRequestBuilder,
 )
+from ..business_units.by_project_key_me_business_units_request_builder import (
+    ByProjectKeyMeBusinessUnitsRequestBuilder,
+)
 from ..carts.by_project_key_me_carts_request_builder import (
     ByProjectKeyMeCartsRequestBuilder,
 )
@@ -33,6 +36,9 @@ from ..payments.by_project_key_me_payments_request_builder import (
 )
 from ..quote_requests.by_project_key_me_quote_requests_request_builder import (
     ByProjectKeyMeQuoteRequestsRequestBuilder,
+)
+from ..quotes.by_project_key_me_quotes_request_builder import (
+    ByProjectKeyMeQuotesRequestBuilder,
 )
 from ..shopping_lists.by_project_key_me_shopping_lists_request_builder import (
     ByProjectKeyMeShoppingListsRequestBuilder,
@@ -88,6 +94,13 @@ class ByProjectKeyMeRequestBuilder:
             client=self._client,
         )
 
+    def business_units(self) -> ByProjectKeyMeBusinessUnitsRequestBuilder:
+        """MyBusinessUnit creates and provides access to Business Units scoped to a specific user."""
+        return ByProjectKeyMeBusinessUnitsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
     def carts(self) -> ByProjectKeyMeCartsRequestBuilder:
         """A shopping cart holds product variants and can be ordered."""
         return ByProjectKeyMeCartsRequestBuilder(
@@ -110,8 +123,15 @@ class ByProjectKeyMeRequestBuilder:
         )
 
     def quote_requests(self) -> ByProjectKeyMeQuoteRequestsRequestBuilder:
-        """The My Quote Requests endpoint creates and provides access to quote requests scoped to a specific user."""
+        """The My Quote Requests endpoint creates and provides access to Quote Requests scoped to a specific user."""
         return ByProjectKeyMeQuoteRequestsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def quotes(self) -> ByProjectKeyMeQuotesRequestBuilder:
+        """The My Quote endpoint provides access to Quotes scoped to a specific user."""
+        return ByProjectKeyMeQuotesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

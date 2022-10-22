@@ -11,6 +11,9 @@ pip-wheel-metadata/
 .tox/
 .coverage.*
 
+# Env
+env/
+
 # Dist files
 /build/
 /dist/

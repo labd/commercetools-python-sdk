@@ -45,6 +45,7 @@ __all__ = [
     "ProcessingState",
     "ProductDiscountKeyReference",
     "ProductKeyReference",
+    "ProductPriceModeEnum",
     "ProductTypeKeyReference",
     "ProductVariantKeyReference",
     "ReferenceType",
@@ -274,6 +275,7 @@ class ImportResource(_BaseType):
 
     """
 
+    #: User-defined unique identifier.
     key: str
 
     def __init__(self, *, key: str):
@@ -986,6 +988,7 @@ class ImportResourceType(enum.Enum):
     PRODUCT_VARIANT_PATCH = "product-variant-patch"
     CUSTOMER = "customer"
     INVENTORY = "inventory"
+    STANDALONE_PRICE = "standalone-price"
 
 
 class ReferenceType(enum.Enum):
@@ -1119,3 +1122,8 @@ class Address(_BaseType):
         from ._schemas.common import AddressSchema
 
         return AddressSchema().dump(self)
+
+
+class ProductPriceModeEnum(enum.Enum):
+    EMBEDDED = "Embedded"
+    STANDALONE = "Standalone"

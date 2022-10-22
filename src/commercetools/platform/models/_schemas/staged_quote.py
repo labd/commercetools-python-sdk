@@ -86,6 +86,23 @@ class StagedQuoteSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitKeyReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="businessUnit",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -114,6 +131,13 @@ class StagedQuoteDraftSchema(helpers.BaseSchema):
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -202,6 +226,9 @@ class StagedQuoteUpdateSchema(helpers.BaseSchema):
                 ),
                 "setValidTo": helpers.absmod(
                     __name__, ".StagedQuoteSetValidToActionSchema"
+                ),
+                "transitionState": helpers.absmod(
+                    __name__, ".StagedQuoteTransitionStateActionSchema"
                 ),
             },
         ),
@@ -316,3 +343,23 @@ class StagedQuoteSetValidToActionSchema(StagedQuoteUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StagedQuoteSetValidToAction(**data)
+
+
+class StagedQuoteTransitionStateActionSchema(StagedQuoteUpdateActionSchema):
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    force = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StagedQuoteTransitionStateAction(**data)

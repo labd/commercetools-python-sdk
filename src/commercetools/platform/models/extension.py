@@ -279,10 +279,14 @@ class ExtensionResourceTypeId(enum.Enum):
     ORDER = "order"
     PAYMENT = "payment"
     CUSTOMER = "customer"
+    QUOTE_REQUEST = "quote-request"
+    STAGED_QUOTE = "staged-quote"
+    QUOTE = "quote"
+    BUSINESS_UNIT = "business-unit"
 
 
 class ExtensionTrigger(_BaseType):
-    #: `cart`, `order`, `payment`, and `customer` are supported.
+    #: `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, `quote`, and `business-unit` are supported.
     resource_type_id: "ExtensionResourceTypeId"
     #: `Create` and `Update` requests are supported.
     actions: typing.List["ExtensionAction"]

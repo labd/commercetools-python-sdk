@@ -776,8 +776,11 @@ class GeoJsonPoint(GeoJson):
 
 
 class Image(_BaseType):
+    #: URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant).
     url: str
+    #: Dimensions of the original image.
     dimensions: "ImageDimensions"
+    #: Custom label for the image.
     label: typing.Optional[str]
 
     def __init__(
@@ -806,7 +809,9 @@ class Image(_BaseType):
 
 
 class ImageDimensions(_BaseType):
+    #: Width of the image.
     w: int
+    #: Height of the image.
     h: int
 
     def __init__(self, *, w: int, h: int):
@@ -843,6 +848,10 @@ class KeyReference(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "KeyReference":
+        if data["typeId"] == "business-unit":
+            from ._schemas.business_unit import BusinessUnitKeyReferenceSchema
+
+            return BusinessUnitKeyReferenceSchema().load(data)
         if data["typeId"] == "store":
             from ._schemas.store import StoreKeyReferenceSchema
 
@@ -930,8 +939,14 @@ class MoneyType(enum.Enum):
 
 
 class Price(_BaseType):
+    """The representation for prices embedded in [LineItems](ctp:api:type:LineItem) and in [ProductVariants](ctp:api:type:ProductVariant) when the [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is `Embedded`.
+    For the `Standalone` ProductPriceMode refer to [StandalonePrice](ctp:api:type:StandalonePrice).
+    """
+
     #: Unique identifier of this Price.
     id: str
+    #: User-defined identifier of the Price. It is unique per [ProductVariant](ctp:api:type:ProductVariant).
+    key: typing.Optional[str]
     #: Money value of this Price.
     value: "TypedMoney"
     #: Country for which this Price is valid.
@@ -957,6 +972,7 @@ class Price(_BaseType):
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         value: "TypedMoney",
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -968,6 +984,7 @@ class Price(_BaseType):
         custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
+        self.key = key
         self.value = value
         self.country = country
         self.customer_group = customer_group
@@ -993,6 +1010,10 @@ class Price(_BaseType):
 
 
 class PriceDraft(_BaseType):
+    """The draft representation for prices to be embedded into [ProductVariantDrafts](ctp:api:type:ProductVariantDraft) when the [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is `Embedded`. For the `Standalone` ProductPriceMode use [StandalonePriceDraft](ctp:api:type:StandalonePriceDraft)."""
+
+    #: User-defined identifier for the Price. It must be unique per [ProductVariant](ctp:api:type:ProductVariant).
+    key: typing.Optional[str]
     #: Money value of this Price.
     value: "Money"
     #: Set this field if this Price is only valid for the specified country.
@@ -1001,13 +1022,13 @@ class PriceDraft(_BaseType):
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: Set this field if this Price is only valid for the referenced `ProductDistribution` [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
-    #: Set this field if this Price is valid only valid from the specified date and time.
+    #: Set this field if this Price is only valid from the specified date and time. Must be at least 1 ms earlier than `validUntil`.
     valid_from: typing.Optional[datetime.datetime]
-    #: Set this field if this Price is valid only valid until the specified date and time.
+    #: Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`.
     valid_until: typing.Optional[datetime.datetime]
-    #: Set this field to add a DiscountedPrice from an external service.
+    #: Set this field to add a DiscountedPrice from an **external service**.
     #:
-    #: The API sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
+    #: Otherwise, Composable Commerce sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
     #: The DiscountedPrice must reference a ProductDiscount with:
     #:
     #: * The `isActive` flag set to `true`.
@@ -1022,6 +1043,7 @@ class PriceDraft(_BaseType):
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         value: "Money",
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
@@ -1032,6 +1054,7 @@ class PriceDraft(_BaseType):
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.value = value
         self.country = country
         self.customer_group = customer_group
@@ -1199,6 +1222,10 @@ class Reference(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Reference":
+        if data["typeId"] == "business-unit":
+            from ._schemas.business_unit import BusinessUnitReferenceSchema
+
+            return BusinessUnitReferenceSchema().load(data)
         if data["typeId"] == "cart-discount":
             from ._schemas.cart_discount import CartDiscountReferenceSchema
 
@@ -1321,6 +1348,7 @@ class Reference(_BaseType):
 class ReferenceTypeId(enum.Enum):
     """Type of resource the value should reference. Supported resource type identifiers are:"""
 
+    BUSINESS_UNIT = "business-unit"
     CART = "cart"
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
@@ -1345,6 +1373,7 @@ class ReferenceTypeId(enum.Enum):
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
     STAGED_QUOTE = "staged-quote"
+    STANDALONE_PRICE = "standalone-price"
     STATE = "state"
     STORE = "store"
     SUBSCRIPTION = "subscription"
@@ -1382,6 +1411,10 @@ class ResourceIdentifier(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ResourceIdentifier":
+        if data["typeId"] == "business-unit":
+            from ._schemas.business_unit import BusinessUnitResourceIdentifierSchema
+
+            return BusinessUnitResourceIdentifierSchema().load(data)
         if data["typeId"] == "cart-discount":
             from ._schemas.cart_discount import CartDiscountResourceIdentifierSchema
 
@@ -1504,21 +1537,32 @@ class ResourceIdentifier(_BaseType):
 
 
 class ScopedPrice(_BaseType):
+    """Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
+    [Search Product Projection](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when Price Selection is used.
+
+    """
+
+    #: Platform-generated unique identifier of the Price.
     id: str
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Original value of the Price.
     value: "TypedMoney"
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: If available, either the original price `value` or `discounted` value.
     current_value: "TypedMoney"
-    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Country code of the geographic location.
     country: typing.Optional[str]
-    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: Reference to a CustomerGroup.
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+    #: Reference to a Channel.
     channel: typing.Optional["ChannelReference"]
+    #: Date and time from which the Price is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time until which the Price is valid.
     valid_until: typing.Optional[datetime.datetime]
+    #: Is set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItem).
+    #:
+    #: When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down) in favor of the Customer.
     discounted: typing.Optional["DiscountedPrice"]
-    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+    #: Custom Fields for the Price.
     custom: typing.Optional["CustomFields"]
 
     def __init__(

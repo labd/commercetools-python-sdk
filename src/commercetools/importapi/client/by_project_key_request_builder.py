@@ -46,6 +46,9 @@ from .product_variants.by_project_key_product_variants_request_builder import (
 from .products.by_project_key_products_request_builder import (
     ByProjectKeyProductsRequestBuilder,
 )
+from .standalone_prices.by_project_key_standalone_prices_request_builder import (
+    ByProjectKeyStandalonePricesRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ..base_client import BaseClient
@@ -84,6 +87,12 @@ class ByProjectKeyRequestBuilder:
 
     def prices(self) -> ByProjectKeyPricesRequestBuilder:
         return ByProjectKeyPricesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def standalone_prices(self) -> ByProjectKeyStandalonePricesRequestBuilder:
+        return ByProjectKeyStandalonePricesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

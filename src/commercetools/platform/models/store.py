@@ -194,9 +194,9 @@ class StoreDraft(_BaseType):
     name: typing.Optional["LocalizedString"]
     #: Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
     languages: typing.Optional[typing.List["str"]]
-    #: ResourceIdentifier to a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+    #: ResourceIdentifier of a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
-    #: ResourceIdentifier to a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+    #: ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
     #: Controls availability of Products for this Store via active Product Selections.
     #:
@@ -457,7 +457,10 @@ class StoreUpdateAction(_BaseType):
 
 
 class StoreAddDistributionChannelAction(StoreUpdateAction):
-    """This action has no effect if a given distribution channel is already present in a Store."""
+    """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
+    It has no effect if a given distribution channel is already present in a Store.
+
+    """
 
     #: Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
     distribution_channel: "ChannelResourceIdentifier"
@@ -515,7 +518,10 @@ class StoreAddProductSelectionAction(StoreUpdateAction):
 
 
 class StoreAddSupplyChannelAction(StoreUpdateAction):
-    """This action has no effect if a given supply channel is already present in a Store."""
+    """This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+    It has no effect if a given supply channel is already present in a Store.
+
+    """
 
     #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
     supply_channel: "ChannelResourceIdentifier"
@@ -573,6 +579,8 @@ class StoreChangeProductSelectionAction(StoreUpdateAction):
 
 
 class StoreRemoveDistributionChannelAction(StoreUpdateAction):
+    """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message."""
+
     #: Value to remove. ResourceIdentifier of a Channel with the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     distribution_channel: "ChannelResourceIdentifier"
 
@@ -621,6 +629,8 @@ class StoreRemoveProductSelectionAction(StoreUpdateAction):
 
 
 class StoreRemoveSupplyChannelAction(StoreUpdateAction):
+    """This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message."""
+
     #: Value to remove. ResourceIdentifier of a Channel with the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     supply_channel: "ChannelResourceIdentifier"
 
@@ -704,6 +714,8 @@ class StoreSetCustomTypeAction(StoreUpdateAction):
 
 
 class StoreSetDistributionChannelsAction(StoreUpdateAction):
+    """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message."""
+
     #: Value to set.
     #: If not defined, the Store's `distributionChannels` are unset.
     #: Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
@@ -735,6 +747,8 @@ class StoreSetDistributionChannelsAction(StoreUpdateAction):
 
 
 class StoreSetLanguagesAction(StoreUpdateAction):
+    """This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message."""
+
     #: Value to set.
     #: Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
     languages: typing.Optional[typing.List["str"]]
@@ -759,6 +773,8 @@ class StoreSetLanguagesAction(StoreUpdateAction):
 
 
 class StoreSetNameAction(StoreUpdateAction):
+    """This update action produces the [StoreNameSet](ctp:api:type:StoreNameSetMessage) Message."""
+
     #: Value to set.
     name: typing.Optional["LocalizedString"]
 
@@ -814,6 +830,8 @@ class StoreSetProductSelectionsAction(StoreUpdateAction):
 
 
 class StoreSetSupplyChannelsAction(StoreUpdateAction):
+    """This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message."""
+
     #: Value to set.
     #: If not defined, the Store's `supplyChannels` are unset.
     #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.

@@ -28,6 +28,7 @@ if typing.TYPE_CHECKING:
         ProductVariantKeyReference,
         ShippingMethodKeyReference,
         StateKeyReference,
+        StoreKeyReference,
         TaxCategoryKeyReference,
         TypedMoney,
     )
@@ -284,6 +285,8 @@ class LineItemImportDraft(_BaseType):
     tax_rate: typing.Optional["TaxRate"]
     #: Maps to LineItem.shippingDetails.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: Custom Fields for this Line Item.
+    custom: typing.Optional["Custom"]
 
     def __init__(
         self,
@@ -297,7 +300,8 @@ class LineItemImportDraft(_BaseType):
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        custom: typing.Optional["Custom"] = None
     ):
         self.product = product
         self.name = name
@@ -309,6 +313,7 @@ class LineItemImportDraft(_BaseType):
         self.distribution_channel = distribution_channel
         self.tax_rate = tax_rate
         self.shipping_details = shipping_details
+        self.custom = custom
 
         super().__init__()
 
@@ -863,21 +868,17 @@ class TaxedPrice(_BaseType):
     total_gross: "Money"
     #: Maps to `TaxedPrice.taxPortions`.
     tax_portions: typing.List["TaxPortion"]
-    #: Maps to `TaxedPrice.totalTax`.
-    total_tax: typing.Optional["Money"]
 
     def __init__(
         self,
         *,
         total_net: "Money",
         total_gross: "Money",
-        tax_portions: typing.List["TaxPortion"],
-        total_tax: typing.Optional["Money"] = None
+        tax_portions: typing.List["TaxPortion"]
     ):
         self.total_net = total_net
         self.total_gross = total_gross
         self.tax_portions = tax_portions
-        self.total_tax = total_tax
 
         super().__init__()
 
@@ -1171,6 +1172,8 @@ class OrderImport(_BaseType):
     origin: typing.Optional["CartOrigin"]
     #: Maps to `Order.itemShippingAddresses`.
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
+    #: Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
+    store: typing.Optional["StoreKeyReference"]
 
     def __init__(
         self,
@@ -1196,7 +1199,8 @@ class OrderImport(_BaseType):
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         origin: typing.Optional["CartOrigin"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
+        store: typing.Optional["StoreKeyReference"] = None
     ):
         self.order_number = order_number
         self.customer = customer
@@ -1220,6 +1224,7 @@ class OrderImport(_BaseType):
         self.tax_calculation_mode = tax_calculation_mode
         self.origin = origin
         self.item_shipping_addresses = item_shipping_addresses
+        self.store = store
 
         super().__init__()
 

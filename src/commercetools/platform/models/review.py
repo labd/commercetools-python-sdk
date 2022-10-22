@@ -55,23 +55,29 @@ class Review(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Review.
     key: typing.Optional[str]
+    #: Must be unique among Reviews. For example, if this value is set to Customer `id` + Product `id`, only one Review per Customer and per Product is allowed.
     uniqueness_value: typing.Optional[str]
+    #: Language in which the content of the Review is written.
     locale: typing.Optional[str]
+    #: Name of the author.
     author_name: typing.Optional[str]
+    #: Title of the Review.
     title: typing.Optional[str]
+    #: Content of the Review.
     text: typing.Optional[str]
-    #: Identifies the target of the review.
-    #: Can be a Product or a Channel
+    #: Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductReference](ctp:api:type:ProductReference) or [ChannelReference](ctp:api:type:ChannelReference), respectively.
     target: typing.Optional[typing.Union["ProductReference", "ChannelReference"]]
-    #: Indicates if this review is taken into account in the ratings statistics of the target.
-    #: A review is per default used in the statistics, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
-    #: If the role of a State is modified after the calculation of this field, the calculation is not updated.
+    #: Indicates if this Review is taken into account in the ratings statistics of the target.
+    #: A Review is per default used in the statistics, unless the Review is in a state that does not have the [role](ctp:api:type:StateRoleEnum) `ReviewIncludedInStatistics`.
+    #: If the role of a [State](ctp:api:type:State) is modified after the calculation of this field, the calculation is not updated.
     included_in_statistics: bool
-    #: Number between -100 and 100 included.
+    #: Rating of the Product or Channel.
     rating: typing.Optional[int]
+    #: State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
     state: typing.Optional["StateReference"]
-    #: The customer who created the review.
+    #: Customer who created the Review.
     customer: typing.Optional["CustomerReference"]
+    #: Custom Fields of the Review.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -133,28 +139,34 @@ class Review(BaseResource):
 
 
 class ReviewDraft(_BaseType):
+    """When creating a new Review, at least one of `title`, `text` or `rating` should be set."""
+
     #: User-defined unique identifier for the Review.
     key: typing.Optional[str]
-    #: If set, this value must be unique among reviews.
-    #: For example, if you want to have only one review per customer and per product, you can set the value to `customer's id` and `product's id`.
+    #: If set, this value must be unique among Reviews.
+    #: For example, if you want to have only one Review per Customer and per Product, you can set the value to Customer `id` + Product `id`.
     uniqueness_value: typing.Optional[str]
+    #: Language in which the content of the Review is written.
     locale: typing.Optional[str]
+    #: Name of the author.
     author_name: typing.Optional[str]
+    #: Title of the Review.
     title: typing.Optional[str]
+    #: Content of the Review.
     text: typing.Optional[str]
-    #: Identifies the target of the review.
-    #: Can be a Product or a Channel
+    #: Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively.
     target: typing.Optional[
         typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"]
     ]
+    #: State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
     state: typing.Optional["StateResourceIdentifier"]
-    #: Number between -100 and 100 included.
-    #: Rating of the targeted object, like a product.
-    #: This rating can represent the number of stars, or a percentage, or a like (+1)/dislike (-1)
-    #: A rating is used in the ratings statistics of the targeted object, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
+    #: Rating of the targeted Product or Channel.
+    #: This rating can represent the number of stars, a percentage, or a like (+1)/dislike (-1).
+    #: A rating is used in the ratings statistics of the targeted object, unless the Review is in a State that does not have the role `ReviewIncludedInStatistics`.
     rating: typing.Optional[int]
-    #: The customer who created the review.
+    #: Customer who created the Review.
     customer: typing.Optional["CustomerResourceIdentifier"]
+    #: Custom Fields for the Review.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -203,10 +215,17 @@ class ReviewDraft(_BaseType):
 class ReviewPagedQueryResponse(_BaseType):
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
+    #: Actual number of results returned.
     count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: [Reviews](ctp:api:type:Review) matching the query.
     results: typing.List["Review"]
 
     def __init__(
@@ -250,7 +269,7 @@ class ReviewRatingStatistics(_BaseType):
     lowest_rating: float
     #: Number of ratings taken into account
     count: int
-    #: The full distribution of the ratings.
+    #: Full distribution of the ratings.
     #: The keys are the different ratings and the values are the count of reviews having this rating.
     #: Only the used ratings appear in this object.
     ratings_distribution: object
@@ -333,7 +352,9 @@ class ReviewResourceIdentifier(ResourceIdentifier):
 
 
 class ReviewUpdate(_BaseType):
+    #: The expected version of the review on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
     version: int
+    #: The list of update actions to be performed on the review.
     actions: typing.List["ReviewUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ReviewUpdateAction"]):
@@ -416,7 +437,7 @@ class ReviewUpdateAction(_BaseType):
 
 
 class ReviewSetAuthorNameAction(ReviewUpdateAction):
-    #: If `authorName` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     author_name: typing.Optional[str]
 
     def __init__(self, *, author_name: typing.Optional[str] = None):
@@ -499,8 +520,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
 
 
 class ReviewSetCustomerAction(ReviewUpdateAction):
-    #: The customer who created the review.
-    #: If `customer` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
@@ -525,7 +545,7 @@ class ReviewSetCustomerAction(ReviewUpdateAction):
 
 
 class ReviewSetKeyAction(ReviewUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -546,7 +566,7 @@ class ReviewSetKeyAction(ReviewUpdateAction):
 
 
 class ReviewSetLocaleAction(ReviewUpdateAction):
-    #: If `locale` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     locale: typing.Optional[str]
 
     def __init__(self, *, locale: typing.Optional[str] = None):
@@ -567,8 +587,9 @@ class ReviewSetLocaleAction(ReviewUpdateAction):
 
 
 class ReviewSetRatingAction(ReviewUpdateAction):
-    #: Number between -100 and 100 included.
-    #: If `rating` is absent or `null`, this field will be removed if it exists.
+    """This update action produces the [ReviewRatingSet](ctp:api:type:ReviewRatingSetMessage) Message."""
+
+    #: Value to set. If empty, any existing value will be removed.
     rating: typing.Optional[int]
 
     def __init__(self, *, rating: typing.Optional[int] = None):
@@ -589,9 +610,7 @@ class ReviewSetRatingAction(ReviewUpdateAction):
 
 
 class ReviewSetTargetAction(ReviewUpdateAction):
-    #: Identifies the target of the review.
-    #: Can be a Product or a Channel.
-    #: If `target` is absent or `null`, this field will be removed if it exists.
+    #: Value to set, specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively. If empty, any existing value will be removed.
     target: typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"]
 
     def __init__(
@@ -616,7 +635,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
 
 
 class ReviewSetTextAction(ReviewUpdateAction):
-    #: If `text` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     text: typing.Optional[str]
 
     def __init__(self, *, text: typing.Optional[str] = None):
@@ -637,7 +656,7 @@ class ReviewSetTextAction(ReviewUpdateAction):
 
 
 class ReviewSetTitleAction(ReviewUpdateAction):
-    #: If `title` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     title: typing.Optional[str]
 
     def __init__(self, *, title: typing.Optional[str] = None):
@@ -658,7 +677,11 @@ class ReviewSetTitleAction(ReviewUpdateAction):
 
 
 class ReviewTransitionStateAction(ReviewUpdateAction):
+    """Transition to a new State. This update action produces the [Review State Transition](ctp:api:type:ReviewStateTransitionMessage) Message."""
+
+    #: Value to set. If there is no State yet, the new State must be an initial State. If the existing State has `transitions` set, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. If the new State does not have the [role](ctp:api:type:StateRoleEnum) `ReviewIncludedInStatistics`, the Review is not taken into account in the ratings statistics of the target.
     state: "StateResourceIdentifier"
+    #: Switch validations on or off.
     force: typing.Optional[bool]
 
     def __init__(

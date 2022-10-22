@@ -19,6 +19,8 @@ if typing.TYPE_CHECKING:
     from .type import CustomFieldLocalizedEnumValue
 
 __all__ = [
+    "BusinessUnitConfiguration",
+    "BusinessUnitConfigurationStatus",
     "CartClassificationType",
     "CartScoreType",
     "CartValueType",
@@ -26,6 +28,7 @@ __all__ = [
     "ExternalOAuth",
     "OrderSearchStatus",
     "Project",
+    "ProjectChangeBusinessUnitStatusOnCreationAction",
     "ProjectChangeCartsConfigurationAction",
     "ProjectChangeCountriesAction",
     "ProjectChangeCountryTaxRateFallbackEnabledAction",
@@ -47,6 +50,38 @@ __all__ = [
     "ShippingRateInputType",
     "ShoppingListsConfiguration",
 ]
+
+
+class BusinessUnitConfiguration(_BaseType):
+    #: Status of Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+    my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus"
+
+    def __init__(
+        self, *, my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus"
+    ):
+        self.my_business_unit_status_on_creation = my_business_unit_status_on_creation
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "BusinessUnitConfiguration":
+        from ._schemas.project import BusinessUnitConfigurationSchema
+
+        return BusinessUnitConfigurationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import BusinessUnitConfigurationSchema
+
+        return BusinessUnitConfigurationSchema().dump(self)
+
+
+class BusinessUnitConfigurationStatus(enum.Enum):
+    """Default value for [Business Unit Status](ctp:api:type:BusinessUnitStatus) configured though [Project settings](/../api/projects/project#change-my-business-unit-status-on-creation)."""
+
+    ACTIVE = "Active"
+    INACTIVE = "Inactive"
 
 
 class CartsConfiguration(_BaseType):
@@ -144,6 +179,8 @@ class Project(_BaseType):
     external_o_auth: typing.Optional["ExternalOAuth"]
     #: Controls indexing of resources to be provided on high performance read-only search endpoints.
     search_indexing: typing.Optional["SearchIndexingConfiguration"]
+    #: Holds configuration specific to [Business Units](ctp:api:type:BusinessUnit).
+    business_units: typing.Optional["BusinessUnitConfiguration"]
 
     def __init__(
         self,
@@ -161,7 +198,8 @@ class Project(_BaseType):
         shopping_lists: typing.Optional["ShoppingListsConfiguration"] = None,
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
-        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None
+        search_indexing: typing.Optional["SearchIndexingConfiguration"] = None,
+        business_units: typing.Optional["BusinessUnitConfiguration"] = None
     ):
         self.version = version
         self.key = key
@@ -177,6 +215,7 @@ class Project(_BaseType):
         self.shipping_rate_input_type = shipping_rate_input_type
         self.external_o_auth = external_o_auth
         self.search_indexing = search_indexing
+        self.business_units = business_units
 
         super().__init__()
 
@@ -226,6 +265,12 @@ class ProjectUpdateAction(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProjectUpdateAction":
+        if data["action"] == "changeMyBusinessUnitStatusOnCreation":
+            from ._schemas.project import (
+                ProjectChangeBusinessUnitStatusOnCreationActionSchema,
+            )
+
+            return ProjectChangeBusinessUnitStatusOnCreationActionSchema().load(data)
         if data["action"] == "changeCartsConfiguration":
             from ._schemas.project import ProjectChangeCartsConfigurationActionSchema
 
@@ -403,7 +448,7 @@ class CartClassificationType(ShippingRateInputType):
 
     """
 
-    #: The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #: The classification items that can be used for specifying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
     values: typing.List["CustomFieldLocalizedEnumValue"]
 
     def __init__(self, *, values: typing.List["CustomFieldLocalizedEnumValue"]):
@@ -491,6 +536,33 @@ class ShoppingListsConfiguration(_BaseType):
         from ._schemas.project import ShoppingListsConfigurationSchema
 
         return ShoppingListsConfigurationSchema().dump(self)
+
+
+class ProjectChangeBusinessUnitStatusOnCreationAction(ProjectUpdateAction):
+    #: Status for Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+    status: "BusinessUnitConfigurationStatus"
+
+    def __init__(self, *, status: "BusinessUnitConfigurationStatus"):
+        self.status = status
+
+        super().__init__(action="changeMyBusinessUnitStatusOnCreation")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectChangeBusinessUnitStatusOnCreationAction":
+        from ._schemas.project import (
+            ProjectChangeBusinessUnitStatusOnCreationActionSchema,
+        )
+
+        return ProjectChangeBusinessUnitStatusOnCreationActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import (
+            ProjectChangeBusinessUnitStatusOnCreationActionSchema,
+        )
+
+        return ProjectChangeBusinessUnitStatusOnCreationActionSchema().dump(self)
 
 
 class ProjectChangeCartsConfigurationAction(ProjectUpdateAction):

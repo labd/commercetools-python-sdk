@@ -15,12 +15,14 @@ from .cart import (
     InventoryMode,
     RoundingMode,
     ShippingMethodState,
+    ShippingMode,
     TaxCalculationMode,
     TaxMode,
 )
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
+    from .business_unit import BusinessUnitKeyReference, BusinessUnitResourceIdentifier
     from .cart import (
         CartOrigin,
         CartReference,
@@ -33,8 +35,10 @@ if typing.TYPE_CHECKING:
         ItemShippingDetailsDraft,
         LineItem,
         RoundingMode,
+        Shipping,
         ShippingInfo,
         ShippingMethodState,
+        ShippingMode,
         ShippingRateInput,
         TaxCalculationMode,
         TaxedPrice,
@@ -45,6 +49,7 @@ if typing.TYPE_CHECKING:
     from .channel import ChannelReference, ChannelResourceIdentifier
     from .common import (
         Address,
+        AddressDraft,
         BaseAddress,
         CreatedBy,
         Image,
@@ -73,6 +78,7 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "CustomLineItemReturnItem",
     "Delivery",
+    "DeliveryDraft",
     "DeliveryItem",
     "DiscountedLineItemPriceDraft",
     "Hit",
@@ -626,9 +632,11 @@ class Hit(_BaseType):
     #: Current version of the Order.
     version: int
     #: The higher the value is, the more relevant the hit is for the search request.
-    relevance: float
+    relevance: typing.Optional[float]
 
-    def __init__(self, *, id: str, version: int, relevance: float):
+    def __init__(
+        self, *, id: str, version: int, relevance: typing.Optional[float] = None
+    ):
         self.id = id
         self.version = version
         self.relevance = relevance
@@ -727,6 +735,42 @@ class Delivery(_BaseType):
         from ._schemas.order import DeliverySchema
 
         return DeliverySchema().dump(self)
+
+
+class DeliveryDraft(_BaseType):
+    #: Items which are shipped in this delivery regardless their distribution over several parcels.
+    #: Can also be specified individually for each Parcel.
+    items: typing.Optional[typing.List["DeliveryItem"]]
+    parcels: typing.Optional[typing.List["ParcelDraft"]]
+    address: typing.Optional["AddressDraft"]
+    #: Custom Fields for the Transaction.
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
+        address: typing.Optional["AddressDraft"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ):
+        self.items = items
+        self.parcels = parcels
+        self.address = address
+        self.custom = custom
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeliveryDraft":
+        from ._schemas.order import DeliveryDraftSchema
+
+        return DeliveryDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import DeliveryDraftSchema
+
+        return DeliveryDraftSchema().dump(self)
 
 
 class DeliveryItem(_BaseType):
@@ -828,6 +872,9 @@ class LineItemImportDraft(_BaseType):
     tax_rate: typing.Optional["TaxRate"]
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+    #: Set only if inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
+    inventory_mode: typing.Optional["InventoryMode"]
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -843,6 +890,7 @@ class LineItemImportDraft(_BaseType):
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.product_id = product_id
@@ -855,6 +903,7 @@ class LineItemImportDraft(_BaseType):
         self.distribution_channel = distribution_channel
         self.tax_rate = tax_rate
         self.custom = custom
+        self.inventory_mode = inventory_mode
         self.shipping_details = shipping_details
 
         super().__init__()
@@ -887,14 +936,28 @@ class Order(BaseResource):
     customer_email: typing.Optional[str]
     #: Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
     anonymous_id: typing.Optional[str]
+    #: The Business Unit the Order belongs to.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
     store: typing.Optional["StoreKeyReference"]
     line_items: typing.List["LineItem"]
     custom_line_items: typing.List["CustomLineItem"]
     total_price: "TypedMoney"
     #: The taxes are calculated based on the shipping address.
     taxed_price: typing.Optional["TaxedPrice"]
+    #: Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+    #: For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
+    taxed_shipping_price: typing.Optional["TaxedPrice"]
+    #: Holds all shipping-related information per Shipping Method.
+    #:
+    #: For `Multi` [ShippingMode](ctp:api:typeShippingMode), it is updated automatically after the Shipping Methods are added.
     shipping_address: typing.Optional["Address"]
     billing_address: typing.Optional["Address"]
+    #: Indicates whether one or multiple Shipping Methods are added to the Cart.
+    shipping_mode: "ShippingMode"
+    #: Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
+    #:
+    #: It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+    shipping: typing.List["Shipping"]
     tax_mode: typing.Optional["TaxMode"]
     #: When calculating taxes for `taxedPrice`, the selected mode is used for rouding.
     tax_rounding_mode: typing.Optional["RoundingMode"]
@@ -950,13 +1013,17 @@ class Order(BaseResource):
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
+        taxed_shipping_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
+        shipping_mode: "ShippingMode",
+        shipping: typing.List["Shipping"],
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -989,13 +1056,17 @@ class Order(BaseResource):
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.anonymous_id = anonymous_id
+        self.business_unit = business_unit
         self.store = store
         self.line_items = line_items
         self.custom_line_items = custom_line_items
         self.total_price = total_price
         self.taxed_price = taxed_price
+        self.taxed_shipping_price = taxed_shipping_price
         self.shipping_address = shipping_address
         self.billing_address = billing_address
+        self.shipping_mode = shipping_mode
+        self.shipping = shipping
         self.tax_mode = tax_mode
         self.tax_rounding_mode = tax_rounding_mode
         self.customer_group = customer_group
@@ -1043,7 +1114,7 @@ class Order(BaseResource):
 class OrderFromCartDraft(_BaseType):
     #: Unique identifier of the Cart from which you can create an Order.
     id: typing.Optional[str]
-    #: ResourceIdentifier to the Cart from which this order is created.
+    #: ResourceIdentifier of the Cart from which this order is created.
     cart: typing.Optional["CartResourceIdentifier"]
     version: int
     #: String that uniquely identifies an order.
@@ -1100,8 +1171,9 @@ class OrderFromCartDraft(_BaseType):
 
 
 class OrderFromQuoteDraft(_BaseType):
-    #: ResourceIdentifier to the Quote from which this order is created. If the quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
+    #: ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
     quote: "QuoteResourceIdentifier"
+    #: `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -1191,6 +1263,8 @@ class OrderImportDraft(_BaseType):
     tax_rounding_mode: typing.Optional["RoundingMode"]
     #: Contains addresses for orders with multiple shipping addresses.
     item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: The Business Unit the Cart belongs to.
+    business_unit: typing.Optional["BusinessUnitResourceIdentifier"]
     store: typing.Optional["StoreResourceIdentifier"]
     #: The default origin is `Customer`.
     origin: typing.Optional["CartOrigin"]
@@ -1222,6 +1296,7 @@ class OrderImportDraft(_BaseType):
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        business_unit: typing.Optional["BusinessUnitResourceIdentifier"] = None,
         store: typing.Optional["StoreResourceIdentifier"] = None,
         origin: typing.Optional["CartOrigin"] = None
     ):
@@ -1247,6 +1322,7 @@ class OrderImportDraft(_BaseType):
         self.inventory_mode = inventory_mode
         self.tax_rounding_mode = tax_rounding_mode
         self.item_shipping_addresses = item_shipping_addresses
+        self.business_unit = business_unit
         self.store = store
         self.origin = origin
 
@@ -1807,8 +1883,8 @@ class ProductVariantImportDraft(_BaseType):
     id: typing.Optional[int]
     #: The SKU of the existing variant.
     sku: typing.Optional[str]
-    #: The [EmbeddedPrices](ctp:api:type:EmbeddedPrice) of the variant.
-    #: The prices should not contain two prices for the same price scope (same currency, country and customer group).
+    #: The [Embedded Prices](ctp:api:type:Price) of the variant.
+    #: The prices should not contain two prices for the same price scope (same currency, country, customer group, channel, valid from and valid until).
     #: If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
     prices: typing.Optional[typing.List["PriceDraft"]]
     #: If this property is defined, then it will override the `attributes` property from the original
@@ -2108,6 +2184,7 @@ class ReturnShipmentState(enum.Enum):
 
 class ShipmentState(enum.Enum):
     SHIPPED = "Shipped"
+    DELIVERED = "Delivered"
     READY = "Ready"
     PENDING = "Pending"
     DELAYED = "Delayed"
@@ -2125,7 +2202,7 @@ class ShippingInfoImportDraft(_BaseType):
     #: Not set if custom shipping method is used.
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
     #: Deliveries are compilations of information on how the articles are being delivered to the customers.
-    deliveries: typing.Optional[typing.List["Delivery"]]
+    deliveries: typing.Optional[typing.List["DeliveryDraft"]]
     discounted_price: typing.Optional["DiscountedLineItemPriceDraft"]
     #: Indicates whether the ShippingMethod referenced is allowed for the cart or not.
     shipping_method_state: typing.Optional["ShippingMethodState"]
@@ -2139,7 +2216,7 @@ class ShippingInfoImportDraft(_BaseType):
         tax_rate: typing.Optional["TaxRate"] = None,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
-        deliveries: typing.Optional[typing.List["Delivery"]] = None,
+        deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
         discounted_price: typing.Optional["DiscountedLineItemPriceDraft"] = None,
         shipping_method_state: typing.Optional["ShippingMethodState"] = None
     ):
@@ -2270,6 +2347,8 @@ class TrackingData(_BaseType):
 
 class OrderAddDeliveryAction(OrderUpdateAction):
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
     address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
     #: Custom Fields for the Transaction.
@@ -2279,11 +2358,13 @@ class OrderAddDeliveryAction(OrderUpdateAction):
         self,
         *,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        shipping_key: typing.Optional[str] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.items = items
+        self.shipping_key = shipping_key
         self.address = address
         self.parcels = parcels
         self.custom = custom

@@ -13,6 +13,7 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
+from ..common import ProductPriceModeEnum
 from .common import ImportResourceSchema, LocalizedStringField
 
 # Fields
@@ -109,6 +110,14 @@ class ProductDraftImportSchema(ImportResourceSchema):
     )
     publish = marshmallow.fields.Boolean(
         allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    price_mode = marshmallow_enum.EnumField(
+        ProductPriceModeEnum,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="priceMode",
     )
 
     class Meta:

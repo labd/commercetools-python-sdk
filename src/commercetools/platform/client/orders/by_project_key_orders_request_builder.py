@@ -15,6 +15,9 @@ from ..edits.by_project_key_orders_edits_request_builder import (
 from ..import_.by_project_key_orders_import_request_builder import (
     ByProjectKeyOrdersImportRequestBuilder,
 )
+from ..quotes.by_project_key_orders_quotes_request_builder import (
+    ByProjectKeyOrdersQuotesRequestBuilder,
+)
 from ..search.by_project_key_orders_search_request_builder import (
     ByProjectKeyOrdersSearchRequestBuilder,
 )
@@ -44,6 +47,12 @@ class ByProjectKeyOrdersRequestBuilder:
 
     def import_order(self) -> ByProjectKeyOrdersImportRequestBuilder:
         return ByProjectKeyOrdersImportRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def order_quote(self) -> ByProjectKeyOrdersQuotesRequestBuilder:
+        return ByProjectKeyOrdersQuotesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

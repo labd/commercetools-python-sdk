@@ -609,7 +609,7 @@ class CategoryChangeParentAction(CategoryUpdateAction):
 
 
 class CategoryChangeSlugAction(CategoryUpdateAction):
-    """Changing the slug produces the [CategorySlugChangedMessage](ctp:api:type:CategorySlugChangedMessage)."""
+    """Changing the slug produces the [CategorySlugChanged](ctp:api:type:CategorySlugChangedMessage) Message."""
 
     #: New value to set. Must not be empty.
     #: A Category can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project).

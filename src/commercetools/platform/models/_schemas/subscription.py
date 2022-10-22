@@ -13,13 +13,15 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..subscription import SubscriptionHealthStatus
+from ..subscription import AwsAuthenticationMode, SubscriptionHealthStatus
 from .common import BaseResourceSchema
 
 # Fields
 
 
 # Marshmallow Schemas
+
+
 class ChangeSubscriptionSchema(helpers.BaseSchema):
     resource_type_id = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="resourceTypeId"
@@ -71,6 +73,9 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitReferenceSchema"
+            ),
             "cart-discount": helpers.absmod(
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
@@ -366,13 +371,27 @@ class ResourceUpdatedDeliveryPayloadSchema(DeliveryPayloadSchema):
 
 class SnsDestinationSchema(DestinationSchema):
     access_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessKey",
     )
     access_secret = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessSecret"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessSecret",
     )
     topic_arn = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="topicArn"
+    )
+    authentication_mode = marshmallow_enum.EnumField(
+        AwsAuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authenticationMode",
     )
 
     class Meta:
@@ -386,15 +405,29 @@ class SnsDestinationSchema(DestinationSchema):
 
 class SqsDestinationSchema(DestinationSchema):
     access_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessKey"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessKey",
     )
     access_secret = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessSecret"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="accessSecret",
     )
     queue_url = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="queueUrl"
     )
     region = marshmallow.fields.String(allow_none=True, missing=None)
+    authentication_mode = marshmallow_enum.EnumField(
+        AwsAuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="authenticationMode",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

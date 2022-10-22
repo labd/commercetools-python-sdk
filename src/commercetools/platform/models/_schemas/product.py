@@ -32,6 +32,18 @@ class CategoryOrderHintsField(marshmallow.fields.Dict):
         return models.CategoryOrderHints(**result)
 
 
+class ProductVariantChannelAvailabilityMapField(marshmallow.fields.Dict):
+    def _deserialize(self, value, attr, data, **kwargs):
+        result = super()._deserialize(value, attr, data)
+        return models.ProductVariantChannelAvailabilityMap(**result)
+
+
+class SearchKeywordsField(marshmallow.fields.Dict):
+    def _deserialize(self, value, attr, data, **kwargs):
+        result = super()._deserialize(value, attr, data)
+        return models.SearchKeywords(**result)
+
+
 # Marshmallow Schemas
 class AttributeSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
@@ -326,10 +338,14 @@ class ProductDataSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         missing=None,
     )
-    search_keywords = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".SearchKeywordsSchema"),
+    search_keywords = SearchKeywordsField(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
+        values=helpers.LazyNestedField(
+            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
+            allow_none=True,
+            many=True,
+            unknown=marshmallow.EXCLUDE,
+        ),
         missing=None,
         data_key="searchKeywords",
     )
@@ -430,10 +446,14 @@ class ProductDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="taxCategory",
     )
-    search_keywords = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".SearchKeywordsSchema"),
+    search_keywords = SearchKeywordsField(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
+        values=helpers.LazyNestedField(
+            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
+            allow_none=True,
+            many=True,
+            unknown=marshmallow.EXCLUDE,
+        ),
         metadata={"omit_empty": True},
         missing=None,
         data_key="searchKeywords",
@@ -468,11 +488,11 @@ class ProductDraftSchema(helpers.BaseSchema):
 
 class ProductPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductSchema"),
         allow_none=True,
@@ -548,10 +568,14 @@ class ProductProjectionSchema(BaseResourceSchema):
         missing=None,
         data_key="metaKeywords",
     )
-    search_keywords = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".SearchKeywordsSchema"),
+    search_keywords = SearchKeywordsField(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
+        values=helpers.LazyNestedField(
+            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
+            allow_none=True,
+            many=True,
+            unknown=marshmallow.EXCLUDE,
+        ),
         metadata={"omit_empty": True},
         missing=None,
         data_key="searchKeywords",
@@ -940,6 +964,16 @@ class ProductVariantSchema(helpers.BaseSchema):
 
 
 class ProductVariantAvailabilitySchema(helpers.BaseSchema):
+    channels = ProductVariantChannelAvailabilityMapField(
+        allow_none=True,
+        values=helpers.LazyNestedField(
+            nested=helpers.absmod(__name__, ".ProductVariantChannelAvailabilitySchema"),
+            allow_none=True,
+            unknown=marshmallow.EXCLUDE,
+        ),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
     is_on_stock = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -957,13 +991,6 @@ class ProductVariantAvailabilitySchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="availableQuantity",
-    )
-    channels = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ProductVariantChannelAvailabilityMapSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        missing=None,
     )
 
     class Meta:
@@ -994,6 +1021,8 @@ class ProductVariantChannelAvailabilitySchema(helpers.BaseSchema):
         missing=None,
         data_key="availableQuantity",
     )
+    id = marshmallow.fields.String(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1002,38 +1031,6 @@ class ProductVariantChannelAvailabilitySchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.ProductVariantChannelAvailability(**data)
-
-
-class ProductVariantChannelAvailabilityMapSchema(helpers.BaseSchema):
-    _regex = helpers.RegexField(
-        unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("")},
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, ".ProductVariantChannelAvailabilitySchema"),
-            allow_none=True,
-            unknown=marshmallow.EXCLUDE,
-            missing=None,
-        ),
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.pre_load
-    def pre_load(self, data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.pre_load(self, data)
-
-    @marshmallow.post_load(pass_original=True)
-    def post_load(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        data = field.post_load(data, original_data)
-        return models.ProductVariantChannelAvailabilityMap(**data)
-
-    @marshmallow.post_dump(pass_original=True)
-    def post_dump(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.post_dump(data, original_data)
 
 
 class ProductVariantDraftSchema(helpers.BaseSchema):
@@ -1124,40 +1121,6 @@ class SearchKeywordSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.SearchKeyword(**data)
-
-
-class SearchKeywordsSchema(helpers.BaseSchema):
-    _regex = helpers.RegexField(
-        unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("^[a-z]{2}(-[A-Z]{2})?$")},
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
-            allow_none=True,
-            many=True,
-            unknown=marshmallow.EXCLUDE,
-            missing=None,
-            data_key="/^[a-z]{2}(-[A-Z]{2})?$/",
-        ),
-    )
-
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.pre_load
-    def pre_load(self, data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.pre_load(self, data)
-
-    @marshmallow.post_load(pass_original=True)
-    def post_load(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        data = field.post_load(data, original_data)
-        return models.SearchKeywords(**data)
-
-    @marshmallow.post_dump(pass_original=True)
-    def post_dump(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.post_dump(data, original_data)
 
 
 class SuggestTokenizerSchema(helpers.BaseSchema):
@@ -2356,10 +2319,14 @@ class ProductSetProductVariantKeyActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
-    search_keywords = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".SearchKeywordsSchema"),
+    search_keywords = SearchKeywordsField(
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
+        values=helpers.LazyNestedField(
+            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
+            allow_none=True,
+            many=True,
+            unknown=marshmallow.EXCLUDE,
+        ),
         missing=None,
         data_key="searchKeywords",
     )

@@ -37,7 +37,7 @@ class ImportOperation(_BaseType):
     id: str
     #: The import status of the resource. Set to `rejected` or `validationFailed` if the import of the resource was not successful.
     state: "ProcessingState"
-    #: The version of the impmorted resource when the import was successful.
+    #: The version of the imported resource when the import was successful.
     resource_version: typing.Optional[int]
     #: Contains an error if the import of the resource was not successful. See [Errors](/error).
     errors: typing.Optional[typing.List["ErrorObject"]]

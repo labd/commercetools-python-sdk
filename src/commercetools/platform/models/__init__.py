@@ -7,6 +7,7 @@
 
 from . import *  # noqa
 from .api_client import *  # noqa
+from .business_unit import *  # noqa
 from .cart import *  # noqa
 from .cart_discount import *  # noqa
 from .category import *  # noqa

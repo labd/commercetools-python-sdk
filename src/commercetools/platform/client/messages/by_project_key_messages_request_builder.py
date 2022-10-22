@@ -50,6 +50,7 @@ class ByProjectKeyMessagesRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["MessagePagedQueryResponse"]:
+        """Deprecated scope: `view_orders:{projectKey}`"""
         params = {
             "expand": expand,
             "sort": sort,

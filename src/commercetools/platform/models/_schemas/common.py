@@ -576,6 +576,9 @@ class MoneySchema(helpers.BaseSchema):
 
 class PriceSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     value = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -648,6 +651,9 @@ class PriceSchema(helpers.BaseSchema):
 
 
 class PriceDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MoneySchema"),
         allow_none=True,

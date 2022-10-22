@@ -10,7 +10,15 @@ import enum
 import typing
 
 from ._abstract import _BaseType
-from .cart import CartOrigin, InventoryMode, RoundingMode, TaxCalculationMode, TaxMode
+from .cart import (
+    CartOrigin,
+    CustomLineItemPriceMode,
+    InventoryMode,
+    RoundingMode,
+    ShippingMode,
+    TaxCalculationMode,
+    TaxMode,
+)
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 from .order import (
     Order,
@@ -23,10 +31,12 @@ from .order import (
 )
 
 if typing.TYPE_CHECKING:
+    from .business_unit import BusinessUnitKeyReference
     from .cart import (
         CartOrigin,
         CartReference,
         CustomLineItem,
+        CustomLineItemPriceMode,
         DiscountCodeInfo,
         ExternalLineItemTotalPrice,
         ExternalTaxAmountDraft,
@@ -35,7 +45,9 @@ if typing.TYPE_CHECKING:
         ItemShippingDetailsDraft,
         LineItem,
         RoundingMode,
+        Shipping,
         ShippingInfo,
+        ShippingMode,
         ShippingRateInput,
         ShippingRateInputDraft,
         TaxCalculationMode,
@@ -662,13 +674,17 @@ class StagedOrder(Order):
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
+        taxed_shipping_price: typing.Optional["TaxedPrice"] = None,
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
+        shipping_mode: "ShippingMode",
+        shipping: typing.List["Shipping"],
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
@@ -707,13 +723,17 @@ class StagedOrder(Order):
             customer_id=customer_id,
             customer_email=customer_email,
             anonymous_id=anonymous_id,
+            business_unit=business_unit,
             store=store,
             line_items=line_items,
             custom_line_items=custom_line_items,
             total_price=total_price,
             taxed_price=taxed_price,
+            taxed_shipping_price=taxed_shipping_price,
             shipping_address=shipping_address,
             billing_address=billing_address,
+            shipping_mode=shipping_mode,
+            shipping=shipping,
             tax_mode=tax_mode,
             tax_rounding_mode=tax_rounding_mode,
             customer_group=customer_group,
@@ -914,6 +934,10 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+    #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    #: - If `External`, Cart Discounts are not considered on the Custom Line Item.
+    price_mode: typing.Optional["CustomLineItemPriceMode"]
 
     def __init__(
         self,
@@ -924,7 +948,8 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
+        price_mode: typing.Optional["CustomLineItemPriceMode"] = None
     ):
         self.money = money
         self.name = name
@@ -933,6 +958,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         self.tax_category = tax_category
         self.custom = custom
         self.external_tax_rate = external_tax_rate
+        self.price_mode = price_mode
 
         super().__init__(action="addCustomLineItem")
 

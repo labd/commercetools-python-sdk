@@ -728,7 +728,7 @@ class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
 
     """
 
-    #: ResourceIdentifier to Product
+    #: ResourceIdentifier of the Product
     product: "ProductResourceIdentifier"
     #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
     #: If not supplied all Variants are deemed to be included.
@@ -783,7 +783,7 @@ class ProductSelectionChangeNameAction(ProductSelectionUpdateAction):
 
 
 class ProductSelectionRemoveProductAction(ProductSelectionUpdateAction):
-    #: ResourceIdentifier to Product
+    #: ResourceIdentifier of the Product
     product: "ProductResourceIdentifier"
 
     def __init__(self, *, product: "ProductResourceIdentifier"):
@@ -906,7 +906,7 @@ class ProductSelectionSetVariantSelectionAction(ProductSelectionUpdateAction):
 
     """
 
-    #: ResourceIdentifier to Product
+    #: ResourceIdentifier of the Product
     product: "ProductResourceIdentifier"
     #: Determines which Variants of the previously added Product are to be included in, or excluded from, the Product Selection.
     #: Leave it empty to unset an existing Variant Selection.

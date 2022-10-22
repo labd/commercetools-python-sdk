@@ -13,7 +13,9 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
+from ..business_unit import BusinessUnitType
 from ..cart import InventoryMode, TaxMode
+from ..me import MyQuoteState
 from ..payment import TransactionType
 from .common import LocalizedStringField
 from .type import FieldContainerField
@@ -22,6 +24,208 @@ from .type import FieldContainerField
 
 
 # Marshmallow Schemas
+class MyBusinessUnitAssociateDraftSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    customer = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".MyCustomerDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyBusinessUnitAssociateDraft(**data)
+
+
+class MyBusinessUnitDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(allow_none=True, missing=None)
+    unit_type = marshmallow_enum.EnumField(
+        BusinessUnitType,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="unitType",
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    contact_email = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="contactEmail",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    addresses = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    shipping_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="shippingAddresses",
+    )
+    default_shiping_address = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultShipingAddress",
+    )
+    billing_addresses = marshmallow.fields.List(
+        marshmallow.fields.Integer(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="billingAddresses",
+    )
+    default_billing_address = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="defaultBillingAddress",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["unit_type"]
+        return models.MyBusinessUnitDraft(**data)
+
+
+class MyBusinessUnitUpdateSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            allow_none=True,
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "addAddress": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitAddAddressActionSchema"
+                ),
+                "addAssociate": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitAddAssociateActionSchema"
+                ),
+                "addBillingAddressId": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitAddBillingAddressIdActionSchema",
+                ),
+                "addShippingAddressId": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitAddShippingAddressIdActionSchema",
+                ),
+                "addStore": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitAddStoreActionSchema"
+                ),
+                "changeAddress": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitChangeAddressActionSchema"
+                ),
+                "changeAssociate": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitChangeAssociateActionSchema"
+                ),
+                "changeName": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitChangeNameActionSchema"
+                ),
+                "changeParentUnit": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitChangeParentUnitActionSchema"
+                ),
+                "changeStatus": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitChangeStatusActionSchema"
+                ),
+                "removeAddress": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitRemoveAddressActionSchema"
+                ),
+                "removeAssociate": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitRemoveAssociateActionSchema"
+                ),
+                "removeBillingAddressId": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitRemoveBillingAddressIdActionSchema",
+                ),
+                "removeShippingAddressId": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitRemoveShippingAddressIdActionSchema",
+                ),
+                "removeStore": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitRemoveStoreActionSchema"
+                ),
+                "setAddressCustomField": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitSetAddressCustomFieldActionSchema",
+                ),
+                "setAddressCustomType": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitSetAddressCustomTypeActionSchema",
+                ),
+                "setAssociates": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetAssociatesActionSchema"
+                ),
+                "setContactEmail": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetContactEmailActionSchema"
+                ),
+                "setCustomField": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetCustomFieldActionSchema"
+                ),
+                "setCustomType": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetCustomTypeActionSchema"
+                ),
+                "setDefaultBillingAddress": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitSetDefaultBillingAddressActionSchema",
+                ),
+                "setDefaultShippingAddress": helpers.absmod(
+                    __name__,
+                    ".business_unit.BusinessUnitSetDefaultShippingAddressActionSchema",
+                ),
+                "setStoreMode": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetStoreModeActionSchema"
+                ),
+                "setStores": helpers.absmod(
+                    __name__, ".business_unit.BusinessUnitSetStoresActionSchema"
+                ),
+            },
+        ),
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyBusinessUnitUpdate(**data)
+
+
+class MyBusinessUnitUpdateActionSchema(helpers.BaseSchema):
+    action = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitUpdateAction(**data)
+
+
 class MyCartDraftSchema(helpers.BaseSchema):
     currency = marshmallow.fields.String(allow_none=True, missing=None)
     customer_email = marshmallow.fields.String(
@@ -109,6 +313,16 @@ class MyCartDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="itemShippingAddresses",
     )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitKeyReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="businessUnit",
+    )
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
@@ -116,11 +330,9 @@ class MyCartDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
-    discount_codes = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.DiscountCodeInfoSchema"),
+    discount_codes = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         missing=None,
         data_key="discountCodes",
@@ -243,6 +455,16 @@ class MyCartUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyCartUpdateAction(**data)
+
+
+class MyCompanyDraftSchema(MyBusinessUnitDraftSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["unit_type"]
+        return models.MyCompanyDraft(**data)
 
 
 class MyCustomerDraftSchema(helpers.BaseSchema):
@@ -423,6 +645,26 @@ class MyCustomerUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyCustomerUpdateAction(**data)
+
+
+class MyDivisionDraftSchema(MyBusinessUnitDraftSchema):
+    parent_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="parentUnit",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["unit_type"]
+        return models.MyDivisionDraft(**data)
 
 
 class MyLineItemDraftSchema(helpers.BaseSchema):
@@ -735,6 +977,43 @@ class MyQuoteRequestUpdateActionSchema(helpers.BaseSchema):
         return models.MyQuoteRequestUpdateAction(**data)
 
 
+class MyQuoteUpdateSchema(helpers.BaseSchema):
+    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    actions = marshmallow.fields.List(
+        helpers.Discriminator(
+            allow_none=True,
+            discriminator_field=("action", "action"),
+            discriminator_schemas={
+                "changeMyQuoteState": helpers.absmod(
+                    __name__, ".MyQuoteChangeMyQuoteStateActionSchema"
+                )
+            },
+        ),
+        allow_none=True,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyQuoteUpdate(**data)
+
+
+class MyQuoteUpdateActionSchema(helpers.BaseSchema):
+    action = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyQuoteUpdateAction(**data)
+
+
 class MyShoppingListDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(
         allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
@@ -928,6 +1207,9 @@ class ReplicaMyCartDraftSchema(helpers.BaseSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitReferenceSchema"
+            ),
             "cart-discount": helpers.absmod(
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
@@ -997,6 +1279,388 @@ class ReplicaMyCartDraftSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.ReplicaMyCartDraft(**data)
+
+
+class MyBusinessUnitAddAddressActionSchema(MyBusinessUnitUpdateActionSchema):
+    address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitAddAddressAction(**data)
+
+
+class MyBusinessUnitAddBillingAddressIdActionSchema(MyBusinessUnitUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitAddBillingAddressIdAction(**data)
+
+
+class MyBusinessUnitAddShippingAddressIdActionSchema(MyBusinessUnitUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitAddShippingAddressIdAction(**data)
+
+
+class MyBusinessUnitChangeAddressActionSchema(MyBusinessUnitUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+    address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitChangeAddressAction(**data)
+
+
+class MyBusinessUnitChangeAssociateActionSchema(MyBusinessUnitUpdateActionSchema):
+    associate = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".business_unit.AssociateDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitChangeAssociateAction(**data)
+
+
+class MyBusinessUnitChangeNameActionSchema(MyBusinessUnitUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitChangeNameAction(**data)
+
+
+class MyBusinessUnitChangeParentUnitActionSchema(MyBusinessUnitUpdateActionSchema):
+    parent_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+        data_key="parentUnit",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitChangeParentUnitAction(**data)
+
+
+class MyBusinessUnitRemoveAddressActionSchema(MyBusinessUnitUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitRemoveAddressAction(**data)
+
+
+class MyBusinessUnitRemoveAssociateActionSchema(MyBusinessUnitUpdateActionSchema):
+    customer = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitRemoveAssociateAction(**data)
+
+
+class MyBusinessUnitRemoveBillingAddressIdActionSchema(
+    MyBusinessUnitUpdateActionSchema
+):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitRemoveBillingAddressIdAction(**data)
+
+
+class MyBusinessUnitRemoveShippingAddressIdActionSchema(
+    MyBusinessUnitUpdateActionSchema
+):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitRemoveShippingAddressIdAction(**data)
+
+
+class MyBusinessUnitSetAddressCustomFieldActionSchema(MyBusinessUnitUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetAddressCustomFieldAction(**data)
+
+
+class MyBusinessUnitSetAddressCustomTypeActionSchema(MyBusinessUnitUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetAddressCustomTypeAction(**data)
+
+
+class MyBusinessUnitSetContactEmailActionSchema(MyBusinessUnitUpdateActionSchema):
+    contact_email = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="contactEmail",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetContactEmailAction(**data)
+
+
+class MyBusinessUnitSetCustomFieldActionSchema(MyBusinessUnitUpdateActionSchema):
+    name = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.Raw(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetCustomFieldAction(**data)
+
+
+class MyBusinessUnitSetCustomTypeActionSchema(MyBusinessUnitUpdateActionSchema):
+    type = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    fields = FieldContainerField(
+        allow_none=True,
+        values=marshmallow.fields.Raw(allow_none=True),
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetCustomTypeAction(**data)
+
+
+class MyBusinessUnitSetDefaultBillingAddressActionSchema(
+    MyBusinessUnitUpdateActionSchema
+):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetDefaultBillingAddressAction(**data)
+
+
+class MyBusinessUnitSetDefaultShippingAddressActionSchema(
+    MyBusinessUnitUpdateActionSchema
+):
+    address_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressId",
+    )
+    address_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="addressKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyBusinessUnitSetDefaultShippingAddressAction(**data)
 
 
 class MyCartAddDiscountCodeActionSchema(MyCartUpdateActionSchema):
@@ -2103,6 +2767,24 @@ class MyPaymentSetTransactionCustomFieldActionSchema(MyPaymentUpdateActionSchema
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.MyPaymentSetTransactionCustomFieldAction(**data)
+
+
+class MyQuoteChangeMyQuoteStateActionSchema(MyQuoteUpdateActionSchema):
+    quote_state = marshmallow_enum.EnumField(
+        MyQuoteState,
+        by_value=True,
+        allow_none=True,
+        missing=None,
+        data_key="quoteState",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.MyQuoteChangeMyQuoteStateAction(**data)
 
 
 class MyQuoteRequestCancelActionSchema(MyQuoteRequestUpdateActionSchema):

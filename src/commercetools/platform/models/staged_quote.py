@@ -13,10 +13,12 @@ from ._abstract import _BaseType
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
+    from .business_unit import BusinessUnitKeyReference
     from .cart import CartReference
     from .common import CreatedBy, LastModifiedBy, ReferenceTypeId
     from .customer import CustomerReference
     from .quote_request import QuoteRequestReference, QuoteRequestResourceIdentifier
+    from .state import StateReference, StateResourceIdentifier
     from .type import (
         CustomFields,
         CustomFieldsDraft,
@@ -36,6 +38,7 @@ __all__ = [
     "StagedQuoteSetSellerCommentAction",
     "StagedQuoteSetValidToAction",
     "StagedQuoteState",
+    "StagedQuoteTransitionStateAction",
     "StagedQuoteUpdate",
     "StagedQuoteUpdateAction",
 ]
@@ -50,18 +53,23 @@ class StagedQuote(BaseResource):
     created_by: typing.Optional["CreatedBy"]
     #: Predefined states tracking the status of the Staged Quote.
     staged_quote_state: "StagedQuoteState"
-    #: The [Buyer](/../api/quotes-overview#buyer) who requested the quote.
+    #: The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
     customer: typing.Optional["CustomerReference"]
-    #: The Quote Request related to this Staged Quote.
+    #: Quote Request related to the Staged Quote.
     quote_request: "QuoteRequestReference"
-    #: The [Cart](ctp:api:type:Cart) containing the offered items.
+    #: [Cart](ctp:api:type:Cart) containing the offered items. May contain either [DirectDiscounts](ctp:api:type:DirectDiscount) or [CartDiscounts](ctp:api:type:CartDiscount).
     quotation_cart: "CartReference"
-    #: Expiration date for the quote.
+    #: Expiration date for the Quote.
     valid_to: typing.Optional[datetime.datetime]
-    #: The text message included in the offer from the [Seller](/../api/quotes-overview#seller).
+    #: Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
     seller_comment: typing.Optional[str]
-    #: Custom Fields of this Staged Quote.
+    #: Custom Fields of the Staged Quote.
     custom: typing.Optional["CustomFields"]
+    #: [State](ctp:api:type:State) of the Staged Quote.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
+    #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
 
     def __init__(
         self,
@@ -79,7 +87,9 @@ class StagedQuote(BaseResource):
         quotation_cart: "CartReference",
         valid_to: typing.Optional[datetime.datetime] = None,
         seller_comment: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
+        state: typing.Optional["StateReference"] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -91,6 +101,8 @@ class StagedQuote(BaseResource):
         self.valid_to = valid_to
         self.seller_comment = seller_comment
         self.custom = custom
+        self.state = state
+        self.business_unit = business_unit
 
         super().__init__(
             id=id,
@@ -112,7 +124,7 @@ class StagedQuote(BaseResource):
 
 
 class StagedQuoteDraft(_BaseType):
-    #: The QuoteRequest from which this StagedQuote is created.
+    #: QuoteRequest from which the StagedQuote is created.
     quote_request: "QuoteRequestResourceIdentifier"
     #: Current version of the QuoteRequest.
     quote_request_version: int
@@ -123,6 +135,9 @@ class StagedQuoteDraft(_BaseType):
     #: - If specified, the Custom Fields are merged with the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) and added to the StagedQuote.
     #: - If empty, the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) are added to the StagedQuote automatically.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: [State](ctp:api:type:State) of the Staged Quote.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
 
     def __init__(
         self,
@@ -130,12 +145,14 @@ class StagedQuoteDraft(_BaseType):
         quote_request: "QuoteRequestResourceIdentifier",
         quote_request_version: int,
         key: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        state: typing.Optional["StateReference"] = None
     ):
         self.quote_request = quote_request
         self.quote_request_version = quote_request_version
         self.key = key
         self.custom = custom
+        self.state = state
 
         super().__init__()
 
@@ -256,7 +273,10 @@ class StagedQuoteState(enum.Enum):
 
 
 class StagedQuoteUpdate(_BaseType):
+    #: Expected version of the [StagedQuote](ctp:api:type:StagedQuote) to which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the [StagedQuote](ctp:api:type:StagedQuote).
     actions: typing.List["StagedQuoteUpdateAction"]
 
     def __init__(
@@ -313,6 +333,10 @@ class StagedQuoteUpdateAction(_BaseType):
             from ._schemas.staged_quote import StagedQuoteSetValidToActionSchema
 
             return StagedQuoteSetValidToActionSchema().load(data)
+        if data["action"] == "transitionState":
+            from ._schemas.staged_quote import StagedQuoteTransitionStateActionSchema
+
+            return StagedQuoteTransitionStateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.staged_quote import StagedQuoteUpdateActionSchema
@@ -321,7 +345,7 @@ class StagedQuoteUpdateAction(_BaseType):
 
 
 class StagedQuoteChangeStagedQuoteStateAction(StagedQuoteUpdateAction):
-    #: The new quote staged state to be set for the Quote Staged.
+    #: New state to be set for the Staged Quote.
     staged_quote_state: "StagedQuoteState"
 
     def __init__(self, *, staged_quote_state: "StagedQuoteState"):
@@ -447,3 +471,34 @@ class StagedQuoteSetValidToAction(StagedQuoteUpdateAction):
         from ._schemas.staged_quote import StagedQuoteSetValidToActionSchema
 
         return StagedQuoteSetValidToActionSchema().dump(self)
+
+
+class StagedQuoteTransitionStateAction(StagedQuoteUpdateAction):
+    """If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. This update action produces the [Staged Quote State Transition](ctp:api:type:StagedQuoteStateTransitionMessage) Message."""
+
+    #: Value to set.
+    #: If there is no State yet, the new State must be an initial State.
+    state: "StateResourceIdentifier"
+    #: Switch validations on or off.
+    force: typing.Optional[bool]
+
+    def __init__(
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
+    ):
+        self.state = state
+        self.force = force
+
+        super().__init__(action="transitionState")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedQuoteTransitionStateAction":
+        from ._schemas.staged_quote import StagedQuoteTransitionStateActionSchema
+
+        return StagedQuoteTransitionStateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.staged_quote import StagedQuoteTransitionStateActionSchema
+
+        return StagedQuoteTransitionStateActionSchema().dump(self)

@@ -13,7 +13,15 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..cart import CartOrigin, InventoryMode, RoundingMode, TaxCalculationMode, TaxMode
+from ..cart import (
+    CartOrigin,
+    CustomLineItemPriceMode,
+    InventoryMode,
+    RoundingMode,
+    ShippingMode,
+    TaxCalculationMode,
+    TaxMode,
+)
 from ..common import ReferenceTypeId
 from ..order import (
     OrderState,
@@ -1013,6 +1021,85 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
             allow_none=True,
             discriminator_field=("type", "type"),
             discriminator_schemas={
+                "BusinessUnitAddressAdded": helpers.absmod(
+                    __name__, ".message.BusinessUnitAddressAddedMessagePayloadSchema"
+                ),
+                "BusinessUnitAddressChanged": helpers.absmod(
+                    __name__, ".message.BusinessUnitAddressChangedMessagePayloadSchema"
+                ),
+                "BusinessUnitAddressRemoved": helpers.absmod(
+                    __name__, ".message.BusinessUnitAddressRemovedMessagePayloadSchema"
+                ),
+                "BusinessUnitAssociateAdded": helpers.absmod(
+                    __name__, ".message.BusinessUnitAssociateAddedMessagePayloadSchema"
+                ),
+                "BusinessUnitAssociateChanged": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitAssociateChangedMessagePayloadSchema",
+                ),
+                "BusinessUnitAssociateRemoved": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitAssociateRemovedMessagePayloadSchema",
+                ),
+                "BusinessUnitAssociatesSet": helpers.absmod(
+                    __name__, ".message.BusinessUnitAssociatesSetMessagePayloadSchema"
+                ),
+                "BusinessUnitBillingAddressAdded": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitBillingAddressAddedMessagePayloadSchema",
+                ),
+                "BusinessUnitBillingAddressRemoved": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitBillingAddressRemovedMessagePayloadSchema",
+                ),
+                "BusinessUnitContactEmailSet": helpers.absmod(
+                    __name__, ".message.BusinessUnitContactEmailSetMessagePayloadSchema"
+                ),
+                "BusinessUnitCreated": helpers.absmod(
+                    __name__, ".message.BusinessUnitCreatedMessagePayloadSchema"
+                ),
+                "BusinessUnitDefaultBillingAddressSet": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitDefaultBillingAddressSetMessagePayloadSchema",
+                ),
+                "BusinessUnitDefaultShippingAddressSet": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitDefaultShippingAddressSetMessagePayloadSchema",
+                ),
+                "BusinessUnitDeleted": helpers.absmod(
+                    __name__, ".message.BusinessUnitDeletedMessagePayloadSchema"
+                ),
+                "BusinessUnitNameChanged": helpers.absmod(
+                    __name__, ".message.BusinessUnitNameChangedMessagePayloadSchema"
+                ),
+                "BusinessUnitParentUnitChanged": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitParentUnitChangedMessagePayloadSchema",
+                ),
+                "BusinessUnitShippingAddressAdded": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitShippingAddressAddedMessagePayloadSchema",
+                ),
+                "BusinessUnitShippingAddressRemoved": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitShippingAddressRemovedMessagePayloadSchema",
+                ),
+                "BusinessUnitStatusChanged": helpers.absmod(
+                    __name__, ".message.BusinessUnitStatusChangedMessagePayloadSchema"
+                ),
+                "BusinessUnitStoreAdded": helpers.absmod(
+                    __name__, ".message.BusinessUnitStoreAddedMessagePayloadSchema"
+                ),
+                "BusinessUnitStoreModeChanged": helpers.absmod(
+                    __name__,
+                    ".message.BusinessUnitStoreModeChangedMessagePayloadSchema",
+                ),
+                "BusinessUnitStoreRemoved": helpers.absmod(
+                    __name__, ".message.BusinessUnitStoreRemovedMessagePayloadSchema"
+                ),
+                "BusinessUnitStoresSet": helpers.absmod(
+                    __name__, ".message.BusinessUnitStoresSetMessagePayloadSchema"
+                ),
                 "CategoryCreated": helpers.absmod(
                     __name__, ".message.CategoryCreatedMessagePayloadSchema"
                 ),
@@ -1171,8 +1258,14 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "QuoteRequestStateChanged": helpers.absmod(
                     __name__, ".message.QuoteRequestStateChangedMessagePayloadSchema"
                 ),
+                "QuoteRequestStateTransition": helpers.absmod(
+                    __name__, ".message.QuoteRequestStateTransitionMessagePayloadSchema"
+                ),
                 "QuoteStateChanged": helpers.absmod(
                     __name__, ".message.QuoteStateChangedMessagePayloadSchema"
+                ),
+                "QuoteStateTransition": helpers.absmod(
+                    __name__, ".message.QuoteStateTransitionMessagePayloadSchema"
                 ),
                 "ReviewCreated": helpers.absmod(
                     __name__, ".message.ReviewCreatedMessagePayloadSchema"
@@ -1198,8 +1291,15 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "StagedQuoteStateChanged": helpers.absmod(
                     __name__, ".message.StagedQuoteStateChangedMessagePayloadSchema"
                 ),
+                "StagedQuoteStateTransition": helpers.absmod(
+                    __name__, ".message.StagedQuoteStateTransitionMessagePayloadSchema"
+                ),
                 "StagedQuoteValidToSet": helpers.absmod(
                     __name__, ".message.StagedQuoteValidToSetMessagePayloadSchema"
+                ),
+                "StandalonePriceActiveChanged": helpers.absmod(
+                    __name__,
+                    ".message.StandalonePriceActiveChangedMessagePayloadSchema",
                 ),
                 "StandalonePriceCreated": helpers.absmod(
                     __name__, ".message.StandalonePriceCreatedMessagePayloadSchema"
@@ -1214,6 +1314,10 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                     __name__,
                     ".message.StandalonePriceExternalDiscountSetMessagePayloadSchema",
                 ),
+                "StandalonePriceStagedChangesApplied": helpers.absmod(
+                    __name__,
+                    ".message.StandalonePriceStagedChangesAppliedMessagePayloadSchema",
+                ),
                 "StandalonePriceValueChanged": helpers.absmod(
                     __name__, ".message.StandalonePriceValueChangedMessagePayloadSchema"
                 ),
@@ -1223,9 +1327,22 @@ class OrderEditPreviewSuccessSchema(OrderEditResultSchema):
                 "StoreDeleted": helpers.absmod(
                     __name__, ".message.StoreDeletedMessagePayloadSchema"
                 ),
+                "StoreDistributionChannelsChanged": helpers.absmod(
+                    __name__,
+                    ".message.StoreDistributionChannelsChangedMessagePayloadSchema",
+                ),
+                "StoreLanguagesChanged": helpers.absmod(
+                    __name__, ".message.StoreLanguagesChangedMessagePayloadSchema"
+                ),
+                "StoreNameSet": helpers.absmod(
+                    __name__, ".message.StoreNameSetMessagePayloadSchema"
+                ),
                 "StoreProductSelectionsChanged": helpers.absmod(
                     __name__,
                     ".message.StoreProductSelectionsChangedMessagePayloadSchema",
+                ),
+                "StoreSupplyChannelsChanged": helpers.absmod(
+                    __name__, ".message.StoreSupplyChannelsChangedMessagePayloadSchema"
                 ),
             },
         ),
@@ -1998,6 +2115,14 @@ class StagedOrderAddCustomLineItemActionSchema(StagedOrderUpdateActionSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="externalTaxRate",
+    )
+    price_mode = marshmallow_enum.EnumField(
+        CustomLineItemPriceMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="priceMode",
     )
 
     class Meta:

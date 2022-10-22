@@ -37,6 +37,7 @@ class ByProjectKeyMessagesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Message"]:
+        """Deprecated scope: `view_orders:{projectKey}`"""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/messages/{self._id}",

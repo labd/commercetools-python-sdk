@@ -21,6 +21,36 @@ from .type import FieldContainerField
 
 
 # Marshmallow Schemas
+class StagedStandalonePriceSchema(helpers.BaseSchema):
+    value = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": helpers.absmod(
+                __name__, ".common.CentPrecisionMoneySchema"
+            ),
+            "highPrecision": helpers.absmod(
+                __name__, ".common.HighPrecisionMoneySchema"
+            ),
+        },
+        missing=None,
+    )
+    discounted = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.StagedStandalonePrice(**data)
+
+
 class StandalonePriceSchema(BaseResourceSchema):
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
@@ -107,6 +137,14 @@ class StandalonePriceSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    staged = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".StagedStandalonePriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    active = marshmallow.fields.Boolean(allow_none=True, missing=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -182,6 +220,9 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    active = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -251,6 +292,12 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "applyStagedChanges": helpers.absmod(
+                    __name__, ".StandalonePriceApplyStagedChangesActionSchema"
+                ),
+                "changeActive": helpers.absmod(
+                    __name__, ".StandalonePriceChangeActiveActionSchema"
+                ),
                 "changeValue": helpers.absmod(
                     __name__, ".StandalonePriceChangeValueActionSchema"
                 ),
@@ -290,12 +337,37 @@ class StandalonePriceUpdateActionSchema(helpers.BaseSchema):
         return models.StandalonePriceUpdateAction(**data)
 
 
+class StandalonePriceApplyStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceApplyStagedChangesAction(**data)
+
+
+class StandalonePriceChangeActiveActionSchema(StandalonePriceUpdateActionSchema):
+    active = marshmallow.fields.Boolean(allow_none=True, missing=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceChangeActiveAction(**data)
+
+
 class StandalonePriceChangeValueActionSchema(StandalonePriceUpdateActionSchema):
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         missing=None,
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
     )
 
     class Meta:

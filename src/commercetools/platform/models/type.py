@@ -569,6 +569,7 @@ class ResourceTypeId(enum.Enum):
 
     ADDRESS = "address"
     ASSET = "asset"
+    BUSINESS_UNIT = "business-unit"
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
     CHANNEL = "channel"
@@ -592,6 +593,7 @@ class ResourceTypeId(enum.Enum):
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
     SHOPPING_LIST_TEXT_LINE_ITEM = "shopping-list-text-line-item"
+    STANDALONE_PRICE = "standalone-price"
     STORE = "store"
     TRANSACTION = "transaction"
 

@@ -162,6 +162,26 @@ class PriceImportRequestSchema(ImportRequestSchema):
         return models.PriceImportRequest(**data)
 
 
+class StandalonePriceImportRequestSchema(ImportRequestSchema):
+    resources = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".standalone_prices.StandalonePriceImportSchema"
+        ),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.StandalonePriceImportRequest(**data)
+
+
 class OrderImportRequestSchema(ImportRequestSchema):
     resources = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.OrderImportSchema"),

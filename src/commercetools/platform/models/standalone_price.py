@@ -34,7 +34,10 @@ if typing.TYPE_CHECKING:
     )
 
 __all__ = [
+    "StagedStandalonePrice",
     "StandalonePrice",
+    "StandalonePriceApplyStagedChangesAction",
+    "StandalonePriceChangeActiveAction",
     "StandalonePriceChangeValueAction",
     "StandalonePriceDraft",
     "StandalonePricePagedQueryResponse",
@@ -46,6 +49,32 @@ __all__ = [
     "StandalonePriceUpdate",
     "StandalonePriceUpdateAction",
 ]
+
+
+class StagedStandalonePrice(_BaseType):
+    """Staged changes on a Standalone Price. To update the `value` property of a Staged Standalone Price, use the corresponding [update action](ctp:api:type:StandalonePriceChangeValueAction). To apply all staged changes to the Standalone Price, use the `applyStagedChanges` update action."""
+
+    #: Money value of the StagedStandalonePrice.
+    value: "TypedMoney"
+    #: Discounted price for the StagedStandalonePrice.
+    discounted: "DiscountedPrice"
+
+    def __init__(self, *, value: "TypedMoney", discounted: "DiscountedPrice"):
+        self.value = value
+        self.discounted = discounted
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StagedStandalonePrice":
+        from ._schemas.standalone_price import StagedStandalonePriceSchema
+
+        return StagedStandalonePriceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StagedStandalonePriceSchema
+
+        return StagedStandalonePriceSchema().dump(self)
 
 
 class StandalonePrice(BaseResource):
@@ -76,6 +105,11 @@ class StandalonePrice(BaseResource):
     discounted: typing.Optional["DiscountedPrice"]
     #: Custom Fields for the StandalonePrice.
     custom: typing.Optional["CustomFields"]
+    #: Staged changes of the StandalonePrice. Only present if the StandalonePrice has staged changes.
+    staged: typing.Optional["StagedStandalonePrice"]
+    #: If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
+    #: If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+    active: bool
 
     def __init__(
         self,
@@ -96,7 +130,9 @@ class StandalonePrice(BaseResource):
         valid_until: typing.Optional[datetime.datetime] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
+        staged: typing.Optional["StagedStandalonePrice"] = None,
+        active: bool
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -111,6 +147,8 @@ class StandalonePrice(BaseResource):
         self.tiers = tiers
         self.discounted = discounted
         self.custom = custom
+        self.staged = staged
+        self.active = active
 
         super().__init__(
             id=id,
@@ -149,9 +187,9 @@ class StandalonePriceDraft(_BaseType):
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: Sets the product distribution [Channel](ctp:api:type:Channel) for which this Price is valid.
     channel: typing.Optional["ChannelResourceIdentifier"]
-    #: Sets the date from which the Price is valid.
+    #: Sets the date from which the Price is valid. Must be at least 1 ms earlier than `validUntil`.
     valid_from: typing.Optional[datetime.datetime]
-    #: Sets the date until the Price is valid.
+    #: Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`.
     valid_until: typing.Optional[datetime.datetime]
     #: Sets price tiers.
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
@@ -159,6 +197,9 @@ class StandalonePriceDraft(_BaseType):
     discounted: typing.Optional["DiscountedPriceDraft"]
     #: Custom Fields for the StandalonePrice.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
+    #: If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+    active: typing.Optional[bool]
 
     def __init__(
         self,
@@ -173,7 +214,8 @@ class StandalonePriceDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
         discounted: typing.Optional["DiscountedPriceDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        active: typing.Optional[bool] = None
     ):
         self.key = key
         self.sku = sku
@@ -186,6 +228,7 @@ class StandalonePriceDraft(_BaseType):
         self.tiers = tiers
         self.discounted = discounted
         self.custom = custom
+        self.active = active
 
         super().__init__()
 
@@ -334,6 +377,18 @@ class StandalonePriceUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "StandalonePriceUpdateAction":
+        if data["action"] == "applyStagedChanges":
+            from ._schemas.standalone_price import (
+                StandalonePriceApplyStagedChangesActionSchema,
+            )
+
+            return StandalonePriceApplyStagedChangesActionSchema().load(data)
+        if data["action"] == "changeActive":
+            from ._schemas.standalone_price import (
+                StandalonePriceChangeActiveActionSchema,
+            )
+
+            return StandalonePriceChangeActiveActionSchema().load(data)
         if data["action"] == "changeValue":
             from ._schemas.standalone_price import (
                 StandalonePriceChangeValueActionSchema,
@@ -365,14 +420,67 @@ class StandalonePriceUpdateAction(_BaseType):
         return StandalonePriceUpdateActionSchema().dump(self)
 
 
+class StandalonePriceApplyStagedChangesAction(StandalonePriceUpdateAction):
+    """Applies all staged changes to the StandalonePrice by overwriting all current values with the values in the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). After successfully applied, the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice) will be removed from the StandalonePrice. An `applyStagedChanges` update action on a StandalonePrice that does not contain any staged changes will return a `400 Bad Request` error. Applying staged changes successfully will produce the [StandalonePriceStagedChangesApplied](ctp:api:type:StandalonePriceStagedChangesAppliedMessage) Message."""
+
+    def __init__(self):
+
+        super().__init__(action="applyStagedChanges")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceApplyStagedChangesAction":
+        from ._schemas.standalone_price import (
+            StandalonePriceApplyStagedChangesActionSchema,
+        )
+
+        return StandalonePriceApplyStagedChangesActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import (
+            StandalonePriceApplyStagedChangesActionSchema,
+        )
+
+        return StandalonePriceApplyStagedChangesActionSchema().dump(self)
+
+
+class StandalonePriceChangeActiveAction(StandalonePriceUpdateAction):
+    """Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceActiveChangedMessage](ctp:api:type:StandalonePriceActiveChangedMessage)."""
+
+    #: New value to set for the `active` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+    active: bool
+
+    def __init__(self, *, active: bool):
+        self.active = active
+
+        super().__init__(action="changeActive")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceChangeActiveAction":
+        from ._schemas.standalone_price import StandalonePriceChangeActiveActionSchema
+
+        return StandalonePriceChangeActiveActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceChangeActiveActionSchema
+
+        return StandalonePriceChangeActiveActionSchema().dump(self)
+
+
 class StandalonePriceChangeValueAction(StandalonePriceUpdateAction):
-    """Produces the [StandalonePriceValueChangedMessage](ctp:api:type:StandalonePriceValueChangedMessage)."""
+    """Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceValueChangedMessage](ctp:api:type:StandalonePriceValueChangedMessage)."""
 
     #: New value to set. Must not be empty.
     value: "Money"
+    #: If set to `true` the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
+    staged: typing.Optional[bool]
 
-    def __init__(self, *, value: "Money"):
+    def __init__(self, *, value: "Money", staged: typing.Optional[bool] = None):
         self.value = value
+        self.staged = staged
 
         super().__init__(action="changeValue")
 

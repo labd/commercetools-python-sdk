@@ -217,6 +217,7 @@ class ShoppingListLineItem(_BaseType):
     #: [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
     product_type: "ProductTypeReference"
     quantity: int
+    #: A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
     variant: typing.Optional["ProductVariant"]
     variant_id: typing.Optional[int]
 

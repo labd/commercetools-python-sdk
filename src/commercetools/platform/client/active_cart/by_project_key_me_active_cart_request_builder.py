@@ -30,13 +30,14 @@ class ByProjectKeyMeActiveCartRequestBuilder:
     def get(
         self,
         *,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/me/active-cart",
-            params={},
+            params={"expand": expand},
             headers=headers,
             options=options,
         )

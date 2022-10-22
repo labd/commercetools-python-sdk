@@ -86,7 +86,7 @@ class ByProjectKeyStandalonePricesKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["StandalonePrice"]:
-        """Produces the [StandalonePriceDeletedMessage](ctp:api:type:StandalonePriceDeletedMessage)."""
+        """Produces the [StandalonePriceDeleted](ctp:api:type:StandalonePriceDeletedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/standalone-prices/key={self._key}",

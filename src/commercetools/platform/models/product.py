@@ -124,8 +124,18 @@ __all__ = [
 
 
 class Attribute(_BaseType):
+    #: Name of the Attribute.
     name: str
-    #: A valid JSON value, based on an AttributeDefinition.
+    #: The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+    #:
+    #: - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+    #:   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+    #:   or the complete objects as `value`.
+    #: - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+    #: - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+    #: - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+    #: - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+    #: - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
     value: typing.Any
 
     def __init__(self, *, name: str, value: typing.Any):
@@ -293,21 +303,32 @@ class FilteredFacetResult(FacetResult):
 
 
 class Product(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    """An abstract sellable good with a set of Attributes defined by a Product Type.
+    Products themselves are not sellable. Instead, they act as a parent structure for Product Variants.
+    Each Product must have at least one Product Variant, which is called the Master Variant.
+    A single Product representation contains the _current_ and the _staged_ representation of its product data.
+
+    """
+
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Product.
-    #: *Product keys are different from ProductVariant keys.*
+    #:
+    #: This is different from the `key` of a [ProductVariant](ctp:api:type:ProductVariant).
     key: typing.Optional[str]
+    #: The Product Type defining the Attributes of the Product. Cannot be changed.
     product_type: "ProductTypeReference"
-    #: The product data in the master catalog.
+    #: Contains the current and the staged representation of the product information.
     master_data: "ProductCatalogData"
+    #: The [TaxCategory](ctp:api:type:TaxCategory) of the Product.
     tax_category: typing.Optional["TaxCategoryReference"]
+    #: [State](ctp:api:type:State) of the Product.
     state: typing.Optional["StateReference"]
-    #: Statistics about the review ratings taken into account for this product.
+    #: Review statistics of the Product.
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
-    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    #: Type of Price to be used when looking up a price for the Product.
     price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
@@ -357,9 +378,15 @@ class Product(BaseResource):
 
 
 class ProductCatalogData(_BaseType):
+    """Contains the `current` and `staged` [ProductData](ctp:api:type:ProductData)."""
+
+    #: `true` if the Product is published.
     published: bool
+    #: Current (published) data of the Product.
     current: "ProductData"
+    #: Staged (unpublished) data of the Product.
     staged: "ProductData"
+    #: `true` if the `staged` data is different from the `current` data.
     has_staged_changes: bool
 
     def __init__(
@@ -390,22 +417,31 @@ class ProductCatalogData(_BaseType):
 
 
 class ProductData(_BaseType):
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    """Contains all the data of a Product and its Product Variants."""
+
+    #: Name of the Product.
     name: "LocalizedString"
+    #: [Categories](ctp:api:type:Category) assigned to the Product.
     categories: typing.List["CategoryReference"]
+    #: Numerical values to allow ordering of Products within a specified Category.
     category_order_hints: typing.Optional["CategoryOrderHints"]
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Description of the Product.
     description: typing.Optional["LocalizedString"]
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: User-defined identifier used in a deep-link URL for the Product.
+    #: Must be unique across a Project, but can be the same for Products in different [Locales](ctp:api:type:Locale).
+    #: Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
     slug: "LocalizedString"
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Title of the Product displayed in search results.
     meta_title: typing.Optional["LocalizedString"]
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Description of the Product displayed in search results below the meta title.
     meta_description: typing.Optional["LocalizedString"]
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Keywords that give additional information about the Product to search engines.
     meta_keywords: typing.Optional["LocalizedString"]
+    #: The Master Variant of the Product.
     master_variant: "ProductVariant"
+    #: Additional Product Variants.
     variants: typing.List["ProductVariant"]
+    #: Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a full text search.
     search_keywords: "SearchKeywords"
 
     def __init__(
@@ -450,35 +486,41 @@ class ProductData(_BaseType):
 
 
 class ProductDraft(_BaseType):
-    #: A predefined product type assigned to the product.
-    #: All products must have a product type.
+    #: The Product Type defining the Attributes for the Product. Cannot be changed later.
     product_type: "ProductTypeResourceIdentifier"
+    #: Name of the Product.
     name: "LocalizedString"
-    #: Human-readable identifiers usually used as deep-link URLs for the product.
-    #: A slug must be unique across a project, but a product can have the same slug for different languages.
-    #: Slugs have a maximum size of 256.
-    #: Valid characters are: alphabetic characters (`A-Z, a-z`), numeric characters (`0-9`), underscores (`_`) and hyphens (`-`).
+    #: User-defined identifier used in a deep-link URL for the Product.
+    #: It must be unique across a Project, but a Product can have the same slug in different [Locales](ctp:api:type:Locale).
+    #: It must match the pattern `[a-zA-Z0-9_\\-]{2,256}`.
     slug: "LocalizedString"
     #: User-defined unique identifier for the Product.
     key: typing.Optional[str]
+    #: Description of the Product.
     description: typing.Optional["LocalizedString"]
-    #: Categories assigned to the product.
+    #: Categories assigned to the Product.
     categories: typing.Optional[typing.List["CategoryResourceIdentifier"]]
+    #: Numerical values to allow ordering of Products within a specified Category.
     category_order_hints: typing.Optional["CategoryOrderHints"]
+    #: Title of the Product displayed in search results.
     meta_title: typing.Optional["LocalizedString"]
+    #: Description of the Product displayed in search results.
     meta_description: typing.Optional["LocalizedString"]
+    #: Keywords that give additional information about the Product to search engines.
     meta_keywords: typing.Optional["LocalizedString"]
-    #: The master product variant.
-    #: Required if the `variants` array has product variants.
+    #: The Product Variant to be the Master Variant for the Product. Required if `variants` are provided also.
     master_variant: typing.Optional["ProductVariantDraft"]
-    #: An array of related product variants.
+    #: The additional Product Variants for the Product.
     variants: typing.Optional[typing.List["ProductVariantDraft"]]
+    #: The Tax Category to be assigned to the Product.
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
     search_keywords: typing.Optional["SearchKeywords"]
+    #: State to be assigned to the Product.
     state: typing.Optional["StateResourceIdentifier"]
-    #: If `true`, the product is published immediately.
+    #: If `true`, the Product is published immediately to the current projection.
     publish: typing.Optional[bool]
-    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    #: Specifies the type of prices used when looking up a price for the Product.
     price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
@@ -535,27 +577,36 @@ class ProductDraft(_BaseType):
 
 
 class ProductPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Product](ctp:api:type:Product)."""
+
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Products](ctp:api:type:Product) matching the query.
     results: typing.List["Product"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Product"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -575,10 +626,7 @@ class ProductPagedQueryResponse(_BaseType):
 
 
 class ProductPriceModeEnum(enum.Enum):
-    """
-    This mode specifies which type of prices should be used when looking up the price of a product.
-
-    """
+    """This mode determines the type of Prices used for [Product Price Selection](ctp:api:type:ProductPriceSelection) as well as for [LineItem Price selection](ctp:api:type:CartLineItemPriceSelection)."""
 
     EMBEDDED = "Embedded"
     STANDALONE = "Standalone"
@@ -778,7 +826,7 @@ class ProductReference(Reference):
 
 
 class ProductResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
@@ -801,7 +849,9 @@ class ProductResourceIdentifier(ResourceIdentifier):
 
 
 class ProductUpdate(_BaseType):
+    #: Expected version of the Product on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Product.
     actions: typing.List["ProductUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["ProductUpdateAction"]):
@@ -1028,20 +1078,41 @@ class ProductUpdateAction(_BaseType):
 
 
 class ProductVariant(_BaseType):
-    #: A unique, sequential identifier of the ProductVariant within the Product.
+    """A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs."""
+
+    #: A unique, sequential identifier of the Product Variant within the Product.
     id: int
+    #: User-defined unique SKU of the Product Variant.
     sku: typing.Optional[str]
     #: User-defined unique identifier of the ProductVariant.
-    #: *ProductVariant keys are different from Product keys.*
+    #:
+    #: This is different from [Product](ctp:api:type:Product) `key`.
     key: typing.Optional[str]
+    #: The Embedded Prices of the Product Variant.
+    #: Cannot contain two Prices of the same Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
     prices: typing.Optional[typing.List["Price"]]
+    #: Attributes of the Product Variant.
     attributes: typing.Optional[typing.List["Attribute"]]
+    #: Only available when [Price selection](#price-selection) is used.
+    #: Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
     price: typing.Optional["Price"]
+    #: Images of the Product Variant.
     images: typing.Optional[typing.List["Image"]]
+    #: Media assets of the Product Variant.
     assets: typing.Optional[typing.List["Asset"]]
+    #: Set if the Product Variant is tracked by [Inventory](ctp:api:type:InventoryEntry).
+    #: Can be used as an optimization to reduce calls to the Inventory service.
+    #: May not contain the latest Inventory State (it is [eventually consistent](/general-concepts#eventual-consistency)).
     availability: typing.Optional["ProductVariantAvailability"]
+    #: `true` if the Product Variant matches the search query.
+    #: Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
     is_matching_variant: typing.Optional[bool]
+    #: Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
+    #: with [price selection](ctp:api:type:ProductPriceSelection).
+    #: Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
     scoped_price: typing.Optional["ScopedPrice"]
+    #: Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
+    #: with [price selection](ctp:api:type:ProductPriceSelection).
     scoped_price_discounted: typing.Optional[bool]
 
     def __init__(
@@ -1088,23 +1159,29 @@ class ProductVariant(_BaseType):
 
 
 class ProductVariantAvailability(_BaseType):
-    is_on_stock: typing.Optional[bool]
-    restockable_in_days: typing.Optional[int]
-    available_quantity: typing.Optional[int]
+    """The [InventoryEntry](ctp:api:type:InventoryEntry) information of the Product Variant. If there is a supply [Channel](ctp:api:type:Channel) for the InventoryEntry, then `channels` is returned. If not, then `isOnStock`, `restockableInDays`, and `quantityOnStock` are returned."""
+
+    #: For each [InventoryEntry](ctp:api:type:InventoryEntry) with a supply Channel, an entry is added to `channels`.
     channels: typing.Optional["ProductVariantChannelAvailabilityMap"]
+    #: Indicates whether a Product Variant is in stock.
+    is_on_stock: typing.Optional[bool]
+    #: Number of days to restock a Product Variant once it is out of stock.
+    restockable_in_days: typing.Optional[int]
+    #: Number of items of the Product Variant that are in stock.
+    available_quantity: typing.Optional[int]
 
     def __init__(
         self,
         *,
+        channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None,
         is_on_stock: typing.Optional[bool] = None,
         restockable_in_days: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None,
-        channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None
+        available_quantity: typing.Optional[int] = None
     ):
+        self.channels = channels
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
         self.available_quantity = available_quantity
-        self.channels = channels
 
         super().__init__()
 
@@ -1123,20 +1200,31 @@ class ProductVariantAvailability(_BaseType):
 
 
 class ProductVariantChannelAvailability(_BaseType):
+    #: Indicates whether a Product Variant is in stock in a specified [Channel](ctp:api:type:Channel).
     is_on_stock: typing.Optional[bool]
+    #: Number of days to restock a Product Variant once it is out of stock in a specified [Channel](ctp:api:type:Channel).
     restockable_in_days: typing.Optional[int]
+    #: Number of items of this Product Variant that are in stock in a specified [Channel](ctp:api:type:Channel).
     available_quantity: typing.Optional[int]
+    #: Unique identifier of the [InventoryEntry](ctp:api:type:InventoryEntry).
+    id: str
+    #: Current version of the [InventoryEntry](ctp:api:type:InventoryEntry).
+    version: int
 
     def __init__(
         self,
         *,
         is_on_stock: typing.Optional[bool] = None,
         restockable_in_days: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None
+        available_quantity: typing.Optional[int] = None,
+        id: str,
+        version: int
     ):
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
         self.available_quantity = available_quantity
+        self.id = id
+        self.version = version
 
         super().__init__()
 
@@ -1161,13 +1249,20 @@ class ProductVariantChannelAvailabilityMap(
 
 
 class ProductVariantDraft(_BaseType):
+    """Creates a Product Variant when included in the `masterVariant` and `variants` fields of the [ProductDraft](ctp:api:type:ProductDraft)."""
+
+    #: User-defined unique SKU of the Product Variant.
     sku: typing.Optional[str]
     #: User-defined unique identifier for the ProductVariant.
-    #: *ProductVariant keys are different from Product keys.*
     key: typing.Optional[str]
+    #: The Embedded Prices for the Product Variant.
+    #: Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
     prices: typing.Optional[typing.List["PriceDraft"]]
+    #: Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
     attributes: typing.Optional[typing.List["Attribute"]]
+    #: Images for the Product Variant.
     images: typing.Optional[typing.List["Image"]]
+    #: Media assets for the Product Variant.
     assets: typing.Optional[typing.List["AssetDraft"]]
 
     def __init__(
@@ -1222,7 +1317,9 @@ class RangeFacetResult(FacetResult):
 
 
 class SearchKeyword(_BaseType):
+    #: Text to return in the result of a [suggest query](ctp:api:type:ProductSuggestionsSuggestQuery).
     text: str
+    #: If no tokenizer is defined, the `text` is used as a single token.
     suggest_tokenizer: typing.Optional["SuggestTokenizer"]
 
     def __init__(
@@ -1278,6 +1375,9 @@ class SuggestTokenizer(_BaseType):
 
 
 class CustomTokenizer(SuggestTokenizer):
+    """Define arbitrary tokens that are used to match the input."""
+
+    #: Contains custom tokens.
     inputs: typing.List["str"]
 
     def __init__(self, *, inputs: typing.List["str"]):
@@ -1368,6 +1468,8 @@ class TermFacetResultType(enum.Enum):
 
 
 class WhitespaceTokenizer(SuggestTokenizer):
+    """Creates tokens by splitting the `text` field in [SearchKeyword](ctp:api:type:SearchKeyword) by whitespaces."""
+
     def __init__(self):
 
         super().__init__(type="whitespace")
@@ -1385,11 +1487,17 @@ class WhitespaceTokenizer(SuggestTokenizer):
 
 
 class ProductAddAssetAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged `assets` are updated. If `false`, both the current and staged `assets` are updated.
     staged: typing.Optional[bool]
+    #: Value to append.
     asset: "AssetDraft"
-    #: Position of the new asset inside the existing list (from `0` to the size of the list)
+    #: Position in `assets` where the Asset should be put. When specified, the value must be between `0` and the total number of Assets minus `1`.
     position: typing.Optional[int]
 
     def __init__(
@@ -1422,9 +1530,15 @@ class ProductAddAssetAction(ProductUpdateAction):
 
 
 class ProductAddExternalImageAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. Produces the [ProductImageAdded](/projects/messages#product-image-added) Message."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: Value to add to `images`.
     image: "Image"
+    #: If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1457,9 +1571,18 @@ class ProductAddExternalImageAction(ProductUpdateAction):
 
 
 class ProductAddPriceAction(ProductUpdateAction):
+    """Adds the given Price to the `prices` array of the [ProductVariant](ctp:api:type:ProductVariant).
+    Either `variantId` or `sku` is required.
+
+    """
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: Embedded Price to add to the Product Variant.
     price: "PriceDraft"
+    #: If `true`, only the staged `prices` is updated. If `false`, both the current and staged `prices` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1490,8 +1613,13 @@ class ProductAddPriceAction(ProductUpdateAction):
 
 
 class ProductAddToCategoryAction(ProductUpdateAction):
+    """Produces the [ProductAddedToCategory](/projects/messages#product-added-to-category) Message."""
+
+    #: The Category to add.
     category: "CategoryResourceIdentifier"
+    #: A string representing a number between 0 and 1. Must start with `0.` and cannot end with `0`. If empty, any existing value will be removed.
     order_hint: typing.Optional[str]
+    #: If `true`, only the staged `categories` and `categoryOrderHints` are updated. If `false`, both the current and staged `categories` and `categoryOrderHints` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1522,12 +1650,19 @@ class ProductAddToCategoryAction(ProductUpdateAction):
 
 
 class ProductAddVariantAction(ProductUpdateAction):
+    #: Value to set. Must be unique.
     sku: typing.Optional[str]
+    #: Value to set. Must be unique.
     key: typing.Optional[str]
+    #: Embedded Prices for the Product Variant.
     prices: typing.Optional[typing.List["PriceDraft"]]
+    #: Images for the Product Variant.
     images: typing.Optional[typing.List["Image"]]
+    #: Attributes for the Product Variant.
     attributes: typing.Optional[typing.List["Attribute"]]
+    #: If `true` the new Product Variant is only staged. If `false` the new Product Variant is both current and staged.
     staged: typing.Optional[bool]
+    #: Media assets for the Product Variant.
     assets: typing.Optional[typing.List["Asset"]]
 
     def __init__(
@@ -1566,11 +1701,19 @@ class ProductAddVariantAction(ProductUpdateAction):
 
 
 class ProductChangeAssetNameAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The Asset to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(
@@ -1607,9 +1750,15 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
 
 
 class ProductChangeAssetOrderAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
     staged: typing.Optional[bool]
+    #: All existing Asset `id`s of the ProductVariant in the desired new order.
     asset_order: typing.List["str"]
 
     def __init__(
@@ -1642,8 +1791,16 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
 
 
 class ProductChangeMasterVariantAction(ProductUpdateAction):
+    """Assigns the specified Product Variant to the `masterVariant` and removes the same from `variants` at the same time. The current Master Variant becomes part of the `variants` array.
+    Either `variantId` or `sku` is required.
+
+    """
+
+    #: The `id` of the ProductVariant to become the Master Variant.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to become the Master Variant.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Master Variant is changed. If `false`, both the current and staged Master Variant are changed.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1674,7 +1831,9 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
 
 
 class ProductChangeNameAction(ProductUpdateAction):
+    #: Value to set. Must not be empty.
     name: "LocalizedString"
+    #: If `true`, only the staged `name` is updated. If `false`, both the current and staged `name` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1700,9 +1859,11 @@ class ProductChangeNameAction(ProductUpdateAction):
 
 
 class ProductChangePriceAction(ProductUpdateAction):
-    #: ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
+    #: The `id` of the Embedded Price to update.
     price_id: str
+    #: Value to set.
     price: "PriceDraft"
+    #: If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1733,10 +1894,11 @@ class ProductChangePriceAction(ProductUpdateAction):
 
 
 class ProductChangeSlugAction(ProductUpdateAction):
-    #: Every slug must be unique across a project, but a product can have the same slug for different languages.
-    #: Allowed are alphabetic, numeric, underscore (`_`) and hyphen (`-`) characters.
-    #: Maximum size is `256`.
+    """Produces the [ProductSlugChanged](ctp:api:type:ProductSlugChangedMessage) Message."""
+
+    #: Value to set. Must not be empty. A Product can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project). Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
     slug: "LocalizedString"
+    #: If `true`, only the staged `slug` is updated. If `false`, both the current and staged `slug` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1786,11 +1948,17 @@ class ProductLegacySetSkuAction(ProductUpdateAction):
 
 
 class ProductMoveImageToPositionAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
-    #: The URL of the image
+    #: The URL of the image to update.
     image_url: str
+    #: Position in `images` where the image should be moved. Must be between `0` and the total number of images minus `1`.
     position: int
+    #: If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1825,6 +1993,11 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
 
 
 class ProductPublishAction(ProductUpdateAction):
+    """Publishes product data from the Product's staged projection to its current projection.
+    Produces the [ProductPublished](ctp:api:type:ProductPublishedMessage) Message.
+    """
+
+    #: `All` or `Prices`
     scope: typing.Optional["ProductPublishScope"]
 
     def __init__(self, *, scope: typing.Optional["ProductPublishScope"] = None):
@@ -1845,10 +2018,17 @@ class ProductPublishAction(ProductUpdateAction):
 
 
 class ProductRemoveAssetAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The Asset to remove must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is removed. If `false`, both the current and staged Asset is removed.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to remove.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to remove.
     asset_key: typing.Optional[str]
 
     def __init__(
@@ -1883,7 +2063,11 @@ class ProductRemoveAssetAction(ProductUpdateAction):
 
 
 class ProductRemoveFromCategoryAction(ProductUpdateAction):
+    """Produces the [ProductRemovedFromCategory](ctp:api:type:ProductRemovedFromCategoryMessage) Message."""
+
+    #: The Category to remove.
     category: "CategoryResourceIdentifier"
+    #: If `true`, only the staged `categories` and `categoryOrderHints` are removed. If `false`, both the current and staged `categories` and `categoryOrderHints` are removed.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1912,10 +2096,15 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
 
 
 class ProductRemoveImageAction(ProductUpdateAction):
+    """Removes a Product image and deletes it from the Content Delivery Network (external images are not deleted). Deletion from the CDN is not instant, which means the image file itself will stay available for some time after the deletion. Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
-    #: The URL of the image.
+    #: The URL of the image to remove.
     image_url: str
+    #: If `true`, only the staged image is removed. If `false`, both the current and staged image is removed.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -1948,8 +2137,9 @@ class ProductRemoveImageAction(ProductUpdateAction):
 
 
 class ProductRemovePriceAction(ProductUpdateAction):
-    #: ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
+    #: The `id` of the Embedded Price to remove.
     price_id: str
+    #: If `true`, only the staged Embedded Price is removed. If `false`, both the current and staged Embedded Price are removed.
     staged: typing.Optional[bool]
 
     def __init__(self, *, price_id: str, staged: typing.Optional[bool] = None):
@@ -1973,8 +2163,13 @@ class ProductRemovePriceAction(ProductUpdateAction):
 
 
 class ProductRemoveVariantAction(ProductUpdateAction):
+    """Either `id` or `sku` is required. Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message."""
+
+    #: The `id` of the ProductVariant to remove.
     id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to remove.
     sku: typing.Optional[str]
+    #: If `true`, only the staged ProductVariant is removed. If `false`, both the current and staged ProductVariant is removed.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2005,6 +2200,8 @@ class ProductRemoveVariantAction(ProductUpdateAction):
 
 
 class ProductRevertStagedChangesAction(ProductUpdateAction):
+    """Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChanges](ctp:api:type:ProductRevertedStagedChangesMessage) Message."""
+
     def __init__(self):
 
         super().__init__(action="revertStagedChanges")
@@ -2024,6 +2221,9 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
 
 
 class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
+    """Reverts the staged version of a ProductVariant to the current version."""
+
+    #: The `id` of the ProductVariant to revert.
     variant_id: int
 
     def __init__(self, *, variant_id: int):
@@ -2046,10 +2246,17 @@ class ProductRevertStagedVariantChangesAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomFieldAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -2094,10 +2301,17 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetAssetCustomTypeAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Asset.
@@ -2141,11 +2355,19 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetAssetDescriptionAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -2182,12 +2404,17 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetAssetKeyAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: str
-    #: User-defined identifier for the asset.
-    #: If left blank or set to `null`, the asset key is unset/removed.
+    #: Value to set. If empty, any existing value will be removed.
     asset_key: typing.Optional[str]
 
     def __init__(
@@ -2222,11 +2449,19 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
 
 
 class ProductSetAssetSourcesAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false` both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
+    #: Value to set.
     sources: typing.List["AssetSource"]
 
     def __init__(
@@ -2263,11 +2498,19 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
 
 
 class ProductSetAssetTagsAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required. The Asset to update must be specified using either `assetId` or `assetKey`."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
     staged: typing.Optional[bool]
+    #: The `id` of the Asset to update.
     asset_id: typing.Optional[str]
+    #: The `key` of the Asset to update.
     asset_key: typing.Optional[str]
+    #: Keywords for categorizing and organizing Assets.
     tags: typing.Optional[typing.List["str"]]
 
     def __init__(
@@ -2304,13 +2547,28 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
 
 
 class ProductSetAttributeAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: The name of the Attribute to set.
     name: str
-    #: If the attribute exists and the value is omitted or set to `null`, the attribute is removed.
-    #: If the attribute exists and a value is provided, the new value is applied.
-    #: If the attribute does not exist and a value is provided, it is added as a new attribute.
+    #: Value to set for the Attribute. If empty, any existing value will be removed.
+    #:
+    #: The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+    #:
+    #: - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+    #:   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+    #:   or the complete objects as `value`.
+    #: - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+    #: - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+    #: - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+    #: - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+    #: - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
     value: typing.Optional[typing.Any]
+    #: If `true`, only the staged Attribute is set. If `false`, both current and staged Attribute is set.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2345,9 +2603,26 @@ class ProductSetAttributeAction(ProductUpdateAction):
 
 
 class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
+    """Adds, removes, or changes a Product Attribute in all Product Variants at the same time.
+    This action is useful for setting values for Attributes with the [Constraint](ctp:api:type:AttributeConstraintEnum) `SameForAll`.
+    """
+
+    #: The name of the Attribute to set.
     name: str
-    #: The same update behavior as for Set Attribute applies.
+    #: Value to set for the Attributes. If empty, any existing value will be removed.
+    #:
+    #: The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+    #:
+    #: - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+    #:   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+    #:   or the complete objects as `value`.
+    #: - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+    #: - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+    #: - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+    #: - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+    #: - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
     value: typing.Optional[typing.Any]
+    #: If `true`, only the staged Attributes are set. If `false`, both the current and staged Attributes are set.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2378,8 +2653,11 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
 
 
 class ProductSetCategoryOrderHintAction(ProductUpdateAction):
+    #: The `id` of the Category to add the `orderHint`.
     category_id: str
+    #: A string representing a number between 0 and 1. Must start with `0.` and cannot end with `0`. If empty, any existing value will be removed.
     order_hint: typing.Optional[str]
+    #: If `true`, only the staged `categoryOrderHints` is updated. If `false`, both the current and staged `categoryOrderHints` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2410,7 +2688,9 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
 
 
 class ProductSetDescriptionAction(ProductUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
+    #: If `true`, only the staged `description` is updated. If `false`, both the current and staged `description` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2439,8 +2719,14 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
+    """Produces the [ProductPriceExternalDiscountSet](ctp:api:type:ProductPriceExternalDiscountSetMessage) Message."""
+
+    #: The `id` of the [Embedded Price](ctp:api:type:Price) to set the Discount.
     price_id: str
+    #: If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
     staged: typing.Optional[bool]
+    #: Value to set. If empty, any existing value will be removed.
+    #: The referenced [ProductDiscount](ctp:api:type:ProductDiscount) must have the Type `external`, be active, and its predicate must match the referenced Price.
     discounted: typing.Optional["DiscountedPriceDraft"]
 
     def __init__(
@@ -2471,13 +2757,17 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
 
 
 class ProductSetImageLabelAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
-    #: The URL of the image.
+    #: The URL of the image to set the label.
     image_url: str
-    #: The new image label.
-    #: If left blank or set to null, the label is removed.
+    #: Value to set. If empty, any existing value will be removed.
     label: typing.Optional[str]
+    #: If `true`, only the staged image is updated. If `false`, both the current and staged image is updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2512,8 +2802,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
 
 
 class ProductSetKeyAction(ProductUpdateAction):
-    #: User-specific unique identifier for the product.
-    #: If left blank or set to `null`, the product key is unset/removed.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -2534,7 +2823,9 @@ class ProductSetKeyAction(ProductUpdateAction):
 
 
 class ProductSetMetaDescriptionAction(ProductUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     meta_description: typing.Optional["LocalizedString"]
+    #: If `true`, only the staged `metaDescription` is updated. If `false`, both the current and staged `metaDescription` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2563,7 +2854,9 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
 
 
 class ProductSetMetaKeywordsAction(ProductUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     meta_keywords: typing.Optional["LocalizedString"]
+    #: If `true`, only the staged `metaKeywords` is updated. If `false`, both the current and staged `metaKeywords` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2592,7 +2885,9 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetMetaTitleAction(ProductUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     meta_title: typing.Optional["LocalizedString"]
+    #: If `true`, only the staged `metaTitle` is updated. If `false`, both the current and staged `metaTitle` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2621,7 +2916,9 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
 
 
 class ProductSetPriceModeAction(ProductUpdateAction):
-    #: Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+    """Controls whether the Prices of a Product Variant are embedded into the Product or standalone."""
+
+    #: Specifies which type of Prices should be used when looking up a price for the Product.
     price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(self, *, price_mode: typing.Optional["ProductPriceModeEnum"] = None):
@@ -2644,9 +2941,16 @@ class ProductSetPriceModeAction(ProductUpdateAction):
 
 
 class ProductSetPricesAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
+    #: The Embedded Prices to set.
+    #: Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
     prices: typing.List["PriceDraft"]
+    #: If `true`, only the staged ProductVariant is updated. If `false`, both the current and staged ProductVariant are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2679,12 +2983,14 @@ class ProductSetPricesAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
+    #: The `id` of the Embedded Price to update.
     price_id: str
+    #: If `true`, only the staged Embedded Price Custom Field is updated. If `false`, both the current and staged Embedded Price Custom Field are updated.
     staged: typing.Optional[bool]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2718,12 +3024,14 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
 
 
 class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
+    #: The `id` of the Embedded Price to update.
     price_id: str
+    #: If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price is updated.
     staged: typing.Optional[bool]
     #: Defines the [Type](ctp:api:type:Type) that extends the Price with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the Price.
+    #: If absent, any existing Type and Custom Fields are removed from the Embedded Price.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Price.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Embedded Price.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -2756,10 +3064,15 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
 
 
 class ProductSetProductVariantKeyAction(ProductUpdateAction):
+    """Either `variantId` or `sku` is required."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: typing.Optional[int]
+    #: The `sku` of the ProductVariant to update.
     sku: typing.Optional[str]
-    #: If left blank or set to `null`, the key is unset/removed.
+    #: Value to set. Must be unique. If empty, any existing value will be removed.
     key: typing.Optional[str]
+    #: If `true`, only the staged `key` is set. If `false`, both the current and staged `key` are set.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2792,7 +3105,9 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
 
 
 class ProductSetSearchKeywordsAction(ProductUpdateAction):
+    #: Value to set.
     search_keywords: "SearchKeywords"
+    #: If `true`, only the staged `searchKeywords` is updated. If `false`, both the current and staged `searchKeywords` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2818,10 +3133,13 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetSkuAction(ProductUpdateAction):
+    """SKU cannot be changed or removed if it is associated with an [InventoryEntry](ctp:api:type:InventoryEntry)."""
+
+    #: The `id` of the ProductVariant to update.
     variant_id: int
-    #: SKU must be unique.
-    #: If left blank or set to `null`, the sku is unset/removed.
+    #: Value to set. Must be unique. If empty, any existing value will be removed.
     sku: typing.Optional[str]
+    #: If `true`, only the staged `sku` is updated. If `false`, both the current and staged `sku` are updated.
     staged: typing.Optional[bool]
 
     def __init__(
@@ -2850,7 +3168,9 @@ class ProductSetSkuAction(ProductUpdateAction):
 
 
 class ProductSetTaxCategoryAction(ProductUpdateAction):
-    #: If left blank or set to `null`, the tax category is unset/removed.
+    """Cannot be staged. Published Products are immediately updated."""
+
+    #: The Tax Category to set. If empty, any existing value will be removed.
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
 
     def __init__(
@@ -2875,7 +3195,11 @@ class ProductSetTaxCategoryAction(ProductUpdateAction):
 
 
 class ProductTransitionStateAction(ProductUpdateAction):
+    """If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. Produces the [ProductStateTransition](ctp:api:type:ProductStateTransitionMessage) Message."""
+
+    #: The State to transition to. If there is no existing State, this must be an initial State.
     state: typing.Optional["StateResourceIdentifier"]
+    #: If `true`, validations are disabled.
     force: typing.Optional[bool]
 
     def __init__(
@@ -2904,6 +3228,8 @@ class ProductTransitionStateAction(ProductUpdateAction):
 
 
 class ProductUnpublishAction(ProductUpdateAction):
+    """Removes the current projection of the Product. The staged projection is unaffected. Unpublished Products only appear in query/search results with `staged=false`. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message."""
+
     def __init__(self):
 
         super().__init__(action="unpublish")

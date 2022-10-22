@@ -210,6 +210,23 @@ class QuoteRequestSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitKeyReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="businessUnit",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -236,6 +253,13 @@ class QuoteRequestDraftSchema(helpers.BaseSchema):
     comment = marshmallow.fields.String(allow_none=True, missing=None)
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -319,6 +343,9 @@ class QuoteRequestUpdateSchema(helpers.BaseSchema):
                 "setCustomType": helpers.absmod(
                     __name__, ".QuoteRequestSetCustomTypeActionSchema"
                 ),
+                "transitionState": helpers.absmod(
+                    __name__, ".QuoteRequestTransitionStateActionSchema"
+                ),
             },
         ),
         allow_none=True,
@@ -401,3 +428,23 @@ class QuoteRequestSetCustomTypeActionSchema(QuoteRequestUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.QuoteRequestSetCustomTypeAction(**data)
+
+
+class QuoteRequestTransitionStateActionSchema(QuoteRequestUpdateActionSchema):
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    force = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.QuoteRequestTransitionStateAction(**data)

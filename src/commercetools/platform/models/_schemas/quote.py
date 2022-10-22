@@ -81,6 +81,12 @@ class QuoteSchema(BaseResourceSchema):
         missing=None,
         data_key="sellerComment",
     )
+    buyer_comment = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="buyerComment",
+    )
     store = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
@@ -224,6 +230,23 @@ class QuoteSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
     )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitKeyReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="businessUnit",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -252,6 +275,13 @@ class QuoteDraftSchema(helpers.BaseSchema):
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        missing=None,
+    )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
@@ -329,11 +359,17 @@ class QuoteUpdateSchema(helpers.BaseSchema):
                 "changeQuoteState": helpers.absmod(
                     __name__, ".QuoteChangeQuoteStateActionSchema"
                 ),
+                "requestQuoteRenegotiation": helpers.absmod(
+                    __name__, ".QuoteRequestQuoteRenegotiationActionSchema"
+                ),
                 "setCustomField": helpers.absmod(
                     __name__, ".QuoteSetCustomFieldActionSchema"
                 ),
                 "setCustomType": helpers.absmod(
                     __name__, ".QuoteSetCustomTypeActionSchema"
+                ),
+                "transitionState": helpers.absmod(
+                    __name__, ".QuoteTransitionStateActionSchema"
                 ),
             },
         ),
@@ -376,6 +412,23 @@ class QuoteChangeQuoteStateActionSchema(QuoteUpdateActionSchema):
         return models.QuoteChangeQuoteStateAction(**data)
 
 
+class QuoteRequestQuoteRenegotiationActionSchema(QuoteUpdateActionSchema):
+    buyer_comment = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="buyerComment",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.QuoteRequestQuoteRenegotiationAction(**data)
+
+
 class QuoteSetCustomFieldActionSchema(QuoteUpdateActionSchema):
     name = marshmallow.fields.String(allow_none=True, missing=None)
     value = marshmallow.fields.Raw(
@@ -413,3 +466,23 @@ class QuoteSetCustomTypeActionSchema(QuoteUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.QuoteSetCustomTypeAction(**data)
+
+
+class QuoteTransitionStateActionSchema(QuoteUpdateActionSchema):
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        missing=None,
+    )
+    force = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.QuoteTransitionStateAction(**data)

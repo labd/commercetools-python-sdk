@@ -22,3 +22,4 @@ from .productdrafts import *  # noqa
 from .products import *  # noqa
 from .producttypes import *  # noqa
 from .productvariants import *  # noqa
+from .standalone_prices import *  # noqa

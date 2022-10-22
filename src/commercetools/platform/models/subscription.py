@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from .message import UserProvidedIdentifiers
 
 __all__ = [
+    "AwsAuthenticationMode",
     "AzureEventGridDestination",
     "AzureServiceBusDestination",
     "ChangeSubscription",
@@ -47,6 +48,13 @@ __all__ = [
     "SubscriptionUpdate",
     "SubscriptionUpdateAction",
 ]
+
+
+class AwsAuthenticationMode(enum.Enum):
+    """Defines the method of authentication for AWS SQS and SNS Destinations. Subscriptions with `Credentials` authentication mode are authenticated using an `accessKey` and `accessSecret` pair. Subscriptions with `IAM` authentication mode are authenticated using Identity and Access Management (IAM). In this case, the user `arn:aws:iam::362576667341:user/subscriptions` requires permissions to send messages to the queue or publish to the topic. This is the recommended `authenticationMode`, as it doesn't require additional key management."""
+
+    CREDENTIALS = "Credentials"
+    IAM = "IAM"
 
 
 class ChangeSubscription(_BaseType):
@@ -119,6 +127,7 @@ class DeliveryPayload(_BaseType):
     notification_type: str
     #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
     resource: "Reference"
+    #: User-provided identifiers present on the resource for which the Message is created. The value of the identifier stored in the Message corresponds to the one that was set on the resource at the version shown in `resourceVersion`.
     resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
     def __init__(
@@ -570,14 +579,26 @@ class ResourceUpdatedDeliveryPayload(DeliveryPayload):
 
 
 class SnsDestination(Destination):
-    access_key: str
-    access_secret: str
+    #: Only present if `authenticationMode` is set to `Credentials`.
+    access_key: typing.Optional[str]
+    #: Only present if `authenticationMode` is set to `Credentials`.
+    access_secret: typing.Optional[str]
     topic_arn: str
+    #: Defines the method of authentication for the SNS topic.
+    authentication_mode: typing.Optional["AwsAuthenticationMode"]
 
-    def __init__(self, *, access_key: str, access_secret: str, topic_arn: str):
+    def __init__(
+        self,
+        *,
+        access_key: typing.Optional[str] = None,
+        access_secret: typing.Optional[str] = None,
+        topic_arn: str,
+        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None
+    ):
         self.access_key = access_key
         self.access_secret = access_secret
         self.topic_arn = topic_arn
+        self.authentication_mode = authentication_mode
 
         super().__init__(type="SNS")
 
@@ -594,18 +615,29 @@ class SnsDestination(Destination):
 
 
 class SqsDestination(Destination):
-    access_key: str
-    access_secret: str
+    #: Only present if `authenticationMode` is set to `Credentials`.
+    access_key: typing.Optional[str]
+    #: Only present if `authenticationMode` is set to `Credentials`.
+    access_secret: typing.Optional[str]
     queue_url: str
     region: str
+    #: Defines the method of authentication for the SQS queue.
+    authentication_mode: typing.Optional["AwsAuthenticationMode"]
 
     def __init__(
-        self, *, access_key: str, access_secret: str, queue_url: str, region: str
+        self,
+        *,
+        access_key: typing.Optional[str] = None,
+        access_secret: typing.Optional[str] = None,
+        queue_url: str,
+        region: str,
+        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None
     ):
         self.access_key = access_key
         self.access_secret = access_secret
         self.queue_url = queue_url
         self.region = region
+        self.authentication_mode = authentication_mode
 
         super().__init__(type="SQS")
 

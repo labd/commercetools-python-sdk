@@ -93,7 +93,7 @@ class TaxRate(_BaseType):
 
 
 class PriceImport(ImportResource):
-    """The data representation for a price to be imported that is persisted as an [EmbeddedPrice](/../api/projects/products#embeddedprice) in the Project."""
+    """The data representation for a price to be imported that is persisted as an [Embedded Price](/../api/types#embedded-price) in the Project."""
 
     #: Maps to `Price.value`.
     value: "TypedMoney"
@@ -103,26 +103,26 @@ class PriceImport(ImportResource):
     valid_from: typing.Optional[datetime.datetime]
     #: Maps to `Price.validUntil`.
     valid_until: typing.Optional[datetime.datetime]
-    #: The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
+    #: The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the [Embedded Price](/../api/types#embedded-price) is associated.
     #: If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
-    #: The Reference to the [Channel](/../api/projects/channels#channel) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
+    #: The Reference to the [Channel](/../api/projects/channels#channel) with which the [Embedded Price](/../api/types#embedded-price) is associated.
     #: If referenced Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Channel is created.
     channel: typing.Optional["ChannelKeyReference"]
     #: Sets a discounted price from an external service.
     discounted: typing.Optional["DiscountedPrice"]
-    #: Only the [EmbeddedPrice](/../api/projects/products#embeddedprice) updates will be published to `staged` and `current` projection.
+    #: Only the [Embedded Price](/../api/types#embedded-price) updates will be published to `staged` and `current` projection.
     publish: typing.Optional[bool]
     #: The tiered prices for this price.
     tiers: typing.Optional[typing.List["PriceTier"]]
     #: The custom fields for this price.
     custom: typing.Optional["Custom"]
-    #: The ProductVariant in which this [EmbeddedPrice](/../api/projects/products#embeddedprice) is contained.
-    #: The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
+    #: The ProductVariant in which this [Embedded Price](/../api/types#embedded-price) is contained.
+    #: The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the [Embedded Price](/../api/types#embedded-price) is associated.
     #: If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
     product_variant: "ProductVariantKeyReference"
-    #: The Product in which the Product Variant containing this [EmbeddedPrice](/../api/projects/products#embeddedprice) is contained. Maps to `ProductVariant.product`.
-    #: The Reference to the [Product](/../api/projects/products#product) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
+    #: The Product in which the Product Variant containing this [Embedded Price](/../api/types#embedded-price) is contained. Maps to `ProductVariant.product`.
+    #: The Reference to the [Product](/../api/projects/products#product) with which the [Embedded Price](/../api/types#embedded-price) is associated.
     #: If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
     product: "ProductKeyReference"
 

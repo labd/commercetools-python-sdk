@@ -13,6 +13,7 @@ from ._abstract import _BaseType
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
+    from .business_unit import BusinessUnitKeyReference, BusinessUnitResourceIdentifier
     from .cart_discount import (
         CartDiscountReference,
         CartDiscountTarget,
@@ -60,14 +61,17 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "Cart",
     "CartAddCustomLineItemAction",
+    "CartAddCustomShippingMethodAction",
     "CartAddDiscountCodeAction",
     "CartAddItemShippingAddressAction",
     "CartAddLineItemAction",
     "CartAddPaymentAction",
+    "CartAddShippingMethodAction",
     "CartAddShoppingListAction",
     "CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction",
     "CartApplyDeltaToLineItemShippingDetailsTargetsAction",
     "CartChangeCustomLineItemMoneyAction",
+    "CartChangeCustomLineItemPriceModeAction",
     "CartChangeCustomLineItemQuantityAction",
     "CartChangeLineItemQuantityAction",
     "CartChangeTaxCalculationModeAction",
@@ -83,6 +87,7 @@ __all__ = [
     "CartRemoveItemShippingAddressAction",
     "CartRemoveLineItemAction",
     "CartRemovePaymentAction",
+    "CartRemoveShippingMethodAction",
     "CartResourceIdentifier",
     "CartSetAnonymousIdAction",
     "CartSetBillingAddressAction",
@@ -121,6 +126,8 @@ __all__ = [
     "CartSetShippingAddressAction",
     "CartSetShippingAddressCustomFieldAction",
     "CartSetShippingAddressCustomTypeAction",
+    "CartSetShippingCustomFieldAction",
+    "CartSetShippingCustomTypeAction",
     "CartSetShippingMethodAction",
     "CartSetShippingMethodTaxAmountAction",
     "CartSetShippingMethodTaxRateAction",
@@ -134,6 +141,8 @@ __all__ = [
     "CustomLineItem",
     "CustomLineItemDraft",
     "CustomLineItemImportDraft",
+    "CustomLineItemPriceMode",
+    "CustomShippingDraft",
     "DirectDiscount",
     "DirectDiscountDraft",
     "DiscountCodeInfo",
@@ -152,13 +161,18 @@ __all__ = [
     "LineItemDraft",
     "LineItemMode",
     "LineItemPriceMode",
+    "MethodTaxRate",
+    "MethodTaxedPrice",
     "ProductPublishScope",
     "ReplicaCartDraft",
     "RoundingMode",
     "ScoreShippingRateInput",
     "ScoreShippingRateInputDraft",
+    "Shipping",
+    "ShippingDraft",
     "ShippingInfo",
     "ShippingMethodState",
+    "ShippingMode",
     "ShippingRateInput",
     "ShippingRateInputDraft",
     "TaxCalculationMode",
@@ -182,6 +196,8 @@ class Cart(BaseResource):
     customer_email: typing.Optional[str]
     #: Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
     anonymous_id: typing.Optional[str]
+    #: The Business Unit the Cart belongs to.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
     store: typing.Optional["StoreKeyReference"]
     line_items: typing.List["LineItem"]
     custom_line_items: typing.List["CustomLineItem"]
@@ -192,10 +208,19 @@ class Cart(BaseResource):
     #: Will be set automatically in the `Platform` TaxMode.
     #: For the `External` tax mode it will be set  as soon as the external tax rates for all line items, custom line items, and shipping in the cart are set.
     taxed_price: typing.Optional["TaxedPrice"]
+    #: Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+    #: For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
+    taxed_shipping_price: typing.Optional["TaxedPrice"]
     cart_state: "CartState"
     #: The shipping address is used to determine the eligible shipping methods and rates as well as the tax rate of the line items.
     shipping_address: typing.Optional["Address"]
     billing_address: typing.Optional["Address"]
+    #: Indicates whether one or multiple Shipping Methods are added to the Cart.
+    shipping_mode: "ShippingMode"
+    #: Holds all shipping-related information per Shipping Method of a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    #:
+    #: It is automatically updated after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+    shipping: typing.List["Shipping"]
     inventory_mode: typing.Optional["InventoryMode"]
     tax_mode: "TaxMode"
     #: When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
@@ -209,6 +234,7 @@ class Cart(BaseResource):
     #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
     #: Used for product variant price selection.
     country: typing.Optional[str]
+    #: Shipping-related information of a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode).
     #: Set automatically once the ShippingMethod is set.
     shipping_info: typing.Optional["ShippingInfo"]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
@@ -246,14 +272,18 @@ class Cart(BaseResource):
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
         anonymous_id: typing.Optional[str] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
+        taxed_shipping_price: typing.Optional["TaxedPrice"] = None,
         cart_state: "CartState",
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
+        shipping_mode: "ShippingMode",
+        shipping: typing.List["Shipping"],
         inventory_mode: typing.Optional["InventoryMode"] = None,
         tax_mode: "TaxMode",
         tax_rounding_mode: "RoundingMode",
@@ -279,14 +309,18 @@ class Cart(BaseResource):
         self.customer_id = customer_id
         self.customer_email = customer_email
         self.anonymous_id = anonymous_id
+        self.business_unit = business_unit
         self.store = store
         self.line_items = line_items
         self.custom_line_items = custom_line_items
         self.total_price = total_price
         self.taxed_price = taxed_price
+        self.taxed_shipping_price = taxed_shipping_price
         self.cart_state = cart_state
         self.shipping_address = shipping_address
         self.billing_address = billing_address
+        self.shipping_mode = shipping_mode
+        self.shipping = shipping
         self.inventory_mode = inventory_mode
         self.tax_mode = tax_mode
         self.tax_rounding_mode = tax_rounding_mode
@@ -338,6 +372,8 @@ class CartDraft(_BaseType):
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
     #: Assigns the new cart to an anonymous session (the customer has not signed up/in yet).
     anonymous_id: typing.Optional[str]
+    #: The Business Unit the Cart belongs to.
+    business_unit: typing.Optional["BusinessUnitResourceIdentifier"]
     #: Assigns the new cart to the store.
     #: The store assignment can not be modified.
     store: typing.Optional["StoreResourceIdentifier"]
@@ -368,6 +404,13 @@ class CartDraft(_BaseType):
     delete_days_after_last_modification: typing.Optional[int]
     #: The default origin is `Customer`.
     origin: typing.Optional["CartOrigin"]
+    #: - If `Single`, only a single Shipping Method can be added to the Cart.
+    #: - If `Multiple`, multiple Shipping Methods can be added to the Cart.
+    shipping_mode: typing.Optional["ShippingMode"]
+    #: Custom Shipping Methods for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    custom_shipping: typing.Optional[typing.List["CustomShippingDraft"]]
+    #: Shipping Methods for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping: typing.Optional[typing.List["ShippingDraft"]]
     #: The shippingRateInput is used as an input to select a ShippingRatePriceTier.
     #: Based on the definition of ShippingRateInputType.
     #: If CartClassification is defined, it must be ClassificationShippingRateInput.
@@ -392,6 +435,7 @@ class CartDraft(_BaseType):
         customer_email: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         anonymous_id: typing.Optional[str] = None,
+        business_unit: typing.Optional["BusinessUnitResourceIdentifier"] = None,
         store: typing.Optional["StoreResourceIdentifier"] = None,
         country: typing.Optional[str] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
@@ -410,6 +454,9 @@ class CartDraft(_BaseType):
         locale: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         origin: typing.Optional["CartOrigin"] = None,
+        shipping_mode: typing.Optional["ShippingMode"] = None,
+        custom_shipping: typing.Optional[typing.List["CustomShippingDraft"]] = None,
+        shipping: typing.Optional[typing.List["ShippingDraft"]] = None,
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
         item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         discount_codes: typing.Optional[typing.List["str"]] = None
@@ -420,6 +467,7 @@ class CartDraft(_BaseType):
         self.customer_email = customer_email
         self.customer_group = customer_group
         self.anonymous_id = anonymous_id
+        self.business_unit = business_unit
         self.store = store
         self.country = country
         self.inventory_mode = inventory_mode
@@ -438,6 +486,9 @@ class CartDraft(_BaseType):
         self.locale = locale
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.origin = origin
+        self.shipping_mode = shipping_mode
+        self.custom_shipping = custom_shipping
+        self.shipping = shipping
         self.shipping_rate_input = shipping_rate_input
         self.item_shipping_addresses = item_shipping_addresses
         self.discount_codes = discount_codes
@@ -590,6 +641,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartAddCustomLineItemActionSchema
 
             return CartAddCustomLineItemActionSchema().load(data)
+        if data["action"] == "addCustomShippingMethod":
+            from ._schemas.cart import CartAddCustomShippingMethodActionSchema
+
+            return CartAddCustomShippingMethodActionSchema().load(data)
         if data["action"] == "addDiscountCode":
             from ._schemas.cart import CartAddDiscountCodeActionSchema
 
@@ -606,6 +661,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartAddPaymentActionSchema
 
             return CartAddPaymentActionSchema().load(data)
+        if data["action"] == "addShippingMethod":
+            from ._schemas.cart import CartAddShippingMethodActionSchema
+
+            return CartAddShippingMethodActionSchema().load(data)
         if data["action"] == "addShoppingList":
             from ._schemas.cart import CartAddShoppingListActionSchema
 
@@ -632,6 +691,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartChangeCustomLineItemMoneyActionSchema
 
             return CartChangeCustomLineItemMoneyActionSchema().load(data)
+        if data["action"] == "changeCustomLineItemPriceMode":
+            from ._schemas.cart import CartChangeCustomLineItemPriceModeActionSchema
+
+            return CartChangeCustomLineItemPriceModeActionSchema().load(data)
         if data["action"] == "changeCustomLineItemQuantity":
             from ._schemas.cart import CartChangeCustomLineItemQuantityActionSchema
 
@@ -676,6 +739,10 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartRemovePaymentActionSchema
 
             return CartRemovePaymentActionSchema().load(data)
+        if data["action"] == "removeShippingMethod":
+            from ._schemas.cart import CartRemoveShippingMethodActionSchema
+
+            return CartRemoveShippingMethodActionSchema().load(data)
         if data["action"] == "setAnonymousId":
             from ._schemas.cart import CartSetAnonymousIdActionSchema
 
@@ -826,6 +893,14 @@ class CartUpdateAction(_BaseType):
             from ._schemas.cart import CartSetShippingAddressCustomTypeActionSchema
 
             return CartSetShippingAddressCustomTypeActionSchema().load(data)
+        if data["action"] == "setShippingCustomField":
+            from ._schemas.cart import CartSetShippingCustomFieldActionSchema
+
+            return CartSetShippingCustomFieldActionSchema().load(data)
+        if data["action"] == "setShippingCustomType":
+            from ._schemas.cart import CartSetShippingCustomTypeActionSchema
+
+            return CartSetShippingCustomTypeActionSchema().load(data)
         if data["action"] == "setShippingMethod":
             from ._schemas.cart import CartSetShippingMethodActionSchema
 
@@ -884,6 +959,9 @@ class CustomLineItem(_BaseType):
     #: CustomLineItem fields that can be used in query predicates: `slug`, `name`, `quantity`,
     #: `money`, `state`, `discountedPricePerQuantity`.
     shipping_details: typing.Optional["ItemShippingDetails"]
+    #: Specifies whether Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    price_mode: "CustomLineItemPriceMode"
 
     def __init__(
         self,
@@ -902,7 +980,8 @@ class CustomLineItem(_BaseType):
             "DiscountedLineItemPriceForQuantity"
         ],
         custom: typing.Optional["CustomFields"] = None,
-        shipping_details: typing.Optional["ItemShippingDetails"] = None
+        shipping_details: typing.Optional["ItemShippingDetails"] = None,
+        price_mode: "CustomLineItemPriceMode"
     ):
         self.id = id
         self.name = name
@@ -917,6 +996,7 @@ class CustomLineItem(_BaseType):
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.custom = custom
         self.shipping_details = shipping_details
+        self.price_mode = price_mode
 
         super().__init__()
 
@@ -947,6 +1027,10 @@ class CustomLineItemDraft(_BaseType):
     custom: typing.Optional["CustomFieldsDraft"]
     #: Container for custom line item specific address(es).
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    #: - If `External`, Cart Discounts are not considered on the Custom Line Item.
+    price_mode: "CustomLineItemPriceMode"
 
     def __init__(
         self,
@@ -958,7 +1042,8 @@ class CustomLineItemDraft(_BaseType):
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        price_mode: "CustomLineItemPriceMode"
     ):
         self.name = name
         self.quantity = quantity
@@ -968,6 +1053,7 @@ class CustomLineItemDraft(_BaseType):
         self.external_tax_rate = external_tax_rate
         self.custom = custom
         self.shipping_details = shipping_details
+        self.price_mode = price_mode
 
         super().__init__()
 
@@ -981,6 +1067,74 @@ class CustomLineItemDraft(_BaseType):
         from ._schemas.cart import CustomLineItemDraftSchema
 
         return CustomLineItemDraftSchema().dump(self)
+
+
+class CustomLineItemPriceMode(enum.Enum):
+    STANDARD = "Standard"
+    EXTERNAL = "External"
+
+
+class CustomShippingDraft(_BaseType):
+    #: User-defined unique identifier of the custom Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    key: str
+    #: Name of the custom Shipping Method.
+    shipping_method_name: str
+    #: Determines the shipping rate and Tax Rate of the associated Line Items.
+    shipping_address: typing.Optional["BaseAddress"]
+    #: Determines the shipping price.
+    shipping_rate: "ShippingRateDraft"
+    #: Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #:
+    #: - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+    #: - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+    #:
+    #: The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+    shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
+    #: Tax Category used to determine a shipping Tax Rate if a Cart has the `Platform` [TaxMode](ctp:api:type:TaxMode).
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Tax Rate used to tax a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    external_tax_rate: typing.Optional[str]
+    #: Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+    #: It holds information on how items are delivered to customers.
+    deliveries: typing.List["Delivery"]
+    #: Custom Fields for the custom Shipping Method.
+    custom: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        shipping_method_name: str,
+        shipping_address: typing.Optional["BaseAddress"] = None,
+        shipping_rate: "ShippingRateDraft",
+        shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
+        external_tax_rate: typing.Optional[str] = None,
+        deliveries: typing.List["Delivery"],
+        custom: typing.Optional[str] = None
+    ):
+        self.key = key
+        self.shipping_method_name = shipping_method_name
+        self.shipping_address = shipping_address
+        self.shipping_rate = shipping_rate
+        self.shipping_rate_input = shipping_rate_input
+        self.tax_category = tax_category
+        self.external_tax_rate = external_tax_rate
+        self.deliveries = deliveries
+        self.custom = custom
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CustomShippingDraft":
+        from ._schemas.cart import CustomShippingDraftSchema
+
+        return CustomShippingDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CustomShippingDraftSchema
+
+        return CustomShippingDraftSchema().dump(self)
 
 
 class DirectDiscount(_BaseType):
@@ -1319,10 +1473,21 @@ class ItemShippingTarget(_BaseType):
     #: Only positive values are allowed.
     #: Using `0` as quantity is also possible in a draft object, but the element will not be present in the resulting ItemShippingDetails.
     quantity: int
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    #:
+    #: It connects Line Item quantities with individual shipping addresses.
+    shipping_method_key: typing.Optional[str]
 
-    def __init__(self, *, address_key: str, quantity: int):
+    def __init__(
+        self,
+        *,
+        address_key: str,
+        quantity: int,
+        shipping_method_key: typing.Optional[str] = None
+    ):
         self.address_key = address_key
         self.quantity = quantity
+        self.shipping_method_key = shipping_method_key
 
         super().__init__()
 
@@ -1361,6 +1526,8 @@ class LineItem(_BaseType):
     price: "Price"
     #: Set once the `taxRate` is set.
     taxed_price: typing.Optional["TaxedItemPrice"]
+    #: Taxed price of the Shipping Method that is set automatically after `perMethodTaxRate` is set.
+    taxed_price_portions: typing.List["MethodTaxedPrice"]
     #: The total price of this line item.
     #: If the line item is discounted, then the `totalPrice` is the DiscountedLineItemPriceForQuantity multiplied by `quantity`.
     #: Otherwise the total price is the product price multiplied by the `quantity`.
@@ -1376,6 +1543,10 @@ class LineItem(_BaseType):
     #: Will be set automatically in the `Platform` TaxMode once the shipping address is set is set.
     #: For the `External` tax mode the tax rate has to be set explicitly with the ExternalTaxRateDraft.
     tax_rate: typing.Optional["TaxRate"]
+    #: Tax Rate per Shipping Method that is automatically set after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to a Cart with the `Platform` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    #:
+    #: For the `External` [TaxMode](ctp:api:type:TaxMode), the Tax Rate must be set with [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
+    per_method_tax_rate: typing.List["MethodTaxRate"]
     #: The supply channel identifies the inventory entries that should be reserved.
     #: The channel has
     #: the role InventorySupply.
@@ -1387,6 +1558,9 @@ class LineItem(_BaseType):
     price_mode: "LineItemPriceMode"
     line_item_mode: "LineItemMode"
     custom: typing.Optional["CustomFields"]
+    #: Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+    #: Only present if inventory mode is different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
+    inventory_mode: typing.Optional["InventoryMode"]
     #: Container for line item specific address(es).
     shipping_details: typing.Optional["ItemShippingDetails"]
     #: The date when the LineItem was last modified by one of the following actions
@@ -1406,11 +1580,13 @@ class LineItem(_BaseType):
         variant: "ProductVariant",
         price: "Price",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
+        taxed_price_portions: typing.List["MethodTaxedPrice"],
         total_price: "TypedMoney",
         quantity: int,
         added_at: typing.Optional[datetime.datetime] = None,
         state: typing.List["ItemState"],
         tax_rate: typing.Optional["TaxRate"] = None,
+        per_method_tax_rate: typing.List["MethodTaxRate"],
         supply_channel: typing.Optional["ChannelReference"] = None,
         distribution_channel: typing.Optional["ChannelReference"] = None,
         discounted_price_per_quantity: typing.List[
@@ -1419,6 +1595,7 @@ class LineItem(_BaseType):
         price_mode: "LineItemPriceMode",
         line_item_mode: "LineItemMode",
         custom: typing.Optional["CustomFields"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetails"] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None
     ):
@@ -1431,17 +1608,20 @@ class LineItem(_BaseType):
         self.variant = variant
         self.price = price
         self.taxed_price = taxed_price
+        self.taxed_price_portions = taxed_price_portions
         self.total_price = total_price
         self.quantity = quantity
         self.added_at = added_at
         self.state = state
         self.tax_rate = tax_rate
+        self.per_method_tax_rate = per_method_tax_rate
         self.supply_channel = supply_channel
         self.distribution_channel = distribution_channel
         self.discounted_price_per_quantity = discounted_price_per_quantity
         self.price_mode = price_mode
         self.line_item_mode = line_item_mode
         self.custom = custom
+        self.inventory_mode = inventory_mode
         self.shipping_details = shipping_details
         self.last_modified_at = last_modified_at
 
@@ -1485,6 +1665,9 @@ class LineItemDraft(_BaseType):
     external_price: typing.Optional["Money"]
     #: Sets the line item `price` and `totalPrice` to the given values and sets the line item `priceMode` to `ExternalTotal` LineItemPriceMode.
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+    #: Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+    #: Set only if inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
+    inventory_mode: typing.Optional["InventoryMode"]
     #: Container for line item specific address(es).
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
@@ -1502,6 +1685,7 @@ class LineItemDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.product_id = product_id
@@ -1515,6 +1699,7 @@ class LineItemDraft(_BaseType):
         self.custom = custom
         self.external_price = external_price
         self.external_total_price = external_total_price
+        self.inventory_mode = inventory_mode
         self.shipping_details = shipping_details
 
         super().__init__()
@@ -1540,6 +1725,61 @@ class LineItemPriceMode(enum.Enum):
     PLATFORM = "Platform"
     EXTERNAL_TOTAL = "ExternalTotal"
     EXTERNAL_PRICE = "ExternalPrice"
+
+
+class MethodTaxRate(_BaseType):
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_method_key: str
+    #: Tax Rate for the Shipping Method.
+    tax_rate: typing.Optional["TaxRate"]
+
+    def __init__(
+        self, *, shipping_method_key: str, tax_rate: typing.Optional["TaxRate"] = None
+    ):
+        self.shipping_method_key = shipping_method_key
+        self.tax_rate = tax_rate
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MethodTaxRate":
+        from ._schemas.cart import MethodTaxRateSchema
+
+        return MethodTaxRateSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import MethodTaxRateSchema
+
+        return MethodTaxRateSchema().dump(self)
+
+
+class MethodTaxedPrice(_BaseType):
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_method_key: str
+    #: Taxed price for the Shipping Method.
+    taxed_price: typing.Optional["TaxedItemPrice"]
+
+    def __init__(
+        self,
+        *,
+        shipping_method_key: str,
+        taxed_price: typing.Optional["TaxedItemPrice"] = None
+    ):
+        self.shipping_method_key = shipping_method_key
+        self.taxed_price = taxed_price
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MethodTaxedPrice":
+        from ._schemas.cart import MethodTaxedPriceSchema
+
+        return MethodTaxedPriceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import MethodTaxedPriceSchema
+
+        return MethodTaxedPriceSchema().dump(self)
 
 
 class ReplicaCartDraft(_BaseType):
@@ -1574,6 +1814,106 @@ class RoundingMode(enum.Enum):
     HALF_EVEN = "HalfEven"
     HALF_UP = "HalfUp"
     HALF_DOWN = "HalfDown"
+
+
+class Shipping(_BaseType):
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: str
+    #: Automatically set when the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+    shipping_info: "ShippingInfo"
+    #: Determines the shipping rates and Tax Rates of the associated Line Item quantities.
+    shipping_address: "Address"
+    #: Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #:
+    #: - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+    #: - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+    shipping_rate_input: typing.Optional["ShippingRateInput"]
+    #: Custom Fields of Shipping.
+    shipping_custom_fields: typing.Optional["CustomFields"]
+
+    def __init__(
+        self,
+        *,
+        shipping_key: str,
+        shipping_info: "ShippingInfo",
+        shipping_address: "Address",
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        shipping_custom_fields: typing.Optional["CustomFields"] = None
+    ):
+        self.shipping_key = shipping_key
+        self.shipping_info = shipping_info
+        self.shipping_address = shipping_address
+        self.shipping_rate_input = shipping_rate_input
+        self.shipping_custom_fields = shipping_custom_fields
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Shipping":
+        from ._schemas.cart import ShippingSchema
+
+        return ShippingSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import ShippingSchema
+
+        return ShippingSchema().dump(self)
+
+
+class ShippingDraft(_BaseType):
+    """Wraps all shipping-related information (such as address, rate, deliveries) per Shipping Method for Carts with multiple Shipping Methods."""
+
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    key: str
+    #: Shipping Methods added to the Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_method: typing.Optional["ShippingMethodReference"]
+    #: Determines the shipping rate and Tax Rate of the associated Line Items.
+    shipping_address: typing.Optional["BaseAddress"]
+    #: Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #:
+    #: - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+    #: - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+    #:
+    #: The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+    shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
+    #: Tax Rate used for taxing a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    external_tax_rate: typing.Optional[str]
+    #: Holds information on how items are delivered to customers.
+    deliveries: typing.List["Delivery"]
+    #: Custom Fields for Shipping.
+    custom: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        key: str,
+        shipping_method: typing.Optional["ShippingMethodReference"] = None,
+        shipping_address: typing.Optional["BaseAddress"] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
+        external_tax_rate: typing.Optional[str] = None,
+        deliveries: typing.List["Delivery"],
+        custom: typing.Optional[str] = None
+    ):
+        self.key = key
+        self.shipping_method = shipping_method
+        self.shipping_address = shipping_address
+        self.shipping_rate_input = shipping_rate_input
+        self.external_tax_rate = external_tax_rate
+        self.deliveries = deliveries
+        self.custom = custom
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ShippingDraft":
+        from ._schemas.cart import ShippingDraftSchema
+
+        return ShippingDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import ShippingDraftSchema
+
+        return ShippingDraftSchema().dump(self)
 
 
 class ShippingInfo(_BaseType):
@@ -1640,6 +1980,11 @@ class ShippingMethodState(enum.Enum):
     MATCHES_CART = "MatchesCart"
 
 
+class ShippingMode(enum.Enum):
+    SINGLE = "Single"
+    MULTIPLE = "Multiple"
+
+
 class ShippingRateInput(_BaseType):
     type: str
 
@@ -1691,9 +2036,9 @@ class ClassificationShippingRateInput(ShippingRateInput):
 
 
 class ScoreShippingRateInput(ShippingRateInput):
-    score: float
+    score: int
 
-    def __init__(self, *, score: float):
+    def __init__(self, *, score: int):
         self.score = score
 
         super().__init__(type="Score")
@@ -1762,9 +2107,9 @@ class ClassificationShippingRateInputDraft(ShippingRateInputDraft):
 
 
 class ScoreShippingRateInputDraft(ShippingRateInputDraft):
-    score: float
+    score: int
 
-    def __init__(self, *, score: float):
+    def __init__(self, *, score: int):
         self.score = score
 
         super().__init__(type="Score")
@@ -1968,6 +2313,10 @@ class CartAddCustomLineItemAction(CartUpdateAction):
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+    #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    #: - If `External`, Cart Discounts are not considered on the Custom Line Item.
+    price_mode: typing.Optional["CustomLineItemPriceMode"]
 
     def __init__(
         self,
@@ -1978,7 +2327,8 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         slug: str,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
+        price_mode: typing.Optional["CustomLineItemPriceMode"] = None
     ):
         self.money = money
         self.name = name
@@ -1987,6 +2337,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         self.tax_category = tax_category
         self.custom = custom
         self.external_tax_rate = external_tax_rate
+        self.price_mode = price_mode
 
         super().__init__(action="addCustomLineItem")
 
@@ -2002,6 +2353,71 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         from ._schemas.cart import CartAddCustomLineItemActionSchema
 
         return CartAddCustomLineItemActionSchema().dump(self)
+
+
+class CartAddCustomShippingMethodAction(CartUpdateAction):
+    #: User-defined unique identifier of the custom Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: str
+    #: Name of the custom Shipping Method.
+    shipping_method_name: str
+    #: Determines the shipping rate and Tax Rate of the associated Line Items.
+    shipping_address: "BaseAddress"
+    #: Determines the shipping price.
+    shipping_rate: "ShippingRateDraft"
+    #: Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #:
+    #: - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+    #: - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+    #:
+    #: The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+    shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
+    #: Tax Category used to determine a shipping Tax Rate if a Cart has the `Platform` [TaxMode](ctp:api:type:TaxMode).
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Tax Rate used to tax a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    external_tax_rate: typing.Optional[str]
+    #: Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+    #: It holds information on how items are delivered to customers.
+    deliveries: typing.List["Delivery"]
+    #: Custom Fields for the custom Shipping Method.
+    custom: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        shipping_key: str,
+        shipping_method_name: str,
+        shipping_address: "BaseAddress",
+        shipping_rate: "ShippingRateDraft",
+        shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
+        external_tax_rate: typing.Optional[str] = None,
+        deliveries: typing.List["Delivery"],
+        custom: typing.Optional[str] = None
+    ):
+        self.shipping_key = shipping_key
+        self.shipping_method_name = shipping_method_name
+        self.shipping_address = shipping_address
+        self.shipping_rate = shipping_rate
+        self.shipping_rate_input = shipping_rate_input
+        self.tax_category = tax_category
+        self.external_tax_rate = external_tax_rate
+        self.deliveries = deliveries
+        self.custom = custom
+
+        super().__init__(action="addCustomShippingMethod")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartAddCustomShippingMethodAction":
+        from ._schemas.cart import CartAddCustomShippingMethodActionSchema
+
+        return CartAddCustomShippingMethodActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartAddCustomShippingMethodActionSchema
+
+        return CartAddCustomShippingMethodActionSchema().dump(self)
 
 
 class CartAddDiscountCodeAction(CartUpdateAction):
@@ -2126,6 +2542,66 @@ class CartAddPaymentAction(CartUpdateAction):
         from ._schemas.cart import CartAddPaymentActionSchema
 
         return CartAddPaymentActionSchema().dump(self)
+
+
+class CartAddShippingMethodAction(CartUpdateAction):
+    """This update action fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error if the referenced shipping method has a predicate that does not match the Cart."""
+
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: str
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    shipping_method: "ShippingMethodReference"
+    #: Determines the shipping rate and Tax Rate of the Line Items.
+    shipping_address: "BaseAddress"
+    #: Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #:
+    #: - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+    #: - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+    #:
+    #: The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+    shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
+    #: Tax Rate used to tax a shipping expense if a Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    external_tax_rate: typing.Optional[str]
+    #: Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+    #: It holds information on how items are delivered to customers.
+    deliveries: typing.List["Delivery"]
+    #: Custom Fields for the Shipping Method.
+    custom: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        shipping_key: str,
+        shipping_method: "ShippingMethodReference",
+        shipping_address: "BaseAddress",
+        shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
+        external_tax_rate: typing.Optional[str] = None,
+        deliveries: typing.List["Delivery"],
+        custom: typing.Optional[str] = None
+    ):
+        self.shipping_key = shipping_key
+        self.shipping_method = shipping_method
+        self.shipping_address = shipping_address
+        self.shipping_rate_input = shipping_rate_input
+        self.external_tax_rate = external_tax_rate
+        self.deliveries = deliveries
+        self.custom = custom
+
+        super().__init__(action="addShippingMethod")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartAddShippingMethodAction":
+        from ._schemas.cart import CartAddShippingMethodActionSchema
+
+        return CartAddShippingMethodActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartAddShippingMethodActionSchema
+
+        return CartAddShippingMethodActionSchema().dump(self)
 
 
 class CartAddShoppingListAction(CartUpdateAction):
@@ -2255,6 +2731,32 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
         from ._schemas.cart import CartChangeCustomLineItemMoneyActionSchema
 
         return CartChangeCustomLineItemMoneyActionSchema().dump(self)
+
+
+class CartChangeCustomLineItemPriceModeAction(CartUpdateAction):
+    #: ID of the Custom Line Item to be updated.
+    custom_line_item_id: str
+    #: New value to set.
+    mode: "CustomLineItemPriceMode"
+
+    def __init__(self, *, custom_line_item_id: str, mode: "CustomLineItemPriceMode"):
+        self.custom_line_item_id = custom_line_item_id
+        self.mode = mode
+
+        super().__init__(action="changeCustomLineItemPriceMode")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartChangeCustomLineItemPriceModeAction":
+        from ._schemas.cart import CartChangeCustomLineItemPriceModeActionSchema
+
+        return CartChangeCustomLineItemPriceModeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartChangeCustomLineItemPriceModeActionSchema
+
+        return CartChangeCustomLineItemPriceModeActionSchema().dump(self)
 
 
 class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
@@ -2536,6 +3038,29 @@ class CartRemovePaymentAction(CartUpdateAction):
         from ._schemas.cart import CartRemovePaymentActionSchema
 
         return CartRemovePaymentActionSchema().dump(self)
+
+
+class CartRemoveShippingMethodAction(CartUpdateAction):
+    #: User-defined unique identifier of the Shipping Method to remove in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: str
+
+    def __init__(self, *, shipping_key: str):
+        self.shipping_key = shipping_key
+
+        super().__init__(action="removeShippingMethod")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartRemoveShippingMethodAction":
+        from ._schemas.cart import CartRemoveShippingMethodActionSchema
+
+        return CartRemoveShippingMethodActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartRemoveShippingMethodActionSchema
+
+        return CartRemoveShippingMethodActionSchema().dump(self)
 
 
 class CartSetAnonymousIdAction(CartUpdateAction):
@@ -3594,6 +4119,79 @@ class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
         return CartSetShippingAddressCustomTypeActionSchema().dump(self)
 
 
+class CartSetShippingCustomFieldAction(CartUpdateAction):
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Name of the [Custom Field](/../api/projects/custom-fields).
+    name: str
+    #: If `value` is absent or `null`, this field will be removed if it exists.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+    #: If `value` is provided, it is set for the field defined by `name`.
+    value: typing.Optional[typing.Any]
+
+    def __init__(
+        self,
+        *,
+        shipping_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
+    ):
+        self.shipping_key = shipping_key
+        self.name = name
+        self.value = value
+
+        super().__init__(action="setShippingCustomField")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetShippingCustomFieldAction":
+        from ._schemas.cart import CartSetShippingCustomFieldActionSchema
+
+        return CartSetShippingCustomFieldActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetShippingCustomFieldActionSchema
+
+        return CartSetShippingCustomFieldActionSchema().dump(self)
+
+
+class CartSetShippingCustomTypeAction(CartUpdateAction):
+    #: User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the `shippingAddress`.
+    type: typing.Optional["TypeResourceIdentifier"]
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingAddress`.
+    fields: typing.Optional["FieldContainer"]
+
+    def __init__(
+        self,
+        *,
+        shipping_key: typing.Optional[str] = None,
+        type: typing.Optional["TypeResourceIdentifier"] = None,
+        fields: typing.Optional["FieldContainer"] = None
+    ):
+        self.shipping_key = shipping_key
+        self.type = type
+        self.fields = fields
+
+        super().__init__(action="setShippingCustomType")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartSetShippingCustomTypeAction":
+        from ._schemas.cart import CartSetShippingCustomTypeActionSchema
+
+        return CartSetShippingCustomTypeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart import CartSetShippingCustomTypeActionSchema
+
+        return CartSetShippingCustomTypeActionSchema().dump(self)
+
+
 class CartSetShippingMethodAction(CartUpdateAction):
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
@@ -3736,6 +4334,10 @@ class CustomLineItemImportDraft(_BaseType):
     #: The custom fields.
     custom: typing.Optional["CustomFieldsDraft"]
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    #: - If `External`, Cart Discounts are not considered on the Custom Line Item.
+    price_mode: "CustomLineItemPriceMode"
 
     def __init__(
         self,
@@ -3748,7 +4350,8 @@ class CustomLineItemImportDraft(_BaseType):
         tax_rate: typing.Optional["TaxRate"] = None,
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        price_mode: "CustomLineItemPriceMode"
     ):
         self.name = name
         self.quantity = quantity
@@ -3759,6 +4362,7 @@ class CustomLineItemImportDraft(_BaseType):
         self.tax_category = tax_category
         self.custom = custom
         self.shipping_details = shipping_details
+        self.price_mode = price_mode
 
         super().__init__()
 
@@ -3777,5 +4381,7 @@ class CustomLineItemImportDraft(_BaseType):
 
 
 class ProductPublishScope(enum.Enum):
+    """The scope controls which part of the product information is published."""
+
     ALL = "All"
     PRICES = "Prices"

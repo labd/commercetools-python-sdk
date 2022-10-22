@@ -14,6 +14,7 @@ from .cart import InventoryMode, RoundingMode, TaxCalculationMode, TaxMode
 from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
+    from .business_unit import BusinessUnitKeyReference
     from .cart import (
         CustomLineItem,
         DirectDiscount,
@@ -32,6 +33,7 @@ if typing.TYPE_CHECKING:
     from .order import PaymentInfo
     from .quote_request import QuoteRequestReference
     from .staged_quote import StagedQuoteReference, StagedQuoteResourceIdentifier
+    from .state import StateReference, StateResourceIdentifier
     from .store import StoreKeyReference
     from .type import (
         CustomFields,
@@ -46,10 +48,12 @@ __all__ = [
     "QuoteDraft",
     "QuotePagedQueryResponse",
     "QuoteReference",
+    "QuoteRequestQuoteRenegotiationAction",
     "QuoteResourceIdentifier",
     "QuoteSetCustomFieldAction",
     "QuoteSetCustomTypeAction",
     "QuoteState",
+    "QuoteTransitionStateAction",
     "QuoteUpdate",
     "QuoteUpdateAction",
 ]
@@ -62,26 +66,28 @@ class Quote(BaseResource):
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: The Quote Request related to this Quote.
+    #: Quote Request related to the Quote.
     quote_request: "QuoteRequestReference"
-    #: The Staged Quote related to this Quote.
+    #: Staged Quote related to the Quote.
     staged_quote: "StagedQuoteReference"
-    #: The [Buyer](/../api/quotes-overview#buyer) who requested this Quote.
+    #: The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
     customer: typing.Optional["CustomerReference"]
     #: Set automatically when `customer` is set and the Customer is a member of a Customer Group.
     #: Used for Product Variant price selection.
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Expiration date for the Quote.
     valid_to: typing.Optional[datetime.datetime]
-    #: The text message included in the offer from the [Seller](/../api/quotes-overview#seller).
+    #: Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
     seller_comment: typing.Optional[str]
+    #: Message from the [Buyer](/../api/quotes-overview#buyer) included in the [renegotiation request](ctp:api:type:QuoteRequestQuoteRenegotiationAction).
+    buyer_comment: typing.Optional[str]
     #: The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
     store: typing.Optional["StoreKeyReference"]
     #: The Line Items for which the Quote is requested.
     line_items: typing.List["LineItem"]
     #: The Custom Line Items for which the Quote is requested.
     custom_line_items: typing.List["CustomLineItem"]
-    #: The sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
+    #: Sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
     #: `totalPrice` may or may not include the taxes: it depends on the taxRate.includedInPrice property of each price.
     total_price: "TypedMoney"
     #: Not set until the shipping address is set.
@@ -91,11 +97,11 @@ class Quote(BaseResource):
     #: Used to determine the eligible [ShippingMethods](ctp:api:type:ShippingMethod)
     #: and rates as well as the tax rate of the Line Items.
     shipping_address: typing.Optional["Address"]
-    #: The address used for invoicing.
+    #: Address used for invoicing.
     billing_address: typing.Optional["Address"]
-    #: The inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+    #: Inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
     inventory_mode: typing.Optional["InventoryMode"]
-    #: The tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+    #: Tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
     tax_mode: "TaxMode"
     #: When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
     tax_rounding_mode: "RoundingMode"
@@ -105,7 +111,7 @@ class Quote(BaseResource):
     country: typing.Optional[str]
     #: Set automatically once the [ShippingMethod](ctp:api:type:ShippingMethod) is set.
     shipping_info: typing.Optional["ShippingInfo"]
-    #: Log of payment transactions related to this quote.
+    #: Log of payment transactions related to the Quote.
     payment_info: typing.Optional["PaymentInfo"]
     #: Used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
     shipping_rate_input: typing.Optional["ShippingRateInput"]
@@ -114,10 +120,15 @@ class Quote(BaseResource):
     #: The addresses captured here are not used to determine eligible shipping methods or the applicable tax rate.
     #: Only the cart's `shippingAddress` is used for this.
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
-    #: Discounts only valid for this Quote, those cannot be associated to any other Cart or Order.
+    #: Discounts that are only valid for the Quote and cannot be associated to any other Cart or Order.
     direct_discounts: typing.Optional[typing.List["DirectDiscount"]]
-    #: Custom Fields of this Quote.
+    #: Custom Fields on the Quote.
     custom: typing.Optional["CustomFields"]
+    #: [State](ctp:api:type:State) of the Quote.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
+    #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
 
     def __init__(
         self,
@@ -135,6 +146,7 @@ class Quote(BaseResource):
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         valid_to: typing.Optional[datetime.datetime] = None,
         seller_comment: typing.Optional[str] = None,
+        buyer_comment: typing.Optional[str] = None,
         store: typing.Optional["StoreKeyReference"] = None,
         line_items: typing.List["LineItem"],
         custom_line_items: typing.List["CustomLineItem"],
@@ -152,7 +164,9 @@ class Quote(BaseResource):
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         direct_discounts: typing.Optional[typing.List["DirectDiscount"]] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
+        state: typing.Optional["StateReference"] = None,
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -163,6 +177,7 @@ class Quote(BaseResource):
         self.customer_group = customer_group
         self.valid_to = valid_to
         self.seller_comment = seller_comment
+        self.buyer_comment = buyer_comment
         self.store = store
         self.line_items = line_items
         self.custom_line_items = custom_line_items
@@ -181,6 +196,8 @@ class Quote(BaseResource):
         self.item_shipping_addresses = item_shipping_addresses
         self.direct_discounts = direct_discounts
         self.custom = custom
+        self.state = state
+        self.business_unit = business_unit
 
         super().__init__(
             id=id,
@@ -202,7 +219,7 @@ class Quote(BaseResource):
 
 
 class QuoteDraft(_BaseType):
-    #: The StagedQuote from which this Quote is created.
+    #: StagedQuote from which the Quote is created.
     staged_quote: "StagedQuoteResourceIdentifier"
     #: Current version of the StagedQuote.
     staged_quote_version: int
@@ -213,6 +230,9 @@ class QuoteDraft(_BaseType):
     #: - If specified, the Custom Fields are merged with the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) and added to the Quote.
     #: - If empty, the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) are added to the Quote automatically.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: [State](ctp:api:type:State) of the Quote.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
 
     def __init__(
         self,
@@ -220,12 +240,14 @@ class QuoteDraft(_BaseType):
         staged_quote: "StagedQuoteResourceIdentifier",
         staged_quote_version: int,
         key: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        state: typing.Optional["StateReference"] = None
     ):
         self.staged_quote = staged_quote
         self.staged_quote_version = staged_quote_version
         self.key = key
         self.custom = custom
+        self.state = state
 
         super().__init__()
 
@@ -342,13 +364,17 @@ class QuoteState(enum.Enum):
 
     PENDING = "Pending"
     DECLINED = "Declined"
+    DECLINED_FOR_RENEGOTIATION = "DeclinedForRenegotiation"
     ACCEPTED = "Accepted"
     FAILED = "Failed"
     WITHDRAWN = "Withdrawn"
 
 
 class QuoteUpdate(_BaseType):
+    #: Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the [Quote](ctp:api:type:Quote).
     actions: typing.List["QuoteUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["QuoteUpdateAction"]):
@@ -383,6 +409,10 @@ class QuoteUpdateAction(_BaseType):
             from ._schemas.quote import QuoteChangeQuoteStateActionSchema
 
             return QuoteChangeQuoteStateActionSchema().load(data)
+        if data["action"] == "requestQuoteRenegotiation":
+            from ._schemas.quote import QuoteRequestQuoteRenegotiationActionSchema
+
+            return QuoteRequestQuoteRenegotiationActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.quote import QuoteSetCustomFieldActionSchema
 
@@ -391,6 +421,10 @@ class QuoteUpdateAction(_BaseType):
             from ._schemas.quote import QuoteSetCustomTypeActionSchema
 
             return QuoteSetCustomTypeActionSchema().load(data)
+        if data["action"] == "transitionState":
+            from ._schemas.quote import QuoteTransitionStateActionSchema
+
+            return QuoteTransitionStateActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.quote import QuoteUpdateActionSchema
@@ -399,7 +433,7 @@ class QuoteUpdateAction(_BaseType):
 
 
 class QuoteChangeQuoteStateAction(QuoteUpdateAction):
-    #: The new quote state to be set for the Quote.
+    #: New state to be set for the Quote.
     quote_state: "QuoteState"
 
     def __init__(self, *, quote_state: "QuoteState"):
@@ -419,6 +453,31 @@ class QuoteChangeQuoteStateAction(QuoteUpdateAction):
         from ._schemas.quote import QuoteChangeQuoteStateActionSchema
 
         return QuoteChangeQuoteStateActionSchema().dump(self)
+
+
+class QuoteRequestQuoteRenegotiationAction(QuoteUpdateAction):
+    """Represents the Buyer requesting renegotiation for a Quote. Valid for Quotes in a `Pending` or `Failed` [state](ctp:api:type:QuoteState)."""
+
+    #: Message from the [Buyer](/api/quotes-overview#buyer) regarding the Quote renegotiation request.
+    buyer_comment: typing.Optional[str]
+
+    def __init__(self, *, buyer_comment: typing.Optional[str] = None):
+        self.buyer_comment = buyer_comment
+
+        super().__init__(action="requestQuoteRenegotiation")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestQuoteRenegotiationAction":
+        from ._schemas.quote import QuoteRequestQuoteRenegotiationActionSchema
+
+        return QuoteRequestQuoteRenegotiationActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.quote import QuoteRequestQuoteRenegotiationActionSchema
+
+        return QuoteRequestQuoteRenegotiationActionSchema().dump(self)
 
 
 class QuoteSetCustomFieldAction(QuoteUpdateAction):
@@ -479,3 +538,34 @@ class QuoteSetCustomTypeAction(QuoteUpdateAction):
         from ._schemas.quote import QuoteSetCustomTypeActionSchema
 
         return QuoteSetCustomTypeActionSchema().dump(self)
+
+
+class QuoteTransitionStateAction(QuoteUpdateAction):
+    """If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. This update action produces the [Quote State Transition](ctp:api:type:QuoteStateTransitionMessage) Message."""
+
+    #: Value to set.
+    #: If there is no State yet, this must be an initial State.
+    state: "StateResourceIdentifier"
+    #: Switch validations on or off.
+    force: typing.Optional[bool]
+
+    def __init__(
+        self, *, state: "StateResourceIdentifier", force: typing.Optional[bool] = None
+    ):
+        self.state = state
+        self.force = force
+
+        super().__init__(action="transitionState")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteTransitionStateAction":
+        from ._schemas.quote import QuoteTransitionStateActionSchema
+
+        return QuoteTransitionStateActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.quote import QuoteTransitionStateActionSchema
+
+        return QuoteTransitionStateActionSchema().dump(self)

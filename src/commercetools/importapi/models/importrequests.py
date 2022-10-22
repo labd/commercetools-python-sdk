@@ -25,6 +25,7 @@ if typing.TYPE_CHECKING:
     from .products import ProductImport
     from .producttypes import ProductTypeImport
     from .productvariants import ProductVariantImport, ProductVariantPatch
+    from .standalone_prices import StandalonePriceImport
 
 __all__ = [
     "CategoryImportRequest",
@@ -40,6 +41,7 @@ __all__ = [
     "ProductTypeImportRequest",
     "ProductVariantImportRequest",
     "ProductVariantPatchRequest",
+    "StandalonePriceImportRequest",
 ]
 
 
@@ -80,6 +82,10 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import PriceImportRequestSchema
 
             return PriceImportRequestSchema().load(data)
+        if data["type"] == "standalone-price":
+            from ._schemas.importrequests import StandalonePriceImportRequestSchema
+
+            return StandalonePriceImportRequestSchema().load(data)
         if data["type"] == "order":
             from ._schemas.importrequests import OrderImportRequestSchema
 
@@ -254,7 +260,7 @@ class ProductVariantImportRequest(ImportRequest):
 
 
 class PriceImportRequest(ImportRequest):
-    """The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a Project."""
+    """The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/types#embedded-price) to be created or updated in a Project."""
 
     #: The price import resources of this request.
     resources: typing.List["PriceImport"]
@@ -274,6 +280,31 @@ class PriceImportRequest(ImportRequest):
         from ._schemas.importrequests import PriceImportRequestSchema
 
         return PriceImportRequestSchema().dump(self)
+
+
+class StandalonePriceImportRequest(ImportRequest):
+    """The request body to [import Standalone Prices](#import-standalone-prices). Contains data for [Standalone Prices](/../api/projects/standalone-prices#standaloneprice) to be created or updated in a Project."""
+
+    #: The Standalone Price import resources of this request.
+    resources: typing.List["StandalonePriceImport"]
+
+    def __init__(self, *, resources: typing.List["StandalonePriceImport"]):
+        self.resources = resources
+
+        super().__init__(type=ImportResourceType.STANDALONE_PRICE)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceImportRequest":
+        from ._schemas.importrequests import StandalonePriceImportRequestSchema
+
+        return StandalonePriceImportRequestSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importrequests import StandalonePriceImportRequestSchema
+
+        return StandalonePriceImportRequestSchema().dump(self)
 
 
 class OrderImportRequest(ImportRequest):

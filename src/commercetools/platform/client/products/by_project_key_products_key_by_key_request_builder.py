@@ -49,13 +49,11 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
-        store_projection: str = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Product"]:
-        """Gets the full representation of a product by Key."""
+        """If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/products/key={self._key}",
@@ -64,8 +62,6 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
-                "localeProjection": locale_projection,
-                "storeProjection": store_projection,
                 "expand": expand,
             },
             headers=headers,
@@ -86,7 +82,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional[None]:
-        """Checks if product with given key exists."""
+        """Check if a Product exists with a specified `key`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise."""
         headers = {} if headers is None else headers
         response = self._client._head(
             endpoint=f"/{self._project_key}/products/key={self._key}",
@@ -111,8 +107,6 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
-        store_projection: str = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -125,8 +119,6 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
-                "localeProjection": locale_projection,
-                "storeProjection": store_projection,
                 "expand": expand,
             },
             json=body.serialize(),
@@ -149,13 +141,14 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
-        locale_projection: str = None,
-        store_projection: str = None,
         version: int,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Product"]:
+        """If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+        Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
+        """
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/products/key={self._key}",
@@ -164,8 +157,6 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
-                "localeProjection": locale_projection,
-                "storeProjection": store_projection,
                 "version": version,
                 "expand": expand,
             },

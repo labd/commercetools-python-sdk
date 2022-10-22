@@ -66,6 +66,9 @@ class ReviewSchema(BaseResourceSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitReferenceSchema"
+            ),
             "cart-discount": helpers.absmod(
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
@@ -194,6 +197,9 @@ class ReviewDraftSchema(helpers.BaseSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+            ),
             "cart-discount": helpers.absmod(
                 __name__, ".cart_discount.CartDiscountResourceIdentifierSchema"
             ),
@@ -549,6 +555,9 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+            ),
             "cart-discount": helpers.absmod(
                 __name__, ".cart_discount.CartDiscountResourceIdentifierSchema"
             ),

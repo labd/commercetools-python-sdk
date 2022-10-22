@@ -36,6 +36,11 @@ class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestBuilder:
     def get(
         self,
         *,
+        price_currency: str = None,
+        price_country: str = None,
+        price_customer_group: str = None,
+        price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -44,7 +49,14 @@ class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestBuilder:
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/product-projections/{self._id}",
-            params={"expand": expand},
+            params={
+                "priceCurrency": price_currency,
+                "priceCountry": price_country,
+                "priceCustomerGroup": price_customer_group,
+                "priceChannel": price_channel,
+                "localeProjection": locale_projection,
+                "expand": expand,
+            },
             headers=headers,
             options=options,
         )

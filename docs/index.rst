@@ -26,8 +26,8 @@ Example
         client_id="<your-client-id>",
         client_secret="<your-client-secret>",
         scope=["<scopes>"],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
 
     product = client.products.get_by_id("00633d11-c5bb-434e-b132-73f7e130b4e3")
@@ -42,8 +42,8 @@ variables:
     export CTP_PROJECT_KEY="<project key>"
     export CTP_CLIENT_SECRET="<client secret>"
     export CTP_CLIENT_ID="<client id>"
-    export CTP_AUTH_URL="https://auth.sphere.io"
-    export CTP_API_URL="https://api.sphere.io"
+    export CTP_AUTH_URL="https://auth.europe-west1.gcp.commercetools.com"
+    export CTP_API_URL="https://api.europe-west1.gcp.commercetools.com"
     export CTP_SCOPES="<comma seperated list of scopes>"
 
 And then constructing a client without arguments:

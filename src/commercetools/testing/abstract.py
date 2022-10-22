@@ -189,7 +189,7 @@ class GenericSchema(traits.QuerySchema, traits.SortableSchema, traits.PagingSche
 
 
 class ServiceBackend(BaseBackend):
-    hostnames = ["api.sphere.io", "localhost"]
+    hostnames = ["api.europe-west1.gcp.commercetools.com", "api.sphere.io", "localhost"]
     model_class: typing.Any = None
     _schema_draft: typing.Optional[typing.Type[marshmallow.Schema]] = None
     _schema_update: typing.Optional[typing.Type[marshmallow.Schema]] = None

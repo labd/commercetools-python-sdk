@@ -20,7 +20,7 @@ class AuthModel:
 
 class AuthBackend(BaseBackend):
     path_prefix = r"/oauth/(?P<path>.*)"
-    hostnames = ["auth.sphere.io", "localhost"]
+    hostnames = ["auth.europe-west1.gcp.commercetools.com", "auth.sphere.io", "localhost"]
     model_class = AuthModel
 
     def __init__(self, *args, **kwargs):

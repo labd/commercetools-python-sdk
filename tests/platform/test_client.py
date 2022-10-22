@@ -15,8 +15,8 @@ def client_environment_settings(monkeypatch):
     monkeypatch.setenv("CTP_CLIENT_ID", "client_id")
     monkeypatch.setenv("CTP_CLIENT_SECRET", "client_secret")
     monkeypatch.setenv("CTP_CLIENT_SCOPES", "some_scope")
-    monkeypatch.setenv("CTP_API_URL", "https://api.shere.io")
-    monkeypatch.setenv("CTP_AUTH_URL", "https://auth.sphere.io")
+    monkeypatch.setenv("CTP_API_URL", "https://api.europe-west1.gcp.commercetools.com")
+    monkeypatch.setenv("CTP_AUTH_URL", "https://auth.europe-west1.gcp.commercetools.com")
 
 
 def test_client_with_environment_settings_is_setup(
@@ -33,8 +33,8 @@ def test_auto_refresh(commercetools_api):
         client_id="unittest",
         client_secret="mysecret",
         project_key="test",
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
     client.products.query()
     time.sleep(1)
@@ -43,7 +43,7 @@ def test_auto_refresh(commercetools_api):
 
     auth_headers = set()
     for request in commercetools_api.requests_mock.request_history:
-        if request.url.startswith("https://api.sphere.io/"):
+        if request.url.startswith("https://api.europe-west1.gcp.commercetools.com/"):
             auth_headers.add(request.headers["Authorization"])
 
     assert len(auth_headers) == 2
@@ -55,8 +55,8 @@ def test_cache_token(commercetools_api):
         client_id="unittest",
         client_secret="none",
         project_key="test",
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1
 
@@ -64,8 +64,8 @@ def test_cache_token(commercetools_api):
         client_id="unittest",
         client_secret="none",
         project_key="test",
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
     assert len(commercetools_api.requests_mock.request_history) == 1
 
@@ -74,15 +74,15 @@ def test_allows_passing_custom_http_adapter():
     my_adapter = Adapter()
     my_adapter.register_uri(
         "POST",
-        "https://auth.sphere.io/oauth/token",
+        "https://auth.europe-west1.gcp.commercetools.com/oauth/token",
         json=dict(access_token="my_mock_access_token"),
     )
     Client(
         client_id="unittest",
         client_secret="none",
         project_key="test",
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
         http_adapter=my_adapter,
     )
     assert len(my_adapter.request_history) == 1

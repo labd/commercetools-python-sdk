@@ -30,8 +30,8 @@ def ct_platform_client(commercetools_api) -> typing.Generator[Client, None, None
         client_id="client-id",
         client_secret="client-secret",
         scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
 
 
@@ -42,8 +42,8 @@ def commercetools_client(commercetools_api) -> typing.Generator[Client, None, No
         client_id="client-id",
         client_secret="client-secret",
         scope=[],
-        url="https://api.sphere.io",
-        token_url="https://auth.sphere.io/oauth/token",
+        url="https://api.europe-west1.gcp.commercetools.com",
+        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
 
 

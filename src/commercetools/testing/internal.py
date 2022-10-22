@@ -4,7 +4,7 @@ from commercetools.testing.utils import create_commercetools_response
 
 class InternalBackend(BaseBackend):
     path_prefix = r"/-/(?P<path>.*)"
-    hostnames = ["auth.sphere.io", "localhost"]
+    hostnames = ["auth.europe-west1.gcp.commercetools.com", "auth.sphere.io", "localhost"]
 
     def urls(self):
         return [("^health$", "GET", self.health)]

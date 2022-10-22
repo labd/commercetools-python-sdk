@@ -25,7 +25,7 @@ def test_unknown_expand_terms(ct_platform_client: PlatformClient):
             expand=["nonExisting"],
         )
     )
-
+    assert order is not None
     assert order.id
 
 
@@ -40,6 +40,7 @@ def test_optional_expanded_terms(ct_platform_client: PlatformClient, commercetoo
         .get(expand=["discountCodes[*].discountCode"])
     )
 
+    assert expanded_order is not None
     assert expanded_order.id
     assert expanded_order.discount_codes is None
 
@@ -57,7 +58,10 @@ def test_unknown_reference_expand_terms(
         .get(expand=["shippingInfo.shippingMethod"])
     )
 
+    assert expanded_order is not None
     assert expanded_order.id
+    assert expanded_order.shipping_info is not None
+    assert expanded_order.shipping_info.shipping_method is not None
     assert expanded_order.shipping_info.shipping_method.obj is None
 
 
@@ -90,6 +94,10 @@ def test_multiple_expand(old_client, commercetools_api):
     )
 
     order = get_test_order()
+    assert order.shipping_info is not None
+    assert order.shipping_info.shipping_method is not None
+    assert order.payment_info is not None
+
     order.shipping_info.shipping_method.id = shipping_method.id
     order.payment_info.payments[0].id = payment.id
     commercetools_api.orders.add_existing(order)

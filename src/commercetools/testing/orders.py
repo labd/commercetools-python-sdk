@@ -83,6 +83,8 @@ class OrdersModel(BaseModel):
             refused_gifts=[],
             order_number=draft.order_number,
             payment_state=draft.payment_state,
+            shipping_mode=models.ShippingMode.SINGLE,
+            shipping=[],
             order_state=OrderState.OPEN,
             origin=CartOrigin.CUSTOMER,
         )
@@ -113,6 +115,8 @@ class OrdersModel(BaseModel):
             payment_state=draft.payment_state,
             order_state=OrderState.OPEN,
             origin=CartOrigin.CUSTOMER,
+            shipping_mode=models.ShippingMode.SINGLE,
+            shipping=[],
             custom=create_from_draft(draft.custom),
         )
         return order
@@ -170,6 +174,8 @@ class OrdersModel(BaseModel):
             state=[],
             discounted_price_per_quantity=[],
             tax_rate=draft.tax_rate,
+            taxed_price_portions=[],
+            per_method_tax_rate=[],
             taxed_price=taxed_price,
             custom=create_from_draft(draft.custom),
             shipping_details=create_from_draft(draft.shipping_details),
@@ -221,6 +227,7 @@ class OrdersModel(BaseModel):
             tax_category=draft.tax_category,
             tax_rate=create_from_draft(draft.external_tax_rate),
             taxed_price=taxed_price,
+            price_mode=models.ProductPriceModeEnum.EMBEDDED,
             custom=create_from_draft(draft.custom),
             shipping_details=create_from_draft(draft.shipping_details),
         )

@@ -229,6 +229,8 @@ def get_test_order():
                     country="GB",
                     id="7JkeuGwo",
                 ),
+                taxed_price_portions=[],
+                per_method_tax_rate=[],
                 state=[
                     models.ItemState(
                         quantity=1,
@@ -269,6 +271,8 @@ def get_test_order():
                 }
             ),
         ),
+        shipping=[],
+        shipping_mode=models.ShippingMode.SINGLE,
         shipping_address=models.Address(
             first_name="David",
             last_name="Weterings",

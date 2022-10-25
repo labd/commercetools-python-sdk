@@ -190,7 +190,6 @@ class ByProjectKeyMeRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Update my customer"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me",
@@ -215,7 +214,6 @@ class ByProjectKeyMeRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Delete my Customer"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/me",

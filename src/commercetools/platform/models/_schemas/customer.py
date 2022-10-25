@@ -25,6 +25,21 @@ from .type import FieldContainerField
 
 
 class CustomerSchema(BaseResourceSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
+    customer_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="customerNumber",
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
+    )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
@@ -40,12 +55,6 @@ class CustomerSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         missing=None,
         data_key="createdBy",
-    )
-    customer_number = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="customerNumber",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(
@@ -123,12 +132,6 @@ class CustomerSchema(BaseResourceSchema):
     is_email_verified = marshmallow.fields.Boolean(
         allow_none=True, missing=None, data_key="isEmailVerified"
     )
-    external_id = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="externalId",
-    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
@@ -150,9 +153,6 @@ class CustomerSchema(BaseResourceSchema):
     salutation = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
     stores = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
         allow_none=True,
@@ -165,7 +165,6 @@ class CustomerSchema(BaseResourceSchema):
         AuthenticationMode,
         by_value=True,
         allow_none=True,
-        metadata={"omit_empty": True},
         missing=None,
         data_key="authenticationMode",
     )
@@ -235,11 +234,20 @@ class CustomerCreatePasswordResetTokenSchema(helpers.BaseSchema):
 
 
 class CustomerDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     customer_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
         missing=None,
         data_key="customerNumber",
+    )
+    external_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="externalId",
     )
     email = marshmallow.fields.String(allow_none=True, missing=None)
     password = marshmallow.fields.String(
@@ -341,12 +349,6 @@ class CustomerDraftSchema(helpers.BaseSchema):
         missing=None,
         data_key="isEmailVerified",
     )
-    external_id = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="externalId",
-    )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
             __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
@@ -368,9 +370,6 @@ class CustomerDraftSchema(helpers.BaseSchema):
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     salutation = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-    key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
     stores = helpers.LazyNestedField(
@@ -418,11 +417,11 @@ class CustomerEmailVerifySchema(helpers.BaseSchema):
 
 class CustomerPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     count = marshmallow.fields.Integer(allow_none=True, missing=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomerSchema"),
         allow_none=True,
@@ -720,6 +719,20 @@ class MyCustomerChangePasswordSchema(helpers.BaseSchema):
         return models.MyCustomerChangePassword(**data)
 
 
+class MyCustomerEmailVerifySchema(helpers.BaseSchema):
+    token_value = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="tokenValue"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.MyCustomerEmailVerify(**data)
+
+
 class MyCustomerResetPasswordSchema(helpers.BaseSchema):
     token_value = marshmallow.fields.String(
         allow_none=True, missing=None, data_key="tokenValue"
@@ -990,6 +1003,9 @@ class CustomerSetAddressCustomFieldActionSchema(CustomerUpdateActionSchema):
 
 
 class CustomerSetAddressCustomTypeActionSchema(CustomerUpdateActionSchema):
+    address_id = marshmallow.fields.String(
+        allow_none=True, missing=None, data_key="addressId"
+    )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
@@ -1002,9 +1018,6 @@ class CustomerSetAddressCustomTypeActionSchema(CustomerUpdateActionSchema):
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
         missing=None,
-    )
-    address_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="addressId"
     )
 
     class Meta:

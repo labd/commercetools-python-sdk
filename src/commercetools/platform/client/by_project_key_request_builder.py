@@ -167,7 +167,7 @@ class ByProjectKeyRequestBuilder:
         )
 
     def customers(self) -> ByProjectKeyCustomersRequestBuilder:
-        """A customer is a person purchasing products. customers, Orders, Comments and Reviews can be associated to a customer."""
+        """A Customer is a person purchasing products. Carts, Orders, Quotes, Reviews and Payments can be associated to a Customer."""
         return ByProjectKeyCustomersRequestBuilder(
             project_key=self._project_key,
             client=self._client,

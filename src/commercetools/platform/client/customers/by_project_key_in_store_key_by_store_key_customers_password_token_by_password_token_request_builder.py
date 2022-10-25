@@ -40,6 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenByPasswordTokenReque
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/password-token={self._password_token}",

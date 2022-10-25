@@ -223,6 +223,8 @@ class QuoteDraft(_BaseType):
     staged_quote: "StagedQuoteResourceIdentifier"
     #: Current version of the StagedQuote.
     staged_quote_version: int
+    #: If `true`, the `stagedQuoteState` of the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) will be set to `Sent`.
+    staged_quote_state_to_sent: typing.Optional[bool]
     #: User-defined unique identifier for the Quote.
     key: typing.Optional[str]
     #: [Custom Fields](/../api/projects/custom-fields) to be added to the Quote.
@@ -239,12 +241,14 @@ class QuoteDraft(_BaseType):
         *,
         staged_quote: "StagedQuoteResourceIdentifier",
         staged_quote_version: int,
+        staged_quote_state_to_sent: typing.Optional[bool] = None,
         key: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         state: typing.Optional["StateReference"] = None
     ):
         self.staged_quote = staged_quote
         self.staged_quote_version = staged_quote_version
+        self.staged_quote_state_to_sent = staged_quote_state_to_sent
         self.key = key
         self.custom = custom
         self.state = state

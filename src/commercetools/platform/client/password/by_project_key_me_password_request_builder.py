@@ -43,6 +43,11 @@ class ByProjectKeyMePasswordRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+
+        If the current password does not match, an [InvalidCurrentPassword](ctp:api:type:InvalidCurrentPasswordError) error is returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/password",

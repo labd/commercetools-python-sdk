@@ -126,6 +126,12 @@ class StagedQuoteDraftSchema(helpers.BaseSchema):
     quote_request_version = marshmallow.fields.Integer(
         allow_none=True, missing=None, data_key="quoteRequestVersion"
     )
+    quote_request_state_to_accepted = marshmallow.fields.Boolean(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="quoteRequestStateToAccepted",
+    )
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )

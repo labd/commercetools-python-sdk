@@ -37,10 +37,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordTokenRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerToken"]:
-        """The token value is used to reset the password of the customer with the given email. The token is
-        valid only for 10 minutes.
-
-        """
+        """If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/password-token",

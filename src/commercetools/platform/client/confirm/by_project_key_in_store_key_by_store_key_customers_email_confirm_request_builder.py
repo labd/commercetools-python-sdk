@@ -37,7 +37,12 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Verifies customer's email using a token."""
+        """The customer verifies the email using the token value.
+        Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message.
+
+        If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/email/confirm",

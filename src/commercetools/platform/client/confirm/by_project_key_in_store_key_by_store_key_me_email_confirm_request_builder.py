@@ -7,7 +7,7 @@
 import typing
 import warnings
 
-from ...models.customer import Customer, CustomerEmailVerify
+from ...models.customer import Customer, MyCustomerEmailVerify
 from ...models.error import ErrorResponse
 
 if typing.TYPE_CHECKING:
@@ -32,11 +32,12 @@ class ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder:
 
     def post(
         self,
-        body: "CustomerEmailVerify",
+        body: "MyCustomerEmailVerify",
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """This is the last step in the [email verification process of a Customer](/../api/projects/customers#email-verification-of-customer-in-store)."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/email/confirm",

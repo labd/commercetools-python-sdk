@@ -37,6 +37,11 @@ class ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """This is the last step in the [password reset process of the authenticated Customer](/../api/projects/customers#password-reset-of-customer-in-store).
+
+        Resetting a password produces the of the Customer [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/password/reset",

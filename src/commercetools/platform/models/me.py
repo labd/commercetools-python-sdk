@@ -674,26 +674,40 @@ class MyCompanyDraft(MyBusinessUnitDraft):
 
 
 class MyCustomerDraft(_BaseType):
+    #: Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or Store the Customer is assigned to.
+    #: It is the mandatory unique identifier of a Customer.
     email: str
+    #: Password of the Customer.
     password: str
+    #: Given name (first name) of the Customer.
     first_name: typing.Optional[str]
+    #: Family name (last name) of the Customer.
     last_name: typing.Optional[str]
+    #: Middle name of the Customer.
     middle_name: typing.Optional[str]
+    #: Title of the Customer, for example, 'Dr.'.
     title: typing.Optional[str]
+    #: Salutation of the Customer, for example, 'Mr.' or 'Mrs.'.
+    salutation: typing.Optional[str]
+    #: Date of birth of the Customer.
     date_of_birth: typing.Optional[datetime.date]
+    #: Company name of the Customer.
     company_name: typing.Optional[str]
+    #: Unique VAT ID of the Customer.
     vat_id: typing.Optional[str]
-    #: Sets the ID of each address to be unique in the addresses list.
+    #: Addresses of the Customer.
     addresses: typing.Optional[typing.List["BaseAddress"]]
-    #: The index of the address in the addresses array.
-    #: The `defaultShippingAddressId` of the customer will be set to the ID of that address.
+    #: Index of the address in the `addresses` array to use as the default shipping address.
+    #: The `defaultShippingAddressId` of the Customer will be set to the `id` of that address.
     default_shipping_address: typing.Optional[int]
-    #: The index of the address in the addresses array.
-    #: The `defaultBillingAddressId` of the customer will be set to the ID of that address.
+    #: Index of the address in the `addresses` array to use as the default billing address.
+    #: The `defaultBillingAddressId` of the Customer will be set to the `id` of that address.
     default_billing_address: typing.Optional[int]
-    #: The custom fields.
+    #: Custom Fields for the Customer.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Preferred language of the Customer. Must be one of the languages supported by the [Project](ctp:api:type:Project).
     locale: typing.Optional[str]
+    #: Sets the [Stores](ctp:api:type:Store) for the Customer.
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
     def __init__(
@@ -705,6 +719,7 @@ class MyCustomerDraft(_BaseType):
         last_name: typing.Optional[str] = None,
         middle_name: typing.Optional[str] = None,
         title: typing.Optional[str] = None,
+        salutation: typing.Optional[str] = None,
         date_of_birth: typing.Optional[datetime.date] = None,
         company_name: typing.Optional[str] = None,
         vat_id: typing.Optional[str] = None,
@@ -721,6 +736,7 @@ class MyCustomerDraft(_BaseType):
         self.last_name = last_name
         self.middle_name = middle_name
         self.title = title
+        self.salutation = salutation
         self.date_of_birth = date_of_birth
         self.company_name = company_name
         self.vat_id = vat_id
@@ -746,7 +762,9 @@ class MyCustomerDraft(_BaseType):
 
 
 class MyCustomerUpdate(_BaseType):
+    #: Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the Customer.
     actions: typing.List["MyCustomerUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["MyCustomerUpdateAction"]):
@@ -2864,6 +2882,9 @@ class MyCartUpdateItemShippingAddressAction(MyCartUpdateAction):
 
 
 class MyCustomerAddAddressAction(MyCustomerUpdateAction):
+    """Adding an address to the Customer produces the [CustomerAddressAdded](ctp:api:type:CustomerAddressAddedMessage) Message."""
+
+    #: Value to append to the `addresses` array.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -2886,7 +2907,11 @@ class MyCustomerAddAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
+    """Adds an address from the `addresses` array to `billingAddressIds`. Either `addressId` or `addressKey` is required."""
+
+    #: `id` of the [Address](ctp:api:type:Address) to become a billing address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become a billing address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -2915,7 +2940,11 @@ class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
 
 
 class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
+    """Adds an address from the `addresses` array to `shippingAddressIds`. Either `addressId` or `addressKey` is required."""
+
+    #: `id` of the [Address](ctp:api:type:Address) to become a shipping address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become a shipping address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -2944,8 +2973,17 @@ class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
 
 
 class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
+    """Changing an address of the Customer produces the [CustomerAddressChanged](ctp:api:type:CustomerAddressChangedMessage) Message.
+
+    Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to change.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to change.
     address_key: typing.Optional[str]
+    #: Value to set.
     address: "BaseAddress"
 
     def __init__(
@@ -2976,6 +3014,9 @@ class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
+    """Changing the email of the Customer produces the [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message."""
+
+    #: New value to set.
     email: str
 
     def __init__(self, *, email: str):
@@ -2998,7 +3039,15 @@ class MyCustomerChangeEmailAction(MyCustomerUpdateAction):
 
 
 class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
+    """Removing an address of the Customer produces the [CustomerAddressRemoved](ctp:api:type:CustomerAddressRemovedMessage) Message.
+
+    Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -3027,7 +3076,14 @@ class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
+    """Removes an existing billing address from `billingAddressesIds`.
+    If the billing address is the default billing address, the `defaultBillingAddressId` is unset. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -3056,7 +3112,14 @@ class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
 
 
 class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
+    """Removes an existing shipping address from `shippingAddressesIds`.
+    If the shipping address is the default shipping address, the `defaultShippingAddressId` is unset. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -3085,6 +3148,10 @@ class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
+    """Setting the `companyName` field on the Customer produces the [CustomerCompanyNameSet](ctp:api:type:CustomerCompanyNameSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     company_name: typing.Optional[str]
 
     def __init__(self, *, company_name: typing.Optional[str] = None):
@@ -3110,7 +3177,7 @@ class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3167,6 +3234,10 @@ class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
+    """Setting the date of birth of the Customer produces the [CustomerDateOfBirthSet](ctp:api:type:CustomerDateOfBirthSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     date_of_birth: typing.Optional[datetime.date]
 
     def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
@@ -3189,7 +3260,14 @@ class MyCustomerSetDateOfBirthAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
+    """Sets the default billing address from `addresses`.
+    If the address is not currently a billing address, it is added to `billingAddressIds`. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to become the default billing address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become the default billing address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -3218,7 +3296,14 @@ class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
+    """Sets the default shipping address from `addresses`.
+    If the address is not currently a shipping address, it is added to `shippingAddressIds`. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to become the default shipping address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become the default shipping address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -3247,6 +3332,10 @@ class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
+    """Setting the first name of the Customer produces the [CustomerFirstNameSetMessage](ctp:api:type:CustomerFirstNameSetMessage)."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     first_name: typing.Optional[str]
 
     def __init__(self, *, first_name: typing.Optional[str] = None):
@@ -3269,6 +3358,10 @@ class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
+    """Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage)."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     last_name: typing.Optional[str]
 
     def __init__(self, *, last_name: typing.Optional[str] = None):
@@ -3291,6 +3384,8 @@ class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetLocaleAction(MyCustomerUpdateAction):
+    #: Value to set.
+    #: Must be one of the languages supported by the [Project](ctp:api:type:Project).
     locale: typing.Optional[str]
 
     def __init__(self, *, locale: typing.Optional[str] = None):
@@ -3313,6 +3408,8 @@ class MyCustomerSetLocaleAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetMiddleNameAction(MyCustomerUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value is removed.
     middle_name: typing.Optional[str]
 
     def __init__(self, *, middle_name: typing.Optional[str] = None):
@@ -3335,6 +3432,8 @@ class MyCustomerSetMiddleNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetSalutationAction(MyCustomerUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value is removed.
     salutation: typing.Optional[str]
 
     def __init__(self, *, salutation: typing.Optional[str] = None):
@@ -3357,6 +3456,10 @@ class MyCustomerSetSalutationAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetTitleAction(MyCustomerUpdateAction):
+    """Setting the title of the Customer produces the [CustomerTitleSetMessage](ctp:api:type:CustomerTitleSetMessage)."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     title: typing.Optional[str]
 
     def __init__(self, *, title: typing.Optional[str] = None):
@@ -3379,6 +3482,8 @@ class MyCustomerSetTitleAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetVatIdAction(MyCustomerUpdateAction):
+    #: Value to set.
+    #: If empty, any existing value is removed.
     vat_id: typing.Optional[str]
 
     def __init__(self, *, vat_id: typing.Optional[str] = None):

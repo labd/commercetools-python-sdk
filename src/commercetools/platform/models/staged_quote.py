@@ -128,6 +128,8 @@ class StagedQuoteDraft(_BaseType):
     quote_request: "QuoteRequestResourceIdentifier"
     #: Current version of the QuoteRequest.
     quote_request_version: int
+    #: If `true`, the `quoteRequestState` of the referenced [QuoteRequest](ctp:api:type:QuoteRequest) will be set to `Accepted`.
+    quote_request_state_to_accepted: typing.Optional[bool]
     #: User-defined unique identifier for the StagedQuote.
     key: typing.Optional[str]
     #: [Custom Fields](/../api/projects/custom-fields) to be added to the StagedQuote.
@@ -144,12 +146,14 @@ class StagedQuoteDraft(_BaseType):
         *,
         quote_request: "QuoteRequestResourceIdentifier",
         quote_request_version: int,
+        quote_request_state_to_accepted: typing.Optional[bool] = None,
         key: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         state: typing.Optional["StateReference"] = None
     ):
         self.quote_request = quote_request
         self.quote_request_version = quote_request_version
+        self.quote_request_state_to_accepted = quote_request_state_to_accepted
         self.key = key
         self.custom = custom
         self.state = state

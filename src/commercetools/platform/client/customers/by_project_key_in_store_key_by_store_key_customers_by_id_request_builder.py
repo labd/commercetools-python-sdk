@@ -40,12 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Returns a customer by its ID from a specific Store.
-        It also considers customers that do not have the stores field.
-        If the customer exists in the project but the stores field references different stores,
-        this method returns a ResourceNotFound error.
-
-        """
+        """If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/{self._id}",
@@ -70,11 +65,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Updates a customer in the store specified by {storeKey}.
-        If the customer exists in the project but the stores field references a different store,
-        this method returns a ResourceNotFound error.
-
-        """
+        """If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/{self._id}",
@@ -101,6 +92,11 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
+
+        If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers/{self._id}",

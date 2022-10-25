@@ -160,7 +160,6 @@ class ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "Customer":
-        """Update my customer in a store"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me",
@@ -180,7 +179,6 @@ class ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "Customer":
-        """Delete my Customer in a store"""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me",

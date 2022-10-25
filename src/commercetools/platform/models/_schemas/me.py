@@ -491,6 +491,9 @@ class MyCustomerDraftSchema(helpers.BaseSchema):
     title = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, missing=None
     )
+    salutation = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, missing=None
+    )
     date_of_birth = marshmallow.fields.Date(
         allow_none=True,
         metadata={"omit_empty": True},

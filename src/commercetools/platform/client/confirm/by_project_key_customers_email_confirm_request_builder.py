@@ -34,7 +34,7 @@ class ByProjectKeyCustomersEmailConfirmRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
-        """Verifies customer's email using a token."""
+        """Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/customers/email/confirm",

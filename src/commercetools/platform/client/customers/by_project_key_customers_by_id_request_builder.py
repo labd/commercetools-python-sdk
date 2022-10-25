@@ -87,6 +87,7 @@ class ByProjectKeyCustomersByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Customer"]:
+        """Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/customers/{self._id}",

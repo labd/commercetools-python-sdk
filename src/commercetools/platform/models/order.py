@@ -1171,10 +1171,12 @@ class OrderFromCartDraft(_BaseType):
 
 
 class OrderFromQuoteDraft(_BaseType):
-    #: ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
+    #: ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
     quote: "QuoteResourceIdentifier"
     #: `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
     version: int
+    #: If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:quote) will be set to `Accepted`.
+    quote_state_to_accepted: typing.Optional[bool]
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
     #: It should be unique across a project.
@@ -1192,6 +1194,7 @@ class OrderFromQuoteDraft(_BaseType):
         *,
         quote: "QuoteResourceIdentifier",
         version: int,
+        quote_state_to_accepted: typing.Optional[bool] = None,
         order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
@@ -1200,6 +1203,7 @@ class OrderFromQuoteDraft(_BaseType):
     ):
         self.quote = quote
         self.version = version
+        self.quote_state_to_accepted = quote_state_to_accepted
         self.order_number = order_number
         self.payment_state = payment_state
         self.shipment_state = shipment_state

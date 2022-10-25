@@ -74,6 +74,7 @@ __all__ = [
     "CustomerUpdate",
     "CustomerUpdateAction",
     "MyCustomerChangePassword",
+    "MyCustomerEmailVerify",
     "MyCustomerResetPassword",
     "MyCustomerSignin",
 ]
@@ -90,51 +91,66 @@ class AuthenticationMode(enum.Enum):
 
 
 class Customer(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-    created_by: typing.Optional["CreatedBy"]
-    #: The customer number can be used to create a more human-readable (in contrast to ID) identifier for the customer.
-    #: It should be unique across a project.
-    #: Once the field was set it cannot be changed anymore.
-    customer_number: typing.Optional[str]
-    #: The customer's email address and the main identifier of uniqueness for a customer account.
-    #: Email addresses are either unique to the store they're specified for, _or_ for the entire project.
-    #: For more information, see Email uniquenes.
-    email: str
-    #: Only present with the default `authenticationMode`, `Password`.
-    password: typing.Optional[str]
-    first_name: typing.Optional[str]
-    last_name: typing.Optional[str]
-    middle_name: typing.Optional[str]
-    title: typing.Optional[str]
-    date_of_birth: typing.Optional[datetime.date]
-    company_name: typing.Optional[str]
-    vat_id: typing.Optional[str]
-    #: The addresses have unique IDs in the addresses list
-    addresses: typing.List["Address"]
-    #: The address ID in the addresses list
-    default_shipping_address_id: typing.Optional[str]
-    #: The IDs from the addresses list which are used as shipping addresses
-    shipping_address_ids: typing.Optional[typing.List["str"]]
-    #: The address ID in the addresses list
-    default_billing_address_id: typing.Optional[str]
-    #: The IDs from the addresses list which are used as billing addresses
-    billing_address_ids: typing.Optional[typing.List["str"]]
-    is_email_verified: bool
-    external_id: typing.Optional[str]
-    customer_group: typing.Optional["CustomerGroupReference"]
-    custom: typing.Optional["CustomFields"]
-    locale: typing.Optional[str]
-    salutation: typing.Optional[str]
+    """If `stores` is not empty, the Customer is specific to those Stores."""
+
     #: User-defined unique identifier of the Customer.
     key: typing.Optional[str]
-    #: References to the stores the customer account is associated with.
-    #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
-    #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
+    #: User-defined unique identifier of the Customer.
+    #:
+    #: Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
+    customer_number: typing.Optional[str]
+    #: Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    external_id: typing.Optional[str]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    created_by: typing.Optional["CreatedBy"]
+    #: Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
+    #: It is the mandatory unique identifier of a Customer.
+    email: str
+    #: Present only when `authenticationMode` is set to `Password`.
+    password: typing.Optional[str]
+    #: Given name (first name) of the Customer.
+    first_name: typing.Optional[str]
+    #: Family name (last name) of the Customer.
+    last_name: typing.Optional[str]
+    #: Middle name of the Customer.
+    middle_name: typing.Optional[str]
+    #: Title of the Customer, for example, 'Dr.'.
+    title: typing.Optional[str]
+    #: Date of birth of the Customer.
+    date_of_birth: typing.Optional[datetime.date]
+    #: Company name of the Customer.
+    company_name: typing.Optional[str]
+    #: Unique VAT ID of the Customer.
+    vat_id: typing.Optional[str]
+    #: Addresses used by the Customer.
+    addresses: typing.List["Address"]
+    #: ID of the address in `addresses` used as the default shipping address.
+    default_shipping_address_id: typing.Optional[str]
+    #: IDs of addresses in `addresses` used as shipping addresses.
+    shipping_address_ids: typing.Optional[typing.List["str"]]
+    #: ID of the address in `addresses` used as the default billing address.
+    default_billing_address_id: typing.Optional[str]
+    #: IDs of addresses in `addresses` used as billing addresses.
+    billing_address_ids: typing.Optional[typing.List["str"]]
+    #: Indicates whether the email address of the Customer is [verified](#email-verification-of-customer).
+    is_email_verified: bool
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) to which the Customer belongs.
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Custom Fields for the Customer.
+    custom: typing.Optional["CustomFields"]
+    #: Preferred language of the Customer.
+    locale: typing.Optional[str]
+    #: Salutation of the Customer, for example, 'Mr.' or 'Mrs.'.
+    salutation: typing.Optional[str]
+    #: [Stores](ctp:api:type:Store) to which the Customer is assigned to.
+    #:
+    #: - If no Stores are specified, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
+    #: - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/../api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
     stores: typing.Optional[typing.List["StoreKeyReference"]]
-    #: Defines whether a Customer has a password.
-    authentication_mode: typing.Optional["AuthenticationMode"]
+    #: Indicates whether the `password` is required for the Customer.
+    authentication_mode: "AuthenticationMode"
 
     def __init__(
         self,
@@ -143,9 +159,11 @@ class Customer(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
+        key: typing.Optional[str] = None,
+        customer_number: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
-        customer_number: typing.Optional[str] = None,
         email: str,
         password: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -161,18 +179,18 @@ class Customer(BaseResource):
         default_billing_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List["str"]] = None,
         is_email_verified: bool,
-        external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
-        authentication_mode: typing.Optional["AuthenticationMode"] = None
+        authentication_mode: "AuthenticationMode"
     ):
+        self.key = key
+        self.customer_number = customer_number
+        self.external_id = external_id
         self.last_modified_by = last_modified_by
         self.created_by = created_by
-        self.customer_number = customer_number
         self.email = email
         self.password = password
         self.first_name = first_name
@@ -188,12 +206,10 @@ class Customer(BaseResource):
         self.default_billing_address_id = default_billing_address_id
         self.billing_address_ids = billing_address_ids
         self.is_email_verified = is_email_verified
-        self.external_id = external_id
         self.customer_group = customer_group
         self.custom = custom
         self.locale = locale
         self.salutation = salutation
-        self.key = key
         self.stores = stores
         self.authentication_mode = authentication_mode
 
@@ -219,8 +235,13 @@ class Customer(BaseResource):
 class CustomerChangePassword(_BaseType):
     #: Unique identifier of the Customer.
     id: str
+    #: Expected version of the Customer on which the changes should be applied.
     version: int
+    #: Current password of the Customer.
+    #:
+    #: If the current password does not match, an [InvalidCurrentPassword](ctp:api:type:InvalidCurrentPasswordError) error is returned.
     current_password: str
+    #: New password to be set.
     new_password: str
 
     def __init__(
@@ -248,9 +269,11 @@ class CustomerChangePassword(_BaseType):
 
 
 class CustomerCreateEmailToken(_BaseType):
-    #: Unique identifier of the email token.
+    #: Unique identifier of the Customer.
     id: str
+    #: Expected version of the Customer.
     version: typing.Optional[int]
+    #: Validity period of the generated token in minutes.
     ttl_minutes: int
 
     def __init__(
@@ -277,7 +300,9 @@ class CustomerCreateEmailToken(_BaseType):
 
 
 class CustomerCreatePasswordResetToken(_BaseType):
+    #: Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
     email: str
+    #: Validity period of the generated token in minutes.
     ttl_minutes: typing.Optional[int]
 
     def __init__(self, *, email: str, ttl_minutes: typing.Optional[int] = None):
@@ -301,65 +326,83 @@ class CustomerCreatePasswordResetToken(_BaseType):
 
 
 class CustomerDraft(_BaseType):
-    #: String that uniquely identifies a customer.
-    #: It can be used to create more human-readable (in contrast to ID) identifier for the customer.
-    #: It should be **unique** across a project.
-    #: Once it's set it cannot be changed.
-    customer_number: typing.Optional[str]
-    #: The customer's email address and the main identifier of uniqueness for a customer account.
-    #: Email addresses are either unique to the store they're specified for, _or_ for the entire project, and are case insensitive.
-    #: For more information, see Email uniquenes.
-    email: str
-    #: Only optional with `authenticationMode` set to `ExternalAuth`.
-    password: typing.Optional[str]
-    first_name: typing.Optional[str]
-    last_name: typing.Optional[str]
-    middle_name: typing.Optional[str]
-    title: typing.Optional[str]
-    #: Identifies a single cart that will be assigned to the new customer account.
-    anonymous_cart_id: typing.Optional[str]
-    #: Identifies a single cart that will be assigned to the new customer account.
-    anonymous_cart: typing.Optional["CartResourceIdentifier"]
-    #: Identifies carts and orders belonging to an anonymous session that will be assigned to the new customer account.
-    anonymous_id: typing.Optional[str]
-    date_of_birth: typing.Optional[datetime.date]
-    company_name: typing.Optional[str]
-    vat_id: typing.Optional[str]
-    #: Sets the ID of each address to be unique in the addresses list.
-    addresses: typing.Optional[typing.List["BaseAddress"]]
-    #: The index of the address in the addresses array.
-    #: The `defaultShippingAddressId` of the customer will be set to the ID of that address.
-    default_shipping_address: typing.Optional[int]
-    #: The indices of the shipping addresses in the addresses array.
-    #: The `shippingAddressIds` of the Customer will be set to the IDs of that addresses.
-    shipping_addresses: typing.Optional[typing.List["int"]]
-    #: The index of the address in the addresses array.
-    #: The `defaultBillingAddressId` of the customer will be set to the ID of that address.
-    default_billing_address: typing.Optional[int]
-    #: The indices of the billing addresses in the addresses array.
-    #: The `billingAddressIds` of the customer will be set to the IDs of that addresses.
-    billing_addresses: typing.Optional[typing.List["int"]]
-    is_email_verified: typing.Optional[bool]
-    external_id: typing.Optional[str]
-    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
-    #: The custom fields.
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Must be one of the languages supported for this project
-    locale: typing.Optional[str]
-    salutation: typing.Optional[str]
     #: User-defined unique identifier for the Customer.
+    #: The `key` field is preferred over `customerNumber` as it is mutable and provides more flexibility.
     key: typing.Optional[str]
-    #: References to the stores the customer account is associated with.
-    #: If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
-    #: If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
+    #: User-defined unique identifier for a Customer.
+    #: Once set, it cannot be changed.
+    #:
+    #: Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
+    customer_number: typing.Optional[str]
+    #: Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    external_id: typing.Optional[str]
+    #: Email address of the Customer that must be [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
+    #: It is the mandatory unique identifier of a Customer.
+    email: str
+    #: Required when `authenticationMode` is set to `Password`.
+    #: Provide the Customer's password in plain text. The API stores passwords in an encrypted format.
+    password: typing.Optional[str]
+    #: Given name (first name) of the Customer.
+    first_name: typing.Optional[str]
+    #: Family name (last name) of the Customer.
+    last_name: typing.Optional[str]
+    #: Middle name of the Customer.
+    middle_name: typing.Optional[str]
+    #: Title of the Customer, for example, 'Dr.'.
+    title: typing.Optional[str]
+    #: Deprecated since an anonymous [Cart](ctp:api:type:Cart) can be identified by its `id` or external `key`.
+    anonymous_cart_id: typing.Optional[str]
+    #: Identifies a [Cart](ctp:api:type:Cart) that will be assigned to the new Customer.
+    anonymous_cart: typing.Optional["CartResourceIdentifier"]
+    #: Identifies Carts and Orders belonging to an anonymous session that will be assigned to the new Customer.
+    anonymous_id: typing.Optional[str]
+    #: Date of birth of the Customer.
+    date_of_birth: typing.Optional[datetime.date]
+    #: Company name of the Customer. When representing a company as a Customer, [Business Units](ctp:api:type:BusinessUnit) provide extended funtionality.
+    company_name: typing.Optional[str]
+    #: Unique VAT ID of the Customer.
+    vat_id: typing.Optional[str]
+    #: Addresses of the Customer.
+    addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: Index of the address in the `addresses` array to use as the default shipping address.
+    #: The `defaultShippingAddressId` of the Customer will be set to the `id` of that address.
+    default_shipping_address: typing.Optional[int]
+    #: Indices of the shipping addresses in the `addresses` array.
+    #: The `shippingAddressIds` of the Customer will be set to the IDs of these addresses.
+    shipping_addresses: typing.Optional[typing.List["int"]]
+    #: Index of the address in the `addresses` array to use as the default billing address.
+    #: The `defaultBillingAddressId` of the Customer will be set to the `id` of that address.
+    default_billing_address: typing.Optional[int]
+    #: Indices of the billing addresses in the `addresses` array.
+    #: The `billingAddressIds` of the Customer will be set to the IDs of these addresses.
+    billing_addresses: typing.Optional[typing.List["int"]]
+    #: Set to `true` if the email address of the Customer has been verified already.
+    #: The intended use is to leave this field unset upon sign-up of the Customer and initiate the [email verification](#email-verification-of-customer) afterwards.
+    is_email_verified: typing.Optional[bool]
+    #: Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for the Customer.
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: Custom Fields for the Customer.
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Preferred language of the Customer.
+    #: Must be one of the languages supported by the [Project](ctp:api:type:Project).
+    locale: typing.Optional[str]
+    #: Salutation of the Customer, for example, 'Mr.' or 'Mrs.'.
+    salutation: typing.Optional[str]
+    #: Sets the [Stores](ctp:api:type:Store) for the Customer.
+    #:
+    #: - If no Stores are specified, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
+    #: - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/../api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
-    #: Defines whether a password field is a required field for the Customer.
+    #: - Set to `Password` to make the `password` field required for the Customer.
+    #: - Set to `ExternalAuth` when the password is not required for the Customer.
     authentication_mode: typing.Optional["AuthenticationMode"]
 
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         customer_number: typing.Optional[str] = None,
+        external_id: typing.Optional[str] = None,
         email: str,
         password: typing.Optional[str] = None,
         first_name: typing.Optional[str] = None,
@@ -378,16 +421,16 @@ class CustomerDraft(_BaseType):
         default_billing_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         is_email_verified: typing.Optional[bool] = None,
-        external_id: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
-        key: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
         authentication_mode: typing.Optional["AuthenticationMode"] = None
     ):
+        self.key = key
         self.customer_number = customer_number
+        self.external_id = external_id
         self.email = email
         self.password = password
         self.first_name = first_name
@@ -406,12 +449,10 @@ class CustomerDraft(_BaseType):
         self.default_billing_address = default_billing_address
         self.billing_addresses = billing_addresses
         self.is_email_verified = is_email_verified
-        self.external_id = external_id
         self.customer_group = customer_group
         self.custom = custom
         self.locale = locale
         self.salutation = salutation
-        self.key = key
         self.stores = stores
         self.authentication_mode = authentication_mode
 
@@ -430,7 +471,9 @@ class CustomerDraft(_BaseType):
 
 
 class CustomerEmailVerify(_BaseType):
+    #: Expected version of the Customer.
     version: typing.Optional[int]
+    #: Value of the token to verify Customer email.
     token_value: str
 
     def __init__(self, *, version: typing.Optional[int] = None, token_value: str):
@@ -452,27 +495,36 @@ class CustomerEmailVerify(_BaseType):
 
 
 class CustomerPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Customer](ctp:api:type:Customer)."""
+
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Customers](ctp:api:type:Customer) matching the query.
     results: typing.List["Customer"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Customer"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -494,7 +546,7 @@ class CustomerPagedQueryResponse(_BaseType):
 class CustomerReference(Reference):
     """[Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer)."""
 
-    #: Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Customers.
+    #: Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Customers.
     obj: typing.Optional["Customer"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Customer"] = None):
@@ -515,8 +567,11 @@ class CustomerReference(Reference):
 
 
 class CustomerResetPassword(_BaseType):
+    #: Value of the token to reset the Customer password.
     token_value: str
+    #: New password to be set.
     new_password: str
+    #: Expected version of the Customer.
     version: typing.Optional[int]
 
     def __init__(
@@ -545,7 +600,7 @@ class CustomerResetPassword(_BaseType):
 
 
 class CustomerResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
@@ -568,9 +623,10 @@ class CustomerResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerSignInResult(_BaseType):
+    #: Customer [signed up](#create-sign-up-customer) or [signed in](#authenticate-sign-in-customer) after authentication.
     customer: "Customer"
-    #: A cart that is associated to the customer.
-    #: Empty if the customer does not have a cart yet.
+    #: Cart associated with the Customer.
+    #: If empty, the Customer does not have a Cart assigned.
     cart: typing.Optional["Cart"]
 
     def __init__(self, *, customer: "Customer", cart: typing.Optional["Cart"] = None):
@@ -592,13 +648,23 @@ class CustomerSignInResult(_BaseType):
 
 
 class CustomerSignin(_BaseType):
+    #: Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
     email: str
+    #: Password of the Customer.
     password: str
+    #: Deprecated since it is now possible to identify an anonymous cart by using its `id` or external `key`.
     anonymous_cart_id: typing.Optional[str]
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart).
+    #: Identifies a [Cart](ctp:api:type:Cart) that will be assigned to the Customer.
     anonymous_cart: typing.Optional["CartResourceIdentifier"]
+    #: - Set to `MergeWithExistingCustomerCart` if [LineItems](ctp:api:type:LineItem) of the anonymous Cart should be merged with the active Customer Cart that has been modified most recently.
+    #: - Set to `UseAsNewActiveCustomerCart` if the anonymous Cart should be used as the new active Customer Cart and no [LineItems](ctp:api:type:LineItem) are to be merged.
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
+    #: If both `anonymousCart` and `anonymousId` are provided, the `anonymousId` on the CustomerSignin must match that of the anonymous [Cart](ctp:api:type:Cart].
+    #: Otherwise a [400 Bad Request](ctp:api:type:InvalidOperationError) `Invalid Operation` error is returned with the message:
+    #: "Cart with the ID cart-id does not have the expected anonymousId.".
     anonymous_id: typing.Optional[str]
+    #: - If `true`, the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart will be updated.
+    #: - If `false`, only the prices, discounts, and tax rates will be updated.
     update_product_data: typing.Optional[bool]
 
     def __init__(
@@ -635,12 +701,17 @@ class CustomerSignin(_BaseType):
 
 
 class CustomerToken(_BaseType):
-    #: Unique identifier of the CustomerToken.
+    #: Unique identifier of the token.
     id: str
+    #: Date and time (UTC) the token was initially created.
     created_at: datetime.datetime
+    #: When the token is created, `lastModifiedAt` is set to `createdAt`.
     last_modified_at: typing.Optional[datetime.datetime]
+    #: The `id` of the Customer.
     customer_id: str
+    #: Date and time (UTC) the token expires.
     expires_at: datetime.datetime
+    #: Value of the token.
     value: str
 
     def __init__(
@@ -675,7 +746,9 @@ class CustomerToken(_BaseType):
 
 
 class CustomerUpdate(_BaseType):
+    #: Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the Customer.
     actions: typing.List["CustomerUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["CustomerUpdateAction"]):
@@ -838,8 +911,13 @@ class CustomerUpdateAction(_BaseType):
 
 
 class MyCustomerChangePassword(_BaseType):
+    #: Expected version of the Customer on which the changes should be applied.
     version: int
+    #: Current password of the Customer.
+    #:
+    #: If the current password does not match, an [InvalidCurrentPassword](ctp:api:type:InvalidCurrentPasswordError) error is returned.
     current_password: str
+    #: New password to be set.
     new_password: str
 
     def __init__(self, *, version: int, current_password: str, new_password: str):
@@ -863,8 +941,31 @@ class MyCustomerChangePassword(_BaseType):
         return MyCustomerChangePasswordSchema().dump(self)
 
 
-class MyCustomerResetPassword(_BaseType):
+class MyCustomerEmailVerify(_BaseType):
+    #: Value of the token to verify Customer email.
     token_value: str
+
+    def __init__(self, *, token_value: str):
+        self.token_value = token_value
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MyCustomerEmailVerify":
+        from ._schemas.customer import MyCustomerEmailVerifySchema
+
+        return MyCustomerEmailVerifySchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import MyCustomerEmailVerifySchema
+
+        return MyCustomerEmailVerifySchema().dump(self)
+
+
+class MyCustomerResetPassword(_BaseType):
+    #: Value of the token to reset the Customer password.
+    token_value: str
+    #: New password to be set.
     new_password: str
 
     def __init__(self, *, token_value: str, new_password: str):
@@ -888,9 +989,15 @@ class MyCustomerResetPassword(_BaseType):
 
 
 class MyCustomerSignin(_BaseType):
+    #: Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
     email: str
+    #: Password of the Customer.
     password: str
+    #: - If `MergeWithExistingCustomerCart`, [LineItems](ctp:api:type:LineItem) of the anonymous Cart are merged with the recently modified active Customer Cart.
+    #: - If `UseAsNewActiveCustomerCart`, the anonymous Cart is used as the new active Customer Cart, and no [LineItems](ctp:api:type:LineItem) are merged.
     active_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
+    #: - If `true`, the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart is updated.
+    #: - If `false`, only the prices, discounts, and tax rates are updated.
     update_product_data: typing.Optional[bool]
 
     def __init__(
@@ -921,6 +1028,9 @@ class MyCustomerSignin(_BaseType):
 
 
 class CustomerAddAddressAction(CustomerUpdateAction):
+    """Adding an address to the Customer produces the [CustomerAddressAdded](ctp:api:type:CustomerAddressAddedMessage) Message."""
+
+    #: Value to append to the `addresses` array.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -943,7 +1053,11 @@ class CustomerAddAddressAction(CustomerUpdateAction):
 
 
 class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
+    """Adds an Address from the `addresses` array to `billingAddressIds`. Either `addressId` or `addressKey` is required."""
+
+    #: `id` of the [Address](ctp:api:type:Address) to become a billing address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become a billing address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -972,7 +1086,11 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
+    """Adds an Address from the `addresses` array to `shippingAddressIds`. Either `addressId` or `addressKey` is required."""
+
+    #: `id` of the [Address](ctp:api:type:Address) to become a shipping address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become a shipping address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1001,7 +1119,9 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerAddStoreAction(CustomerUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+    """Associates the Customer with a Store."""
+
+    #: ResourceIdentifier of the Store to add.
     store: "StoreResourceIdentifier"
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
@@ -1024,8 +1144,17 @@ class CustomerAddStoreAction(CustomerUpdateAction):
 
 
 class CustomerChangeAddressAction(CustomerUpdateAction):
+    """Changing an address of the Customer produces the [CustomerAddressChanged](ctp:api:type:CustomerAddressChangedMessage) Message.
+
+    Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to change.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to change.
     address_key: typing.Optional[str]
+    #: Value to set.
     address: "BaseAddress"
 
     def __init__(
@@ -1056,6 +1185,9 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 
 
 class CustomerChangeEmailAction(CustomerUpdateAction):
+    """Changing the email of the Customer produces the [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message."""
+
+    #: Value to set.
     email: str
 
     def __init__(self, *, email: str):
@@ -1078,7 +1210,15 @@ class CustomerChangeEmailAction(CustomerUpdateAction):
 
 
 class CustomerRemoveAddressAction(CustomerUpdateAction):
+    """Removing an address from the Customer produces the [CustomerAddressRemoved](ctp:api:type:CustomerAddressRemovedMessage) Message.
+
+    Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1107,7 +1247,14 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
 
 
 class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
+    """Removes a billing address from `billingAddressesIds`.
+    If the billing address is the default billing address, the `defaultBillingAddressId` is unset. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1136,7 +1283,14 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
+    """Removes a shipping address from `shippingAddressesIds`.
+    If the shipping address is the default shipping address, the `defaultShippingAddressId` is unset. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1165,7 +1319,12 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
 
 
 class CustomerRemoveStoreAction(CustomerUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+    """Removes the association to a Store from the Customer.
+    If no more Stores are assigned, the Customer becomes a [global Customer](/../api/customers-overview#global-versus-store-specific-customers).
+
+    """
+
+    #: ResourceIdentifier of the Store to remove.
     store: "StoreResourceIdentifier"
 
     def __init__(self, *, store: "StoreResourceIdentifier"):
@@ -1188,11 +1347,12 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
 
 class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
+    #: User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
     address_id: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1220,23 +1380,24 @@ class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
+    #: User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
+    address_id: str
     #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the `address`.
     type: typing.Optional["TypeResourceIdentifier"]
     #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
     fields: typing.Optional["FieldContainer"]
-    address_id: str
 
     def __init__(
         self,
         *,
+        address_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None,
-        address_id: str
+        fields: typing.Optional["FieldContainer"] = None
     ):
+        self.address_id = address_id
         self.type = type
         self.fields = fields
-        self.address_id = address_id
 
         super().__init__(action="setAddressCustomType")
 
@@ -1255,8 +1416,10 @@ class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
 
 
 class CustomerSetAuthenticationModeAction(CustomerUpdateAction):
+    #: Value to set.
+    #: Changing a Customer's `authMode` from `Password` to `ExternalAuth` deletes the Customer's password.
     auth_mode: "AuthenticationMode"
-    #: Required when `authMode` is `Password`
+    #: Required when `authMode` is `Password`.
     password: typing.Optional[str]
 
     def __init__(
@@ -1282,7 +1445,10 @@ class CustomerSetAuthenticationModeAction(CustomerUpdateAction):
 
 
 class CustomerSetCompanyNameAction(CustomerUpdateAction):
-    #: If not defined, the company name is unset.
+    """Setting a company name produces the [CustomerCompanyNameSet](ctp:api:type:CustomerCompanyNameSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     company_name: typing.Optional[str]
 
     def __init__(self, *, company_name: typing.Optional[str] = None):
@@ -1308,7 +1474,7 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1365,7 +1531,10 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomerGroupAction(CustomerUpdateAction):
-    #: If not defined, the customer group is unset.
+    """Setting the Customer Group of the Customer produces the [CustomerGroupSet](ctp:api:type:CustomerGroupSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
 
     def __init__(
@@ -1392,8 +1561,10 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomerNumberAction(CustomerUpdateAction):
-    #: It should be **unique** across a project.
-    #: Once it's set, it cannot be changed.
+    """Sets a new ID that can be used to refer to a Customer in a human-reabable way (for use in emails, invoices, etc)."""
+
+    #: Value to set.
+    #: Once set, it cannot be changed.
     customer_number: typing.Optional[str]
 
     def __init__(self, *, customer_number: typing.Optional[str] = None):
@@ -1416,7 +1587,10 @@ class CustomerSetCustomerNumberAction(CustomerUpdateAction):
 
 
 class CustomerSetDateOfBirthAction(CustomerUpdateAction):
-    #: If not defined, the date of birth is unset.
+    """Setting the date of birth of the Customer produces the [CustomerDateOfBirthSet](ctp:api:type:CustomerDateOfBirthSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     date_of_birth: typing.Optional[datetime.date]
 
     def __init__(self, *, date_of_birth: typing.Optional[datetime.date] = None):
@@ -1439,8 +1613,14 @@ class CustomerSetDateOfBirthAction(CustomerUpdateAction):
 
 
 class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
-    #: If not defined, the customer's `defaultBillingAddress` is unset.
+    """Sets the default billing address from `addresses`.
+    The action adds the `id` of the specified Address to the `billingAddressIds` if not contained already. Either `addressId` or `addressKey` is required.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to become the default billing address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become the default billing address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1469,8 +1649,16 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
 
 
 class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
-    #: If not defined, the customer's `defaultShippingAddress` is unset.
+    """Sets the default shipping address from `addresses`.
+    The action adds the `id` of the specified address to the `shippingAddressIds` if not contained already. Either `addressId` or `addressKey` is required.
+
+    If the Tax Category of the Cart [ShippingInfo](ctp:api:type:ShippingInfo) is missing the TaxRate matching country and state given in the `shippingAddress` of that Cart, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
+
+    """
+
+    #: `id` of the [Address](ctp:api:type:Address) to become the default shipping address.
     address_id: typing.Optional[str]
+    #: `key` of the [Address](ctp:api:type:Address) to become the default shipping address.
     address_key: typing.Optional[str]
 
     def __init__(
@@ -1499,7 +1687,8 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
 
 
 class CustomerSetExternalIdAction(CustomerUpdateAction):
-    #: If not defined, the external ID is unset.
+    #: Value to set.
+    #: If empty, any existing value is removed.
     external_id: typing.Optional[str]
 
     def __init__(self, *, external_id: typing.Optional[str] = None):
@@ -1522,6 +1711,7 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
 
 class CustomerSetFirstNameAction(CustomerUpdateAction):
+    #: Value to set. If empty, any existing value is removed.
     first_name: typing.Optional[str]
 
     def __init__(self, *, first_name: typing.Optional[str] = None):
@@ -1544,7 +1734,7 @@ class CustomerSetFirstNameAction(CustomerUpdateAction):
 
 
 class CustomerSetKeyAction(CustomerUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: If `key` is absent or `null`, the existing key, if any, will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -1565,6 +1755,9 @@ class CustomerSetKeyAction(CustomerUpdateAction):
 
 
 class CustomerSetLastNameAction(CustomerUpdateAction):
+    """Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage)."""
+
+    #: Value to set. If empty, any existing value is removed.
     last_name: typing.Optional[str]
 
     def __init__(self, *, last_name: typing.Optional[str] = None):
@@ -1587,6 +1780,8 @@ class CustomerSetLastNameAction(CustomerUpdateAction):
 
 
 class CustomerSetLocaleAction(CustomerUpdateAction):
+    #: Value to set.
+    #: Must be one of the languages supported by the [Project](ctp:api:type:Project).
     locale: typing.Optional[str]
 
     def __init__(self, *, locale: typing.Optional[str] = None):
@@ -1609,6 +1804,7 @@ class CustomerSetLocaleAction(CustomerUpdateAction):
 
 
 class CustomerSetMiddleNameAction(CustomerUpdateAction):
+    #: Value to set. If empty, any existing value is removed.
     middle_name: typing.Optional[str]
 
     def __init__(self, *, middle_name: typing.Optional[str] = None):
@@ -1631,6 +1827,7 @@ class CustomerSetMiddleNameAction(CustomerUpdateAction):
 
 
 class CustomerSetSalutationAction(CustomerUpdateAction):
+    #: Value to set. If empty, any existing value is removed.
     salutation: typing.Optional[str]
 
     def __init__(self, *, salutation: typing.Optional[str] = None):
@@ -1653,6 +1850,12 @@ class CustomerSetSalutationAction(CustomerUpdateAction):
 
 
 class CustomerSetStoresAction(CustomerUpdateAction):
+    """Sets the Stores the Customer account is associated with.
+    If no Stores are specified, the Customer becomes a [global Customer](/../api/customers-overview#global-versus-store-specific-customers).
+
+    """
+
+    #: ResourceIdentifier of the Stores to set.
     stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
 
     def __init__(
@@ -1677,6 +1880,9 @@ class CustomerSetStoresAction(CustomerUpdateAction):
 
 
 class CustomerSetTitleAction(CustomerUpdateAction):
+    """Setting the title of the Customer produces the [CustomerTitleSetMessage](ctp:api:type:CustomerTitleSetMessage)."""
+
+    #: Value to set. If empty, any existing value is removed.
     title: typing.Optional[str]
 
     def __init__(self, *, title: typing.Optional[str] = None):
@@ -1699,7 +1905,8 @@ class CustomerSetTitleAction(CustomerUpdateAction):
 
 
 class CustomerSetVatIdAction(CustomerUpdateAction):
-    #: If not defined, the vat Id is unset.
+    #: Value to set.
+    #: If empty, any existing value is removed.
     vat_id: typing.Optional[str]
 
     def __init__(self, *, vat_id: typing.Optional[str] = None):

@@ -35,6 +35,11 @@ class ByProjectKeyMeSignupRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerSignInResult"]:
+        """If used with an [access token for an anonymous session](/../api/authorization#tokens-for-anonymous-sessions), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
+
+        Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/signup",

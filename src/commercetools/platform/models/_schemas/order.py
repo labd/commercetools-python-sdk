@@ -721,6 +721,12 @@ class OrderFromQuoteDraftSchema(helpers.BaseSchema):
         missing=None,
     )
     version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    quote_state_to_accepted = marshmallow.fields.Boolean(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        missing=None,
+        data_key="quoteStateToAccepted",
+    )
     order_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},

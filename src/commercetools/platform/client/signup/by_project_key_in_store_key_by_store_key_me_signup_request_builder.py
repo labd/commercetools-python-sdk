@@ -38,6 +38,11 @@ class ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerSignInResult"]:
+        """If omitted in the request body, the [Customer](ctp:api:type:Customer) `stores` field is set to the Store specified in the path parameter.
+
+        Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/signup",

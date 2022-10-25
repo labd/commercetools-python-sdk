@@ -29,6 +29,7 @@ class CustomerModel(abstract.BaseModel):
             version=1,
             created_at=now,
             last_modified_at=now,
+            authentication_mode=models.AuthenticationMode.PASSWORD,
             customer_number=draft.customer_number,
             email=draft.email,
             password=draft.password,

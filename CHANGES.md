@@ -1,3 +1,9 @@
+22.10.25
+--------
+- Regenerate code with latest RAML specifications, bringing the SDK up to date
+   again with new features released by commercetools
+- Update logic to set the HTTP User agent
+
 22.6.4
 ------
 Switch to CalVer format instead of the SemVer we did earlier. Since we generate

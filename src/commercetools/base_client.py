@@ -8,12 +8,12 @@ from requests.adapters import HTTPAdapter
 from requests_oauthlib import OAuth2Session
 from urllib3 import Retry
 
-from commercetools.version import __version__
 from commercetools.constants import HEADER_CORRELATION_ID
 from commercetools.exceptions import CommercetoolsError
 from commercetools.helpers import _concurrent_retry
 from commercetools.services import ServicesMixin
 from commercetools.utils import BaseTokenSaver, DefaultTokenSaver, fix_token_url
+from commercetools.version import __version__
 
 
 class RefreshingOAuth2Session(OAuth2Session):
@@ -88,7 +88,7 @@ class BaseClient:
             },
             token_updater=self._save_token,
         )
-        self._http_client.headers.update({'User-Agent': self._get_user_agent()})
+        self._http_client.headers.update({"User-Agent": self._get_user_agent()})
 
         if not http_adapter:
             # Register retry handling for Connection errors and 502, 503, 504.
@@ -223,10 +223,15 @@ class BaseClient:
         return config
 
     def _get_user_agent(self):
-        py_version =  "%d.%d" % sys.version_info[0:2]
+        py_version = "%d.%d" % sys.version_info[0:2]
         arch = platform.machine()
         return "commercetools-python-sdk/%s Python/%s (%s; %s; %s)" % (
-            __version__, py_version, sys.implementation.name, sys.platform, arch)
+            __version__,
+            py_version,
+            sys.implementation.name,
+            sys.platform,
+            arch,
+        )
 
 
 class Client(BaseClient, ServicesMixin):

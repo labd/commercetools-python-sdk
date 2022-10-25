@@ -16,7 +16,9 @@ def client_environment_settings(monkeypatch):
     monkeypatch.setenv("CTP_CLIENT_SECRET", "client_secret")
     monkeypatch.setenv("CTP_CLIENT_SCOPES", "some_scope")
     monkeypatch.setenv("CTP_API_URL", "https://api.europe-west1.gcp.commercetools.com")
-    monkeypatch.setenv("CTP_AUTH_URL", "https://auth.europe-west1.gcp.commercetools.com")
+    monkeypatch.setenv(
+        "CTP_AUTH_URL", "https://auth.europe-west1.gcp.commercetools.com"
+    )
 
 
 def test_client_with_environment_settings_is_setup(

@@ -5,7 +5,6 @@ import uuid
 
 import marshmallow
 from marshmallow import fields
-from requests.packages.urllib3 import response
 from requests_mock.request import _RequestObjectProxy
 
 from commercetools import CommercetoolsError
@@ -16,8 +15,7 @@ from commercetools.platform.models._schemas.error import (
     DuplicateFieldErrorSchema,
     ErrorResponseSchema,
 )
-from commercetools.services import traits
-from commercetools.testing import utils
+from commercetools.testing import traits, utils
 from commercetools.testing.predicates import PredicateFilter
 from commercetools.testing.utils import create_commercetools_response
 

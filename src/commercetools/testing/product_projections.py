@@ -1,15 +1,25 @@
 import typing
 
+from marshmallow import fields
 from commercetools.platform import models
 from commercetools.platform.models._schemas.product import (
     ProductProjectionPagedQueryResponseSchema,
     ProductProjectionSchema,
     ProductSchema,
 )
-from commercetools.services.product_projections import _ProductProjectionQuerySchema
-from commercetools.testing import utils
+from commercetools.testing import traits, utils
 from commercetools.testing.abstract import ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
+
+class _ProductProjectionQuerySchema(
+    traits.ExpandableSchema,
+    traits.SortableSchema,
+    traits.PagingSchema,
+    traits.QuerySchema,
+    traits.PriceSelectingSchema,
+):
+    staged = fields.Bool(required=False, missing=False)
+
 
 
 class ProductProjectionsBackend(ServiceBackend):

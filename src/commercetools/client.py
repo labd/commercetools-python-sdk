@@ -11,10 +11,9 @@ from .base_client import BaseClient
 from .constants import HEADER_CORRELATION_ID
 from .exceptions import CommercetoolsError
 from .protocols import Model
-from .services import ServicesMixin
 
 
-class Client(BaseClient, ServicesMixin):
+class Client(BaseClient):
     def __init__(self, *args, **kwargs):
         warnings.warn(
             "This client interface will be removed in the near future, "

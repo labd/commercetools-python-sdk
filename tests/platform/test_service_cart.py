@@ -6,15 +6,15 @@ from commercetools.platform import models
 from commercetools.platform.client import Client
 
 
-def test_cart_get_by_id(ct_platform_client: Client, cart_draft):
-    cart = ct_platform_client.with_project_key("test").carts().post(cart_draft)
+def test_cart_with_id_get(ct_platform_client: Client, cart_draft):
+    cart = ct_platform_client.with_project_key("unittest").carts().post(cart_draft)
 
     assert cart.id
 
 
 @pytest.fixture
 def cart_draft(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     product_1 = client.products().post(
         models.ProductDraft(
             key="product-1",
@@ -54,7 +54,7 @@ def cart_draft(ct_platform_client: Client):
 
 
 def test_update_actions(commercetools_api, ct_platform_client, cart_draft):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     cart = client.carts().post(cart_draft)
 
     payment_reference = models.PaymentReference(id=str(uuid.uuid4()))

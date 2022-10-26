@@ -2,24 +2,22 @@ import os
 
 import requests
 
-from commercetools import Client
 from commercetools.platform import models
+from commercetools.platform.client import Client
 from commercetools.platform.models import (
     ChannelDraft,
     ChannelResourceIdentifier,
     ChannelRoleEnum,
-    LocalizedString,
     ProductDraft,
     ProductTypeResourceIdentifier,
     StoreDraft,
 )
 
 
-def test_http_server(commercetools_client, commercetools_http_server):
+def test_http_server(ct_platform_client, commercetools_http_server):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
     client = Client(
-        project_key="unittest",
         client_id="client-id",
         client_secret="client-secret",
         scope=[],
@@ -27,18 +25,22 @@ def test_http_server(commercetools_client, commercetools_http_server):
         token_url=f"{commercetools_http_server.api_url}/oauth/token",
     )
 
-    query_result = client.products.query()
+    query_result = ct_platform_client.with_project_key("unittest").products().get()
     assert query_result.count == 0
-    product = client.products.create(
-        ProductDraft(
-            key="test-product",
-            product_type=ProductTypeResourceIdentifier(key="dummy"),
-            name={"nl": "Testje"},
-            slug={"en": "foo-bar"},
+    product = (
+        client.with_project_key("unittest")
+        .products()
+        .post(
+            ProductDraft(
+                key="test-product",
+                product_type=ProductTypeResourceIdentifier(key="dummy"),
+                name={"nl": "Testje"},
+                slug={"en": "foo-bar"},
+            )
         )
     )
 
-    client.products.get_by_id(product.id)
+    client.with_project_key("unittes").products().with_id(product.id).get()
     url = commercetools_http_server.api_url + f"/unittest/products/{product.id}"
     response = requests.get(url, headers={"Authorization": "Bearer token"})
 
@@ -47,11 +49,10 @@ def test_http_server(commercetools_client, commercetools_http_server):
     assert data["masterData"]["staged"]["name"]["nl"] == "Testje"
 
 
-def test_http_server_expanding(commercetools_client, commercetools_http_server):
+def test_http_server_expanding(ct_platform_client: Client, commercetools_http_server):
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
     client = Client(
-        project_key="unittest",
         client_id="client-id",
         client_secret="client-secret",
         scope=[],
@@ -59,15 +60,19 @@ def test_http_server_expanding(commercetools_client, commercetools_http_server):
         token_url=f"{commercetools_http_server.api_url}/oauth/token",
     )
 
-    client.channels.create(
+    client.with_project_key("unittest").channels().post(
         ChannelDraft(key="FOO", roles=[ChannelRoleEnum.PRODUCT_DISTRIBUTION])
     )
 
-    store = client.stores.create(
-        StoreDraft(
-            name=models.LocalizedString(nl="foo"),
-            key="FOO",
-            distribution_channels=[ChannelResourceIdentifier(key="FOO")],
+    store = (
+        client.with_project_key("unittest")
+        .stores()
+        .post(
+            StoreDraft(
+                name=models.LocalizedString(nl="foo"),
+                key="FOO",
+                distribution_channels=[ChannelResourceIdentifier(key="FOO")],
+            )
         )
     )
 

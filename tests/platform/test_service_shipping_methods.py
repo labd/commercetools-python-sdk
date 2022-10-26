@@ -2,33 +2,46 @@ import pytest
 from requests.exceptions import HTTPError
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
-def test_shipping_method_get_by_id(old_client):
-    shipping_method = old_client.shipping_methods.create(
-        models.ShippingMethodDraft(
-            key="test-shipping-method",
-            name="test shipping method",
-            tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
-            zone_rates=[],
-            is_default=False,
+def test_shipping_method_with_id_get(ct_platform_client: Client):
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .post(
+            models.ShippingMethodDraft(
+                key="test-shipping-method",
+                name="test shipping method",
+                tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
+                zone_rates=[],
+                is_default=False,
+            )
         )
     )
-
+    assert shipping_method
     assert shipping_method.id
     assert shipping_method.key == "test-shipping-method"
     assert shipping_method.name == "test shipping method"
 
-    shipping_method = old_client.shipping_methods.get_by_id(shipping_method.id)
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .with_id(shipping_method.id)
+        .get()
+    )
+    assert shipping_method
     assert shipping_method.id
     assert shipping_method.key == "test-shipping-method"
 
     with pytest.raises(HTTPError):
-        old_client.shipping_methods.get_by_id("invalid")
+        ct_platform_client.with_project_key("unittest").shipping_methods().with_id(
+            "invalid"
+        ).get()
 
 
-def test_shipping_method_query(old_client):
-    old_client.shipping_methods.create(
+def test_shipping_method_query(ct_platform_client: Client):
+    ct_platform_client.with_project_key("unittest").shipping_methods().post(
         models.ShippingMethodDraft(
             key="test-shipping_method1",
             name="test shipping method1",
@@ -37,7 +50,7 @@ def test_shipping_method_query(old_client):
             is_default=False,
         )
     )
-    old_client.shipping_methods.create(
+    ct_platform_client.with_project_key("unittest").shipping_methods().post(
         models.ShippingMethodDraft(
             key="test-shipping_method2",
             name="test shipping method2",
@@ -48,64 +61,96 @@ def test_shipping_method_query(old_client):
     )
 
     # single sort query
-    result = old_client.shipping_methods.query(sort="id asc")
+    result = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .get(sort="id asc")
+    )
     assert len(result.results) == 2
     assert result.total == 2
 
     # multiple sort queries
-    result = old_client.shipping_methods.query(sort=["id asc", "name asc"])
+    result = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .get(sort=["id asc", "name asc"])
+    )
     assert len(result.results) == 2
     assert result.total == 2
 
 
-def test_shipping_method_update(old_client):
+def test_shipping_method_update(ct_platform_client: Client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    shipping_method = old_client.shipping_methods.create(
-        models.ShippingMethodDraft(
-            key="test-shipping-method",
-            name="test shipping method",
-            tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
-            zone_rates=[],
-            is_default=False,
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .post(
+            models.ShippingMethodDraft(
+                key="test-shipping-method",
+                name="test shipping method",
+                tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
+                zone_rates=[],
+                is_default=False,
+            )
         )
     )
     assert shipping_method.key == "test-shipping-method"
 
-    shipping_method = old_client.shipping_methods.update_by_id(
-        id=shipping_method.id,
-        version=shipping_method.version,
-        actions=[models.ShippingMethodChangeNameAction(name="shipping-method-2")],
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .with_id(shipping_method.id)
+        .post(
+            models.ShippingMethodUpdate(
+                version=shipping_method.version,
+                actions=[
+                    models.ShippingMethodChangeNameAction(name="shipping-method-2")
+                ],
+            )
+        )
     )
 
     assert shipping_method.key == "test-shipping-method"
 
 
-def test_shipping_method_update(old_client):
-    shipping_method = old_client.shipping_methods.create(
-        models.ShippingMethodDraft(
-            key="test-shipping-method",
-            name="test shipping method",
-            tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
-            zone_rates=[],
-            is_default=False,
+def test_shipping_method_update_two(ct_platform_client: Client):
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .post(
+            models.ShippingMethodDraft(
+                key="test-shipping-method",
+                name="test shipping method",
+                tax_category=models.TaxCategoryResourceIdentifier(id="dummy"),
+                zone_rates=[],
+                is_default=False,
+            )
         )
     )
 
     assert shipping_method.id
     assert shipping_method.localized_description is None
 
-    shipping_method = old_client.shipping_methods.update_by_id(
-        id=shipping_method.id,
-        version=shipping_method.version,
-        actions=[
-            models.ShippingMethodSetLocalizedDescriptionAction(
-                localized_description=models.LocalizedString({"en": "a new lstring"})
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .with_id(shipping_method.id)
+        .post(
+            models.ShippingMethodUpdate(
+                version=shipping_method.version,
+                actions=[
+                    models.ShippingMethodSetLocalizedDescriptionAction(
+                        localized_description=models.LocalizedString(
+                            {"en": "a new lstring"}
+                        )
+                    )
+                ],
             )
-        ],
+        )
     )
 
     assert shipping_method.localized_description == models.LocalizedString(

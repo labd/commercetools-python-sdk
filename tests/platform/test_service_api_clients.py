@@ -1,15 +1,25 @@
 import pytest
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
-def test_api_client_flow(old_client, api_client_draft):
-    api_client = old_client.api_clients.create(api_client_draft)
+def test_api_client_flow(ct_platform_client: Client, api_client_draft):
+    api_client = (
+        ct_platform_client.with_project_key("test").api_clients().post(api_client_draft)
+    )
 
+    assert api_client
     assert api_client.id
 
-    deleted_api_client = old_client.api_clients.delete_by_id(api_client.id)
+    deleted_api_client = (
+        ct_platform_client.with_project_key("test")
+        .api_clients()
+        .with_id(api_client.id)
+        .delete()
+    )
 
+    assert deleted_api_client
     assert api_client.id == deleted_api_client.id
 
 

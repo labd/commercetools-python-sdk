@@ -91,7 +91,7 @@ class AuthBackend(BaseBackend):
             if token in stored_tokens:
                 status = {
                     "active": True,
-                    "scope": "manage_project:todo",
+                    "scope": "manage_project:example-project",
                     "exp": self._expire_time,
                 }
             else:

@@ -5,8 +5,8 @@ import pytest
 from requests_mock.adapter import Adapter
 
 from commercetools import CommercetoolsError
-from commercetools.client import Client
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
 @pytest.fixture()
@@ -34,14 +34,13 @@ def test_auto_refresh(commercetools_api):
     client = Client(
         client_id="unittest",
         client_secret="mysecret",
-        project_key="test",
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
-    )
-    client.products.query()
+    ).with_project_key("unittest")
+    client.products().get()
     time.sleep(1)
-    client.products.query()
-    client.products.query()
+    client.products().get()
+    client.products().get()
 
     auth_headers = set()
     for request in commercetools_api.requests_mock.request_history:
@@ -56,7 +55,7 @@ def test_cache_token(commercetools_api):
     Client(
         client_id="unittest",
         client_secret="none",
-        project_key="test",
+        scope=["manage_project:test"],
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
@@ -90,18 +89,22 @@ def test_allows_passing_custom_http_adapter():
     assert len(my_adapter.request_history) == 1
 
 
-def test_resource_update_conflict(old_client):
+def test_resource_update_conflict(ct_platform_client: Client):
     """Test the return value of the update methods.
 
     It doesn't test the actual update itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    product = old_client.products.create(
-        models.ProductDraft(
-            key="test-product",
-            product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name={"en": "my-product"},
-            slug={"en": "foo-bar"},
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .post(
+            models.ProductDraft(
+                key="test-product",
+                product_type=models.ProductTypeResourceIdentifier(key="dummy"),
+                name={"en": "my-product"},
+                slug={"en": "foo-bar"},
+            )
         )
     )
 
@@ -109,71 +112,112 @@ def test_resource_update_conflict(old_client):
     assert uuid.UUID(product.id)
     assert product.key == "test-product"
 
-    product = old_client.products.update_by_id(
-        id=product.id,
-        version=product.version,
-        actions=[
-            models.ProductChangeSlugAction(slug=models.LocalizedString(nl="nl-slug2"))
-        ],
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .with_id(product.id)
+        .post(
+            models.ProductUpdate(
+                version=product.version,
+                actions=[
+                    models.ProductChangeSlugAction(
+                        slug=models.LocalizedString(nl="nl-slug2")
+                    )
+                ],
+            )
+        )
     )
     assert product.key == "test-product"
     assert product.version == 2
 
     # This should raise a version conflict error
     with pytest.raises(CommercetoolsError) as exc:
-        product = old_client.products.update_by_id(
-            id=product.id,
-            version=1,
-            actions=[
-                models.ProductChangeSlugAction(
-                    slug=models.LocalizedString(nl="nl-slug3")
+        product = (
+            ct_platform_client.with_project_key("unittest")
+            .products()
+            .with_id(product.id)
+            .post(
+                models.ProductUpdate(
+                    version=1,
+                    actions=[
+                        models.ProductChangeSlugAction(
+                            slug=models.LocalizedString(nl="nl-slug3")
+                        )
+                    ],
                 )
-            ],
+            )
         )
     assert exc.value.response.status_code == 409
     assert exc.value.response.errors[0].current_version == 2
 
     # Force it
-    product = old_client.products.update_by_id(
-        id=product.id,
-        version=1,
-        actions=[
-            models.ProductChangeSlugAction(slug=models.LocalizedString(nl="nl-slug2"))
-        ],
-        force_update=True,
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .with_id(product.id)
+        .post(
+            models.ProductUpdate(
+                version=1,
+                actions=[
+                    models.ProductChangeSlugAction(
+                        slug=models.LocalizedString(nl="nl-slug2")
+                    )
+                ],
+            ),
+            options={"force_version": True},
+        )
     )
 
 
-def test_resource_delete_conflict(old_client):
+def test_resource_delete_conflict(ct_platform_client: Client):
     """Test the return value of the delete methods.
 
     It doesn't test the actual delete itself.
     TODO: See if this is worth testing since we're using a mocking backend
     """
-    product = old_client.products.create(
-        models.ProductDraft(
-            key="test-product",
-            product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name={"en": "my-product"},
-            slug={"en": "foo-bar"},
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .post(
+            models.ProductDraft(
+                key="test-product",
+                product_type=models.ProductTypeResourceIdentifier(key="dummy"),
+                name={"en": "my-product"},
+                slug={"en": "foo-bar"},
+            )
         )
     )
 
-    product = old_client.products.update_by_id(
-        id=product.id,
-        version=product.version,
-        actions=[
-            models.ProductChangeSlugAction(slug=models.LocalizedString(nl="nl-slug2"))
-        ],
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .with_id(product.id)
+        .post(
+            models.ProductUpdate(
+                version=product.version,
+                actions=[
+                    models.ProductChangeSlugAction(
+                        slug=models.LocalizedString(nl="nl-slug2")
+                    )
+                ],
+            ),
+        )
     )
     assert product.version == 2
 
     # This should raise a version conflict error
     with pytest.raises(CommercetoolsError) as exc:
-        product = old_client.products.delete_by_id(id=product.id, version=1)
+        product = (
+            ct_platform_client.with_project_key("unittest")
+            .products()
+            .with_id(product.id)
+            .delete(version=1)
+        )
 
     assert exc.value.response.status_code == 409
     assert exc.value.response.errors[0].current_version == 2
 
     # Force it
-    old_client.products.delete_by_id(id=product.id, version=1, force_delete=True)
+    ct_platform_client.with_project_key("unittest").products().with_id(
+        product.id
+    ).delete(version=1, options={"force_version": True})

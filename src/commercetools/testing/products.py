@@ -16,8 +16,7 @@ from commercetools.platform.models._schemas.product import (
     ProductUpdateSchema,
     ProductVariantSchema,
 )
-from commercetools.services.products import _ProductQuerySchema
-from commercetools.testing import utils
+from commercetools.testing import traits, utils
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     create_commercetools_response,
@@ -25,6 +24,16 @@ from commercetools.testing.utils import (
     get_product_variants,
     parse_request_params,
 )
+
+
+class _ProductQuerySchema(
+    traits.ExpandableSchema,
+    traits.SortableSchema,
+    traits.PagingSchema,
+    traits.QuerySchema,
+    traits.PriceSelectingSchema,
+):
+    pass
 
 
 class ProductsModel(BaseModel):

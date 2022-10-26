@@ -22,7 +22,7 @@ def create_products(client: ByProjectKeyRequestBuilder):
 
 
 def test_page_paginator(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.Paginator(client.products().get, sort=["id asc", "name asc"])
@@ -34,7 +34,7 @@ def test_page_paginator(ct_platform_client: Client):
 
 
 def test_page_paginator_slice_start(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.Paginator(client.products().get, sort=["id asc", "name asc"])
@@ -48,7 +48,7 @@ def test_page_paginator_slice_start(ct_platform_client: Client):
 
 
 def test_page_paginator_slice_stop(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.Paginator(client.products().get, sort=["id asc", "name asc"])
@@ -62,7 +62,7 @@ def test_page_paginator_slice_stop(ct_platform_client: Client):
 
 
 def test_page_paginator_slice_start_stop(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.Paginator(client.products().get, sort=["id asc", "name asc"])
@@ -76,7 +76,7 @@ def test_page_paginator_slice_start_stop(ct_platform_client: Client):
 
 
 def test_cursor_paginator(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.CursorPaginator(
@@ -90,7 +90,7 @@ def test_cursor_paginator(ct_platform_client: Client):
 
 
 def test_cursor_paginator_slice_start(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.CursorPaginator(
@@ -104,7 +104,7 @@ def test_cursor_paginator_slice_start(ct_platform_client: Client):
 
 
 def test_cursor_paginator_slice_stop(ct_platform_client: Client):
-    client = ct_platform_client.with_project_key("test")
+    client = ct_platform_client.with_project_key("unittest")
     create_products(client)
 
     paginator = paginators.CursorPaginator(

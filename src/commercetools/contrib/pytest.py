@@ -5,7 +5,6 @@ import typing
 import pytest
 import requests
 
-from commercetools import Client
 from commercetools.platform.client import Client as PlatformClient
 from commercetools.testing import backend_mocker
 from commercetools.testing.server import Server
@@ -25,20 +24,10 @@ def commercetools_api():
 
 
 @pytest.fixture
-def ct_platform_client(commercetools_api) -> typing.Generator[Client, None, None]:
+def ct_platform_client(
+    commercetools_api,
+) -> typing.Generator[PlatformClient, None, None]:
     yield PlatformClient(
-        client_id="client-id",
-        client_secret="client-secret",
-        scope=[],
-        url="https://api.europe-west1.gcp.commercetools.com",
-        token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
-    )
-
-
-@pytest.fixture
-def commercetools_client(commercetools_api) -> typing.Generator[Client, None, None]:
-    yield Client(
-        project_key="unittest",
         client_id="client-id",
         client_secret="client-secret",
         scope=[],

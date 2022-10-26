@@ -5,50 +5,74 @@ from commercetools.platform import models
 from commercetools.platform.client import Client
 
 
-def test_product_projections_get_by_id(old_client):
+def test_product_projections_with_id_get(ct_platform_client: Client):
     variant = models.ProductVariantDraft()
-    product_create = old_client.products.create(
-        models.ProductDraft(
-            key="test-product",
-            product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product"),
-            slug=models.LocalizedString(en=f"my-product"),
-            master_variant=variant,
-            variants=[variant],
-            publish=False,
+    product_create = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .post(
+            models.ProductDraft(
+                key="test-product",
+                product_type=models.ProductTypeResourceIdentifier(key="dummy"),
+                name=models.LocalizedString(en=f"my-product"),
+                slug=models.LocalizedString(en=f"my-product"),
+                master_variant=variant,
+                variants=[variant],
+                publish=False,
+            )
         )
     )
 
-    product = old_client.product_projections.get_by_id(product_create.id, staged=True)
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .product_projections()
+        .with_id(product_create.id)
+        .get(staged=True)
+    )
+    assert product
     assert product.id == product_create.id
     assert product.key == product_create.key
 
 
-def test_product_projections_get_by_id_not_found(old_client):
+def test_product_projections_get_by_id_not_found(ct_platform_client: Client):
     with pytest.raises(HTTPError):
-        old_client.products.get_by_id("invalid")
+        ct_platform_client.with_project_key("unittest").products().with_id(
+            "invalid"
+        ).get()
 
 
-def test_product_projections_get_by_key(old_client):
+def test_product_projections_get_by_key(ct_platform_client: Client):
     variant = models.ProductVariantDraft()
-    product_create = old_client.products.create(
-        models.ProductDraft(
-            key="test-product",
-            product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product"),
-            slug=models.LocalizedString(en=f"my-product"),
-            master_variant=variant,
-            variants=[variant],
-            publish=False,
+    product_create = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .post(
+            models.ProductDraft(
+                key="test-product",
+                product_type=models.ProductTypeResourceIdentifier(key="dummy"),
+                name=models.LocalizedString(en=f"my-product"),
+                slug=models.LocalizedString(en=f"my-product"),
+                master_variant=variant,
+                variants=[variant],
+                publish=False,
+            )
         )
     )
-    product = old_client.product_projections.get_by_key(product_create.key, staged=True)
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .product_projections()
+        .with_key(product_create.key)
+        .get(staged=True)
+    )
+    assert product
     assert product.id == product_create.id
     assert product.key == product_create.key
 
 
-def test_product_projections_query_parameters_are_passed(old_client, commercetools_api):
-    old_client.products.query(
+def test_product_projections_query_parameters_are_passed(
+    ct_platform_client: Client, commercetools_api
+):
+    ct_platform_client.with_project_key("unittest").products().get(
         expand="productType", price_country="GB", price_currency="GBP"
     )
 
@@ -58,13 +82,15 @@ def test_product_projections_query_parameters_are_passed(old_client, commercetoo
         assert field in last_request.qs
 
 
-def test_product_projections_get_by_key_not_found(old_client):
+def test_product_projections_get_by_key_not_found(ct_platform_client: Client):
     with pytest.raises(HTTPError):
-        old_client.products.get_by_key("invalid")
+        ct_platform_client.with_project_key("unittest").products().with_id(
+            "invalid"
+        ).get()
 
 
-def test_product_projections_query(ct_platform_client: Client, old_client):
-    client = ct_platform_client.with_project_key("test")
+def test_product_projections_query(ct_platform_client: Client):
+    client = ct_platform_client.with_project_key("unittest")
 
     for key in ["product-1", "product-2"]:
         variant = models.ProductVariantDraft()
@@ -97,6 +123,7 @@ def test_product_projections_query(ct_platform_client: Client, old_client):
     result = client.product_projections().get(
         sort="id asc", where=[f'slug(nl-NL="product-3")'], expand=["parent.category"]
     )
+    assert result
     assert len(result.results) == 2
     assert result.total == 2
     assert result.results[0].key == "product-1"

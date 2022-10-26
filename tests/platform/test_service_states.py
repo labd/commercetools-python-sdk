@@ -1,10 +1,12 @@
 import pytest
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
-def test_state_flow(old_client, state_draft):
-    state = old_client.states.create(state_draft)
+def test_state_flow(ct_platform_client: Client, state_draft):
+    state = ct_platform_client.with_project_key("unittest").states().post(state_draft)
+    assert state
     assert state.id
 
     new_name = models.LocalizedString({"en": "new_name"})
@@ -17,18 +19,36 @@ def test_state_flow(old_client, state_draft):
             roles=[models.StateRoleEnum.REVIEW_INCLUDED_IN_STATISTICS]
         ),
     ]
-    state = old_client.states.update_by_id(state.id, state.version, update_actions)
+    state = (
+        ct_platform_client.with_project_key("unittest")
+        .states()
+        .with_id(state.id)
+        .post(models.StateUpdate(version=state.version, actions=update_actions))
+    )
+    assert state
     assert state.name == new_name
     assert state.description == new_description
     assert state.initial is True
-    assert len(state.roles) == 1
+    assert state.roles and len(state.roles) == 1
 
-    state = old_client.states.update_by_id(
-        state.id, state.version, [models.StateSetRolesAction(roles=[])]
+    state = (
+        ct_platform_client.with_project_key("unittest")
+        .states()
+        .with_id(state.id)
+        .post(
+            models.StateUpdate(
+                version=state.version, actions=[models.StateSetRolesAction(roles=[])]
+            )
+        )
     )
     assert len(state.roles) == 0
 
-    deleted_state = old_client.states.delete_by_id(state.id, state.version)
+    deleted_state = (
+        ct_platform_client.with_project_key("unittest")
+        .states()
+        .with_id(state.id)
+        .delete(version=state.version)
+    )
     assert state.id == deleted_state.id
 
 

@@ -1,13 +1,22 @@
 import datetime
 
 from commercetools.platform import models
+from commercetools.platform.client import Client
 
 
-def test_orders_get_by_id(old_client):
-    cart = old_client.carts.create(models.CartDraft(currency="EUR"))
-    order = old_client.orders.create(
-        models.OrderFromCartDraft(
-            id=cart.id, cart=cart, version=1, order_number="test-order"
+def test_orders_with_id_get(ct_platform_client: Client):
+    cart = (
+        ct_platform_client.with_project_key("unittest")
+        .carts()
+        .post(models.CartDraft(currency="EUR"))
+    )
+    order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .post(
+            models.OrderFromCartDraft(
+                id=cart.id, cart=cart, version=1, order_number="test-order"
+            )
         )
     )
 
@@ -15,22 +24,30 @@ def test_orders_get_by_id(old_client):
     assert order.order_number == "test-order"
 
 
-def test_orders_query(old_client):
-    results = old_client.orders.query()
+def test_orders_query(ct_platform_client: Client):
+    results = ct_platform_client.with_project_key("unittest").orders().get()
     assert results.total == 0
 
-    cart = old_client.carts.create(models.CartDraft(currency="EUR"))
-    order = old_client.orders.create(
-        models.OrderFromCartDraft(
-            id=cart.id, cart=cart, version=1, order_number="test-order"
+    cart = (
+        ct_platform_client.with_project_key("unittest")
+        .carts()
+        .post(models.CartDraft(currency="EUR"))
+    )
+    order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .post(
+            models.OrderFromCartDraft(
+                id=cart.id, cart=cart, version=1, order_number="test-order"
+            )
         )
     )
 
-    results = old_client.orders.query()
+    results = ct_platform_client.with_project_key("unittest").orders().get()
     assert results.total == 1
 
 
-def test_orders_query_filter(commercetools_api, old_client):
+def test_orders_query_filter(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
     where = [
@@ -38,78 +55,110 @@ def test_orders_query_filter(commercetools_api, old_client):
         'createdAt >= "2019-10-15T14:12:36.464465"',
     ]
 
-    results = old_client.orders.query(where=where)
+    results = ct_platform_client.with_project_key("unittest").orders().get(where=where)
     assert results.total == 1
 
 
-def test_orders_delete(commercetools_api, old_client):
+def test_orders_delete(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    deleted_order = old_client.orders.delete_by_id(order.id, order.version)
+    deleted_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .delete(version=order.version)
+    )
     assert order.id == deleted_order.id
 
 
-def test_add_existing_order(commercetools_api, old_client):
+def test_add_existing_order(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    assert old_client.orders.get_by_id(order.id).order_number == order.order_number
+    result = (
+        ct_platform_client.with_project_key("unittest").orders().with_id(order.id).get()
+    )
+    assert result.order_number == order.order_number
 
 
-def test_update_order_state_action(commercetools_api, old_client):
+def test_update_order_state_action(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
 
     commercetools_api.orders.add_existing(order)
 
-    updated_order = old_client.orders.update_by_id(
-        order.id,
-        order.version,
-        actions=[
-            models.OrderChangeOrderStateAction(order_state=models.OrderState.CONFIRMED)
-        ],
+    updated_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .post(
+            models.OrderUpdate(
+                version=order.version,
+                actions=[
+                    models.OrderChangeOrderStateAction(
+                        order_state=models.OrderState.CONFIRMED
+                    )
+                ],
+            )
+        )
     )
 
     assert updated_order.order_state == models.OrderState.CONFIRMED
 
 
-def test_update_payment_state_action(commercetools_api, old_client):
+def test_update_payment_state_action(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
     order.payment_state = None
 
     commercetools_api.orders.add_existing(order)
 
-    updated_order = old_client.orders.update_by_id(
-        order.id,
-        order.version,
-        actions=[
-            models.OrderChangePaymentStateAction(payment_state=models.PaymentState.PAID)
-        ],
+    updated_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .post(
+            models.OrderUpdate(
+                version=order.version,
+                actions=[
+                    models.OrderChangePaymentStateAction(
+                        payment_state=models.PaymentState.PAID
+                    )
+                ],
+            )
+        )
     )
 
     assert updated_order.payment_state == models.PaymentState.PAID
 
 
-def test_update_order_add_delivery(commercetools_api, old_client):
+def test_update_order_add_delivery(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
 
     commercetools_api.orders.add_existing(order)
 
-    updated_order = old_client.orders.update_by_id(
-        order.id,
-        order.version,
-        actions=[
-            models.OrderSetBillingAddressAction(address=models.Address(country="NL")),
-            models.OrderAddDeliveryAction(
-                parcels=[
-                    models.ParcelDraft(
-                        tracking_data=models.TrackingData(
-                            tracking_id="123", carrier="Test Carrier"
-                        )
-                    )
-                ]
-            ),
-        ],
+    updated_order = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .with_id(order.id)
+        .post(
+            models.OrderUpdate(
+                version=order.version,
+                actions=[
+                    models.OrderSetBillingAddressAction(
+                        address=models.Address(country="NL")
+                    ),
+                    models.OrderAddDeliveryAction(
+                        parcels=[
+                            models.ParcelDraft(
+                                tracking_data=models.TrackingData(
+                                    tracking_id="123", carrier="Test Carrier"
+                                )
+                            )
+                        ]
+                    ),
+                ],
+            )
+        )
     )
 
     assert (
@@ -297,11 +346,15 @@ def get_test_order():
     return order
 
 
-def test_where_query_state(commercetools_api, old_client):
+def test_where_query_state(commercetools_api, ct_platform_client: Client):
     order = get_test_order()
     commercetools_api.orders.add_existing(order)
 
-    result = old_client.orders.query(where='orderState in ("Open")')
+    result = (
+        ct_platform_client.with_project_key("unittest")
+        .orders()
+        .get(where='orderState in ("Open")')
+    )
 
     assert result.results[0].id == order.id
 

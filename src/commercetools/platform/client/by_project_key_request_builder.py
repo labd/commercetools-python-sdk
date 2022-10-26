@@ -435,7 +435,7 @@ class ByProjectKeyRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
+            raise self._client._create_exception(None, response)
         warnings.warn("Unhandled status code %d" % response.status_code)
 
     def post(

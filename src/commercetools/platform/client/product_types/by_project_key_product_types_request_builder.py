@@ -88,7 +88,7 @@ class ByProjectKeyProductTypesRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
+            raise self._client._create_exception(None, response)
         warnings.warn("Unhandled status code %d" % response.status_code)
 
     def head(
@@ -109,7 +109,7 @@ class ByProjectKeyProductTypesRequestBuilder:
         if response.status_code == 200:
             return None
         elif response.status_code == 404:
-            return None
+            raise self._client._create_exception(None, response)
         elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
@@ -137,5 +137,5 @@ class ByProjectKeyProductTypesRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            return None
+            raise self._client._create_exception(None, response)
         warnings.warn("Unhandled status code %d" % response.status_code)

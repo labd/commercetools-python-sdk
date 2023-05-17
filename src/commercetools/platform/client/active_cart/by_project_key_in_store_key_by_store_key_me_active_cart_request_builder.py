@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -33,13 +32,21 @@ class ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder:
     def get(
         self,
         *,
+        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
+        """Retrieves the Customer's most recently modified active Cart in the Store specified by the `storeKey` path parameter.
+
+        Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
+
+        If no active Cart exists, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/me/active-cart",
-            params={},
+            params={"expand": expand},
             headers=headers,
             options=options,
         )

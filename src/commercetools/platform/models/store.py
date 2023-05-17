@@ -25,6 +25,7 @@ if typing.TYPE_CHECKING:
         ProductSelectionReference,
         ProductSelectionResourceIdentifier,
     )
+    from .store_country import StoreCountry
     from .type import (
         CustomFields,
         CustomFieldsDraft,
@@ -36,6 +37,7 @@ __all__ = [
     "ProductSelectionSetting",
     "ProductSelectionSettingDraft",
     "Store",
+    "StoreAddCountryAction",
     "StoreAddDistributionChannelAction",
     "StoreAddProductSelectionAction",
     "StoreAddSupplyChannelAction",
@@ -44,10 +46,12 @@ __all__ = [
     "StoreKeyReference",
     "StorePagedQueryResponse",
     "StoreReference",
+    "StoreRemoveCountryAction",
     "StoreRemoveDistributionChannelAction",
     "StoreRemoveProductSelectionAction",
     "StoreRemoveSupplyChannelAction",
     "StoreResourceIdentifier",
+    "StoreSetCountriesAction",
     "StoreSetCustomFieldAction",
     "StoreSetCustomTypeAction",
     "StoreSetDistributionChannelsAction",
@@ -128,14 +132,18 @@ class Store(BaseResource):
     name: typing.Optional["LocalizedString"]
     #: Languages configured for the Store.
     languages: typing.List["str"]
+    #: Countries defined for the Store.
+    countries: typing.List["StoreCountry"]
     #: Product Distribution Channels allowed for the Store.
     distribution_channels: typing.List["ChannelReference"]
     #: Inventory Supply Channels allowed for the Store.
     supply_channels: typing.List["ChannelReference"]
-    #: Controls availability of Products for this Store via active Product Selections.
+    #: Controls availability of Products for this Store via Product Selections:
     #:
-    #: - If empty all Products in the [Project](ctp:api:type:Project) are available in this Store.
-    #: - If provided, Products from `active` Product Selections are available in this Store.
+    #: - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
+    #: - If only `inactive` Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) are provided, all the Products are availlable in this Store.
+    #: - If all the Product Selections provided are `inactive` and there's at least a Product Selection of mode `Individual`, no Product is availlable in this Store.
+    #: - If at least an `active` Product Selection is provided, only `active` Product Selections are considered to compute the availlability in this Store.
     product_selections: typing.List["ProductSelectionSetting"]
     #: Custom fields for the Store.
     custom: typing.Optional["CustomFields"]
@@ -152,6 +160,7 @@ class Store(BaseResource):
         key: str,
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.List["str"],
+        countries: typing.List["StoreCountry"],
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
         product_selections: typing.List["ProductSelectionSetting"],
@@ -162,6 +171,7 @@ class Store(BaseResource):
         self.key = key
         self.name = name
         self.languages = languages
+        self.countries = countries
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
         self.product_selections = product_selections
@@ -194,14 +204,18 @@ class StoreDraft(_BaseType):
     name: typing.Optional["LocalizedString"]
     #: Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
     languages: typing.Optional[typing.List["str"]]
+    #: Countries defined for the Store.
+    countries: typing.Optional[typing.List["StoreCountry"]]
     #: ResourceIdentifier of a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
     #: ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
-    #: Controls availability of Products for this Store via active Product Selections.
+    #: Controls availability of Products for this Store via active/inactive Product Selections:
     #:
     #: - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
-    #: - If provided, Products from `active` Product Selections are available in this Store.
+    #: - If only `inactive` Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) are provided, all the Products are available in this Store.
+    #: - If all the Product Selections provided are `inactive` and there's at least a Product Selection of mode `Individual`, no Product is available in this Store.
+    #: - If at least an `active` Product Selection is provided, only `active` Product Selections are considered to compute the availability in this Store.
     product_selections: typing.Optional[typing.List["ProductSelectionSettingDraft"]]
     #: Custom fields for the Store.
     custom: typing.Optional["CustomFieldsDraft"]
@@ -212,6 +226,7 @@ class StoreDraft(_BaseType):
         key: str,
         name: typing.Optional["LocalizedString"] = None,
         languages: typing.Optional[typing.List["str"]] = None,
+        countries: typing.Optional[typing.List["StoreCountry"]] = None,
         distribution_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
         ] = None,
@@ -226,6 +241,7 @@ class StoreDraft(_BaseType):
         self.key = key
         self.name = name
         self.languages = languages
+        self.countries = countries
         self.distribution_channels = distribution_channels
         self.supply_channels = supply_channels
         self.product_selections = product_selections
@@ -249,7 +265,6 @@ class StoreKeyReference(KeyReference):
     """[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceTypeId.STORE)
 
     @classmethod
@@ -342,7 +357,6 @@ class StoreResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STORE)
 
     @classmethod
@@ -360,7 +374,7 @@ class StoreResourceIdentifier(ResourceIdentifier):
 
 
 class StoreUpdate(_BaseType):
-    #: Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Store.
     actions: typing.List["StoreUpdateAction"]
@@ -393,6 +407,10 @@ class StoreUpdateAction(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreUpdateAction":
+        if data["action"] == "addCountry":
+            from ._schemas.store import StoreAddCountryActionSchema
+
+            return StoreAddCountryActionSchema().load(data)
         if data["action"] == "addDistributionChannel":
             from ._schemas.store import StoreAddDistributionChannelActionSchema
 
@@ -409,6 +427,10 @@ class StoreUpdateAction(_BaseType):
             from ._schemas.store import StoreChangeProductSelectionActionSchema
 
             return StoreChangeProductSelectionActionSchema().load(data)
+        if data["action"] == "removeCountry":
+            from ._schemas.store import StoreRemoveCountryActionSchema
+
+            return StoreRemoveCountryActionSchema().load(data)
         if data["action"] == "removeDistributionChannel":
             from ._schemas.store import StoreRemoveDistributionChannelActionSchema
 
@@ -421,6 +443,10 @@ class StoreUpdateAction(_BaseType):
             from ._schemas.store import StoreRemoveSupplyChannelActionSchema
 
             return StoreRemoveSupplyChannelActionSchema().load(data)
+        if data["action"] == "setCountries":
+            from ._schemas.store import StoreSetCountriesActionSchema
+
+            return StoreSetCountriesActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.store import StoreSetCustomFieldActionSchema
 
@@ -456,13 +482,41 @@ class StoreUpdateAction(_BaseType):
         return StoreUpdateActionSchema().dump(self)
 
 
+class StoreAddCountryAction(StoreUpdateAction):
+    """This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
+    It has no effect if the given country is already present in a Store.
+
+    """
+
+    #: Value to append to `countries`.
+    country: "StoreCountry"
+
+    def __init__(self, *, country: "StoreCountry"):
+        self.country = country
+
+        super().__init__(action="addCountry")
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "StoreAddCountryAction":
+        from ._schemas.store import StoreAddCountryActionSchema
+
+        return StoreAddCountryActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreAddCountryActionSchema
+
+        return StoreAddCountryActionSchema().dump(self)
+
+
 class StoreAddDistributionChannelAction(StoreUpdateAction):
     """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
     It has no effect if a given distribution channel is already present in a Store.
 
+    Adding a [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+
     """
 
-    #: Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
+    #: Value to append.
     distribution_channel: "ChannelResourceIdentifier"
 
     def __init__(self, *, distribution_channel: "ChannelResourceIdentifier"):
@@ -518,12 +572,15 @@ class StoreAddProductSelectionAction(StoreUpdateAction):
 
 
 class StoreAddSupplyChannelAction(StoreUpdateAction):
-    """This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
-    It has no effect if a given supply channel is already present in a Store.
+    """This action has no effect if a given supply channel is already present in a Store.
+
+    Adding a supply channel produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+
+    Adding a [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 
     """
 
-    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+    #: Value to append.
     supply_channel: "ChannelResourceIdentifier"
 
     def __init__(self, *, supply_channel: "ChannelResourceIdentifier"):
@@ -576,6 +633,34 @@ class StoreChangeProductSelectionAction(StoreUpdateAction):
         from ._schemas.store import StoreChangeProductSelectionActionSchema
 
         return StoreChangeProductSelectionActionSchema().dump(self)
+
+
+class StoreRemoveCountryAction(StoreUpdateAction):
+    """This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
+    It has no effect if a given country is not present in a Store.
+
+    """
+
+    #: Value to remove from `countries`.
+    country: "StoreCountry"
+
+    def __init__(self, *, country: "StoreCountry"):
+        self.country = country
+
+        super().__init__(action="removeCountry")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreRemoveCountryAction":
+        from ._schemas.store import StoreRemoveCountryActionSchema
+
+        return StoreRemoveCountryActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreRemoveCountryActionSchema
+
+        return StoreRemoveCountryActionSchema().dump(self)
 
 
 class StoreRemoveDistributionChannelAction(StoreUpdateAction):
@@ -653,11 +738,38 @@ class StoreRemoveSupplyChannelAction(StoreUpdateAction):
         return StoreRemoveSupplyChannelActionSchema().dump(self)
 
 
+class StoreSetCountriesAction(StoreUpdateAction):
+    """This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message."""
+
+    #: New value to set.
+    countries: typing.Optional[typing.List["StoreCountry"]]
+
+    def __init__(
+        self, *, countries: typing.Optional[typing.List["StoreCountry"]] = None
+    ):
+        self.countries = countries
+
+        super().__init__(action="setCountries")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreSetCountriesAction":
+        from ._schemas.store import StoreSetCountriesActionSchema
+
+        return StoreSetCountriesActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.store import StoreSetCountriesActionSchema
+
+        return StoreSetCountriesActionSchema().dump(self)
+
+
 class StoreSetCustomFieldAction(StoreUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -714,11 +826,14 @@ class StoreSetCustomTypeAction(StoreUpdateAction):
 
 
 class StoreSetDistributionChannelsAction(StoreUpdateAction):
-    """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message."""
+    """This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
+
+    Setting a [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+
+    """
 
     #: Value to set.
     #: If not defined, the Store's `distributionChannels` are unset.
-    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
     distribution_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(
@@ -747,10 +862,12 @@ class StoreSetDistributionChannelsAction(StoreUpdateAction):
 
 
 class StoreSetLanguagesAction(StoreUpdateAction):
-    """This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message."""
+    """This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message.
+    Adding a language other than the ones defined in the [Project](ctp:api:type:Project) returns a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
+
+    """
 
     #: Value to set.
-    #: Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
     languages: typing.Optional[typing.List["str"]]
 
     def __init__(self, *, languages: typing.Optional[typing.List["str"]] = None):
@@ -830,11 +947,14 @@ class StoreSetProductSelectionsAction(StoreUpdateAction):
 
 
 class StoreSetSupplyChannelsAction(StoreUpdateAction):
-    """This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message."""
+    """Setting a supply channel produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+
+    Setting a [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+
+    """
 
     #: Value to set.
     #: If not defined, the Store's `supplyChannels` are unset.
-    #: Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
     supply_channels: typing.Optional[typing.List["ChannelResourceIdentifier"]]
 
     def __init__(

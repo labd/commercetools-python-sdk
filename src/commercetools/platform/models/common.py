@@ -308,11 +308,20 @@ class AssetSource(_BaseType):
 
 
 class BaseAddress(_BaseType):
+    """Polymorphic base type that represents a postal address and contact details.
+    Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    only differ in the data type for the optional `custom` field.
+
+    """
+
     #: Unique identifier of the Address.
+    #:
+    #: It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
+    #: Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
     id: typing.Optional[str]
-    #: User-defined unique identifier of the Address.
+    #: User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
     key: typing.Optional[str]
-    #: Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    #: Name of the country.
     country: str
     #: Title of the contact, for example 'Dr.'
     title: typing.Optional[str]
@@ -429,6 +438,11 @@ class BaseAddress(_BaseType):
 
 
 class Address(BaseAddress):
+    """Address type returned by read methods.
+    Optionally, the `custom` field can be present in addition to the fields of a [BaseAddress](ctp:api:type:BaseAddress).
+
+    """
+
     #: Custom Fields defined for the Address.
     custom: typing.Optional["CustomFields"]
 
@@ -505,6 +519,11 @@ class Address(BaseAddress):
 
 
 class AddressDraft(BaseAddress):
+    """Address type to be used on write methods.
+    Optionally, use the `custom` field in addition to the fields of a [BaseAddress](ctp:api:type:BaseAddress).
+
+    """
+
     #: Custom Fields defined for the Address.
     custom: typing.Optional["CustomFieldsDraft"]
 
@@ -622,7 +641,7 @@ class ClientLogging(_BaseType):
     external_user_id: typing.Optional[str]
     #: Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
     customer: typing.Optional["CustomerReference"]
-    #: Indicates that the resource was modified during an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) with the logged ID.
+    #: Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
     anonymous_id: typing.Optional[str]
 
     def __init__(
@@ -663,7 +682,6 @@ class CreatedBy(ClientLogging):
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None
     ):
-
         super().__init__(
             client_id=client_id,
             external_user_id=external_user_id,
@@ -776,7 +794,7 @@ class GeoJsonPoint(GeoJson):
 
 
 class Image(_BaseType):
-    #: URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant).
+    #: URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant). If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
     url: str
     #: Dimensions of the original image.
     dimensions: "ImageDimensions"
@@ -848,6 +866,10 @@ class KeyReference(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "KeyReference":
+        if data["typeId"] == "associate-role":
+            from ._schemas.associate_role import AssociateRoleKeyReferenceSchema
+
+            return AssociateRoleKeyReferenceSchema().load(data)
         if data["typeId"] == "business-unit":
             from ._schemas.business_unit import BusinessUnitKeyReferenceSchema
 
@@ -874,7 +896,6 @@ class LastModifiedBy(ClientLogging):
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None
     ):
-
         super().__init__(
             client_id=client_id,
             external_user_id=external_user_id,
@@ -899,11 +920,7 @@ class LocalizedString(typing.Dict[str, str]):
 
 
 class Money(_BaseType):
-    """Draft type that stores amounts in cent precision for the specified currency.
-
-    For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-
-    """
+    """Draft type that stores amounts only in cent precision for the specified currency."""
 
     #: Amount in the smallest indivisible unit of a currency, such as:
     #:
@@ -957,11 +974,11 @@ class Price(_BaseType):
     channel: typing.Optional["ChannelReference"]
     #: Date and time from which this Price is valid.
     valid_from: typing.Optional[datetime.datetime]
-    #: Date and time until this Price is valid.
+    #: Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
     valid_until: typing.Optional[datetime.datetime]
     #: Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
-    #: If set, the API uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
-    #: When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+    #: If set, the API uses the DiscountedPrice value for the [Line Item Price selection](ctp:api:type:LineItemPriceSelection).
+    #: When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
     discounted: typing.Optional["DiscountedPrice"]
     #: Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
     tiers: typing.Optional[typing.List["PriceTier"]]
@@ -1024,7 +1041,7 @@ class PriceDraft(_BaseType):
     channel: typing.Optional["ChannelResourceIdentifier"]
     #: Set this field if this Price is only valid from the specified date and time. Must be at least 1 ms earlier than `validUntil`.
     valid_from: typing.Optional[datetime.datetime]
-    #: Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`.
+    #: Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
     valid_until: typing.Optional[datetime.datetime]
     #: Set this field to add a DiscountedPrice from an **external service**.
     #:
@@ -1091,6 +1108,7 @@ class PriceTier(_BaseType):
     #: Minimum quantity this Price tier is valid for.
     #:
     #: The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
+    #: A [Price](ctp:api:type:Price) or [StandalonePrice](ctp:api:type:StandalonePrice) cannot contain more than one tier with the same `minimumQuantity`.
     minimum_quantity: int
     #: Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
     #:
@@ -1121,6 +1139,8 @@ class PriceTierDraft(_BaseType):
     #: Minimum quantity this Price tier is valid for.
     #:
     #: The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
+    #: A [Price](ctp:api:type:Price) or [StandalonePrice](ctp:api:type:StandalonePrice) cannot contain more than one tier with the same `minimumQuantity`.
+    #: In the case one of the constraint is not met an [InvalidField](ctp:api:type:InvalidFieldError) is returned.
     minimum_quantity: int
     #: Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
     #:
@@ -1222,6 +1242,14 @@ class Reference(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Reference":
+        if data["typeId"] == "associate-role":
+            from ._schemas.associate_role import AssociateRoleReferenceSchema
+
+            return AssociateRoleReferenceSchema().load(data)
+        if data["typeId"] == "attribute-group":
+            from ._schemas.attribute_group import AttributeGroupReferenceSchema
+
+            return AttributeGroupReferenceSchema().load(data)
         if data["typeId"] == "business-unit":
             from ._schemas.business_unit import BusinessUnitReferenceSchema
 
@@ -1234,6 +1262,10 @@ class Reference(_BaseType):
             from ._schemas.cart import CartReferenceSchema
 
             return CartReferenceSchema().load(data)
+        if data["typeId"] == "direct-discount":
+            from ._schemas.cart import DirectDiscountReferenceSchema
+
+            return DirectDiscountReferenceSchema().load(data)
         if data["typeId"] == "category":
             from ._schemas.category import CategoryReferenceSchema
 
@@ -1348,6 +1380,8 @@ class Reference(_BaseType):
 class ReferenceTypeId(enum.Enum):
     """Type of resource the value should reference. Supported resource type identifiers are:"""
 
+    ASSOCIATE_ROLE = "associate-role"
+    ATTRIBUTE_GROUP = "attribute-group"
     BUSINESS_UNIT = "business-unit"
     CART = "cart"
     CART_DISCOUNT = "cart-discount"
@@ -1355,6 +1389,7 @@ class ReferenceTypeId(enum.Enum):
     CHANNEL = "channel"
     CUSTOMER = "customer"
     CUSTOMER_GROUP = "customer-group"
+    DIRECT_DISCOUNT = "direct-discount"
     DISCOUNT_CODE = "discount-code"
     EXTENSION = "extension"
     INVENTORY_ENTRY = "inventory-entry"
@@ -1411,6 +1446,14 @@ class ResourceIdentifier(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ResourceIdentifier":
+        if data["typeId"] == "associate-role":
+            from ._schemas.associate_role import AssociateRoleResourceIdentifierSchema
+
+            return AssociateRoleResourceIdentifierSchema().load(data)
+        if data["typeId"] == "attribute-group":
+            from ._schemas.attribute_group import AttributeGroupResourceIdentifierSchema
+
+            return AttributeGroupResourceIdentifierSchema().load(data)
         if data["typeId"] == "business-unit":
             from ._schemas.business_unit import BusinessUnitResourceIdentifierSchema
 
@@ -1538,7 +1581,7 @@ class ResourceIdentifier(_BaseType):
 
 class ScopedPrice(_BaseType):
     """Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-    [Search Product Projection](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when Price Selection is used.
+    [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](ctp:api:type:ScopedPriceSearch) is used.
 
     """
 
@@ -1558,7 +1601,7 @@ class ScopedPrice(_BaseType):
     valid_from: typing.Optional[datetime.datetime]
     #: Date and time until which the Price is valid.
     valid_until: typing.Optional[datetime.datetime]
-    #: Is set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItem).
+    #: Is set when a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
     #:
     #: When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down) in favor of the Customer.
     discounted: typing.Optional["DiscountedPrice"]
@@ -1649,7 +1692,6 @@ class CentPrecisionMoney(TypedMoney):
     """Object that stores cent amounts in a specific currency."""
 
     def __init__(self, *, cent_amount: int, currency_code: str, fraction_digits: int):
-
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,
@@ -1740,6 +1782,8 @@ class TypedMoneyDraft(Money):
 
 
 class CentPrecisionMoneyDraft(TypedMoneyDraft):
+    """This draft type is the alternative to [Money](ctp:api:type:Money)."""
+
     def __init__(
         self,
         *,
@@ -1747,7 +1791,6 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
         currency_code: str,
         fraction_digits: typing.Optional[int] = None
     ):
-
         super().__init__(
             cent_amount=cent_amount,
             currency_code=currency_code,

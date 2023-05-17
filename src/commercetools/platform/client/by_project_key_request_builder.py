@@ -12,6 +12,15 @@ from ..models.project import Project, ProjectUpdate
 from .api_clients.by_project_key_api_clients_request_builder import (
     ByProjectKeyApiClientsRequestBuilder,
 )
+from .as_associate.by_project_key_as_associate_request_builder import (
+    ByProjectKeyAsAssociateRequestBuilder,
+)
+from .associate_roles.by_project_key_associate_roles_request_builder import (
+    ByProjectKeyAssociateRolesRequestBuilder,
+)
+from .attribute_groups.by_project_key_attribute_groups_request_builder import (
+    ByProjectKeyAttributeGroupsRequestBuilder,
+)
 from .business_units.by_project_key_business_units_request_builder import (
     ByProjectKeyBusinessUnitsRequestBuilder,
 )
@@ -119,7 +128,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -130,6 +138,19 @@ class ByProjectKeyRequestBuilder:
     ):
         self._project_key = project_key
         self._client = client
+
+    def as_associate(self) -> ByProjectKeyAsAssociateRequestBuilder:
+        return ByProjectKeyAsAssociateRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def associate_roles(self) -> ByProjectKeyAssociateRolesRequestBuilder:
+        """An Associate Role enables permissions over a Business Unit to an Associate."""
+        return ByProjectKeyAssociateRolesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
 
     def business_units(self) -> ByProjectKeyBusinessUnitsRequestBuilder:
         """A Business Unit can represent a Company or a Division."""
@@ -263,9 +284,11 @@ class ByProjectKeyRequestBuilder:
     def product_selections(self) -> ByProjectKeyProductSelectionsRequestBuilder:
         """Manage individual Store assortments through Product Selections.
 
-        After you have created Product Selections and populated them by Products,
+        After you have created Product Selections and populated them with Products,
         you can manage Store assortments by assigning Product Selections to Stores.
         Product Selections may be used by a single Store or shared across several Stores.
+
+        As a good practice, we recommend first creating Products in the project, and then creating Product Selection.
 
         """
         return ByProjectKeyProductSelectionsRequestBuilder(
@@ -412,6 +435,13 @@ class ByProjectKeyRequestBuilder:
     ) -> ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder:
         return ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder(
             business_unit_key=business_unit_key,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def attribute_groups(self) -> ByProjectKeyAttributeGroupsRequestBuilder:
+        """Attribute groups ... TODO"""
+        return ByProjectKeyAttributeGroupsRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

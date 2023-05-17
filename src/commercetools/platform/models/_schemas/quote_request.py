@@ -25,14 +25,14 @@ from .type import FieldContainerField
 # Marshmallow Schemas
 class QuoteRequestSchema(BaseResourceSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -40,31 +40,31 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     quote_request_state = marshmallow_enum.EnumField(
         QuoteRequestState,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="quoteRequestState",
     )
     comment = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     store = helpers.LazyNestedField(
@@ -72,14 +72,14 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     line_items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.LineItemSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="lineItems",
     )
     custom_line_items = helpers.LazyNestedField(
@@ -87,7 +87,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="customLineItems",
     )
     total_price = helpers.Discriminator(
@@ -101,7 +101,7 @@ class QuoteRequestSchema(BaseResourceSchema):
                 __name__, ".common.HighPrecisionMoneySchema"
             ),
         },
-        missing=None,
+        load_default=None,
         data_key="totalPrice",
     )
     taxed_price = helpers.LazyNestedField(
@@ -109,7 +109,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxedPrice",
     )
     shipping_address = helpers.LazyNestedField(
@@ -117,7 +117,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="shippingAddress",
     )
     billing_address = helpers.LazyNestedField(
@@ -125,7 +125,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="billingAddress",
     )
     inventory_mode = marshmallow_enum.EnumField(
@@ -133,35 +133,35 @@ class QuoteRequestSchema(BaseResourceSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inventoryMode",
     )
     tax_mode = marshmallow_enum.EnumField(
-        TaxMode, by_value=True, allow_none=True, missing=None, data_key="taxMode"
+        TaxMode, by_value=True, allow_none=True, load_default=None, data_key="taxMode"
     )
     tax_rounding_mode = marshmallow_enum.EnumField(
         RoundingMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="taxRoundingMode",
     )
     tax_calculation_mode = marshmallow_enum.EnumField(
         TaxCalculationMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="taxCalculationMode",
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     shipping_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="shippingInfo",
     )
     payment_info = helpers.LazyNestedField(
@@ -169,7 +169,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="paymentInfo",
     )
     shipping_rate_input = helpers.Discriminator(
@@ -182,7 +182,7 @@ class QuoteRequestSchema(BaseResourceSchema):
             "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="shippingRateInput",
     )
     item_shipping_addresses = helpers.LazyNestedField(
@@ -191,7 +191,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="itemShippingAddresses",
     )
     direct_discounts = helpers.LazyNestedField(
@@ -200,7 +200,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="directDiscounts",
     )
     custom = helpers.LazyNestedField(
@@ -208,14 +208,20 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+    )
+    purchase_order_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="purchaseOrderNumber",
     )
     business_unit = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -224,7 +230,7 @@ class QuoteRequestSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="businessUnit",
     )
 
@@ -233,7 +239,6 @@ class QuoteRequestSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.QuoteRequest(**data)
 
 
@@ -242,28 +247,34 @@ class QuoteRequestDraftSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".cart.CartResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     cart_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="cartVersion"
+        allow_none=True, load_default=None, data_key="cartVersion"
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    comment = marshmallow.fields.String(allow_none=True, missing=None)
+    comment = marshmallow.fields.String(allow_none=True, load_default=None)
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+    )
+    purchase_order_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="purchaseOrderNumber",
     )
 
     class Meta:
@@ -271,23 +282,22 @@ class QuoteRequestDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.QuoteRequestDraft(**data)
 
 
 class QuoteRequestPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".QuoteRequestSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -295,7 +305,6 @@ class QuoteRequestPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.QuoteRequestPagedQueryResponse(**data)
 
 
@@ -305,7 +314,7 @@ class QuoteRequestReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -328,12 +337,15 @@ class QuoteRequestResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class QuoteRequestUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "changeCustomer": helpers.absmod(
+                    __name__, ".QuoteRequestChangeCustomerActionSchema"
+                ),
                 "changeQuoteRequestState": helpers.absmod(
                     __name__, ".QuoteRequestChangeQuoteRequestStateActionSchema"
                 ),
@@ -349,7 +361,7 @@ class QuoteRequestUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -357,12 +369,11 @@ class QuoteRequestUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.QuoteRequestUpdate(**data)
 
 
 class QuoteRequestUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -373,12 +384,29 @@ class QuoteRequestUpdateActionSchema(helpers.BaseSchema):
         return models.QuoteRequestUpdateAction(**data)
 
 
+class QuoteRequestChangeCustomerActionSchema(QuoteRequestUpdateActionSchema):
+    customer = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.QuoteRequestChangeCustomerAction(**data)
+
+
 class QuoteRequestChangeQuoteRequestStateActionSchema(QuoteRequestUpdateActionSchema):
     quote_request_state = marshmallow_enum.EnumField(
         QuoteRequestState,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="quoteRequestState",
     )
 
@@ -392,9 +420,9 @@ class QuoteRequestChangeQuoteRequestStateActionSchema(QuoteRequestUpdateActionSc
 
 
 class QuoteRequestSetCustomFieldActionSchema(QuoteRequestUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -412,13 +440,13 @@ class QuoteRequestSetCustomTypeActionSchema(QuoteRequestUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -435,10 +463,10 @@ class QuoteRequestTransitionStateActionSchema(QuoteRequestUpdateActionSchema):
         nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     force = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

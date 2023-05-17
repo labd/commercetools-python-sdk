@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -30,29 +29,6 @@ class ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder:
         self._project_key = project_key
         self._key = key
         self._client = client
-
-    def get(
-        self,
-        *,
-        expand: typing.List["str"] = None,
-        headers: typing.Dict[str, str] = None,
-        options: typing.Dict[str, typing.Any] = None,
-    ) -> typing.Optional["QuoteRequest"]:
-        headers = {} if headers is None else headers
-        response = self._client._get(
-            endpoint=f"/{self._project_key}/me/quote-requests/key={self._key}",
-            params={"expand": expand},
-            headers=headers,
-            options=options,
-        )
-        if response.status_code == 200:
-            return QuoteRequest.deserialize(response.json())
-        elif response.status_code in (400, 401, 403, 500, 502, 503):
-            obj = ErrorResponse.deserialize(response.json())
-            raise self._client._create_exception(obj, response)
-        elif response.status_code == 404:
-            return None
-        warnings.warn("Unhandled status code %d" % response.status_code)
 
     def post(
         self,
@@ -97,6 +73,29 @@ class ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder:
         if response.status_code == 200:
             return QuoteRequest.deserialize(response.json())
         elif response.status_code in (409, 400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def get(
+        self,
+        *,
+        expand: typing.List["str"] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional["QuoteRequest"]:
+        headers = {} if headers is None else headers
+        response = self._client._get(
+            endpoint=f"/{self._project_key}/me/quote-requests/key={self._key}",
+            params={"expand": expand},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return QuoteRequest.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:

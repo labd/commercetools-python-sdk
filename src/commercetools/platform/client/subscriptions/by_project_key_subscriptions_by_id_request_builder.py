@@ -9,13 +9,15 @@ import warnings
 
 from ...models.error import ErrorResponse
 from ...models.subscription import Subscription, SubscriptionUpdate
+from ..health.by_project_key_subscriptions_by_id_health_request_builder import (
+    ByProjectKeySubscriptionsByIDHealthRequestBuilder,
+)
 
 if typing.TYPE_CHECKING:
     from ...base_client import BaseClient
 
 
 class ByProjectKeySubscriptionsByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _id: str
@@ -30,6 +32,13 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
         self._id = id
         self._client = client
 
+    def with_id_health(self) -> ByProjectKeySubscriptionsByIDHealthRequestBuilder:
+        return ByProjectKeySubscriptionsByIDHealthRequestBuilder(
+            project_key=self._project_key,
+            id=self._id,
+            client=self._client,
+        )
+
     def get(
         self,
         *,
@@ -37,7 +46,6 @@ class ByProjectKeySubscriptionsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Subscription"]:
-        """Retrieves the representation of a subscription by its id."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/subscriptions/{self._id}",

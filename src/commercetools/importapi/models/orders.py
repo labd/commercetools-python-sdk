@@ -518,6 +518,8 @@ class Parcel(_BaseType):
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: The representation to be sent to the server when creating a resource with custom fields.
+    custom: typing.Optional["Custom"]
 
     def __init__(
         self,
@@ -526,13 +528,15 @@ class Parcel(_BaseType):
         created_at: datetime.datetime,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        custom: typing.Optional["Custom"] = None
     ):
         self.id = id
         self.created_at = created_at
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+        self.custom = custom
 
         super().__init__()
 
@@ -1122,7 +1126,7 @@ class OrderImport(_BaseType):
     """The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
 
     In commercetools, you can import an Order using the
-    [Create Order by Import](https://docs.commercetools.com/http-api-projects-orders-import.html#create-an-order-by-import)
+    [Create Order by Import](/../api/projects/orders-import#create-an-order-by-import)
     endpoint method instead of creating it from a Cart.
 
     An OrderImport is a snapshot of an order at the time it was imported.
@@ -1174,6 +1178,8 @@ class OrderImport(_BaseType):
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
     #: Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
     store: typing.Optional["StoreKeyReference"]
+    #: Reference to a State in a custom workflow.
+    state: typing.Optional["StateKeyReference"]
 
     def __init__(
         self,
@@ -1200,7 +1206,8 @@ class OrderImport(_BaseType):
         tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
         origin: typing.Optional["CartOrigin"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
-        store: typing.Optional["StoreKeyReference"] = None
+        store: typing.Optional["StoreKeyReference"] = None,
+        state: typing.Optional["StateKeyReference"] = None
     ):
         self.order_number = order_number
         self.customer = customer
@@ -1225,6 +1232,7 @@ class OrderImport(_BaseType):
         self.origin = origin
         self.item_shipping_addresses = item_shipping_addresses
         self.store = store
+        self.state = state
 
         super().__init__()
 

@@ -33,7 +33,7 @@ class CartDiscountSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -41,20 +41,22 @@ class CartDiscountSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     value = helpers.Discriminator(
         allow_none=True,
@@ -67,10 +69,10 @@ class CartDiscountSchema(BaseResourceSchema):
             ),
             "relative": helpers.absmod(__name__, ".CartDiscountValueRelativeSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, load_default=None, data_key="cartPredicate"
     )
     target = helpers.Discriminator(
         allow_none=True,
@@ -91,34 +93,40 @@ class CartDiscountSchema(BaseResourceSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     sort_order = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="sortOrder"
+        allow_none=True, load_default=None, data_key="sortOrder"
     )
     is_active = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isActive"
+        allow_none=True, load_default=None, data_key="isActive"
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     requires_discount_code = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="requiresDiscountCode"
+        allow_none=True, load_default=None, data_key="requiresDiscountCode"
     )
     references = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
             discriminator_field=("typeId", "type_id"),
             discriminator_schemas={
+                "associate-role": helpers.absmod(
+                    __name__, ".associate_role.AssociateRoleReferenceSchema"
+                ),
+                "attribute-group": helpers.absmod(
+                    __name__, ".attribute_group.AttributeGroupReferenceSchema"
+                ),
                 "business-unit": helpers.absmod(
                     __name__, ".business_unit.BusinessUnitReferenceSchema"
                 ),
@@ -126,6 +134,9 @@ class CartDiscountSchema(BaseResourceSchema):
                     __name__, ".CartDiscountReferenceSchema"
                 ),
                 "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+                "direct-discount": helpers.absmod(
+                    __name__, ".cart.DirectDiscountReferenceSchema"
+                ),
                 "category": helpers.absmod(
                     __name__, ".category.CategoryReferenceSchema"
                 ),
@@ -187,13 +198,13 @@ class CartDiscountSchema(BaseResourceSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
     stacking_mode = marshmallow_enum.EnumField(
         StackingMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="stackingMode",
     )
     custom = helpers.LazyNestedField(
@@ -201,7 +212,7 @@ class CartDiscountSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -209,22 +220,23 @@ class CartDiscountSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CartDiscount(**data)
 
 
 class CartDiscountDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     value = helpers.Discriminator(
         allow_none=True,
@@ -241,10 +253,10 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
                 __name__, ".CartDiscountValueRelativeDraftSchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, load_default=None, data_key="cartPredicate"
     )
     target = helpers.Discriminator(
         allow_none=True,
@@ -265,33 +277,33 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     sort_order = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="sortOrder"
+        allow_none=True, load_default=None, data_key="sortOrder"
     )
     is_active = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isActive",
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     requires_discount_code = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="requiresDiscountCode",
     )
     stacking_mode = marshmallow_enum.EnumField(
@@ -299,7 +311,7 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="stackingMode",
     )
     custom = helpers.LazyNestedField(
@@ -307,7 +319,7 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -315,23 +327,22 @@ class CartDiscountDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CartDiscountDraft(**data)
 
 
 class CartDiscountPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CartDiscountSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -339,7 +350,6 @@ class CartDiscountPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CartDiscountPagedQueryResponse(**data)
 
 
@@ -349,7 +359,7 @@ class CartDiscountReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -372,7 +382,7 @@ class CartDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class CartDiscountTargetSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -384,7 +394,7 @@ class CartDiscountTargetSchema(helpers.BaseSchema):
 
 
 class CartDiscountCustomLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -396,7 +406,7 @@ class CartDiscountCustomLineItemsTargetSchema(CartDiscountTargetSchema):
 
 
 class CartDiscountLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -418,7 +428,7 @@ class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
 
 
 class CartDiscountUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -470,7 +480,7 @@ class CartDiscountUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -478,12 +488,11 @@ class CartDiscountUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CartDiscountUpdate(**data)
 
 
 class CartDiscountUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -495,7 +504,7 @@ class CartDiscountUpdateActionSchema(helpers.BaseSchema):
 
 
 class CartDiscountValueSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -512,7 +521,7 @@ class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -525,7 +534,7 @@ class CartDiscountValueAbsoluteSchema(CartDiscountValueSchema):
 
 
 class CartDiscountValueDraftSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -542,7 +551,7 @@ class CartDiscountValueAbsoluteDraftSchema(CartDiscountValueDraftSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -560,7 +569,7 @@ class CartDiscountValueFixedSchema(CartDiscountValueSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -578,7 +587,7 @@ class CartDiscountValueFixedDraftSchema(CartDiscountValueDraftSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -595,17 +604,17 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
         nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
     distribution_channel = helpers.LazyNestedField(
@@ -613,7 +622,7 @@ class CartDiscountValueGiftLineItemSchema(CartDiscountValueSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="distributionChannel",
     )
 
@@ -631,17 +640,17 @@ class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
         nested=helpers.absmod(__name__, ".product.ProductResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
     distribution_channel = helpers.LazyNestedField(
@@ -649,7 +658,7 @@ class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="distributionChannel",
     )
 
@@ -663,7 +672,7 @@ class CartDiscountValueGiftLineItemDraftSchema(CartDiscountValueDraftSchema):
 
 
 class CartDiscountValueRelativeSchema(CartDiscountValueSchema):
-    permyriad = marshmallow.fields.Integer(allow_none=True, missing=None)
+    permyriad = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -675,7 +684,7 @@ class CartDiscountValueRelativeSchema(CartDiscountValueSchema):
 
 
 class CartDiscountValueRelativeDraftSchema(CartDiscountValueDraftSchema):
-    permyriad = marshmallow.fields.Integer(allow_none=True, missing=None)
+    permyriad = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -687,24 +696,24 @@ class CartDiscountValueRelativeDraftSchema(CartDiscountValueDraftSchema):
 
 
 class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(allow_none=True, load_default=None)
     trigger_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="triggerQuantity"
+        allow_none=True, load_default=None, data_key="triggerQuantity"
     )
     discounted_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="discountedQuantity"
+        allow_none=True, load_default=None, data_key="discountedQuantity"
     )
     max_occurrence = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="maxOccurrence",
     )
     selection_mode = marshmallow_enum.EnumField(
         SelectionMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="selectionMode",
     )
 
@@ -718,24 +727,24 @@ class MultiBuyCustomLineItemsTargetSchema(CartDiscountTargetSchema):
 
 
 class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
-    predicate = marshmallow.fields.String(allow_none=True, missing=None)
+    predicate = marshmallow.fields.String(allow_none=True, load_default=None)
     trigger_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="triggerQuantity"
+        allow_none=True, load_default=None, data_key="triggerQuantity"
     )
     discounted_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="discountedQuantity"
+        allow_none=True, load_default=None, data_key="discountedQuantity"
     )
     max_occurrence = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="maxOccurrence",
     )
     selection_mode = marshmallow_enum.EnumField(
         SelectionMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="selectionMode",
     )
 
@@ -750,7 +759,7 @@ class MultiBuyLineItemsTargetSchema(CartDiscountTargetSchema):
 
 class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema):
     cart_predicate = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cartPredicate"
+        allow_none=True, load_default=None, data_key="cartPredicate"
     )
 
     class Meta:
@@ -764,7 +773,7 @@ class CartDiscountChangeCartPredicateActionSchema(CartDiscountUpdateActionSchema
 
 class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
     is_active = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isActive"
+        allow_none=True, load_default=None, data_key="isActive"
     )
 
     class Meta:
@@ -778,7 +787,9 @@ class CartDiscountChangeIsActiveActionSchema(CartDiscountUpdateActionSchema):
 
 class CartDiscountChangeNameActionSchema(CartDiscountUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -794,7 +805,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
     CartDiscountUpdateActionSchema
 ):
     requires_discount_code = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="requiresDiscountCode"
+        allow_none=True, load_default=None, data_key="requiresDiscountCode"
     )
 
     class Meta:
@@ -808,7 +819,7 @@ class CartDiscountChangeRequiresDiscountCodeActionSchema(
 
 class CartDiscountChangeSortOrderActionSchema(CartDiscountUpdateActionSchema):
     sort_order = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="sortOrder"
+        allow_none=True, load_default=None, data_key="sortOrder"
     )
 
     class Meta:
@@ -825,7 +836,7 @@ class CartDiscountChangeStackingModeActionSchema(CartDiscountUpdateActionSchema)
         StackingMode,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="stackingMode",
     )
 
@@ -857,7 +868,7 @@ class CartDiscountChangeTargetActionSchema(CartDiscountUpdateActionSchema):
                 __name__, ".MultiBuyLineItemsTargetSchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -885,7 +896,7 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
                 __name__, ".CartDiscountValueRelativeDraftSchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -898,9 +909,9 @@ class CartDiscountChangeValueActionSchema(CartDiscountUpdateActionSchema):
 
 
 class CartDiscountSetCustomFieldActionSchema(CartDiscountUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -918,13 +929,13 @@ class CartDiscountSetCustomTypeActionSchema(CartDiscountUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -941,7 +952,7 @@ class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -955,7 +966,7 @@ class CartDiscountSetDescriptionActionSchema(CartDiscountUpdateActionSchema):
 
 class CartDiscountSetKeyActionSchema(CartDiscountUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -971,7 +982,7 @@ class CartDiscountSetValidFromActionSchema(CartDiscountUpdateActionSchema):
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
 
@@ -988,13 +999,13 @@ class CartDiscountSetValidFromAndUntilActionSchema(CartDiscountUpdateActionSchem
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
 
@@ -1011,7 +1022,7 @@ class CartDiscountSetValidUntilActionSchema(CartDiscountUpdateActionSchema):
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
 

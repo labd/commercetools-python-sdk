@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCustomersKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str

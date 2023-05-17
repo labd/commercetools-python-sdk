@@ -68,6 +68,9 @@ class StagedQuote(BaseResource):
     #: [State](ctp:api:type:State) of the Staged Quote.
     #: This reference can point to a State in a custom workflow.
     state: typing.Optional["StateReference"]
+    #: The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
+    #: track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+    purchase_order_number: typing.Optional[str]
     #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
     business_unit: typing.Optional["BusinessUnitKeyReference"]
 
@@ -89,6 +92,7 @@ class StagedQuote(BaseResource):
         seller_comment: typing.Optional[str] = None,
         custom: typing.Optional["CustomFields"] = None,
         state: typing.Optional["StateReference"] = None,
+        purchase_order_number: typing.Optional[str] = None,
         business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
@@ -102,6 +106,7 @@ class StagedQuote(BaseResource):
         self.seller_comment = seller_comment
         self.custom = custom
         self.state = state
+        self.purchase_order_number = purchase_order_number
         self.business_unit = business_unit
 
         super().__init__(
@@ -251,7 +256,6 @@ class StagedQuoteResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STAGED_QUOTE)
 
     @classmethod
@@ -375,7 +379,7 @@ class StagedQuoteSetCustomFieldAction(StagedQuoteUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

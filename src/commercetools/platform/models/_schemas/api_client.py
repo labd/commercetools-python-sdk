@@ -19,40 +19,40 @@ from ... import models
 
 # Marshmallow Schemas
 class ApiClientSchema(helpers.BaseSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    scope = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    scope = marshmallow.fields.String(allow_none=True, load_default=None)
     secret = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     last_used_at = marshmallow.fields.Date(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastUsedAt",
     )
     delete_at = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="deleteAt",
     )
     created_at = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdAt",
     )
     access_token_validity_seconds = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessTokenValiditySeconds",
     )
     refresh_token_validity_seconds = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="refreshTokenValiditySeconds",
     )
 
@@ -61,29 +61,28 @@ class ApiClientSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ApiClient(**data)
 
 
 class ApiClientDraftSchema(helpers.BaseSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    scope = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    scope = marshmallow.fields.String(allow_none=True, load_default=None)
     delete_days_after_creation = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="deleteDaysAfterCreation",
     )
     access_token_validity_seconds = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessTokenValiditySeconds",
     )
     refresh_token_validity_seconds = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="refreshTokenValiditySeconds",
     )
 
@@ -92,23 +91,22 @@ class ApiClientDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ApiClientDraft(**data)
 
 
 class ApiClientPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ApiClientSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -116,5 +114,4 @@ class ApiClientPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ApiClientPagedQueryResponse(**data)

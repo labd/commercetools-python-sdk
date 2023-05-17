@@ -22,7 +22,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeQuoteRequestsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

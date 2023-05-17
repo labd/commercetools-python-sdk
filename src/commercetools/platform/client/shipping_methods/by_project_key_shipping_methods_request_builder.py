@@ -16,6 +16,9 @@ from ...models.shipping_method import (
 from ..matching_cart.by_project_key_shipping_methods_matching_cart_request_builder import (
     ByProjectKeyShippingMethodsMatchingCartRequestBuilder,
 )
+from ..matching_cart_location.by_project_key_shipping_methods_matching_cart_location_request_builder import (
+    ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder,
+)
 from ..matching_location.by_project_key_shipping_methods_matching_location_request_builder import (
     ByProjectKeyShippingMethodsMatchingLocationRequestBuilder,
 )
@@ -34,7 +37,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyShippingMethodsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -56,6 +58,15 @@ class ByProjectKeyShippingMethodsRequestBuilder:
     def matching_cart(self) -> ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
         """Get ShippingMethods for a cart"""
         return ByProjectKeyShippingMethodsMatchingCartRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def matching_cart_location(
+        self,
+    ) -> ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder:
+        """Get ShippingMethods for a cart and location"""
+        return ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

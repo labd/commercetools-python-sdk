@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeShoppingListsByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _id: str
@@ -82,15 +81,15 @@ class ByProjectKeyMeShoppingListsByIDRequestBuilder:
     def delete(
         self,
         *,
-        version: int,
         expand: typing.List["str"] = None,
+        version: int,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/me/shopping-lists/{self._id}",
-            params={"version": version, "expand": expand},
+            params={"expand": expand, "version": version},
             headers=headers,
             options=options,
         )

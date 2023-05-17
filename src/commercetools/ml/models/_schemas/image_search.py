@@ -19,15 +19,15 @@ from ... import models
 
 # Marshmallow Schemas
 class ImageSearchResponseSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Float(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Float(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ResultItemSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -35,20 +35,19 @@ class ImageSearchResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImageSearchResponse(**data)
 
 
 class ResultItemSchema(helpers.BaseSchema):
     image_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="imageUrl"
+        allow_none=True, load_default=None, data_key="imageUrl"
     )
     product_variants = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductVariantSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productVariants",
     )
 
@@ -57,5 +56,4 @@ class ResultItemSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ResultItem(**data)

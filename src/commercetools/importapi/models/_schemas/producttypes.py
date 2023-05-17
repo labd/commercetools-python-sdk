@@ -40,28 +40,30 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
             "text": helpers.absmod(__name__, ".AttributeTextTypeSchema"),
             "time": helpers.absmod(__name__, ".AttributeTimeTypeSchema"),
         },
-        missing=None,
+        load_default=None,
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     is_required = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isRequired"
+        allow_none=True, load_default=None, data_key="isRequired"
     )
     attribute_constraint = marshmallow_enum.EnumField(
         AttributeConstraintEnum,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="attributeConstraint",
     )
     input_tip = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputTip",
     )
     input_hint = marshmallow_enum.EnumField(
@@ -69,13 +71,13 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputHint",
     )
     is_searchable = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isSearchable",
     )
 
@@ -84,12 +86,11 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeDefinition(**data)
 
 
 class AttributeTypeSchema(helpers.BaseSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -136,7 +137,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -149,15 +150,14 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
 
 
 class AttributePlainEnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
+    label = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributePlainEnumValue(**data)
 
 
@@ -177,7 +177,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -190,9 +190,11 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
 
 
 class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -200,7 +202,6 @@ class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeLocalizedEnumValue(**data)
 
 
@@ -219,7 +220,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
         nested=helpers.absmod(__name__, ".common.ProductTypeKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="typeReference",
     )
 
@@ -247,7 +248,7 @@ class AttributeReferenceTypeSchema(AttributeTypeSchema):
         ReferenceType,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="referenceTypeId",
     )
 
@@ -279,7 +280,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
             "text": helpers.absmod(__name__, ".AttributeTextTypeSchema"),
             "time": helpers.absmod(__name__, ".AttributeTimeTypeSchema"),
         },
-        missing=None,
+        load_default=None,
         data_key="elementType",
     )
 
@@ -313,15 +314,15 @@ class AttributeTimeTypeSchema(AttributeTypeSchema):
 
 
 class ProductTypeImportSchema(ImportResourceSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    description = marshmallow.fields.String(allow_none=True, load_default=None)
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeDefinitionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -329,5 +330,4 @@ class ProductTypeImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductTypeImport(**data)

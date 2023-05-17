@@ -23,3 +23,4 @@ from .products import *  # noqa
 from .producttypes import *  # noqa
 from .productvariants import *  # noqa
 from .standalone_prices import *  # noqa
+from .types import *  # noqa

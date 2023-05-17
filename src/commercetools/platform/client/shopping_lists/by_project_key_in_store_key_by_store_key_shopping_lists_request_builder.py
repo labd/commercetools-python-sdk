@@ -25,7 +25,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -108,6 +107,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
+        """When using this endpoint, the `store` field of a ShoppingList is always set to the Store specified in the path parameter."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists",

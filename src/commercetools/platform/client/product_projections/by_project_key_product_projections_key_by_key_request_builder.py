@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -44,9 +43,9 @@ class ByProjectKeyProductProjectionsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjection"]:
-        """Gets the current or staged representation of a product found by Key.
-        When used with an API client that has the view_published_products:{projectKey} scope,
-        this endpoint only returns published (current) product projections.
+        """Gets the current or staged representation of a [Product](ctp:api:type:Product) found by Key.
+        When used with an API Client that has the `view_published_products:{projectKey}` scope,
+        this endpoint only returns published (current) Product Projections.
 
         """
         headers = {} if headers is None else headers

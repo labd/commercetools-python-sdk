@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _id: str
@@ -44,11 +43,7 @@ class ByProjectKeyProductProjectionsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjection"]:
-        """Gets the current or staged representation of a product in a catalog by ID.
-        When used with an API client that has the view_published_products:{projectKey} scope,
-        this endpoint only returns published (current) product projections.
-
-        """
+        """Gets the current or staged representation of a [Product](ctp:api:type:Product) by its ID. When used with an API Client that has the `view_published_products:{projectKey}` scope, this endpoint only returns published (current) Product Projections."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/product-projections/{self._id}",

@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -40,11 +39,9 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Returns a cart by its ID from a specific Store.
-        If the cart exists in the project but does not have the store field,
-        or the store field references a different store, this method returns a ResourceNotFound error.
-        The cart may not contain up-to-date prices, discounts etc.
-        If you want to ensure they're up-to-date, send an Update request with the Recalculate update action instead.
+        """If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+
+        To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 
         """
         headers = {} if headers is None else headers
@@ -72,8 +69,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder:
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
         """Updates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
-        If the Cart exists in the Project but does not have the store field,
-        or the `store` field references a different Store, this method returns a [ResourceNotFoundError](ctp:api:type:ResourceNotFoundError).
+        If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
 
         """
         headers = {} if headers is None else headers
@@ -102,6 +98,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
+        """If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/carts/{self._id}",

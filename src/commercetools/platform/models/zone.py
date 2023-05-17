@@ -227,7 +227,6 @@ class ZoneResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ZONE)
 
     @classmethod
@@ -245,7 +244,7 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 
 
 class ZoneUpdate(_BaseType):
-    #: Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Zone.
     actions: typing.List["ZoneUpdateAction"]

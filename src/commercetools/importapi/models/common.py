@@ -401,7 +401,6 @@ class CartKeyReference(KeyReference):
     """References a cart by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CART)
 
     @classmethod
@@ -420,7 +419,6 @@ class CartDiscountKeyReference(KeyReference):
     """References a cart discount by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CART_DISCOUNT)
 
     @classmethod
@@ -441,7 +439,6 @@ class CategoryKeyReference(KeyReference):
     """References a category by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CATEGORY)
 
     @classmethod
@@ -460,7 +457,6 @@ class ChannelKeyReference(KeyReference):
     """References a channel by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CHANNEL)
 
     @classmethod
@@ -479,7 +475,6 @@ class CustomerKeyReference(KeyReference):
     """References a customer by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CUSTOMER)
 
     @classmethod
@@ -498,7 +493,6 @@ class CustomerGroupKeyReference(KeyReference):
     """References a customer group by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.CUSTOMER_GROUP)
 
     @classmethod
@@ -519,7 +513,6 @@ class DiscountCodeKeyReference(KeyReference):
     """References a discount code by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.DISCOUNT_CODE)
 
     @classmethod
@@ -540,7 +533,6 @@ class OrderKeyReference(KeyReference):
     """References an order by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.ORDER)
 
     @classmethod
@@ -559,7 +551,6 @@ class PaymentKeyReference(KeyReference):
     """References a payment by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PAYMENT)
 
     @classmethod
@@ -578,7 +569,6 @@ class PriceKeyReference(KeyReference):
     """References a price by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PRICE)
 
     @classmethod
@@ -597,7 +587,6 @@ class ProductKeyReference(KeyReference):
     """References a product by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PRODUCT)
 
     @classmethod
@@ -616,7 +605,6 @@ class ProductDiscountKeyReference(KeyReference):
     """References a product discount by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_DISCOUNT)
 
     @classmethod
@@ -637,7 +625,6 @@ class ProductTypeKeyReference(KeyReference):
     """References a product type by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_TYPE)
 
     @classmethod
@@ -658,7 +645,6 @@ class ProductVariantKeyReference(KeyReference):
     """References a product variant by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.PRODUCT_VARIANT)
 
     @classmethod
@@ -679,7 +665,6 @@ class ShippingMethodKeyReference(KeyReference):
     """References a shipping method by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.SHIPPING_METHOD)
 
     @classmethod
@@ -700,7 +685,6 @@ class StateKeyReference(KeyReference):
     """References a state by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.STATE)
 
     @classmethod
@@ -719,7 +703,6 @@ class StoreKeyReference(KeyReference):
     """References a store by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.STORE)
 
     @classmethod
@@ -738,7 +721,6 @@ class TaxCategoryKeyReference(KeyReference):
     """References a tax category by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.TAX_CATEGORY)
 
     @classmethod
@@ -759,7 +741,6 @@ class TypeKeyReference(KeyReference):
     """References a type by key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceType.TYPE)
 
     @classmethod
@@ -905,7 +886,6 @@ class Money(TypedMoney):
         cent_amount: int,
         currency_code: str
     ):
-
         super().__init__(
             fraction_digits=fraction_digits,
             cent_amount=cent_amount,
@@ -975,7 +955,7 @@ class PriceTier(_BaseType):
 
 
 class ImportResourceType(enum.Enum):
-    """The type of the import resource."""
+    """The resource types that can be imported."""
 
     CATEGORY = "category"
     ORDER = "order"
@@ -989,6 +969,7 @@ class ImportResourceType(enum.Enum):
     CUSTOMER = "customer"
     INVENTORY = "inventory"
     STANDALONE_PRICE = "standalone-price"
+    TYPE = "type"
 
 
 class ReferenceType(enum.Enum):
@@ -1054,6 +1035,8 @@ class Address(_BaseType):
     fax: typing.Optional[str]
     additional_address_info: typing.Optional[str]
     external_id: typing.Optional[str]
+    #: Custom Fields defined for the Address. Custom Fields can only be applied to `shippingAddress`.
+    custom: typing.Optional["Custom"]
 
     def __init__(
         self,
@@ -1082,7 +1065,8 @@ class Address(_BaseType):
         email: typing.Optional[str] = None,
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        external_id: typing.Optional[str] = None,
+        custom: typing.Optional["Custom"] = None
     ):
         self.id = id
         self.key = key
@@ -1109,6 +1093,7 @@ class Address(_BaseType):
         self.fax = fax
         self.additional_address_info = additional_address_info
         self.external_id = external_id
+        self.custom = custom
 
         super().__init__()
 

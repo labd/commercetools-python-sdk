@@ -310,7 +310,6 @@ class ShippingMethodResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.SHIPPING_METHOD)
 
     @classmethod
@@ -452,8 +451,8 @@ class ShippingRate(_BaseType):
     #: Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
     free_above: typing.Optional["TypedMoney"]
     #: `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
-    #: Only appears in response to requests for [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) or
-    #: [Get ShippingMethods for a Location](#get-shippingmethods-for-a-location).
+    #: Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
+    #: [Get ShippingMethods for a Location](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-location:GET).
     is_matching: typing.Optional[bool]
     #: Price tiers for the ShippingRate.
     tiers: typing.List["ShippingRatePriceTier"]
@@ -554,7 +553,7 @@ class CartClassificationTier(ShippingRatePriceTier):
     value: str
     #: Fixed shipping rate for the selected classification.
     price: "Money"
-    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+    #: Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
@@ -592,7 +591,7 @@ class CartScoreTier(ShippingRatePriceTier):
     price: typing.Optional["Money"]
     #: Dynamically calculates a Price for a range of scores.
     price_function: typing.Optional["PriceFunction"]
-    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+    #: Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
@@ -634,7 +633,7 @@ class CartValueTier(ShippingRatePriceTier):
     minimum_cent_amount: int
     #: Fixed shipping rate Price for a CartValue.
     price: "Money"
-    #: Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+    #: Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
     is_matching: typing.Optional[bool]
 
     def __init__(
@@ -910,7 +909,7 @@ class ShippingMethodSetCustomFieldAction(ShippingMethodUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

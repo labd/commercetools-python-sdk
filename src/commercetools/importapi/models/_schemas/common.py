@@ -25,35 +25,37 @@ class LocalizedStringField(marshmallow.fields.Dict):
 
 # Marshmallow Schemas
 class AssetSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     sources = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetSourceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -61,39 +63,37 @@ class AssetSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Asset(**data)
 
 
 class AssetDimensionsSchema(helpers.BaseSchema):
-    w = marshmallow.fields.Integer(allow_none=True, missing=None)
-    h = marshmallow.fields.Integer(allow_none=True, missing=None)
+    w = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    h = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AssetDimensions(**data)
 
 
 class AssetSourceSchema(helpers.BaseSchema):
-    uri = marshmallow.fields.String(allow_none=True, missing=None)
+    uri = marshmallow.fields.String(allow_none=True, load_default=None)
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     dimensions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetDimensionsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     content_type = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="contentType",
     )
 
@@ -102,20 +102,19 @@ class AssetSourceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AssetSource(**data)
 
 
 class ImageSchema(helpers.BaseSchema):
-    url = marshmallow.fields.String(allow_none=True, missing=None)
+    url = marshmallow.fields.String(allow_none=True, load_default=None)
     dimensions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AssetDimensionsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     label = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -123,27 +122,27 @@ class ImageSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Image(**data)
 
 
 class EnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
+    label = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.EnumValue(**data)
 
 
 class LocalizedEnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -151,26 +150,28 @@ class LocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.LocalizedEnumValue(**data)
 
 
 class ImportResourceSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportResource(**data)
 
 
 class KeyReferenceSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     type_id = marshmallow_enum.EnumField(
-        ReferenceType, by_value=True, allow_none=True, missing=None, data_key="typeId"
+        ReferenceType,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="typeId",
     )
 
     class Meta:
@@ -373,7 +374,7 @@ class TypeKeyReferenceSchema(KeyReferenceSchema):
 
 
 class CustomObjectKeyReferenceSchema(KeyReferenceSchema):
-    container = marshmallow.fields.String(allow_none=True, missing=None)
+    container = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -385,9 +386,13 @@ class CustomObjectKeyReferenceSchema(KeyReferenceSchema):
 
 
 class UnresolvedReferencesSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     type_id = marshmallow_enum.EnumField(
-        ReferenceType, by_value=True, allow_none=True, missing=None, data_key="typeId"
+        ReferenceType,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="typeId",
     )
 
     class Meta:
@@ -395,25 +400,24 @@ class UnresolvedReferencesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.UnresolvedReferences(**data)
 
 
 class TypedMoneySchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
-        MoneyType, by_value=True, allow_none=True, missing=None
+        MoneyType, by_value=True, allow_none=True, load_default=None
     )
     fraction_digits = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="fractionDigits",
     )
     cent_amount = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="centAmount"
+        allow_none=True, load_default=None, data_key="centAmount"
     )
     currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
+        allow_none=True, load_default=None, data_key="currencyCode"
     )
 
     class Meta:
@@ -427,7 +431,7 @@ class TypedMoneySchema(helpers.BaseSchema):
 
 class HighPrecisionMoneySchema(TypedMoneySchema):
     precise_amount = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="preciseAmount"
+        allow_none=True, load_default=None, data_key="preciseAmount"
     )
 
     class Meta:
@@ -457,13 +461,13 @@ class DiscountedPriceSchema(helpers.BaseSchema):
             "highPrecision": helpers.absmod(__name__, ".HighPrecisionMoneySchema"),
             "centPrecision": helpers.absmod(__name__, ".MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
     discount = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductDiscountKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -471,13 +475,12 @@ class DiscountedPriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.DiscountedPrice(**data)
 
 
 class PriceTierSchema(helpers.BaseSchema):
     minimum_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="minimumQuantity"
+        allow_none=True, load_default=None, data_key="minimumQuantity"
     )
     value = helpers.Discriminator(
         allow_none=True,
@@ -486,7 +489,7 @@ class PriceTierSchema(helpers.BaseSchema):
             "highPrecision": helpers.absmod(__name__, ".HighPrecisionMoneySchema"),
             "centPrecision": helpers.absmod(__name__, ".MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -494,107 +497,116 @@ class PriceTierSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PriceTier(**data)
 
 
 class AddressSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     title = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     salutation = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="firstName",
     )
     last_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastName",
     )
     street_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="streetName",
     )
     street_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="streetNumber",
     )
     additional_street_info = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="additionalStreetInfo",
     )
     postal_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="postalCode",
     )
     city = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     region = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     state = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(allow_none=True, load_default=None)
     company = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     department = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     building = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     apartment = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     p_o_box = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="pOBox"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="pOBox",
     )
     phone = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     mobile = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     email = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     fax = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     additional_address_info = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="additionalAddressInfo",
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
     )
 
     class Meta:
@@ -602,5 +614,4 @@ class AddressSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Address(**data)

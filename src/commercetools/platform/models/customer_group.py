@@ -90,7 +90,7 @@ class CustomerGroupDraft(_BaseType):
     #: User-defined unique identifier for the CustomerGroup.
     key: typing.Optional[str]
     #: Unique value which must be different from any value used for `name` in [CustomerGroup](ctp:api:type:CustomerGroup) in the Project.
-    #: If not, a `DuplicateField` [error](/../api/errors#400-bad-request-1) is thrown.
+    #: If not, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
     group_name: str
     #: Custom Fields for the CustomerGroup.
     custom: typing.Optional["CustomFieldsDraft"]
@@ -200,7 +200,6 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CUSTOMER_GROUP)
 
     @classmethod
@@ -219,7 +218,7 @@ class CustomerGroupResourceIdentifier(ResourceIdentifier):
 
 class CustomerGroupUpdate(_BaseType):
     #: Expected version of the CustomerGroup on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the CustomerGroup.
     actions: typing.List["CustomerGroupUpdateAction"]
@@ -306,7 +305,7 @@ class CustomerGroupSetCustomFieldAction(CustomerGroupUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

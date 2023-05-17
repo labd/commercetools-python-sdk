@@ -21,7 +21,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -55,6 +54,7 @@ class ByProjectKeyProductsRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
@@ -71,6 +71,7 @@ class ByProjectKeyProductsRequestBuilder:
             "priceCountry": price_country,
             "priceCustomerGroup": price_customer_group,
             "priceChannel": price_channel,
+            "localeProjection": locale_projection,
             "expand": expand,
             "sort": sort,
             "limit": limit,
@@ -128,6 +129,7 @@ class ByProjectKeyProductsRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -145,6 +147,7 @@ class ByProjectKeyProductsRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
+                "localeProjection": locale_projection,
                 "expand": expand,
             },
             json=body.serialize(),

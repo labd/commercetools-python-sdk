@@ -7,6 +7,8 @@
 
 from . import *  # noqa
 from .api_client import *  # noqa
+from .associate_role import *  # noqa
+from .attribute_group import *  # noqa
 from .business_unit import *  # noqa
 from .cart import *  # noqa
 from .cart_discount import *  # noqa
@@ -40,6 +42,7 @@ from .staged_quote import *  # noqa
 from .standalone_price import *  # noqa
 from .state import *  # noqa
 from .store import *  # noqa
+from .store_country import *  # noqa
 from .subscription import *  # noqa
 from .tax_category import *  # noqa
 from .type import *  # noqa

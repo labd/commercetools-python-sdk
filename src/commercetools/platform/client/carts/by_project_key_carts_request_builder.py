@@ -27,7 +27,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCartsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -116,8 +115,9 @@ class ByProjectKeyCartsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Creating a cart can fail with an InvalidOperation if the referenced shipping method in the
-        CartDraft has a predicate which does not match the cart.
+        """Creating a Cart fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error if the
+        [ShippingMethod](ctp:api:type:ShippingMethod) referenced in the CartDraft
+        has a `predicate` that does not match the Cart.
 
         """
         headers = {} if headers is None else headers

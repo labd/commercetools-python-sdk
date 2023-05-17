@@ -27,7 +27,7 @@ class InventoryEntrySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -35,37 +35,37 @@ class InventoryEntrySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
     quantity_on_stock = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="quantityOnStock"
+        allow_none=True, load_default=None, data_key="quantityOnStock"
     )
     available_quantity = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="availableQuantity"
+        allow_none=True, load_default=None, data_key="availableQuantity"
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
     expected_delivery = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="expectedDelivery",
     )
     custom = helpers.LazyNestedField(
@@ -73,7 +73,7 @@ class InventoryEntrySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -81,36 +81,35 @@ class InventoryEntrySchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.InventoryEntry(**data)
 
 
 class InventoryEntryDraftSchema(helpers.BaseSchema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     supply_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
     quantity_on_stock = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="quantityOnStock"
+        allow_none=True, load_default=None, data_key="quantityOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
     expected_delivery = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="expectedDelivery",
     )
     custom = helpers.LazyNestedField(
@@ -118,7 +117,7 @@ class InventoryEntryDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -126,7 +125,6 @@ class InventoryEntryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.InventoryEntryDraft(**data)
 
 
@@ -136,7 +134,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -159,7 +157,7 @@ class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class InventoryEntryUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -193,7 +191,7 @@ class InventoryEntryUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -201,12 +199,11 @@ class InventoryEntryUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.InventoryEntryUpdate(**data)
 
 
 class InventoryEntryUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -218,18 +215,18 @@ class InventoryEntryUpdateActionSchema(helpers.BaseSchema):
 
 
 class InventoryPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".InventoryEntrySchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -237,12 +234,11 @@ class InventoryPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.InventoryPagedQueryResponse(**data)
 
 
 class InventoryEntryAddQuantityActionSchema(InventoryEntryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -254,7 +250,7 @@ class InventoryEntryAddQuantityActionSchema(InventoryEntryUpdateActionSchema):
 
 
 class InventoryEntryChangeQuantityActionSchema(InventoryEntryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -266,7 +262,7 @@ class InventoryEntryChangeQuantityActionSchema(InventoryEntryUpdateActionSchema)
 
 
 class InventoryEntryRemoveQuantityActionSchema(InventoryEntryUpdateActionSchema):
-    quantity = marshmallow.fields.Integer(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -278,9 +274,9 @@ class InventoryEntryRemoveQuantityActionSchema(InventoryEntryUpdateActionSchema)
 
 
 class InventoryEntrySetCustomFieldActionSchema(InventoryEntryUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -298,13 +294,13 @@ class InventoryEntrySetCustomTypeActionSchema(InventoryEntryUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -320,7 +316,7 @@ class InventoryEntrySetExpectedDeliveryActionSchema(InventoryEntryUpdateActionSc
     expected_delivery = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="expectedDelivery",
     )
 
@@ -335,7 +331,7 @@ class InventoryEntrySetExpectedDeliveryActionSchema(InventoryEntryUpdateActionSc
 
 class InventoryEntrySetKeyActionSchema(InventoryEntryUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -351,7 +347,7 @@ class InventoryEntrySetRestockableInDaysActionSchema(InventoryEntryUpdateActionS
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
 
@@ -370,7 +366,7 @@ class InventoryEntrySetSupplyChannelActionSchema(InventoryEntryUpdateActionSchem
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
 

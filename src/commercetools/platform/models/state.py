@@ -240,7 +240,6 @@ class StateResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STATE)
 
     @classmethod
@@ -278,7 +277,7 @@ class StateTypeEnum(enum.Enum):
 
 
 class StateUpdate(_BaseType):
-    #: Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the State.
     actions: typing.List["StateUpdateAction"]

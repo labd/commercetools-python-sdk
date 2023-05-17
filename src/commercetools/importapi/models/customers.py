@@ -16,7 +16,12 @@ if typing.TYPE_CHECKING:
     from .common import CustomerGroupKeyReference, StoreKeyReference
     from .customfields import Custom
 
-__all__ = ["CustomerAddress", "CustomerImport"]
+__all__ = ["AuthenticationMode", "CustomerAddress", "CustomerImport"]
+
+
+class AuthenticationMode(enum.Enum):
+    PASSWORD = "Password"
+    EXTERNAL_AUTH = "ExternalAuth"
 
 
 class CustomerAddress(_BaseType):
@@ -128,8 +133,8 @@ class CustomerImport(ImportResource):
     customer_number: typing.Optional[str]
     #: Maps to `Customer.email`.
     email: str
-    #: Maps to `Customer.password`.
-    password: str
+    #: Required when `authenticationMode` is set to `Password`. Maps to `Customer.password`.
+    password: typing.Optional[str]
     #: The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Stores are created.
     stores: typing.Optional[typing.List["StoreKeyReference"]]
     #: Maps to `Customer.firstName`.
@@ -167,8 +172,11 @@ class CustomerImport(ImportResource):
     shipping_addresses: typing.Optional[typing.List["int"]]
     #: Maps to `Customer.locale`.
     locale: typing.Optional[str]
-    #: The custom fields for this Customer.
+    #: The Custom Fields for this Customer.
     custom: typing.Optional["Custom"]
+    #: - Set to `Password` to make the `password` field required for the Customer.
+    #: - Set to `ExternalAuth` when the password is not required for the Customer.
+    authentication_mode: typing.Optional["AuthenticationMode"]
 
     def __init__(
         self,
@@ -176,7 +184,7 @@ class CustomerImport(ImportResource):
         key: str,
         customer_number: typing.Optional[str] = None,
         email: str,
-        password: str,
+        password: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
         first_name: typing.Optional[str] = None,
         last_name: typing.Optional[str] = None,
@@ -195,7 +203,8 @@ class CustomerImport(ImportResource):
         default_shipping_address: typing.Optional[int] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
         locale: typing.Optional[str] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
+        authentication_mode: typing.Optional["AuthenticationMode"] = None
     ):
         self.customer_number = customer_number
         self.email = email
@@ -219,6 +228,7 @@ class CustomerImport(ImportResource):
         self.shipping_addresses = shipping_addresses
         self.locale = locale
         self.custom = custom
+        self.authentication_mode = authentication_mode
 
         super().__init__(key=key)
 

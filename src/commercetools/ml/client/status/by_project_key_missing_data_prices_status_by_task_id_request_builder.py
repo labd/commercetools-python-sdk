@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMissingDataPricesStatusByTaskIdRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _task_id: str

@@ -255,7 +255,6 @@ class ChannelResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CHANNEL)
 
     @classmethod
@@ -283,7 +282,7 @@ class ChannelRoleEnum(enum.Enum):
 
 
 class ChannelUpdate(_BaseType):
-    #: Expected version of the Channel on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the Channel on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Channel.
     actions: typing.List["ChannelUpdateAction"]
@@ -511,7 +510,8 @@ class ChannelSetAddressCustomFieldAction(ChannelUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: Specifies the format of the value of the Custom Field defined by `name`.
-    #: If `value` is absent or `null`, this field will be removed, if it exists. Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: If `value` is absent or `null`, this field will be removed, if it exists.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):
@@ -570,7 +570,7 @@ class ChannelSetCustomFieldAction(ChannelUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

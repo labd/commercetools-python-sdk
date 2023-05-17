@@ -17,7 +17,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyImageSearchConfigRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

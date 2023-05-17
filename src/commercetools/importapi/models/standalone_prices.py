@@ -28,7 +28,7 @@ __all__ = ["StandalonePriceImport"]
 class StandalonePriceImport(ImportResource):
     """The data representation for a Standalone Price to be imported that is persisted as a [Standalone Price](/../api/projects/standalone-prices#standaloneprice) in the Project."""
 
-    #: Specifies to which ProductVariant the API associates this Price. It is not validated to exist in product variants.
+    #: Identifies the ProductVariant to which this Standalone Price is associated. This value is not validated to exist in Product Variants.
     sku: str
     #: Sets the money value of this Price.
     value: "TypedMoney"

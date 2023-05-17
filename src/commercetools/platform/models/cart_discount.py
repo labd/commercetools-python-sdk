@@ -181,7 +181,7 @@ class CartDiscountDraft(_BaseType):
     #: Description of the CartDiscount.
     description: typing.Optional["LocalizedString"]
     #: Effect of the CartDiscount.
-    #: For a target, relative or absolute discount values, or a fixed item price value can be specified. If no target is specified, a gift line item can be added to the cart.
+    #: For a [target](ctp:api:type:CartDiscountTarget), relative or absolute Discount values or a fixed item Price value can be specified. If no target is specified, a [Gift Line Item](/../api/projects/cartDiscounts#gift-line-item) can be added to the Cart.
     value: "CartDiscountValueDraft"
     #: Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
     cart_predicate: str
@@ -327,7 +327,6 @@ class CartDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CART_DISCOUNT)
 
     @classmethod
@@ -435,7 +434,6 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
     """Discount is applied to the shipping costs of the [Cart](ctp:api:type:Cart)."""
 
     def __init__(self):
-
         super().__init__(type="shipping")
 
     @classmethod
@@ -453,7 +451,7 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
 
 
 class CartDiscountUpdate(_BaseType):
-    #: Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the CartDiscount.
     actions: typing.List["CartDiscountUpdateAction"]
@@ -1156,7 +1154,7 @@ class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

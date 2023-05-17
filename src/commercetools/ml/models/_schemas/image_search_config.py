@@ -22,7 +22,7 @@ from ..image_search_config import ImageSearchConfigStatus
 
 
 class ImageSearchConfigUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -35,7 +35,7 @@ class ImageSearchConfigUpdateActionSchema(helpers.BaseSchema):
 
 class ChangeStatusUpdateActionSchema(ImageSearchConfigUpdateActionSchema):
     status = marshmallow_enum.EnumField(
-        ImageSearchConfigStatus, by_value=True, allow_none=True, missing=None
+        ImageSearchConfigStatus, by_value=True, allow_none=True, load_default=None
     )
 
     class Meta:
@@ -59,7 +59,7 @@ class ImageSearchConfigRequestSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -67,16 +67,15 @@ class ImageSearchConfigRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImageSearchConfigRequest(**data)
 
 
 class ImageSearchConfigResponseSchema(helpers.BaseSchema):
     status = marshmallow_enum.EnumField(
-        ImageSearchConfigStatus, by_value=True, allow_none=True, missing=None
+        ImageSearchConfigStatus, by_value=True, allow_none=True, load_default=None
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True, load_default=None, data_key="lastModifiedAt"
     )
 
     class Meta:
@@ -84,5 +83,4 @@ class ImageSearchConfigResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImageSearchConfigResponse(**data)

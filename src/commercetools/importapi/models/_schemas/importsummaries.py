@@ -23,35 +23,33 @@ class ImportSummarySchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".OperationStatesSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportSummary(**data)
 
 
 class OperationStatesSchema(helpers.BaseSchema):
-    processing = marshmallow.fields.Integer(allow_none=True, missing=None)
+    processing = marshmallow.fields.Integer(allow_none=True, load_default=None)
     validation_failed = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="validationFailed"
+        allow_none=True, load_default=None, data_key="validationFailed"
     )
-    unresolved = marshmallow.fields.Integer(allow_none=True, missing=None)
+    unresolved = marshmallow.fields.Integer(allow_none=True, load_default=None)
     wait_for_master_variant = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="waitForMasterVariant"
+        allow_none=True, load_default=None, data_key="waitForMasterVariant"
     )
-    imported = marshmallow.fields.Integer(allow_none=True, missing=None)
-    rejected = marshmallow.fields.Integer(allow_none=True, missing=None)
+    imported = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    rejected = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.OperationStates(**data)

@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyOrdersImportContainersByImportContainerKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _import_container_key: str
@@ -37,7 +36,7 @@ class ByProjectKeyOrdersImportContainersByImportContainerKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> "ImportResponse":
-        """Creates a request for creating new Orders or updating existing ones."""
+        """Creates a request for creating new Orders."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/orders/import-containers/{self._import_container_key}",

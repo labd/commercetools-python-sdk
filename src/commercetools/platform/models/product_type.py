@@ -104,7 +104,7 @@ class AttributeDefinition(_BaseType):
     #: Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
     #: The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
     #: This constraint is enforced at both [Product creation](/../api/projects/products#create-product) and [Product update](/../api/projects/products#update-product).
-    #: If the length of the input exceeds the maximum size, an [InvalidFieldError](ctp:api:type:InvalidFieldError) is returned.
+    #: If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
     is_searchable: bool
 
     def __init__(
@@ -146,9 +146,12 @@ class AttributeDefinitionDraft(_BaseType):
     """Specify the Attribute to be created with the [ProductTypeDraft](ctp:api:type:ProductTypeDraft)."""
 
     #: Describes the Type of the Attribute.
+    #:
+    #: When the `type` is different for an AttributeDefinition using the same name in multiple ProductTypes, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
     type: "AttributeType"
     #: User-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
-    #: When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. Otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+    #:
+    #: When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes, else an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
     #: An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
     name: str
     #: Human-readable label for the Attribute.
@@ -206,7 +209,7 @@ class AttributeDefinitionDraft(_BaseType):
 
 
 class AttributeLocalizedEnumValue(_BaseType):
-    """Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected."""
+    """A localized enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned."""
 
     #: Key of the value used as a programmatic identifier, for example in facets & filters.
     key: str
@@ -234,7 +237,7 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributePlainEnumValue(_BaseType):
-    """A plain enum value must be unique within the enum, otherwise a [DuplicateEnumValues](/errors#product-types-400-duplicate-enum-values) error will be returned."""
+    """A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:types:DuplicateEnumValuesError) error is returned."""
 
     #: Key of the value used as a programmatic identifier, for example in facets & filters.
     key: str
@@ -353,7 +356,6 @@ class AttributeBooleanType(AttributeType):
     """Attribute type for Boolean values. Valid values for the Attribute are `true` and `false` (JSON Boolean)."""
 
     def __init__(self):
-
         super().__init__(name="boolean")
 
     @classmethod
@@ -370,7 +372,6 @@ class AttributeBooleanType(AttributeType):
 
 class AttributeDateTimeType(AttributeType):
     def __init__(self):
-
         super().__init__(name="datetime")
 
     @classmethod
@@ -387,7 +388,6 @@ class AttributeDateTimeType(AttributeType):
 
 class AttributeDateType(AttributeType):
     def __init__(self):
-
         super().__init__(name="date")
 
     @classmethod
@@ -429,7 +429,6 @@ class AttributeLocalizableTextType(AttributeType):
     """Attribute type for [LocalizedString](ctp:api:type:LocalizedString) values."""
 
     def __init__(self):
-
         super().__init__(name="ltext")
 
     @classmethod
@@ -447,6 +446,8 @@ class AttributeLocalizableTextType(AttributeType):
 
 
 class AttributeLocalizedEnumType(AttributeType):
+    """Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected."""
+
     #: Available values that can be assigned to Products.
     values: typing.List["AttributeLocalizedEnumValue"]
 
@@ -471,7 +472,6 @@ class AttributeLocalizedEnumType(AttributeType):
 
 class AttributeMoneyType(AttributeType):
     def __init__(self):
-
         super().__init__(name="money")
 
     @classmethod
@@ -511,7 +511,6 @@ class AttributeNestedType(AttributeType):
 
 class AttributeNumberType(AttributeType):
     def __init__(self):
-
         super().__init__(name="number")
 
     @classmethod
@@ -576,7 +575,6 @@ class AttributeTextType(AttributeType):
     """Attribute type for plain text values."""
 
     def __init__(self):
-
         super().__init__(name="text")
 
     @classmethod
@@ -593,7 +591,6 @@ class AttributeTextType(AttributeType):
 
 class AttributeTimeType(AttributeType):
     def __init__(self):
-
         super().__init__(name="time")
 
     @classmethod
@@ -777,7 +774,6 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
     @classmethod
@@ -795,7 +791,7 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 
 
 class ProductTypeUpdate(_BaseType):
-    #: Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the ProductType.
     actions: typing.List["ProductTypeUpdateAction"]
@@ -1066,12 +1062,17 @@ class ProductTypeChangeAttributeConstraintAction(ProductTypeUpdateAction):
 
 
 class ProductTypeChangeAttributeNameAction(ProductTypeUpdateAction):
-    """Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency)."""
+    """Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
+
+    If the AttributeDefinition name to be changed does not exist, an [AttributeNameDoesNotExist](ctp:api:type:AttributeNameDoesNotExistError) error is returned.
+
+    """
 
     #: Name of the AttributeDefinition to update.
     attribute_name: str
     #: New user-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
-    #: When using the same `name` for an Attribute in two or more ProductTypes all fields of the AttributeDefinition of this Attribute need to be the same across the ProductTypes, otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+    #:
+    #: When using the same `name` for an Attribute in two or more ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. If not, an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
     #: An exception to this are the values of an `enum` or `lenum` type and sets thereof.
     new_attribute_name: str
 
@@ -1169,6 +1170,8 @@ class ProductTypeChangeDescriptionAction(ProductTypeUpdateAction):
 
 class ProductTypeChangeEnumKeyAction(ProductTypeUpdateAction):
     """Updates the key of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition, or AttributeSetType of AttributeLocalizedEnumType AttributeDefinition.
+
+    If the AttributeDefinition does not contain an enum with the referenced key, a [EnumKeyDoesNotExist](ctp:api:type:EnumKeyDoesNotExistError) error is returned.
 
     All Products will be updated to the new key in an [eventually consistent](/general-concepts#eventual-consistency) way.
 
@@ -1327,7 +1330,7 @@ class ProductTypeChangeLocalizedEnumValueOrderAction(ProductTypeUpdateAction):
 
     #: Name of the AttributeDefinition to update.
     attribute_name: str
-    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](ctp:api:type:EnumValuesMustMatchError) error is returned.
     values: typing.List["AttributeLocalizedEnumValue"]
 
     def __init__(
@@ -1420,7 +1423,7 @@ class ProductTypeChangePlainEnumValueOrderAction(ProductTypeUpdateAction):
 
     #: Name of the AttributeDefinition to update.
     attribute_name: str
-    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+    #: Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](ctp:api:type:EnumValuesMustMatchError) error is returned.
     values: typing.List["AttributePlainEnumValue"]
 
     def __init__(
@@ -1485,7 +1488,7 @@ class ProductTypeRemoveAttributeDefinitionAction(ProductTypeUpdateAction):
 class ProductTypeRemoveEnumValuesAction(ProductTypeUpdateAction):
     """Removes enum values from an AttributeDefinition of [AttributeEnumType](ctp:api:type:AttributeEnumType), [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType), [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType, or AttributeSetType of AttributeLocalizedEnumType.
 
-    If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation will fail with the [EnumValueIsUsed](/errors#product-types-400-enum-value-is-used) error code.
+    If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation returns an [EnumValueIsUsed](ctp:api:type:EnumValueIsUsedError) error.
 
     """
 

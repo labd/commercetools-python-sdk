@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsSuggestRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -31,22 +30,22 @@ class ByProjectKeyProductProjectionsSuggestRequestBuilder:
         self,
         *,
         fuzzy: bool = None,
-        staged: bool = None,
         search_keywords: typing.Dict[str, typing.List["str"]] = None,
         sort: typing.List["str"] = None,
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
+        staged: bool = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["SuggestionResult"]:
         params = {
             "fuzzy": fuzzy,
-            "staged": staged,
             "sort": sort,
             "limit": limit,
             "offset": offset,
             "withTotal": with_total,
+            "staged": staged,
         }
         search_keywords and params.update(
             {f"searchKeywords.{k}": v for k, v in search_keywords.items()}

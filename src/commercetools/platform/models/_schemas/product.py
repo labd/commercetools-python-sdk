@@ -46,49 +46,51 @@ class SearchKeywordsField(marshmallow.fields.Dict):
 
 # Marshmallow Schemas
 class AttributeSchema(helpers.BaseSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    value = marshmallow.fields.Raw(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Attribute(**data)
 
 
 class FacetRangeSchema(helpers.BaseSchema):
-    from_ = marshmallow.fields.Float(allow_none=True, missing=None, data_key="from")
-    from_str = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="fromStr"
+    from_ = marshmallow.fields.Float(
+        allow_none=True, load_default=None, data_key="from"
     )
-    to = marshmallow.fields.Float(allow_none=True, missing=None)
-    to_str = marshmallow.fields.String(allow_none=True, missing=None, data_key="toStr")
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    from_str = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="fromStr"
+    )
+    to = marshmallow.fields.Float(allow_none=True, load_default=None)
+    to_str = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="toStr"
+    )
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     product_count = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productCount",
     )
-    total = marshmallow.fields.Float(allow_none=True, missing=None)
-    min = marshmallow.fields.Float(allow_none=True, missing=None)
-    max = marshmallow.fields.Float(allow_none=True, missing=None)
-    mean = marshmallow.fields.Float(allow_none=True, missing=None)
+    total = marshmallow.fields.Float(allow_none=True, load_default=None)
+    min = marshmallow.fields.Float(allow_none=True, load_default=None)
+    max = marshmallow.fields.Float(allow_none=True, load_default=None)
+    mean = marshmallow.fields.Float(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.FacetRange(**data)
 
 
 class FacetResultSchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
-        FacetTypes, by_value=True, allow_none=True, missing=None
+        FacetTypes, by_value=True, allow_none=True, load_default=None
     )
 
     class Meta:
@@ -103,18 +105,20 @@ class FacetResultSchema(helpers.BaseSchema):
 class FacetResultsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("^[a-z].*$")},
-        type=helpers.Discriminator(
-            allow_none=True,
-            discriminator_field=("type", "type"),
-            discriminator_schemas={
-                "filter": helpers.absmod(__name__, ".FilteredFacetResultSchema"),
-                "range": helpers.absmod(__name__, ".RangeFacetResultSchema"),
-                "terms": helpers.absmod(__name__, ".TermFacetResultSchema"),
-            },
-            missing=None,
-            data_key="/^[a-z].*$/",
-        ),
+        metadata={
+            "pattern": re.compile("^[a-z].*$"),
+            "type": helpers.Discriminator(
+                allow_none=True,
+                discriminator_field=("type", "type"),
+                discriminator_schemas={
+                    "filter": helpers.absmod(__name__, ".FilteredFacetResultSchema"),
+                    "range": helpers.absmod(__name__, ".RangeFacetResultSchema"),
+                    "terms": helpers.absmod(__name__, ".TermFacetResultSchema"),
+                },
+                load_default=None,
+                data_key="/^[a-z].*$/",
+            ),
+        },
     )
 
     class Meta:
@@ -138,12 +142,12 @@ class FacetResultsSchema(helpers.BaseSchema):
 
 
 class FacetTermSchema(helpers.BaseSchema):
-    term = marshmallow.fields.Raw(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    term = marshmallow.fields.Raw(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     product_count = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productCount",
     )
 
@@ -152,16 +156,15 @@ class FacetTermSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.FacetTerm(**data)
 
 
 class FilteredFacetResultSchema(FacetResultSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     product_count = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productCount",
     )
 
@@ -180,7 +183,7 @@ class ProductSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -188,24 +191,24 @@ class ProductSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".product_type.ProductTypeReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productType",
     )
     master_data = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductCatalogDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="masterData",
     )
     tax_category = helpers.LazyNestedField(
@@ -213,7 +216,7 @@ class ProductSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxCategory",
     )
     state = helpers.LazyNestedField(
@@ -221,14 +224,14 @@ class ProductSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     review_rating_statistics = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".review.ReviewRatingStatisticsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="reviewRatingStatistics",
     )
     price_mode = marshmallow_enum.EnumField(
@@ -236,7 +239,7 @@ class ProductSchema(BaseResourceSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="priceMode",
     )
 
@@ -245,26 +248,25 @@ class ProductSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Product(**data)
 
 
 class ProductCatalogDataSchema(helpers.BaseSchema):
-    published = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    published = marshmallow.fields.Boolean(allow_none=True, load_default=None)
     current = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     has_staged_changes = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="hasStagedChanges"
+        allow_none=True, load_default=None, data_key="hasStagedChanges"
     )
 
     class Meta:
@@ -272,63 +274,66 @@ class ProductCatalogDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductCatalogData(**data)
 
 
 class ProductDataSchema(helpers.BaseSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     category_order_hints = CategoryOrderHintsField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="categoryOrderHints",
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     master_variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="masterVariant",
     )
     variants = helpers.LazyNestedField(
@@ -336,7 +341,7 @@ class ProductDataSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     search_keywords = SearchKeywordsField(
         allow_none=True,
@@ -346,7 +351,7 @@ class ProductDataSchema(helpers.BaseSchema):
             many=True,
             unknown=marshmallow.EXCLUDE,
         ),
-        missing=None,
+        load_default=None,
         data_key="searchKeywords",
     )
 
@@ -355,7 +360,6 @@ class ProductDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductData(**data)
 
 
@@ -366,23 +370,27 @@ class ProductDraftSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productType",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".category.CategoryResourceIdentifierSchema"),
@@ -390,34 +398,34 @@ class ProductDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     category_order_hints = CategoryOrderHintsField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="categoryOrderHints",
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     master_variant = helpers.LazyNestedField(
@@ -425,7 +433,7 @@ class ProductDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="masterVariant",
     )
     variants = helpers.LazyNestedField(
@@ -434,7 +442,7 @@ class ProductDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -443,7 +451,7 @@ class ProductDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxCategory",
     )
     search_keywords = SearchKeywordsField(
@@ -455,7 +463,7 @@ class ProductDraftSchema(helpers.BaseSchema):
             unknown=marshmallow.EXCLUDE,
         ),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="searchKeywords",
     )
     state = helpers.LazyNestedField(
@@ -463,17 +471,17 @@ class ProductDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     publish = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     price_mode = marshmallow_enum.EnumField(
         ProductPriceModeEnum,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="priceMode",
     )
 
@@ -482,23 +490,22 @@ class ProductDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductDraft(**data)
 
 
 class ProductPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -506,66 +513,69 @@ class ProductPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductPagedQueryResponse(**data)
 
 
 class ProductProjectionSchema(BaseResourceSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".product_type.ProductTypeReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productType",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     category_order_hints = CategoryOrderHintsField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="categoryOrderHints",
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     search_keywords = SearchKeywordsField(
@@ -577,23 +587,23 @@ class ProductProjectionSchema(BaseResourceSchema):
             unknown=marshmallow.EXCLUDE,
         ),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="searchKeywords",
     )
     has_staged_changes = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="hasStagedChanges",
     )
     published = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     master_variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="masterVariant",
     )
     variants = helpers.LazyNestedField(
@@ -601,14 +611,14 @@ class ProductProjectionSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     tax_category = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".tax_category.TaxCategoryReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxCategory",
     )
     state = helpers.LazyNestedField(
@@ -616,15 +626,23 @@ class ProductProjectionSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     review_rating_statistics = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".review.ReviewRatingStatisticsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="reviewRatingStatistics",
+    )
+    price_mode = marshmallow_enum.EnumField(
+        ProductPriceModeEnum,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="priceMode",
     )
 
     class Meta:
@@ -632,23 +650,22 @@ class ProductProjectionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductProjection(**data)
 
 
 class ProductProjectionPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductProjectionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -656,29 +673,28 @@ class ProductProjectionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductProjectionPagedQueryResponse(**data)
 
 
 class ProductProjectionPagedSearchResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductProjectionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     facets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".FacetResultsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -686,7 +702,6 @@ class ProductProjectionPagedSearchResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductProjectionPagedSearchResponse(**data)
 
 
@@ -696,7 +711,7 @@ class ProductReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -719,7 +734,7 @@ class ProductResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class ProductUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -828,6 +843,9 @@ class ProductUpdateSchema(helpers.BaseSchema):
                 "setMetaTitle": helpers.absmod(
                     __name__, ".ProductSetMetaTitleActionSchema"
                 ),
+                "setPriceKey": helpers.absmod(
+                    __name__, ".ProductSetPriceKeyActionSchema"
+                ),
                 "setPriceMode": helpers.absmod(
                     __name__, ".ProductSetPriceModeActionSchema"
                 ),
@@ -855,7 +873,7 @@ class ProductUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -863,12 +881,11 @@ class ProductUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductUpdate(**data)
 
 
 class ProductUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -880,12 +897,12 @@ class ProductUpdateActionSchema(helpers.BaseSchema):
 
 
 class ProductVariantSchema(helpers.BaseSchema):
-    id = marshmallow.fields.Integer(allow_none=True, missing=None)
+    id = marshmallow.fields.Integer(allow_none=True, load_default=None)
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceSchema"),
@@ -893,7 +910,7 @@ class ProductVariantSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeSchema"),
@@ -901,14 +918,14 @@ class ProductVariantSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     images = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ImageSchema"),
@@ -916,7 +933,7 @@ class ProductVariantSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetSchema"),
@@ -924,19 +941,19 @@ class ProductVariantSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     availability = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantAvailabilitySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     is_matching_variant = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isMatchingVariant",
     )
     scoped_price = helpers.LazyNestedField(
@@ -944,13 +961,13 @@ class ProductVariantSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="scopedPrice",
     )
     scoped_price_discounted = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="scopedPriceDiscounted",
     )
 
@@ -959,7 +976,6 @@ class ProductVariantSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariant(**data)
 
 
@@ -972,24 +988,24 @@ class ProductVariantAvailabilitySchema(helpers.BaseSchema):
             unknown=marshmallow.EXCLUDE,
         ),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     is_on_stock = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isOnStock",
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
     available_quantity = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="availableQuantity",
     )
 
@@ -998,7 +1014,6 @@ class ProductVariantAvailabilitySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariantAvailability(**data)
 
 
@@ -1006,39 +1021,38 @@ class ProductVariantChannelAvailabilitySchema(helpers.BaseSchema):
     is_on_stock = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isOnStock",
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
     available_quantity = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="availableQuantity",
     )
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariantChannelAvailability(**data)
 
 
 class ProductVariantDraftSchema(helpers.BaseSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
@@ -1046,7 +1060,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeSchema"),
@@ -1054,7 +1068,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     images = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ImageSchema"),
@@ -1062,7 +1076,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetDraftSchema"),
@@ -1070,7 +1084,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1078,7 +1092,6 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariantDraft(**data)
 
 
@@ -1088,7 +1101,7 @@ class RangeFacetResultSchema(FacetResultSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1101,7 +1114,7 @@ class RangeFacetResultSchema(FacetResultSchema):
 
 
 class SearchKeywordSchema(helpers.BaseSchema):
-    text = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(allow_none=True, load_default=None)
     suggest_tokenizer = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -1110,7 +1123,7 @@ class SearchKeywordSchema(helpers.BaseSchema):
             "whitespace": helpers.absmod(__name__, ".WhitespaceTokenizerSchema"),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="suggestTokenizer",
     )
 
@@ -1119,12 +1132,11 @@ class SearchKeywordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SearchKeyword(**data)
 
 
 class SuggestTokenizerSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1137,7 +1149,7 @@ class SuggestTokenizerSchema(helpers.BaseSchema):
 
 class CustomTokenizerSchema(SuggestTokenizerSchema):
     inputs = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -1150,29 +1162,30 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
 
 
 class SuggestionSchema(helpers.BaseSchema):
-    text = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Suggestion(**data)
 
 
 class SuggestionResultSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?")},
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, ".SuggestionSchema"),
-            allow_none=True,
-            many=True,
-            unknown=marshmallow.EXCLUDE,
-            missing=None,
-            data_key="/searchKeywords.[a-z]{2}(-[A-Z]{2})?/",
-        ),
+        metadata={
+            "pattern": re.compile("searchKeywords.[a-z]{2}(-[A-Z]{2})?"),
+            "type": helpers.LazyNestedField(
+                nested=helpers.absmod(__name__, ".SuggestionSchema"),
+                allow_none=True,
+                many=True,
+                unknown=marshmallow.EXCLUDE,
+                load_default=None,
+                data_key="/searchKeywords.[a-z]{2}(-[A-Z]{2})?/",
+            ),
+        },
     )
 
     class Meta:
@@ -1200,18 +1213,18 @@ class TermFacetResultSchema(FacetResultSchema):
         TermFacetResultType,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="dataType",
     )
-    missing = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    other = marshmallow.fields.Integer(allow_none=True, missing=None)
+    missing = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    other = marshmallow.fields.Integer(allow_none=True, load_default=None)
     terms = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".FacetTermSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1237,23 +1250,23 @@ class ProductAddAssetActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     position = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1269,20 +1282,20 @@ class ProductAddExternalImageActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     image = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ImageSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1298,20 +1311,20 @@ class ProductAddPriceActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1328,16 +1341,16 @@ class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
         nested=helpers.absmod(__name__, ".category.CategoryResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     order_hint = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="orderHint",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1351,10 +1364,10 @@ class ProductAddToCategoryActionSchema(ProductUpdateActionSchema):
 
 class ProductAddVariantActionSchema(ProductUpdateActionSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
@@ -1362,7 +1375,7 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     images = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ImageSchema"),
@@ -1370,7 +1383,7 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeSchema"),
@@ -1378,18 +1391,18 @@ class ProductAddVariantActionSchema(ProductUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     assets = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AssetSchema"),
+        nested=helpers.absmod(__name__, ".common.AssetDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1405,26 +1418,31 @@ class ProductChangeAssetNameActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -1440,19 +1458,19 @@ class ProductChangeAssetOrderActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_order = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="assetOrder",
     )
 
@@ -1469,14 +1487,14 @@ class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1490,10 +1508,12 @@ class ProductChangeMasterVariantActionSchema(ProductUpdateActionSchema):
 
 class ProductChangeNameActionSchema(ProductUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1507,16 +1527,16 @@ class ProductChangeNameActionSchema(ProductUpdateActionSchema):
 
 class ProductChangePriceActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="priceId"
+        allow_none=True, load_default=None, data_key="priceId"
     )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1530,10 +1550,12 @@ class ProductChangePriceActionSchema(ProductUpdateActionSchema):
 
 class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1547,10 +1569,10 @@ class ProductChangeSlugActionSchema(ProductUpdateActionSchema):
 
 class ProductLegacySetSkuActionSchema(ProductUpdateActionSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
 
     class Meta:
@@ -1566,18 +1588,18 @@ class ProductMoveImageToPositionActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     image_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="imageUrl"
+        allow_none=True, load_default=None, data_key="imageUrl"
     )
-    position = marshmallow.fields.Integer(allow_none=True, missing=None)
+    position = marshmallow.fields.Integer(allow_none=True, load_default=None)
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1595,7 +1617,7 @@ class ProductPublishActionSchema(ProductUpdateActionSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1611,22 +1633,25 @@ class ProductRemoveAssetActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
 
@@ -1644,10 +1669,10 @@ class ProductRemoveFromCategoryActionSchema(ProductUpdateActionSchema):
         nested=helpers.absmod(__name__, ".category.CategoryResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1663,17 +1688,17 @@ class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     image_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="imageUrl"
+        allow_none=True, load_default=None, data_key="imageUrl"
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1687,10 +1712,26 @@ class ProductRemoveImageActionSchema(ProductUpdateActionSchema):
 
 class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="priceId"
+        allow_none=True, load_default=None, data_key="priceId"
+    )
+    sku = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="variantId",
+    )
+    price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1704,13 +1745,13 @@ class ProductRemovePriceActionSchema(ProductUpdateActionSchema):
 
 class ProductRemoveVariantActionSchema(ProductUpdateActionSchema):
     id = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1734,7 +1775,7 @@ class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
 
 class ProductRevertStagedVariantChangesActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
 
     class Meta:
@@ -1750,27 +1791,30 @@ class ProductSetAssetCustomFieldActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1786,22 +1830,25 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     type = helpers.LazyNestedField(
@@ -1809,13 +1856,13 @@ class ProductSetAssetCustomTypeActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1831,29 +1878,32 @@ class ProductSetAssetDescriptionActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1869,22 +1919,22 @@ class ProductSetAssetKeyActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, load_default=None, data_key="assetId"
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
 
@@ -1901,22 +1951,25 @@ class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     sources = helpers.LazyNestedField(
@@ -1924,7 +1977,7 @@ class ProductSetAssetSourcesActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1940,29 +1993,32 @@ class ProductSetAssetTagsActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1978,18 +2034,18 @@ class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2002,12 +2058,12 @@ class ProductSetAttributeActionSchema(ProductUpdateActionSchema):
 
 
 class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2021,16 +2077,16 @@ class ProductSetAttributeInAllVariantsActionSchema(ProductUpdateActionSchema):
 
 class ProductSetCategoryOrderHintActionSchema(ProductUpdateActionSchema):
     category_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="categoryId"
+        allow_none=True, load_default=None, data_key="categoryId"
     )
     order_hint = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="orderHint",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2047,10 +2103,10 @@ class ProductSetDescriptionActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2064,17 +2120,17 @@ class ProductSetDescriptionActionSchema(ProductUpdateActionSchema):
 
 class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="priceId"
+        allow_none=True, load_default=None, data_key="priceId"
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -2088,22 +2144,22 @@ class ProductSetDiscountedPriceActionSchema(ProductUpdateActionSchema):
 
 class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     image_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="imageUrl"
+        allow_none=True, load_default=None, data_key="imageUrl"
     )
     label = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2117,7 +2173,7 @@ class ProductSetImageLabelActionSchema(ProductUpdateActionSchema):
 
 class ProductSetKeyActionSchema(ProductUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2134,11 +2190,11 @@ class ProductSetMetaDescriptionActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2155,11 +2211,11 @@ class ProductSetMetaKeywordsActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2176,11 +2232,11 @@ class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2192,13 +2248,33 @@ class ProductSetMetaTitleActionSchema(ProductUpdateActionSchema):
         return models.ProductSetMetaTitleAction(**data)
 
 
+class ProductSetPriceKeyActionSchema(ProductUpdateActionSchema):
+    price_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="priceId"
+    )
+    staged = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.ProductSetPriceKeyAction(**data)
+
+
 class ProductSetPriceModeActionSchema(ProductUpdateActionSchema):
     price_mode = marshmallow_enum.EnumField(
         ProductPriceModeEnum,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="priceMode",
     )
 
@@ -2215,21 +2291,21 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2243,14 +2319,14 @@ class ProductSetPricesActionSchema(ProductUpdateActionSchema):
 
 class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="priceId"
+        allow_none=True, load_default=None, data_key="priceId"
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2264,23 +2340,23 @@ class ProductSetProductPriceCustomFieldActionSchema(ProductUpdateActionSchema):
 
 class ProductSetProductPriceCustomTypeActionSchema(ProductUpdateActionSchema):
     price_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="priceId"
+        allow_none=True, load_default=None, data_key="priceId"
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -2296,17 +2372,17 @@ class ProductSetProductVariantKeyActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2327,11 +2403,11 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
             many=True,
             unknown=marshmallow.EXCLUDE,
         ),
-        missing=None,
+        load_default=None,
         data_key="searchKeywords",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2345,13 +2421,13 @@ class ProductSetSearchKeywordsActionSchema(ProductUpdateActionSchema):
 
 class ProductSetSkuActionSchema(ProductUpdateActionSchema):
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -2371,7 +2447,7 @@ class ProductSetTaxCategoryActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxCategory",
     )
 
@@ -2390,10 +2466,10 @@ class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     force = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

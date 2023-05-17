@@ -21,9 +21,9 @@ from .common import ImportResourceSchema, LocalizedStringField
 # Marshmallow Schemas
 class AttributeSchema(helpers.BaseSchema):
     name = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -35,7 +35,7 @@ class AttributeSchema(helpers.BaseSchema):
 
 
 class BooleanAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    value = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -48,7 +48,7 @@ class BooleanAttributeSchema(AttributeSchema):
 
 class BooleanSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Boolean(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Boolean(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -61,7 +61,7 @@ class BooleanSetAttributeSchema(AttributeSchema):
 
 
 class DateAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.Date(allow_none=True, missing=None)
+    value = marshmallow.fields.Date(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -74,7 +74,7 @@ class DateAttributeSchema(AttributeSchema):
 
 class DateSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Date(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Date(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -87,7 +87,7 @@ class DateSetAttributeSchema(AttributeSchema):
 
 
 class DateTimeAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    value = marshmallow.fields.DateTime(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -100,7 +100,7 @@ class DateTimeAttributeSchema(AttributeSchema):
 
 class DateTimeSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.DateTime(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.DateTime(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -113,7 +113,7 @@ class DateTimeSetAttributeSchema(AttributeSchema):
 
 
 class EnumAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -126,7 +126,7 @@ class EnumAttributeSchema(AttributeSchema):
 
 class EnumSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -139,7 +139,7 @@ class EnumSetAttributeSchema(AttributeSchema):
 
 
 class LocalizableEnumAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -152,7 +152,7 @@ class LocalizableEnumAttributeSchema(AttributeSchema):
 
 class LocalizableEnumSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -166,7 +166,9 @@ class LocalizableEnumSetAttributeSchema(AttributeSchema):
 
 class LocalizableTextAttributeSchema(AttributeSchema):
     value = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -184,7 +186,7 @@ class LocalizableTextSetAttributeSchema(AttributeSchema):
             allow_none=True, values=marshmallow.fields.String(allow_none=True)
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -206,7 +208,7 @@ class MoneyAttributeSchema(AttributeSchema):
             ),
             "centPrecision": helpers.absmod(__name__, ".common.MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -231,7 +233,7 @@ class MoneySetAttributeSchema(AttributeSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -244,7 +246,7 @@ class MoneySetAttributeSchema(AttributeSchema):
 
 
 class NumberAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.Float(allow_none=True, missing=None)
+    value = marshmallow.fields.Float(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -257,7 +259,7 @@ class NumberAttributeSchema(AttributeSchema):
 
 class NumberSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Float(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Float(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -313,7 +315,7 @@ class ReferenceAttributeSchema(AttributeSchema):
                 __name__, ".common.CustomObjectKeyReferenceSchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -382,7 +384,7 @@ class ReferenceSetAttributeSchema(AttributeSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -395,7 +397,7 @@ class ReferenceSetAttributeSchema(AttributeSchema):
 
 
 class TextAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -408,7 +410,7 @@ class TextAttributeSchema(AttributeSchema):
 
 class TextSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -421,7 +423,7 @@ class TextSetAttributeSchema(AttributeSchema):
 
 
 class TimeAttributeSchema(AttributeSchema):
-    value = marshmallow.fields.Time(allow_none=True, missing=None)
+    value = marshmallow.fields.Time(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -434,7 +436,7 @@ class TimeAttributeSchema(AttributeSchema):
 
 class TimeSetAttributeSchema(AttributeSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Time(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Time(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -448,10 +450,10 @@ class TimeSetAttributeSchema(AttributeSchema):
 
 class ProductVariantImportSchema(ImportResourceSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     is_master_variant = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isMasterVariant"
+        allow_none=True, load_default=None, data_key="isMasterVariant"
     )
     attributes = marshmallow.fields.List(
         helpers.Discriminator(
@@ -490,7 +492,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
         ),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     images = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ImageSchema"),
@@ -498,7 +500,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetSchema"),
@@ -506,16 +508,16 @@ class ProductVariantImportSchema(ImportResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     publish = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -523,7 +525,6 @@ class ProductVariantImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariantImport(**data)
 
 
@@ -532,7 +533,7 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.ProductVariantKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productVariant",
     )
     attributes = helpers.LazyNestedField(
@@ -540,10 +541,10 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -551,49 +552,58 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariantPatch(**data)
 
 
 class AttributesSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("")},
-        type=helpers.Discriminator(
-            allow_none=True,
-            discriminator_field=("type", "type"),
-            discriminator_schemas={
-                "boolean": helpers.absmod(__name__, ".BooleanAttributeSchema"),
-                "boolean-set": helpers.absmod(__name__, ".BooleanSetAttributeSchema"),
-                "date": helpers.absmod(__name__, ".DateAttributeSchema"),
-                "date-set": helpers.absmod(__name__, ".DateSetAttributeSchema"),
-                "datetime": helpers.absmod(__name__, ".DateTimeAttributeSchema"),
-                "datetime-set": helpers.absmod(__name__, ".DateTimeSetAttributeSchema"),
-                "enum": helpers.absmod(__name__, ".EnumAttributeSchema"),
-                "enum-set": helpers.absmod(__name__, ".EnumSetAttributeSchema"),
-                "lenum": helpers.absmod(__name__, ".LocalizableEnumAttributeSchema"),
-                "lenum-set": helpers.absmod(
-                    __name__, ".LocalizableEnumSetAttributeSchema"
-                ),
-                "ltext": helpers.absmod(__name__, ".LocalizableTextAttributeSchema"),
-                "ltext-set": helpers.absmod(
-                    __name__, ".LocalizableTextSetAttributeSchema"
-                ),
-                "money": helpers.absmod(__name__, ".MoneyAttributeSchema"),
-                "money-set": helpers.absmod(__name__, ".MoneySetAttributeSchema"),
-                "number": helpers.absmod(__name__, ".NumberAttributeSchema"),
-                "number-set": helpers.absmod(__name__, ".NumberSetAttributeSchema"),
-                "reference": helpers.absmod(__name__, ".ReferenceAttributeSchema"),
-                "reference-set": helpers.absmod(
-                    __name__, ".ReferenceSetAttributeSchema"
-                ),
-                "text": helpers.absmod(__name__, ".TextAttributeSchema"),
-                "text-set": helpers.absmod(__name__, ".TextSetAttributeSchema"),
-                "time": helpers.absmod(__name__, ".TimeAttributeSchema"),
-                "time-set": helpers.absmod(__name__, ".TimeSetAttributeSchema"),
-            },
-            missing=None,
-        ),
+        metadata={
+            "pattern": re.compile(""),
+            "type": helpers.Discriminator(
+                allow_none=True,
+                discriminator_field=("type", "type"),
+                discriminator_schemas={
+                    "boolean": helpers.absmod(__name__, ".BooleanAttributeSchema"),
+                    "boolean-set": helpers.absmod(
+                        __name__, ".BooleanSetAttributeSchema"
+                    ),
+                    "date": helpers.absmod(__name__, ".DateAttributeSchema"),
+                    "date-set": helpers.absmod(__name__, ".DateSetAttributeSchema"),
+                    "datetime": helpers.absmod(__name__, ".DateTimeAttributeSchema"),
+                    "datetime-set": helpers.absmod(
+                        __name__, ".DateTimeSetAttributeSchema"
+                    ),
+                    "enum": helpers.absmod(__name__, ".EnumAttributeSchema"),
+                    "enum-set": helpers.absmod(__name__, ".EnumSetAttributeSchema"),
+                    "lenum": helpers.absmod(
+                        __name__, ".LocalizableEnumAttributeSchema"
+                    ),
+                    "lenum-set": helpers.absmod(
+                        __name__, ".LocalizableEnumSetAttributeSchema"
+                    ),
+                    "ltext": helpers.absmod(
+                        __name__, ".LocalizableTextAttributeSchema"
+                    ),
+                    "ltext-set": helpers.absmod(
+                        __name__, ".LocalizableTextSetAttributeSchema"
+                    ),
+                    "money": helpers.absmod(__name__, ".MoneyAttributeSchema"),
+                    "money-set": helpers.absmod(__name__, ".MoneySetAttributeSchema"),
+                    "number": helpers.absmod(__name__, ".NumberAttributeSchema"),
+                    "number-set": helpers.absmod(__name__, ".NumberSetAttributeSchema"),
+                    "reference": helpers.absmod(__name__, ".ReferenceAttributeSchema"),
+                    "reference-set": helpers.absmod(
+                        __name__, ".ReferenceSetAttributeSchema"
+                    ),
+                    "text": helpers.absmod(__name__, ".TextAttributeSchema"),
+                    "text-set": helpers.absmod(__name__, ".TextSetAttributeSchema"),
+                    "time": helpers.absmod(__name__, ".TimeAttributeSchema"),
+                    "time-set": helpers.absmod(__name__, ".TimeSetAttributeSchema"),
+                },
+                load_default=None,
+            ),
+        },
     )
 
     class Meta:

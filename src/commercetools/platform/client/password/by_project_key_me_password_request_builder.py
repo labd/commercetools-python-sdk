@@ -18,7 +18,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMePasswordRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

@@ -10,31 +10,39 @@ import enum
 import typing
 
 from ._abstract import _BaseType
+from .associate_role import Permission
 from .channel import ChannelRoleEnum
 from .common import ReferenceTypeId
 
 if typing.TYPE_CHECKING:
+    from .associate_role import Permission
+    from .business_unit import BusinessUnitResourceIdentifier
     from .channel import ChannelReference, ChannelResourceIdentifier, ChannelRoleEnum
     from .common import LocalizedString, Price, PriceDraft, Reference, ReferenceTypeId
+    from .customer import CustomerResourceIdentifier
     from .customer_group import CustomerGroupReference, CustomerGroupResourceIdentifier
     from .order_edit import OrderEditPreviewFailure
-    from .product import Attribute
+    from .product import Attribute, ProductReference
+    from .product_selection import ProductVariantSelection
     from .standalone_price import StandalonePriceReference
 
 __all__ = [
-    "AccessDeniedError",
     "AnonymousIdAlreadyInUseError",
+    "AssociateMissingPermissionError",
     "AttributeDefinitionAlreadyExistsError",
     "AttributeDefinitionTypeConflictError",
     "AttributeNameDoesNotExistError",
+    "AuthErrorResponse",
     "BadGatewayError",
     "ConcurrentModificationError",
+    "CountryNotConfiguredInStoreError",
     "DiscountCodeNonApplicableError",
     "DuplicateAttributeValueError",
     "DuplicateAttributeValuesError",
     "DuplicateEnumValuesError",
     "DuplicateFieldError",
     "DuplicateFieldWithConflictingResourceError",
+    "DuplicatePriceKeyError",
     "DuplicatePriceScopeError",
     "DuplicateStandalonePriceScopeError",
     "DuplicateVariantValuesError",
@@ -47,11 +55,86 @@ __all__ = [
     "ErrorObject",
     "ErrorResponse",
     "ExtensionBadResponseError",
+    "ExtensionError",
     "ExtensionNoResponseError",
+    "ExtensionPredicateEvaluationFailedError",
     "ExtensionUpdateActionsFailedError",
     "ExternalOAuthFailedError",
     "FeatureRemovedError",
     "GeneralError",
+    "GraphQLAnonymousIdAlreadyInUseError",
+    "GraphQLAssociateMissingPermissionError",
+    "GraphQLAttributeDefinitionAlreadyExistsError",
+    "GraphQLAttributeDefinitionTypeConflictError",
+    "GraphQLAttributeNameDoesNotExistError",
+    "GraphQLBadGatewayError",
+    "GraphQLConcurrentModificationError",
+    "GraphQLCountryNotConfiguredInStoreError",
+    "GraphQLDiscountCodeNonApplicableError",
+    "GraphQLDuplicateAttributeValueError",
+    "GraphQLDuplicateAttributeValuesError",
+    "GraphQLDuplicateEnumValuesError",
+    "GraphQLDuplicateFieldError",
+    "GraphQLDuplicateFieldWithConflictingResourceError",
+    "GraphQLDuplicatePriceKeyError",
+    "GraphQLDuplicatePriceScopeError",
+    "GraphQLDuplicateStandalonePriceScopeError",
+    "GraphQLDuplicateVariantValuesError",
+    "GraphQLEditPreviewFailedError",
+    "GraphQLEnumKeyAlreadyExistsError",
+    "GraphQLEnumKeyDoesNotExistError",
+    "GraphQLEnumValueIsUsedError",
+    "GraphQLEnumValuesMustMatchError",
+    "GraphQLErrorObject",
+    "GraphQLExtensionBadResponseError",
+    "GraphQLExtensionNoResponseError",
+    "GraphQLExtensionPredicateEvaluationFailedError",
+    "GraphQLExtensionUpdateActionsFailedError",
+    "GraphQLExternalOAuthFailedError",
+    "GraphQLFeatureRemovedError",
+    "GraphQLGeneralError",
+    "GraphQLInsufficientScopeError",
+    "GraphQLInternalConstraintViolatedError",
+    "GraphQLInvalidCredentialsError",
+    "GraphQLInvalidCurrentPasswordError",
+    "GraphQLInvalidFieldError",
+    "GraphQLInvalidInputError",
+    "GraphQLInvalidItemShippingDetailsError",
+    "GraphQLInvalidJsonInputError",
+    "GraphQLInvalidOperationError",
+    "GraphQLInvalidSubjectError",
+    "GraphQLInvalidTokenError",
+    "GraphQLLanguageUsedInStoresError",
+    "GraphQLMatchingPriceNotFoundError",
+    "GraphQLMaxResourceLimitExceededError",
+    "GraphQLMissingRoleOnChannelError",
+    "GraphQLMissingTaxRateForCountryError",
+    "GraphQLMoneyOverflowError",
+    "GraphQLNoMatchingProductDiscountFoundError",
+    "GraphQLNotEnabledError",
+    "GraphQLObjectNotFoundError",
+    "GraphQLOutOfStockError",
+    "GraphQLOverCapacityError",
+    "GraphQLOverlappingStandalonePriceValidityError",
+    "GraphQLPendingOperationError",
+    "GraphQLPriceChangedError",
+    "GraphQLProductAssignmentMissingError",
+    "GraphQLProductPresentWithDifferentVariantSelectionError",
+    "GraphQLProjectNotConfiguredForLanguagesError",
+    "GraphQLQueryComplexityLimitExceededError",
+    "GraphQLQueryTimedOutError",
+    "GraphQLReferenceExistsError",
+    "GraphQLReferencedResourceNotFoundError",
+    "GraphQLRequiredFieldError",
+    "GraphQLResourceNotFoundError",
+    "GraphQLResourceSizeLimitExceededError",
+    "GraphQLSearchDeactivatedError",
+    "GraphQLSearchExecutionFailureError",
+    "GraphQLSearchFacetPathNotFoundError",
+    "GraphQLSearchIndexingInProgressError",
+    "GraphQLSemanticErrorError",
+    "GraphQLShippingMethodDoesNotMatchCartError",
+    "GraphQLSyntaxErrorError",
     "InsufficientScopeError",
     "InternalConstraintViolatedError",
     "InvalidCredentialsError",
@@ -68,6 +151,7 @@ __all__ = [
     "MaxResourceLimitExceededError",
     "MissingRoleOnChannelError",
     "MissingTaxRateForCountryError",
+    "MoneyOverflowError",
     "NoMatchingProductDiscountFoundError",
     "NotEnabledError",
     "ObjectNotFoundError",
@@ -76,6 +160,8 @@ __all__ = [
     "OverlappingStandalonePriceValidityError",
     "PendingOperationError",
     "PriceChangedError",
+    "ProductAssignmentMissingError",
+    "ProductPresentWithDifferentVariantSelectionError",
     "ProjectNotConfiguredForLanguagesError",
     "QueryComplexityLimitExceededError",
     "QueryTimedOutError",
@@ -92,7 +178,6 @@ __all__ = [
     "ShippingMethodDoesNotMatchCartError",
     "SyntaxErrorError",
     "VariantValues",
-    "WeakPasswordError",
 ]
 
 
@@ -121,7 +206,11 @@ class ErrorByExtension(_BaseType):
 
 
 class ErrorObject(_BaseType):
+    """Represents a single error. Multiple errors may be included in an [ErrorResponse](ctp:api:type:ErrorResponse)."""
+
+    #: Error identifier.
     code: str
+    #: Plain text description of the cause of the error.
     message: str
 
     def __init__(self, *, code: str, message: str, **kwargs):
@@ -133,14 +222,14 @@ class ErrorObject(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ErrorObject":
-        if data["code"] == "access_denied":
-            from ._schemas.error import AccessDeniedErrorSchema
-
-            return AccessDeniedErrorSchema().load(data)
         if data["code"] == "AnonymousIdAlreadyInUse":
             from ._schemas.error import AnonymousIdAlreadyInUseErrorSchema
 
             return AnonymousIdAlreadyInUseErrorSchema().load(data)
+        if data["code"] == "AssociateMissingPermission":
+            from ._schemas.error import AssociateMissingPermissionErrorSchema
+
+            return AssociateMissingPermissionErrorSchema().load(data)
         if data["code"] == "AttributeDefinitionAlreadyExists":
             from ._schemas.error import AttributeDefinitionAlreadyExistsErrorSchema
 
@@ -161,6 +250,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import ConcurrentModificationErrorSchema
 
             return ConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "CountryNotConfiguredInStore":
+            from ._schemas.error import CountryNotConfiguredInStoreErrorSchema
+
+            return CountryNotConfiguredInStoreErrorSchema().load(data)
         if data["code"] == "DiscountCodeNonApplicable":
             from ._schemas.error import DiscountCodeNonApplicableErrorSchema
 
@@ -185,6 +278,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import DuplicateFieldWithConflictingResourceErrorSchema
 
             return DuplicateFieldWithConflictingResourceErrorSchema().load(data)
+        if data["code"] == "DuplicatePriceKey":
+            from ._schemas.error import DuplicatePriceKeyErrorSchema
+
+            return DuplicatePriceKeyErrorSchema().load(data)
         if data["code"] == "DuplicatePriceScope":
             from ._schemas.error import DuplicatePriceScopeErrorSchema
 
@@ -225,6 +322,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import ExtensionNoResponseErrorSchema
 
             return ExtensionNoResponseErrorSchema().load(data)
+        if data["code"] == "ExtensionPredicateEvaluationFailed":
+            from ._schemas.error import ExtensionPredicateEvaluationFailedErrorSchema
+
+            return ExtensionPredicateEvaluationFailedErrorSchema().load(data)
         if data["code"] == "ExtensionUpdateActionsFailed":
             from ._schemas.error import ExtensionUpdateActionsFailedErrorSchema
 
@@ -305,6 +406,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import MissingTaxRateForCountryErrorSchema
 
             return MissingTaxRateForCountryErrorSchema().load(data)
+        if data["code"] == "MoneyOverflow":
+            from ._schemas.error import MoneyOverflowErrorSchema
+
+            return MoneyOverflowErrorSchema().load(data)
         if data["code"] == "NoMatchingProductDiscountFound":
             from ._schemas.error import NoMatchingProductDiscountFoundErrorSchema
 
@@ -337,6 +442,16 @@ class ErrorObject(_BaseType):
             from ._schemas.error import PriceChangedErrorSchema
 
             return PriceChangedErrorSchema().load(data)
+        if data["code"] == "ProductAssignmentMissing":
+            from ._schemas.error import ProductAssignmentMissingErrorSchema
+
+            return ProductAssignmentMissingErrorSchema().load(data)
+        if data["code"] == "ProductPresentWithDifferentVariantSelection":
+            from ._schemas.error import (
+                ProductPresentWithDifferentVariantSelectionErrorSchema,
+            )
+
+            return ProductPresentWithDifferentVariantSelectionErrorSchema().load(data)
         if data["code"] == "ProjectNotConfiguredForLanguages":
             from ._schemas.error import ProjectNotConfiguredForLanguagesErrorSchema
 
@@ -397,10 +512,6 @@ class ErrorObject(_BaseType):
             from ._schemas.error import SyntaxErrorErrorSchema
 
             return SyntaxErrorErrorSchema().load(data)
-        if data["code"] == "WeakPassword":
-            from ._schemas.error import WeakPasswordErrorSchema
-
-            return WeakPasswordErrorSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.error import ErrorObjectSchema
@@ -408,27 +519,14 @@ class ErrorObject(_BaseType):
         return ErrorObjectSchema().dump(self)
 
 
-class AccessDeniedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
-
-        kwargs.pop("code", None)
-        super().__init__(message=message, code="access_denied", **kwargs)
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AccessDeniedError":
-        from ._schemas.error import AccessDeniedErrorSchema
-
-        return AccessDeniedErrorSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.error import AccessDeniedErrorSchema
-
-        return AccessDeniedErrorSchema().dump(self)
-
-
 class AnonymousIdAlreadyInUseError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the anonymous ID is being used by another resource.
 
+    The client application should choose another anonymous ID or retrieve an automatically generated one.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="AnonymousIdAlreadyInUse", **kwargs)
 
@@ -446,9 +544,61 @@ class AnonymousIdAlreadyInUseError(ErrorObject):
         return AnonymousIdAlreadyInUseErrorSchema().dump(self)
 
 
+class AssociateMissingPermissionError(ErrorObject):
+    """Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources)."""
+
+    #: [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) to the [Associate](ctp:api:type:Associate) that tried to perform the action.
+    associate: "CustomerResourceIdentifier"
+    #: [ResourceIdentifier](ctp:api:type:BusinessUnitResourceIdentifier) to the [BusinessUnit](ctp:api:type:BusinessUnit).
+    business_unit: "BusinessUnitResourceIdentifier"
+    #: [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) of the [Associate](ctp:api:type:Associate) on whose behalf the action is performed.
+    associate_on_behalf: typing.Optional["CustomerResourceIdentifier"]
+    #: The Permissions that the [Associate](ctp:api:type:Associate) performing the action lacks. At least one of these Permissions is needed.
+    permissions: typing.List["Permission"]
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        associate: "CustomerResourceIdentifier",
+        business_unit: "BusinessUnitResourceIdentifier",
+        associate_on_behalf: typing.Optional["CustomerResourceIdentifier"] = None,
+        permissions: typing.List["Permission"],
+        **kwargs
+    ):
+        self.associate = associate
+        self.business_unit = business_unit
+        self.associate_on_behalf = associate_on_behalf
+        self.permissions = permissions
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="AssociateMissingPermission", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "AssociateMissingPermissionError":
+        from ._schemas.error import AssociateMissingPermissionErrorSchema
+
+        return AssociateMissingPermissionErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import AssociateMissingPermissionErrorSchema
+
+        return AssociateMissingPermissionErrorSchema().dump(self)
+
+
 class AttributeDefinitionAlreadyExistsError(ErrorObject):
+    """Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
+
+    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+
+    """
+
+    #: Unique identifier of the Product Type containing the conflicting name.
     conflicting_product_type_id: str
+    #: Name of the Product Type containing the conflicting name.
     conflicting_product_type_name: str
+    #: Name of the conflicting Attribute.
     conflicting_attribute_name: str
 
     def __init__(
@@ -483,8 +633,17 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
 
 
 class AttributeDefinitionTypeConflictError(ErrorObject):
+    """Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
+
+    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+
+    """
+
+    #: Unique identifier of the Product Type containing the conflicting name.
     conflicting_product_type_id: str
+    #: Name of the Product Type containing the conflicting name.
     conflicting_product_type_name: str
+    #: Name of the conflicting Attribute.
     conflicting_attribute_name: str
 
     def __init__(
@@ -519,6 +678,13 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
 
 
 class AttributeNameDoesNotExistError(ErrorObject):
+    """Returned when an [AttributeDefinition](ctp:api:type:AttributeDefinition) does not exist for an Attribute `name`.
+
+    The error is returned as a failed response to the [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+
+    """
+
+    #: Non-existent Attribute name.
     invalid_attribute_name: str
 
     def __init__(self, *, message: str, invalid_attribute_name: str, **kwargs):
@@ -541,8 +707,13 @@ class AttributeNameDoesNotExistError(ErrorObject):
 
 
 class BadGatewayError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a server-side problem is caused by scaling infrastructure resources.
 
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="BadGateway", **kwargs)
 
@@ -559,6 +730,12 @@ class BadGatewayError(ErrorObject):
 
 
 class ConcurrentModificationError(ErrorObject):
+    """Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
+    The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+
+    """
+
+    #: Current version of the resource.
     current_version: typing.Optional[int]
 
     def __init__(
@@ -582,12 +759,75 @@ class ConcurrentModificationError(ErrorObject):
         return ConcurrentModificationErrorSchema().dump(self)
 
 
+class CountryNotConfiguredInStoreError(ErrorObject):
+    """Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
+
+    The error is returned as a failed response to:
+
+    - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
+    - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
+    - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+    - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+    - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+    - [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
+    - [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
+
+    """
+
+    #: Countries configured for the Store.
+    store_countries: typing.List["str"]
+    #: The country that is not configured for the Store but referenced on the Cart or Order.
+    country: str
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        store_countries: typing.List["str"],
+        country: str,
+        **kwargs
+    ):
+        self.store_countries = store_countries
+        self.country = country
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="CountryNotConfiguredInStore", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CountryNotConfiguredInStoreError":
+        from ._schemas.error import CountryNotConfiguredInStoreErrorSchema
+
+        return CountryNotConfiguredInStoreErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import CountryNotConfiguredInStoreErrorSchema
+
+        return CountryNotConfiguredInStoreErrorSchema().dump(self)
+
+
 class DiscountCodeNonApplicableError(ErrorObject):
+    """Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Discount Code passed to the Cart.
     discount_code: typing.Optional[str]
+    #: `"DoesNotExist"` or `"TimeRangeNonApplicable"`
     reason: typing.Optional[str]
-    dicount_code_id: typing.Optional[str]
+    #: Unique identifier of the Discount Code.
+    discount_code_id: typing.Optional[str]
+    #: Date and time (UTC) from which the Discount Code is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Discount Code is valid.
     valid_until: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) the Discount Code validity check was last performed.
     validity_check_time: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -596,7 +836,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
         message: str,
         discount_code: typing.Optional[str] = None,
         reason: typing.Optional[str] = None,
-        dicount_code_id: typing.Optional[str] = None,
+        discount_code_id: typing.Optional[str] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         validity_check_time: typing.Optional[datetime.datetime] = None,
@@ -604,7 +844,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
     ):
         self.discount_code = discount_code
         self.reason = reason
-        self.dicount_code_id = dicount_code_id
+        self.discount_code_id = discount_code_id
         self.valid_from = valid_from
         self.valid_until = valid_until
         self.validity_check_time = validity_check_time
@@ -626,6 +866,9 @@ class DiscountCodeNonApplicableError(ErrorObject):
 
 
 class DuplicateAttributeValueError(ErrorObject):
+    """Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Conflicting Attributes.
     attribute: "Attribute"
 
     def __init__(self, *, message: str, attribute: "Attribute", **kwargs):
@@ -648,6 +891,9 @@ class DuplicateAttributeValueError(ErrorObject):
 
 
 class DuplicateAttributeValuesError(ErrorObject):
+    """Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Conflicting Attributes.
     attributes: typing.List["Attribute"]
 
     def __init__(self, *, message: str, attributes: typing.List["Attribute"], **kwargs):
@@ -670,6 +916,9 @@ class DuplicateAttributeValuesError(ErrorObject):
 
 
 class DuplicateEnumValuesError(ErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains duplicate keys."""
+
+    #: Duplicate keys.
     duplicates: typing.List["str"]
 
     def __init__(self, *, message: str, duplicates: typing.List["str"], **kwargs):
@@ -692,23 +941,18 @@ class DuplicateEnumValuesError(ErrorObject):
 
 
 class DuplicateFieldError(ErrorObject):
-    field: typing.Optional[str]
-    duplicate_value: typing.Optional[typing.Any]
-    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-    conflicting_resource: typing.Optional["Reference"]
+    """Returned when a field value conflicts with an existing value causing a duplicate."""
+
+    #: Name of the conflicting field.
+    field: str
+    #: Conflicting duplicate value.
+    duplicate_value: typing.Any
 
     def __init__(
-        self,
-        *,
-        message: str,
-        field: typing.Optional[str] = None,
-        duplicate_value: typing.Optional[typing.Any] = None,
-        conflicting_resource: typing.Optional["Reference"] = None,
-        **kwargs
+        self, *, message: str, field: str, duplicate_value: typing.Any, **kwargs
     ):
         self.field = field
         self.duplicate_value = duplicate_value
-        self.conflicting_resource = conflicting_resource
         kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicateField", **kwargs)
 
@@ -725,9 +969,13 @@ class DuplicateFieldError(ErrorObject):
 
 
 class DuplicateFieldWithConflictingResourceError(ErrorObject):
+    """Returned when a field value conflicts with an existing value stored in a particular resource causing a duplicate."""
+
+    #: Name of the conflicting field.
     field: str
+    #: Conflicting duplicate value.
     duplicate_value: typing.Any
-    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+    #: Reference to the resource that has the conflicting value.
     conflicting_resource: "Reference"
 
     def __init__(
@@ -761,13 +1009,47 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
         return DuplicateFieldWithConflictingResourceErrorSchema().dump(self)
 
 
-class DuplicatePriceScopeError(ErrorObject):
-    conflicting_prices: typing.List["Price"]
+class DuplicatePriceKeyError(ErrorObject):
+    """Returned when a Price key conflicts with an existing key.
 
-    def __init__(
-        self, *, message: str, conflicting_prices: typing.List["Price"], **kwargs
-    ):
-        self.conflicting_prices = conflicting_prices
+    Keys of Embedded Prices must be unique per ProductVariant.
+
+    """
+
+    #: Conflicting Embedded Price.
+    conflicting_price: "Price"
+
+    def __init__(self, *, message: str, conflicting_price: "Price", **kwargs):
+        self.conflicting_price = conflicting_price
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="DuplicatePriceKey", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DuplicatePriceKeyError":
+        from ._schemas.error import DuplicatePriceKeyErrorSchema
+
+        return DuplicatePriceKeyErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import DuplicatePriceKeyErrorSchema
+
+        return DuplicatePriceKeyErrorSchema().dump(self)
+
+
+class DuplicatePriceScopeError(ErrorObject):
+    """Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+
+    Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
+
+    """
+
+    #: Conflicting Embedded Price.
+    conflicting_price: "Price"
+
+    def __init__(self, *, message: str, conflicting_price: "Price", **kwargs):
+        self.conflicting_price = conflicting_price
         kwargs.pop("code", None)
         super().__init__(message=message, code="DuplicatePriceScope", **kwargs)
 
@@ -786,16 +1068,28 @@ class DuplicatePriceScopeError(ErrorObject):
 
 
 class DuplicateStandalonePriceScopeError(ErrorObject):
-    #: [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+    """Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
+    Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
+
+    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: Reference to the conflicting Standalone Price.
     conflicting_standalone_price: "StandalonePriceReference"
+    #: SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
     sku: str
+    #: Currency code of the country.
     currency: str
+    #: Country code of the geographic location.
     country: typing.Optional[str]
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+    #: [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
     channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Date and time (UTC) from which the Standalone Price is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Standalone Price is valid.
     valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -840,6 +1134,9 @@ class DuplicateStandalonePriceScopeError(ErrorObject):
 
 
 class DuplicateVariantValuesError(ErrorObject):
+    """Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Every Product Variant must have a distinct combination of SKU, prices, and custom Attribute values.
     variant_values: "VariantValues"
 
     def __init__(self, *, message: str, variant_values: "VariantValues", **kwargs):
@@ -862,6 +1159,13 @@ class DuplicateVariantValuesError(ErrorObject):
 
 
 class EditPreviewFailedError(ErrorObject):
+    """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
+
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+
+    """
+
+    #: State of the OrderEdit where the `stagedActions` cannot be applied to the Order.
     result: "OrderEditPreviewFailure"
 
     def __init__(self, *, message: str, result: "OrderEditPreviewFailure", **kwargs):
@@ -884,7 +1188,11 @@ class EditPreviewFailedError(ErrorObject):
 
 
 class EnumKeyAlreadyExistsError(ErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains a key that already exists."""
+
+    #: Conflicting enum key.
     conflicting_enum_key: str
+    #: Name of the conflicting Attribute.
     conflicting_attribute_name: str
 
     def __init__(
@@ -915,7 +1223,15 @@ class EnumKeyAlreadyExistsError(ErrorObject):
 
 
 class EnumKeyDoesNotExistError(ErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) already contains a value with the given key.
+
+    The error is returned as a failed response to the [Change the key of an EnumValue](ctp:api:type:ProductTypeChangeEnumKeyAction) update action.
+
+    """
+
+    #: Conflicting enum key.
     conflicting_enum_key: str
+    #: Name of the conflicting Attribute.
     conflicting_attribute_name: str
 
     def __init__(
@@ -946,8 +1262,13 @@ class EnumKeyDoesNotExistError(ErrorObject):
 
 
 class EnumValueIsUsedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when an enum value cannot be removed from an Attribute as it is being used by a Product.
 
+    The error is returned as a failed response to the [Remove EnumValues from AttributeDefinition](ctp:api:type:ProductTypeRemoveEnumValuesAction) update action.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValueIsUsed", **kwargs)
 
@@ -964,8 +1285,13 @@ class EnumValueIsUsedError(ErrorObject):
 
 
 class EnumValuesMustMatchError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when during an order update of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) the new enum values do not match the existing ones.
 
+    The error is returned as a failed response to the [Change the order of EnumValues](ctp:api:type:ProductTypeChangePlainEnumValueOrderAction) and [Change the order of LocalizedEnumValues](ctp:api:type:ProductTypeChangeLocalizedEnumValueOrderAction) update actions.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValuesMustMatch", **kwargs)
 
@@ -984,10 +1310,15 @@ class EnumValuesMustMatchError(ErrorObject):
 
 
 class ErrorResponse(_BaseType):
+    """Base representation of an error response containing common fields to all errors."""
+
+    #: HTTP status code corresponding to the error.
     status_code: int
+    #: First error message in the `errors` array.
     message: str
-    error: typing.Optional[str]
-    error_description: typing.Optional[str]
+    #: Errors returned for a request.
+    #:
+    #: A single error response can contain multiple errors if the errors are related to the same HTTP status code such as `400`.
     errors: typing.Optional[typing.List["ErrorObject"]]
 
     def __init__(
@@ -995,14 +1326,10 @@ class ErrorResponse(_BaseType):
         *,
         status_code: int,
         message: str,
-        error: typing.Optional[str] = None,
-        error_description: typing.Optional[str] = None,
         errors: typing.Optional[typing.List["ErrorObject"]] = None
     ):
         self.status_code = status_code
         self.message = message
-        self.error = error
-        self.error_description = error_description
         self.errors = errors
 
         super().__init__()
@@ -1019,11 +1346,57 @@ class ErrorResponse(_BaseType):
         return ErrorResponseSchema().dump(self)
 
 
+class AuthErrorResponse(ErrorResponse):
+    """Represents errors related to authentication and authorization in a format conforming to the [OAuth 2.0 specification](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2)."""
+
+    #: Error code as per the [OAuth 2.0 specification](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2). For example: `"access_denied"`.
+    error: str
+    #: Plain text description of the first error.
+    error_description: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        status_code: int,
+        message: str,
+        errors: typing.List["ErrorObject"],
+        error: str,
+        error_description: typing.Optional[str] = None
+    ):
+        self.error = error
+        self.error_description = error_description
+
+        super().__init__(status_code=status_code, message=message, errors=errors)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "AuthErrorResponse":
+        from ._schemas.error import AuthErrorResponseSchema
+
+        return AuthErrorResponseSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import AuthErrorResponseSchema
+
+        return AuthErrorResponseSchema().dump(self)
+
+
 class ExtensionBadResponseError(ErrorObject):
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    """Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response)."""
+
+    #: User-defined localized description of the error.
     localized_message: typing.Optional["LocalizedString"]
+    #: Any information that should be returned to the API caller.
     extension_extra_info: typing.Optional[object]
-    error_by_extension: "ErrorByExtension"
+    #: Additional errors related to the API Extension.
+    extension_errors: typing.List["ExtensionError"]
+    #: The response body returned by the Extension.
+    extension_body: typing.Optional[str]
+    #: Http status code returned by the Extension.
+    extension_status_code: typing.Optional[int]
+    #: Unique identifier of the Extension.
+    extension_id: str
+    #: User-defined unique identifier of the Extension.
+    extension_key: typing.Optional[str]
 
     def __init__(
         self,
@@ -1031,12 +1404,20 @@ class ExtensionBadResponseError(ErrorObject):
         message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension",
+        extension_errors: typing.List["ExtensionError"],
+        extension_body: typing.Optional[str] = None,
+        extension_status_code: typing.Optional[int] = None,
+        extension_id: str,
+        extension_key: typing.Optional[str] = None,
         **kwargs
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
-        self.error_by_extension = error_by_extension
+        self.extension_errors = extension_errors
+        self.extension_body = extension_body
+        self.extension_status_code = extension_status_code
+        self.extension_id = extension_id
+        self.extension_key = extension_key
         kwargs.pop("code", None)
         super().__init__(message=message, code="ExtensionBadResponse", **kwargs)
 
@@ -1054,8 +1435,51 @@ class ExtensionBadResponseError(ErrorObject):
         return ExtensionBadResponseErrorSchema().dump(self)
 
 
-class ExtensionNoResponseError(ErrorObject):
+class ExtensionError(_BaseType):
+    #: Error code caused by the Extension. For example, `InvalidField`.
+    code: str
+    #: Plain text description of the error.
+    message: str
+    #: Unique identifier of the Extension.
     extension_id: str
+    #: User-defined unique identifier of the Extension.
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        code: str,
+        message: str,
+        extension_id: str,
+        extension_key: typing.Optional[str] = None,
+        **kwargs
+    ):
+        self.code = code
+        self.message = message
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        self.__dict__.update(kwargs)
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ExtensionError":
+        from ._schemas.error import ExtensionErrorSchema
+
+        return ExtensionErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import ExtensionErrorSchema
+
+        return ExtensionErrorSchema().dump(self)
+
+
+class ExtensionNoResponseError(ErrorObject):
+    """Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached."""
+
+    #: Unique identifier of the API Extension.
+    extension_id: str
+    #: User-defined unique identifier of the API Extension, if available.
     extension_key: typing.Optional[str]
 
     def __init__(
@@ -1085,11 +1509,47 @@ class ExtensionNoResponseError(ErrorObject):
         return ExtensionNoResponseErrorSchema().dump(self)
 
 
-class ExtensionUpdateActionsFailedError(ErrorObject):
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-    localized_message: typing.Optional["LocalizedString"]
-    extension_extra_info: typing.Optional[object]
+class ExtensionPredicateEvaluationFailedError(ErrorObject):
+    """Returned when the predicate defined in the [ExtensionTrigger](ctp:api:type:ExtensionTrigger) could not be evaluated due to a missing field."""
+
+    #: Details about the API Extension that was involved in the error.
     error_by_extension: "ErrorByExtension"
+
+    def __init__(
+        self, *, message: str, error_by_extension: "ErrorByExtension", **kwargs
+    ):
+        self.error_by_extension = error_by_extension
+        kwargs.pop("code", None)
+        super().__init__(
+            message=message, code="ExtensionPredicateEvaluationFailed", **kwargs
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ExtensionPredicateEvaluationFailedError":
+        from ._schemas.error import ExtensionPredicateEvaluationFailedErrorSchema
+
+        return ExtensionPredicateEvaluationFailedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import ExtensionPredicateEvaluationFailedErrorSchema
+
+        return ExtensionPredicateEvaluationFailedErrorSchema().dump(self)
+
+
+class ExtensionUpdateActionsFailedError(ErrorObject):
+    """Returned when update actions could not be applied to the resource (for example, because a referenced resource does not exist).
+    This would result in a [400 Bad Request](#400-bad-request) response if the same update action was sent from a regular client.
+
+    """
+
+    #: User-defined localized description of the error.
+    localized_message: typing.Optional["LocalizedString"]
+    #: Any information that should be returned to the API caller.
+    extension_extra_info: typing.Optional[object]
+    #: Additional errors related to the API Extension.
+    extension_errors: typing.List["ExtensionError"]
 
     def __init__(
         self,
@@ -1097,12 +1557,12 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         message: str,
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
-        error_by_extension: "ErrorByExtension",
+        extension_errors: typing.List["ExtensionError"],
         **kwargs
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
-        self.error_by_extension = error_by_extension
+        self.extension_errors = extension_errors
         kwargs.pop("code", None)
         super().__init__(message=message, code="ExtensionUpdateActionsFailed", **kwargs)
 
@@ -1121,8 +1581,9 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
 
 
 class ExternalOAuthFailedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`)."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="ExternalOAuthFailed", **kwargs)
 
@@ -1141,8 +1602,9 @@ class ExternalOAuthFailedError(ErrorObject):
 
 
 class FeatureRemovedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the requested feature was removed."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="FeatureRemoved", **kwargs)
 
@@ -1159,8 +1621,13 @@ class FeatureRemovedError(ErrorObject):
 
 
 class GeneralError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a server-side problem occurs.
 
+    If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="General", **kwargs)
 
@@ -1178,7 +1645,6 @@ class GeneralError(ErrorObject):
 
 class InsufficientScopeError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
-
         kwargs.pop("code", None)
         super().__init__(message=message, code="insufficient_scope", **kwargs)
 
@@ -1197,8 +1663,9 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InternalConstraintViolatedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="InternalConstraintViolated", **kwargs)
 
@@ -1217,8 +1684,16 @@ class InternalConstraintViolatedError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a Customer with the given credentials (matching the given email/password pair) is not found and authentication fails.
 
+    The error is returned as a failed response to:
+
+    - [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
+    - [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCredentials", **kwargs)
 
@@ -1237,8 +1712,16 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidCurrentPasswordError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the current password of the Customer does not match.
 
+    The error is returned as a failed response to:
+
+    - [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
+    - [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCurrentPassword", **kwargs)
 
@@ -1257,8 +1740,13 @@ class InvalidCurrentPasswordError(ErrorObject):
 
 
 class InvalidFieldError(ErrorObject):
+    """Returned when a field has an invalid value."""
+
+    #: Name of the field with the invalid value.
     field: str
+    #: Value invalid for the field.
     invalid_value: typing.Any
+    #: Fixed set of allowed values for the field, if any.
     allowed_values: typing.Optional[typing.List["typing.Any"]]
 
     def __init__(
@@ -1289,8 +1777,9 @@ class InvalidFieldError(ErrorObject):
 
 
 class InvalidInputError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when an invalid input has been sent."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidInput", **kwargs)
 
@@ -1307,7 +1796,15 @@ class InvalidInputError(ErrorObject):
 
 
 class InvalidItemShippingDetailsError(ErrorObject):
+    """Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
+
+    The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    #: `"LineItem"` or `"CustomLineItem"`
     subject: str
+    #: Unique identifier of the Line Item or Custom Line Item.
     item_id: str
 
     def __init__(self, *, message: str, subject: str, item_id: str, **kwargs):
@@ -1331,8 +1828,18 @@ class InvalidItemShippingDetailsError(ErrorObject):
 
 
 class InvalidJsonInputError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when an invalid JSON input has been sent.
+    Either the JSON is syntactically incorrect or does not conform to the expected shape (for example is missing a required field).
 
+    The client application should validate the input according to the constraints described in the error message before sending the request.
+
+    """
+
+    #: Further explanation about why the JSON is invalid.
+    detailed_error_message: str
+
+    def __init__(self, *, message: str, detailed_error_message: str, **kwargs):
+        self.detailed_error_message = detailed_error_message
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidJsonInput", **kwargs)
 
@@ -1349,8 +1856,13 @@ class InvalidJsonInputError(ErrorObject):
 
 
 class InvalidOperationError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the resources involved in the request are not in a valid state for the operation.
 
+    The client application should validate the constraints described in the error message before sending the request.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidOperation", **kwargs)
 
@@ -1368,7 +1880,6 @@ class InvalidOperationError(ErrorObject):
 
 class InvalidSubjectError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
-
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidSubject", **kwargs)
 
@@ -1386,7 +1897,6 @@ class InvalidSubjectError(ErrorObject):
 
 class InvalidTokenError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
-
         kwargs.pop("code", None)
         super().__init__(message=message, code="invalid_token", **kwargs)
 
@@ -1403,8 +1913,13 @@ class InvalidTokenError(ErrorObject):
 
 
 class LanguageUsedInStoresError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a language cannot be removed from a Project as it is being used by a Store.
 
+    The error is returned as a failed response to the [Change Languages](ctp:api:type:ProjectChangeLanguagesAction) update action.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="LanguageUsedInStores", **kwargs)
 
@@ -1423,13 +1938,28 @@ class LanguageUsedInStoresError(ErrorObject):
 
 
 class MatchingPriceNotFoundError(ErrorObject):
+    """Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
+
+    The error is returned as a failed response to:
+
+    - [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
+    - [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifier of a [Product](ctp:api:type:Product).
     product_id: str
+    #: Unique identifier of a [ProductVariant](ctp:api:type:ProductVariant) in the Product.
     variant_id: int
+    #: Currency code of the country.
     currency: typing.Optional[str]
+    #: Country code of the geographic location.
     country: typing.Optional[str]
-    #: [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: Customer Group associated with the Price.
     customer_group: typing.Optional["CustomerGroupReference"]
-    #: [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+    #: Channel associated with the Price.
     channel: typing.Optional["ChannelReference"]
 
     def __init__(
@@ -1468,7 +1998,13 @@ class MatchingPriceNotFoundError(ErrorObject):
 
 
 class MaxResourceLimitExceededError(ErrorObject):
-    #: Type of resource the value should reference. Supported resource type identifiers are:
+    """Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+
+    The limits must be adjusted for this resource before sending the request again.
+
+    """
+
+    #: Resource type that reached its maximum limit of configured elements (for example, 100 Zones per Project).
     exceeded_resource: "ReferenceTypeId"
 
     def __init__(self, *, message: str, exceeded_resource: "ReferenceTypeId", **kwargs):
@@ -1491,9 +2027,22 @@ class MaxResourceLimitExceededError(ErrorObject):
 
 
 class MissingRoleOnChannelError(ErrorObject):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+    """Returned when one of the following states occur:
+
+    - [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
+    - [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+
+    The error is returned as a failed response to:
+
+    - [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
+    - [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a given [Channel](ctp:api:type:Channel).
     channel: typing.Optional["ChannelResourceIdentifier"]
-    #: Describes the purpose and type of the Channel. A Channel can have one or more roles.
+    #: - `ProductDistribution` for Product Distribution Channels allowed for the Store. Also required for [Standalone Prices](ctp:api:type:StandalonePrice).
+    #: - `InventorySupply` for Inventory Supply Channels allowed for the Store.
     missing_role: "ChannelRoleEnum"
 
     def __init__(
@@ -1524,8 +2073,20 @@ class MissingRoleOnChannelError(ErrorObject):
 
 
 class MissingTaxRateForCountryError(ErrorObject):
+    """Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
+
+    The error is returned as a failed response to:
+
+    - [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    #: Unique identifier of the [TaxCategory](ctp:api:type:TaxCategory).
     tax_category_id: str
+    #: Country code of the geographic location.
     country: typing.Optional[str]
+    #: State within the country, such as Texas in the United States.
     state: typing.Optional[str]
 
     def __init__(
@@ -1557,9 +2118,36 @@ class MissingTaxRateForCountryError(ErrorObject):
         return MissingTaxRateForCountryErrorSchema().dump(self)
 
 
-class NoMatchingProductDiscountFoundError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+class MoneyOverflowError(ErrorObject):
+    """Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
+    See [Money usage](/types#usage) for more information.
 
+    """
+
+    def __init__(self, *, message: str, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="MoneyOverflow", **kwargs)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "MoneyOverflowError":
+        from ._schemas.error import MoneyOverflowErrorSchema
+
+        return MoneyOverflowErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import MoneyOverflowErrorSchema
+
+        return MoneyOverflowErrorSchema().dump(self)
+
+
+class NoMatchingProductDiscountFoundError(ErrorObject):
+    """Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
+
+    The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(
             message=message, code="NoMatchingProductDiscountFound", **kwargs
@@ -1580,8 +2168,9 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
 
 
 class NotEnabledError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="NotEnabled", **kwargs)
 
@@ -1598,8 +2187,9 @@ class NotEnabledError(ErrorObject):
 
 
 class ObjectNotFoundError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the requested resource was not found."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="ObjectNotFound", **kwargs)
 
@@ -1616,7 +2206,18 @@ class ObjectNotFoundError(ErrorObject):
 
 
 class OutOfStockError(ErrorObject):
+    """Returned when some of the [Line Items](ctp:api:type:LineItem) are out of stock at the time of placing an [Order](ctp:api:type:Order).
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifiers of the Line Items that are out of stock.
     line_items: typing.List["str"]
+    #: SKUs of the Line Items that are out of stock.
     skus: typing.List["str"]
 
     def __init__(
@@ -1645,8 +2246,13 @@ class OutOfStockError(ErrorObject):
 
 
 class OverCapacityError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the service is having trouble handling the load.
 
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="OverCapacity", **kwargs)
 
@@ -1663,18 +2269,32 @@ class OverCapacityError(ErrorObject):
 
 
 class OverlappingStandalonePriceValidityError(ErrorObject):
-    #: [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+    """Returned when a given Price validity period conflicts with an existing one.
+    Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
+
+    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: Reference to the conflicting Standalone Price.
     conflicting_standalone_price: "StandalonePriceReference"
+    #: SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
     sku: str
+    #: Currency code of the country.
     currency: str
+    #: Country code of the geographic location.
     country: typing.Optional[str]
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+    #: [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
     channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Date and time (UTC) from which the Standalone Price is valid.
     valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Standalone Price is valid.
     valid_until: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) from which the conflicting Standalone Price is valid.
     conflicting_valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the conflicting Standalone Price is valid.
     conflicting_valid_until: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -1723,8 +2343,14 @@ class OverlappingStandalonePriceValidityError(ErrorObject):
 
 
 class PendingOperationError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
 
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+    If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="PendingOperation", **kwargs)
 
@@ -1741,7 +2367,18 @@ class PendingOperationError(ErrorObject):
 
 
 class PriceChangedError(ErrorObject):
+    """Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
     line_items: typing.List["str"]
+    #: `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
     shipping: bool
 
     def __init__(
@@ -1764,7 +2401,89 @@ class PriceChangedError(ErrorObject):
         return PriceChangedErrorSchema().dump(self)
 
 
+class ProductAssignmentMissingError(ErrorObject):
+    """Returned when a Product is not assigned to the Product Selection.
+    The error is returned as a failed response either to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) or to the [Set Variant Exclusion](ctp:api:type:ProductSelectionSetVariantExclusionAction) update action.
+
+    """
+
+    #: [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+    product: "ProductReference"
+
+    def __init__(self, *, message: str, product: "ProductReference", **kwargs):
+        self.product = product
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="ProductAssignmentMissing", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductAssignmentMissingError":
+        from ._schemas.error import ProductAssignmentMissingErrorSchema
+
+        return ProductAssignmentMissingErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import ProductAssignmentMissingErrorSchema
+
+        return ProductAssignmentMissingErrorSchema().dump(self)
+
+
+class ProductPresentWithDifferentVariantSelectionError(ErrorObject):
+    """Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
+
+    The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
+
+    """
+
+    #: [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+    product: "ProductReference"
+    #: Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+    existing_variant_selection: "ProductVariantSelection"
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        product: "ProductReference",
+        existing_variant_selection: "ProductVariantSelection",
+        **kwargs
+    ):
+        self.product = product
+        self.existing_variant_selection = existing_variant_selection
+        kwargs.pop("code", None)
+        super().__init__(
+            message=message,
+            code="ProductPresentWithDifferentVariantSelection",
+            **kwargs
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductPresentWithDifferentVariantSelectionError":
+        from ._schemas.error import (
+            ProductPresentWithDifferentVariantSelectionErrorSchema,
+        )
+
+        return ProductPresentWithDifferentVariantSelectionErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import (
+            ProductPresentWithDifferentVariantSelectionErrorSchema,
+        )
+
+        return ProductPresentWithDifferentVariantSelectionErrorSchema().dump(self)
+
+
 class ProjectNotConfiguredForLanguagesError(ErrorObject):
+    """Returned when the languages set for a Store are not supported by the Project.
+
+    The error is returned as a failed response to the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+
+    """
+
+    #: Languages configured for the Store.
     languages: typing.Optional[typing.List["str"]]
 
     def __init__(
@@ -1796,7 +2515,6 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 
 class QueryComplexityLimitExceededError(ErrorObject):
     def __init__(self, *, message: str, **kwargs):
-
         kwargs.pop("code", None)
         super().__init__(message=message, code="QueryComplexityLimitExceeded", **kwargs)
 
@@ -1815,8 +2533,13 @@ class QueryComplexityLimitExceededError(ErrorObject):
 
 
 class QueryTimedOutError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the query times out.
 
+    If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="QueryTimedOut", **kwargs)
 
@@ -1833,7 +2556,9 @@ class QueryTimedOutError(ErrorObject):
 
 
 class ReferenceExistsError(ErrorObject):
-    #: Type of resource the value should reference. Supported resource type identifiers are:
+    """Returned when a resource cannot be deleted because it is being referenced by another resource."""
+
+    #: Type of referenced resource.
     referenced_by: typing.Optional["ReferenceTypeId"]
 
     def __init__(
@@ -1860,9 +2585,13 @@ class ReferenceExistsError(ErrorObject):
 
 
 class ReferencedResourceNotFoundError(ErrorObject):
-    #: Type of resource the value should reference. Supported resource type identifiers are:
+    """Returned when a resource referenced by a [Reference](ctp:api:type:Reference) or a [ResourceIdentifier](ctp:api:type:ResourceIdentifier) could not be found."""
+
+    #: Type of referenced resource.
     type_id: "ReferenceTypeId"
+    #: Unique identifier of the referenced resource, if known.
     id: typing.Optional[str]
+    #: User-defined unique identifier of the referenced resource, if known.
     key: typing.Optional[str]
 
     def __init__(
@@ -1895,6 +2624,9 @@ class ReferencedResourceNotFoundError(ErrorObject):
 
 
 class RequiredFieldError(ErrorObject):
+    """Returned when a value is not defined for a required field."""
+
+    #: Name of the field missing the value.
     field: str
 
     def __init__(self, *, message: str, field: str, **kwargs):
@@ -1915,8 +2647,9 @@ class RequiredFieldError(ErrorObject):
 
 
 class ResourceNotFoundError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the resource addressed by the request URL does not exist."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceNotFound", **kwargs)
 
@@ -1933,8 +2666,9 @@ class ResourceNotFoundError(ErrorObject):
 
 
 class ResourceSizeLimitExceededError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the resource exceeds the maximum allowed size of 16 MB."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceSizeLimitExceeded", **kwargs)
 
@@ -1953,8 +2687,13 @@ class ResourceSizeLimitExceededError(ErrorObject):
 
 
 class SearchDeactivatedError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the indexing of Product information is deactivated in a Project.
 
+    To activate indexing, call [Change Product Search Indexing Enabled](ctp:api:type:ProjectChangeProductSearchIndexingEnabledAction) and set `enabled` to `true`.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchDeactivated", **kwargs)
 
@@ -1973,8 +2712,9 @@ class SearchDeactivatedError(ErrorObject):
 
 
 class SearchExecutionFailureError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a search query could not be completed due to an unexpected failure."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchExecutionFailure", **kwargs)
 
@@ -1993,8 +2733,9 @@ class SearchExecutionFailureError(ErrorObject):
 
 
 class SearchFacetPathNotFoundError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a search facet path could not be found."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchFacetPathNotFound", **kwargs)
 
@@ -2013,8 +2754,9 @@ class SearchFacetPathNotFoundError(ErrorObject):
 
 
 class SearchIndexingInProgressError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the indexing of Product information is still in progress for Projects that have indexing activated."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchIndexingInProgress", **kwargs)
 
@@ -2033,8 +2775,9 @@ class SearchIndexingInProgressError(ErrorObject):
 
 
 class SemanticErrorError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SemanticError", **kwargs)
 
@@ -2051,8 +2794,13 @@ class SemanticErrorError(ErrorObject):
 
 
 class ShippingMethodDoesNotMatchCartError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
 
+    The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(
             message=message, code="ShippingMethodDoesNotMatchCart", **kwargs
@@ -2073,8 +2821,9 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
 
 
 class SyntaxErrorError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+    """Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax."""
 
+    def __init__(self, *, message: str, **kwargs):
         kwargs.pop("code", None)
         super().__init__(message=message, code="SyntaxError", **kwargs)
 
@@ -2091,8 +2840,11 @@ class SyntaxErrorError(ErrorObject):
 
 
 class VariantValues(_BaseType):
+    #: SKU of the [ProductVariant](ctp:api:type:ProductVariant).
     sku: typing.Optional[str]
+    #: Embedded Prices of the [ProductVariant](ctp:api:type:ProductVariant).
     prices: typing.List["PriceDraft"]
+    #: Attributes of the [ProductVariant](ctp:api:type:ProductVariant).
     attributes: typing.List["Attribute"]
 
     def __init__(
@@ -2120,19 +2872,2510 @@ class VariantValues(_BaseType):
         return VariantValuesSchema().dump(self)
 
 
-class WeakPasswordError(ErrorObject):
-    def __init__(self, *, message: str, **kwargs):
+class GraphQLErrorObject(_BaseType):
+    """Represents a single error."""
 
-        kwargs.pop("code", None)
-        super().__init__(message=message, code="WeakPassword", **kwargs)
+    #: Error identifier.
+    code: str
+
+    def __init__(self, *, code: str, **kwargs):
+        self.code = code
+        self.__dict__.update(kwargs)
+
+        super().__init__()
 
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "WeakPasswordError":
-        from ._schemas.error import WeakPasswordErrorSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "GraphQLErrorObject":
+        if data["code"] == "AnonymousIdAlreadyInUse":
+            from ._schemas.error import GraphQLAnonymousIdAlreadyInUseErrorSchema
 
-        return WeakPasswordErrorSchema().load(data)
+            return GraphQLAnonymousIdAlreadyInUseErrorSchema().load(data)
+        if data["code"] == "AssociateMissingPermission":
+            from ._schemas.error import GraphQLAssociateMissingPermissionErrorSchema
+
+            return GraphQLAssociateMissingPermissionErrorSchema().load(data)
+        if data["code"] == "AttributeDefinitionAlreadyExists":
+            from ._schemas.error import (
+                GraphQLAttributeDefinitionAlreadyExistsErrorSchema,
+            )
+
+            return GraphQLAttributeDefinitionAlreadyExistsErrorSchema().load(data)
+        if data["code"] == "AttributeDefinitionTypeConflict":
+            from ._schemas.error import (
+                GraphQLAttributeDefinitionTypeConflictErrorSchema,
+            )
+
+            return GraphQLAttributeDefinitionTypeConflictErrorSchema().load(data)
+        if data["code"] == "AttributeNameDoesNotExist":
+            from ._schemas.error import GraphQLAttributeNameDoesNotExistErrorSchema
+
+            return GraphQLAttributeNameDoesNotExistErrorSchema().load(data)
+        if data["code"] == "BadGateway":
+            from ._schemas.error import GraphQLBadGatewayErrorSchema
+
+            return GraphQLBadGatewayErrorSchema().load(data)
+        if data["code"] == "ConcurrentModification":
+            from ._schemas.error import GraphQLConcurrentModificationErrorSchema
+
+            return GraphQLConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "CountryNotConfiguredInStore":
+            from ._schemas.error import GraphQLCountryNotConfiguredInStoreErrorSchema
+
+            return GraphQLCountryNotConfiguredInStoreErrorSchema().load(data)
+        if data["code"] == "DiscountCodeNonApplicable":
+            from ._schemas.error import GraphQLDiscountCodeNonApplicableErrorSchema
+
+            return GraphQLDiscountCodeNonApplicableErrorSchema().load(data)
+        if data["code"] == "DuplicateAttributeValue":
+            from ._schemas.error import GraphQLDuplicateAttributeValueErrorSchema
+
+            return GraphQLDuplicateAttributeValueErrorSchema().load(data)
+        if data["code"] == "DuplicateAttributeValues":
+            from ._schemas.error import GraphQLDuplicateAttributeValuesErrorSchema
+
+            return GraphQLDuplicateAttributeValuesErrorSchema().load(data)
+        if data["code"] == "DuplicateEnumValues":
+            from ._schemas.error import GraphQLDuplicateEnumValuesErrorSchema
+
+            return GraphQLDuplicateEnumValuesErrorSchema().load(data)
+        if data["code"] == "DuplicateField":
+            from ._schemas.error import GraphQLDuplicateFieldErrorSchema
+
+            return GraphQLDuplicateFieldErrorSchema().load(data)
+        if data["code"] == "DuplicateFieldWithConflictingResource":
+            from ._schemas.error import (
+                GraphQLDuplicateFieldWithConflictingResourceErrorSchema,
+            )
+
+            return GraphQLDuplicateFieldWithConflictingResourceErrorSchema().load(data)
+        if data["code"] == "DuplicatePriceKey":
+            from ._schemas.error import GraphQLDuplicatePriceKeyErrorSchema
+
+            return GraphQLDuplicatePriceKeyErrorSchema().load(data)
+        if data["code"] == "DuplicatePriceScope":
+            from ._schemas.error import GraphQLDuplicatePriceScopeErrorSchema
+
+            return GraphQLDuplicatePriceScopeErrorSchema().load(data)
+        if data["code"] == "DuplicateStandalonePriceScope":
+            from ._schemas.error import GraphQLDuplicateStandalonePriceScopeErrorSchema
+
+            return GraphQLDuplicateStandalonePriceScopeErrorSchema().load(data)
+        if data["code"] == "DuplicateVariantValues":
+            from ._schemas.error import GraphQLDuplicateVariantValuesErrorSchema
+
+            return GraphQLDuplicateVariantValuesErrorSchema().load(data)
+        if data["code"] == "EditPreviewFailed":
+            from ._schemas.error import GraphQLEditPreviewFailedErrorSchema
+
+            return GraphQLEditPreviewFailedErrorSchema().load(data)
+        if data["code"] == "EnumKeyAlreadyExists":
+            from ._schemas.error import GraphQLEnumKeyAlreadyExistsErrorSchema
+
+            return GraphQLEnumKeyAlreadyExistsErrorSchema().load(data)
+        if data["code"] == "EnumKeyDoesNotExist":
+            from ._schemas.error import GraphQLEnumKeyDoesNotExistErrorSchema
+
+            return GraphQLEnumKeyDoesNotExistErrorSchema().load(data)
+        if data["code"] == "EnumValueIsUsed":
+            from ._schemas.error import GraphQLEnumValueIsUsedErrorSchema
+
+            return GraphQLEnumValueIsUsedErrorSchema().load(data)
+        if data["code"] == "EnumValuesMustMatch":
+            from ._schemas.error import GraphQLEnumValuesMustMatchErrorSchema
+
+            return GraphQLEnumValuesMustMatchErrorSchema().load(data)
+        if data["code"] == "ExtensionBadResponse":
+            from ._schemas.error import GraphQLExtensionBadResponseErrorSchema
+
+            return GraphQLExtensionBadResponseErrorSchema().load(data)
+        if data["code"] == "ExtensionNoResponse":
+            from ._schemas.error import GraphQLExtensionNoResponseErrorSchema
+
+            return GraphQLExtensionNoResponseErrorSchema().load(data)
+        if data["code"] == "ExtensionPredicateEvaluationFailed":
+            from ._schemas.error import (
+                GraphQLExtensionPredicateEvaluationFailedErrorSchema,
+            )
+
+            return GraphQLExtensionPredicateEvaluationFailedErrorSchema().load(data)
+        if data["code"] == "ExtensionUpdateActionsFailed":
+            from ._schemas.error import GraphQLExtensionUpdateActionsFailedErrorSchema
+
+            return GraphQLExtensionUpdateActionsFailedErrorSchema().load(data)
+        if data["code"] == "ExternalOAuthFailed":
+            from ._schemas.error import GraphQLExternalOAuthFailedErrorSchema
+
+            return GraphQLExternalOAuthFailedErrorSchema().load(data)
+        if data["code"] == "FeatureRemoved":
+            from ._schemas.error import GraphQLFeatureRemovedErrorSchema
+
+            return GraphQLFeatureRemovedErrorSchema().load(data)
+        if data["code"] == "General":
+            from ._schemas.error import GraphQLGeneralErrorSchema
+
+            return GraphQLGeneralErrorSchema().load(data)
+        if data["code"] == "insufficient_scope":
+            from ._schemas.error import GraphQLInsufficientScopeErrorSchema
+
+            return GraphQLInsufficientScopeErrorSchema().load(data)
+        if data["code"] == "InternalConstraintViolated":
+            from ._schemas.error import GraphQLInternalConstraintViolatedErrorSchema
+
+            return GraphQLInternalConstraintViolatedErrorSchema().load(data)
+        if data["code"] == "InvalidCredentials":
+            from ._schemas.error import GraphQLInvalidCredentialsErrorSchema
+
+            return GraphQLInvalidCredentialsErrorSchema().load(data)
+        if data["code"] == "InvalidCurrentPassword":
+            from ._schemas.error import GraphQLInvalidCurrentPasswordErrorSchema
+
+            return GraphQLInvalidCurrentPasswordErrorSchema().load(data)
+        if data["code"] == "InvalidField":
+            from ._schemas.error import GraphQLInvalidFieldErrorSchema
+
+            return GraphQLInvalidFieldErrorSchema().load(data)
+        if data["code"] == "InvalidInput":
+            from ._schemas.error import GraphQLInvalidInputErrorSchema
+
+            return GraphQLInvalidInputErrorSchema().load(data)
+        if data["code"] == "InvalidItemShippingDetails":
+            from ._schemas.error import GraphQLInvalidItemShippingDetailsErrorSchema
+
+            return GraphQLInvalidItemShippingDetailsErrorSchema().load(data)
+        if data["code"] == "InvalidJsonInput":
+            from ._schemas.error import GraphQLInvalidJsonInputErrorSchema
+
+            return GraphQLInvalidJsonInputErrorSchema().load(data)
+        if data["code"] == "InvalidOperation":
+            from ._schemas.error import GraphQLInvalidOperationErrorSchema
+
+            return GraphQLInvalidOperationErrorSchema().load(data)
+        if data["code"] == "InvalidSubject":
+            from ._schemas.error import GraphQLInvalidSubjectErrorSchema
+
+            return GraphQLInvalidSubjectErrorSchema().load(data)
+        if data["code"] == "invalid_token":
+            from ._schemas.error import GraphQLInvalidTokenErrorSchema
+
+            return GraphQLInvalidTokenErrorSchema().load(data)
+        if data["code"] == "LanguageUsedInStores":
+            from ._schemas.error import GraphQLLanguageUsedInStoresErrorSchema
+
+            return GraphQLLanguageUsedInStoresErrorSchema().load(data)
+        if data["code"] == "MatchingPriceNotFound":
+            from ._schemas.error import GraphQLMatchingPriceNotFoundErrorSchema
+
+            return GraphQLMatchingPriceNotFoundErrorSchema().load(data)
+        if data["code"] == "MaxResourceLimitExceeded":
+            from ._schemas.error import GraphQLMaxResourceLimitExceededErrorSchema
+
+            return GraphQLMaxResourceLimitExceededErrorSchema().load(data)
+        if data["code"] == "MissingRoleOnChannel":
+            from ._schemas.error import GraphQLMissingRoleOnChannelErrorSchema
+
+            return GraphQLMissingRoleOnChannelErrorSchema().load(data)
+        if data["code"] == "MissingTaxRateForCountry":
+            from ._schemas.error import GraphQLMissingTaxRateForCountryErrorSchema
+
+            return GraphQLMissingTaxRateForCountryErrorSchema().load(data)
+        if data["code"] == "MoneyOverflow":
+            from ._schemas.error import GraphQLMoneyOverflowErrorSchema
+
+            return GraphQLMoneyOverflowErrorSchema().load(data)
+        if data["code"] == "NoMatchingProductDiscountFound":
+            from ._schemas.error import GraphQLNoMatchingProductDiscountFoundErrorSchema
+
+            return GraphQLNoMatchingProductDiscountFoundErrorSchema().load(data)
+        if data["code"] == "NotEnabled":
+            from ._schemas.error import GraphQLNotEnabledErrorSchema
+
+            return GraphQLNotEnabledErrorSchema().load(data)
+        if data["code"] == "ObjectNotFound":
+            from ._schemas.error import GraphQLObjectNotFoundErrorSchema
+
+            return GraphQLObjectNotFoundErrorSchema().load(data)
+        if data["code"] == "OutOfStock":
+            from ._schemas.error import GraphQLOutOfStockErrorSchema
+
+            return GraphQLOutOfStockErrorSchema().load(data)
+        if data["code"] == "OverCapacity":
+            from ._schemas.error import GraphQLOverCapacityErrorSchema
+
+            return GraphQLOverCapacityErrorSchema().load(data)
+        if data["code"] == "OverlappingStandalonePriceValidity":
+            from ._schemas.error import (
+                GraphQLOverlappingStandalonePriceValidityErrorSchema,
+            )
+
+            return GraphQLOverlappingStandalonePriceValidityErrorSchema().load(data)
+        if data["code"] == "PendingOperation":
+            from ._schemas.error import GraphQLPendingOperationErrorSchema
+
+            return GraphQLPendingOperationErrorSchema().load(data)
+        if data["code"] == "PriceChanged":
+            from ._schemas.error import GraphQLPriceChangedErrorSchema
+
+            return GraphQLPriceChangedErrorSchema().load(data)
+        if data["code"] == "ProductAssignmentMissing":
+            from ._schemas.error import GraphQLProductAssignmentMissingErrorSchema
+
+            return GraphQLProductAssignmentMissingErrorSchema().load(data)
+        if data["code"] == "ProductPresentWithDifferentVariantSelection":
+            from ._schemas.error import (
+                GraphQLProductPresentWithDifferentVariantSelectionErrorSchema,
+            )
+
+            return GraphQLProductPresentWithDifferentVariantSelectionErrorSchema().load(
+                data
+            )
+        if data["code"] == "ProjectNotConfiguredForLanguages":
+            from ._schemas.error import (
+                GraphQLProjectNotConfiguredForLanguagesErrorSchema,
+            )
+
+            return GraphQLProjectNotConfiguredForLanguagesErrorSchema().load(data)
+        if data["code"] == "QueryComplexityLimitExceeded":
+            from ._schemas.error import GraphQLQueryComplexityLimitExceededErrorSchema
+
+            return GraphQLQueryComplexityLimitExceededErrorSchema().load(data)
+        if data["code"] == "QueryTimedOut":
+            from ._schemas.error import GraphQLQueryTimedOutErrorSchema
+
+            return GraphQLQueryTimedOutErrorSchema().load(data)
+        if data["code"] == "ReferenceExists":
+            from ._schemas.error import GraphQLReferenceExistsErrorSchema
+
+            return GraphQLReferenceExistsErrorSchema().load(data)
+        if data["code"] == "ReferencedResourceNotFound":
+            from ._schemas.error import GraphQLReferencedResourceNotFoundErrorSchema
+
+            return GraphQLReferencedResourceNotFoundErrorSchema().load(data)
+        if data["code"] == "RequiredField":
+            from ._schemas.error import GraphQLRequiredFieldErrorSchema
+
+            return GraphQLRequiredFieldErrorSchema().load(data)
+        if data["code"] == "ResourceNotFound":
+            from ._schemas.error import GraphQLResourceNotFoundErrorSchema
+
+            return GraphQLResourceNotFoundErrorSchema().load(data)
+        if data["code"] == "ResourceSizeLimitExceeded":
+            from ._schemas.error import GraphQLResourceSizeLimitExceededErrorSchema
+
+            return GraphQLResourceSizeLimitExceededErrorSchema().load(data)
+        if data["code"] == "SearchDeactivated":
+            from ._schemas.error import GraphQLSearchDeactivatedErrorSchema
+
+            return GraphQLSearchDeactivatedErrorSchema().load(data)
+        if data["code"] == "SearchExecutionFailure":
+            from ._schemas.error import GraphQLSearchExecutionFailureErrorSchema
+
+            return GraphQLSearchExecutionFailureErrorSchema().load(data)
+        if data["code"] == "SearchFacetPathNotFound":
+            from ._schemas.error import GraphQLSearchFacetPathNotFoundErrorSchema
+
+            return GraphQLSearchFacetPathNotFoundErrorSchema().load(data)
+        if data["code"] == "SearchIndexingInProgress":
+            from ._schemas.error import GraphQLSearchIndexingInProgressErrorSchema
+
+            return GraphQLSearchIndexingInProgressErrorSchema().load(data)
+        if data["code"] == "SemanticError":
+            from ._schemas.error import GraphQLSemanticErrorErrorSchema
+
+            return GraphQLSemanticErrorErrorSchema().load(data)
+        if data["code"] == "ShippingMethodDoesNotMatchCart":
+            from ._schemas.error import GraphQLShippingMethodDoesNotMatchCartErrorSchema
+
+            return GraphQLShippingMethodDoesNotMatchCartErrorSchema().load(data)
+        if data["code"] == "SyntaxError":
+            from ._schemas.error import GraphQLSyntaxErrorErrorSchema
+
+            return GraphQLSyntaxErrorErrorSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.error import WeakPasswordErrorSchema
+        from ._schemas.error import GraphQLErrorObjectSchema
 
-        return WeakPasswordErrorSchema().dump(self)
+        return GraphQLErrorObjectSchema().dump(self)
+
+
+class GraphQLAnonymousIdAlreadyInUseError(GraphQLErrorObject):
+    """Returned when the anonymous ID is being used by another resource.
+
+    The client application should choose another anonymous ID or retrieve an automatically generated one.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="AnonymousIdAlreadyInUse", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLAnonymousIdAlreadyInUseError":
+        from ._schemas.error import GraphQLAnonymousIdAlreadyInUseErrorSchema
+
+        return GraphQLAnonymousIdAlreadyInUseErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLAnonymousIdAlreadyInUseErrorSchema
+
+        return GraphQLAnonymousIdAlreadyInUseErrorSchema().dump(self)
+
+
+class GraphQLAssociateMissingPermissionError(GraphQLErrorObject):
+    """Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources)."""
+
+    #: [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) to the [Associate](ctp:api:type:Associate) that tried to perform the action.
+    associate: "CustomerResourceIdentifier"
+    #: [ResourceIdentifier](ctp:api:type:BusinessUnitResourceIdentifier) to the [BusinessUnit](ctp:api:type:BusinessUnit).
+    business_unit: "BusinessUnitResourceIdentifier"
+    #: [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) of the [Associate](ctp:api:type:Associate) on whose behalf the action is performed.
+    associate_on_behalf: typing.Optional["CustomerResourceIdentifier"]
+    #: The Permissions that the [Associate](ctp:api:type:Associate) performing the action lacks. At least one of these Permissions is needed.
+    permissions: typing.List["Permission"]
+
+    def __init__(
+        self,
+        *,
+        associate: "CustomerResourceIdentifier",
+        business_unit: "BusinessUnitResourceIdentifier",
+        associate_on_behalf: typing.Optional["CustomerResourceIdentifier"] = None,
+        permissions: typing.List["Permission"],
+        **kwargs
+    ):
+        self.associate = associate
+        self.business_unit = business_unit
+        self.associate_on_behalf = associate_on_behalf
+        self.permissions = permissions
+        kwargs.pop("code", None)
+        super().__init__(code="AssociateMissingPermission", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLAssociateMissingPermissionError":
+        from ._schemas.error import GraphQLAssociateMissingPermissionErrorSchema
+
+        return GraphQLAssociateMissingPermissionErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLAssociateMissingPermissionErrorSchema
+
+        return GraphQLAssociateMissingPermissionErrorSchema().dump(self)
+
+
+class GraphQLAttributeDefinitionAlreadyExistsError(GraphQLErrorObject):
+    """Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
+
+    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+
+    """
+
+    #: Unique identifier of the Product Type containing the conflicting name.
+    conflicting_product_type_id: str
+    #: Name of the Product Type containing the conflicting name.
+    conflicting_product_type_name: str
+    #: Name of the conflicting Attribute.
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str,
+        **kwargs
+    ):
+        self.conflicting_product_type_id = conflicting_product_type_id
+        self.conflicting_product_type_name = conflicting_product_type_name
+        self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
+        super().__init__(code="AttributeDefinitionAlreadyExists", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLAttributeDefinitionAlreadyExistsError":
+        from ._schemas.error import GraphQLAttributeDefinitionAlreadyExistsErrorSchema
+
+        return GraphQLAttributeDefinitionAlreadyExistsErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLAttributeDefinitionAlreadyExistsErrorSchema
+
+        return GraphQLAttributeDefinitionAlreadyExistsErrorSchema().dump(self)
+
+
+class GraphQLAttributeDefinitionTypeConflictError(GraphQLErrorObject):
+    """Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
+
+    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+
+    """
+
+    #: Unique identifier of the Product Type containing the conflicting name.
+    conflicting_product_type_id: str
+    #: Name of the Product Type containing the conflicting name.
+    conflicting_product_type_name: str
+    #: Name of the conflicting Attribute.
+    conflicting_attribute_name: str
+
+    def __init__(
+        self,
+        *,
+        conflicting_product_type_id: str,
+        conflicting_product_type_name: str,
+        conflicting_attribute_name: str,
+        **kwargs
+    ):
+        self.conflicting_product_type_id = conflicting_product_type_id
+        self.conflicting_product_type_name = conflicting_product_type_name
+        self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
+        super().__init__(code="AttributeDefinitionTypeConflict", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLAttributeDefinitionTypeConflictError":
+        from ._schemas.error import GraphQLAttributeDefinitionTypeConflictErrorSchema
+
+        return GraphQLAttributeDefinitionTypeConflictErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLAttributeDefinitionTypeConflictErrorSchema
+
+        return GraphQLAttributeDefinitionTypeConflictErrorSchema().dump(self)
+
+
+class GraphQLAttributeNameDoesNotExistError(GraphQLErrorObject):
+    """Returned when an [AttributeDefinition](ctp:api:type:AttributeDefinition) does not exist for an Attribute `name`.
+
+    The error is returned as a failed response to the [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+
+    """
+
+    #: Non-existent Attribute name.
+    invalid_attribute_name: str
+
+    def __init__(self, *, invalid_attribute_name: str, **kwargs):
+        self.invalid_attribute_name = invalid_attribute_name
+        kwargs.pop("code", None)
+        super().__init__(code="AttributeNameDoesNotExist", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLAttributeNameDoesNotExistError":
+        from ._schemas.error import GraphQLAttributeNameDoesNotExistErrorSchema
+
+        return GraphQLAttributeNameDoesNotExistErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLAttributeNameDoesNotExistErrorSchema
+
+        return GraphQLAttributeNameDoesNotExistErrorSchema().dump(self)
+
+
+class GraphQLBadGatewayError(GraphQLErrorObject):
+    """Returned when a server-side problem is caused by scaling infrastructure resources.
+
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="BadGateway", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLBadGatewayError":
+        from ._schemas.error import GraphQLBadGatewayErrorSchema
+
+        return GraphQLBadGatewayErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLBadGatewayErrorSchema
+
+        return GraphQLBadGatewayErrorSchema().dump(self)
+
+
+class GraphQLConcurrentModificationError(GraphQLErrorObject):
+    """Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
+    The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+
+    """
+
+    #: Current version of the resource.
+    current_version: typing.Optional[int]
+
+    def __init__(self, *, current_version: typing.Optional[int] = None, **kwargs):
+        self.current_version = current_version
+        kwargs.pop("code", None)
+        super().__init__(code="ConcurrentModification", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLConcurrentModificationError":
+        from ._schemas.error import GraphQLConcurrentModificationErrorSchema
+
+        return GraphQLConcurrentModificationErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLConcurrentModificationErrorSchema
+
+        return GraphQLConcurrentModificationErrorSchema().dump(self)
+
+
+class GraphQLCountryNotConfiguredInStoreError(GraphQLErrorObject):
+    """Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
+
+    The error is returned as a failed response to:
+
+    - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
+    - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
+    - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+    - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+    - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+    - [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
+    - [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
+
+    """
+
+    #: Countries configured for the Store.
+    store_countries: typing.List["str"]
+    #: The country that is not configured for the Store but referenced on the Cart or Order.
+    country: str
+
+    def __init__(self, *, store_countries: typing.List["str"], country: str, **kwargs):
+        self.store_countries = store_countries
+        self.country = country
+        kwargs.pop("code", None)
+        super().__init__(code="CountryNotConfiguredInStore", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLCountryNotConfiguredInStoreError":
+        from ._schemas.error import GraphQLCountryNotConfiguredInStoreErrorSchema
+
+        return GraphQLCountryNotConfiguredInStoreErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLCountryNotConfiguredInStoreErrorSchema
+
+        return GraphQLCountryNotConfiguredInStoreErrorSchema().dump(self)
+
+
+class GraphQLDiscountCodeNonApplicableError(GraphQLErrorObject):
+    """Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Discount Code passed to the Cart.
+    discount_code: typing.Optional[str]
+    #: `"DoesNotExist"` or `"TimeRangeNonApplicable"`
+    reason: typing.Optional[str]
+    #: Unique identifier of the Discount Code.
+    discount_code_id: typing.Optional[str]
+    #: Date and time (UTC) from which the Discount Code is valid.
+    valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Discount Code is valid.
+    valid_until: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) the Discount Code validity check was last performed.
+    validity_check_time: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        discount_code: typing.Optional[str] = None,
+        reason: typing.Optional[str] = None,
+        discount_code_id: typing.Optional[str] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        validity_check_time: typing.Optional[datetime.datetime] = None,
+        **kwargs
+    ):
+        self.discount_code = discount_code
+        self.reason = reason
+        self.discount_code_id = discount_code_id
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.validity_check_time = validity_check_time
+        kwargs.pop("code", None)
+        super().__init__(code="DiscountCodeNonApplicable", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDiscountCodeNonApplicableError":
+        from ._schemas.error import GraphQLDiscountCodeNonApplicableErrorSchema
+
+        return GraphQLDiscountCodeNonApplicableErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDiscountCodeNonApplicableErrorSchema
+
+        return GraphQLDiscountCodeNonApplicableErrorSchema().dump(self)
+
+
+class GraphQLDuplicateAttributeValueError(GraphQLErrorObject):
+    """Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Conflicting Attributes.
+    attribute: "Attribute"
+
+    def __init__(self, *, attribute: "Attribute", **kwargs):
+        self.attribute = attribute
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateAttributeValue", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateAttributeValueError":
+        from ._schemas.error import GraphQLDuplicateAttributeValueErrorSchema
+
+        return GraphQLDuplicateAttributeValueErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateAttributeValueErrorSchema
+
+        return GraphQLDuplicateAttributeValueErrorSchema().dump(self)
+
+
+class GraphQLDuplicateAttributeValuesError(GraphQLErrorObject):
+    """Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Conflicting Attributes.
+    attributes: typing.List["Attribute"]
+
+    def __init__(self, *, attributes: typing.List["Attribute"], **kwargs):
+        self.attributes = attributes
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateAttributeValues", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateAttributeValuesError":
+        from ._schemas.error import GraphQLDuplicateAttributeValuesErrorSchema
+
+        return GraphQLDuplicateAttributeValuesErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateAttributeValuesErrorSchema
+
+        return GraphQLDuplicateAttributeValuesErrorSchema().dump(self)
+
+
+class GraphQLDuplicateEnumValuesError(GraphQLErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains duplicate keys."""
+
+    #: Duplicate keys.
+    duplicates: typing.List["str"]
+
+    def __init__(self, *, duplicates: typing.List["str"], **kwargs):
+        self.duplicates = duplicates
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateEnumValues", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateEnumValuesError":
+        from ._schemas.error import GraphQLDuplicateEnumValuesErrorSchema
+
+        return GraphQLDuplicateEnumValuesErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateEnumValuesErrorSchema
+
+        return GraphQLDuplicateEnumValuesErrorSchema().dump(self)
+
+
+class GraphQLDuplicateFieldError(GraphQLErrorObject):
+    """Returned when a field value conflicts with an existing value causing a duplicate."""
+
+    #: Name of the conflicting field.
+    field: str
+    #: Conflicting duplicate value.
+    duplicate_value: typing.Any
+
+    def __init__(self, *, field: str, duplicate_value: typing.Any, **kwargs):
+        self.field = field
+        self.duplicate_value = duplicate_value
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateField", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateFieldError":
+        from ._schemas.error import GraphQLDuplicateFieldErrorSchema
+
+        return GraphQLDuplicateFieldErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateFieldErrorSchema
+
+        return GraphQLDuplicateFieldErrorSchema().dump(self)
+
+
+class GraphQLDuplicateFieldWithConflictingResourceError(GraphQLErrorObject):
+    """Returned when a field value conflicts with an existing value stored in a particular resource causing a duplicate."""
+
+    #: Name of the conflicting field.
+    field: str
+    #: Conflicting duplicate value.
+    duplicate_value: typing.Any
+    #: Reference to the resource that has the conflicting value.
+    conflicting_resource: "Reference"
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        duplicate_value: typing.Any,
+        conflicting_resource: "Reference",
+        **kwargs
+    ):
+        self.field = field
+        self.duplicate_value = duplicate_value
+        self.conflicting_resource = conflicting_resource
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateFieldWithConflictingResource", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateFieldWithConflictingResourceError":
+        from ._schemas.error import (
+            GraphQLDuplicateFieldWithConflictingResourceErrorSchema,
+        )
+
+        return GraphQLDuplicateFieldWithConflictingResourceErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import (
+            GraphQLDuplicateFieldWithConflictingResourceErrorSchema,
+        )
+
+        return GraphQLDuplicateFieldWithConflictingResourceErrorSchema().dump(self)
+
+
+class GraphQLDuplicatePriceKeyError(GraphQLErrorObject):
+    """Returned when a Price key conflicts with an existing key.
+
+    Keys of Embedded Prices must be unique per ProductVariant.
+
+    """
+
+    #: Conflicting Embedded Price.
+    conflicting_price: "Price"
+
+    def __init__(self, *, conflicting_price: "Price", **kwargs):
+        self.conflicting_price = conflicting_price
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicatePriceKey", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicatePriceKeyError":
+        from ._schemas.error import GraphQLDuplicatePriceKeyErrorSchema
+
+        return GraphQLDuplicatePriceKeyErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicatePriceKeyErrorSchema
+
+        return GraphQLDuplicatePriceKeyErrorSchema().dump(self)
+
+
+class GraphQLDuplicatePriceScopeError(GraphQLErrorObject):
+    """Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+
+    Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
+
+    """
+
+    #: Conflicting Embedded Price.
+    conflicting_price: "Price"
+
+    def __init__(self, *, conflicting_price: "Price", **kwargs):
+        self.conflicting_price = conflicting_price
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicatePriceScope", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicatePriceScopeError":
+        from ._schemas.error import GraphQLDuplicatePriceScopeErrorSchema
+
+        return GraphQLDuplicatePriceScopeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicatePriceScopeErrorSchema
+
+        return GraphQLDuplicatePriceScopeErrorSchema().dump(self)
+
+
+class GraphQLDuplicateStandalonePriceScopeError(GraphQLErrorObject):
+    """Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
+    Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
+
+    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: Reference to the conflicting Standalone Price.
+    conflicting_standalone_price: "StandalonePriceReference"
+    #: SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+    sku: str
+    #: Currency code of the country.
+    currency: str
+    #: Country code of the geographic location.
+    country: typing.Optional[str]
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Date and time (UTC) from which the Standalone Price is valid.
+    valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Standalone Price is valid.
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        conflicting_standalone_price: "StandalonePriceReference",
+        sku: str,
+        currency: str,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
+        channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        **kwargs
+    ):
+        self.conflicting_standalone_price = conflicting_standalone_price
+        self.sku = sku
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateStandalonePriceScope", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateStandalonePriceScopeError":
+        from ._schemas.error import GraphQLDuplicateStandalonePriceScopeErrorSchema
+
+        return GraphQLDuplicateStandalonePriceScopeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateStandalonePriceScopeErrorSchema
+
+        return GraphQLDuplicateStandalonePriceScopeErrorSchema().dump(self)
+
+
+class GraphQLDuplicateVariantValuesError(GraphQLErrorObject):
+    """Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request."""
+
+    #: Every Product Variant must have a distinct combination of SKU, prices, and custom Attribute values.
+    variant_values: "VariantValues"
+
+    def __init__(self, *, variant_values: "VariantValues", **kwargs):
+        self.variant_values = variant_values
+        kwargs.pop("code", None)
+        super().__init__(code="DuplicateVariantValues", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLDuplicateVariantValuesError":
+        from ._schemas.error import GraphQLDuplicateVariantValuesErrorSchema
+
+        return GraphQLDuplicateVariantValuesErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLDuplicateVariantValuesErrorSchema
+
+        return GraphQLDuplicateVariantValuesErrorSchema().dump(self)
+
+
+class GraphQLEditPreviewFailedError(GraphQLErrorObject):
+    """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
+
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+
+    """
+
+    #: State of the OrderEdit where the `stagedActions` cannot be applied to the Order.
+    result: "OrderEditPreviewFailure"
+
+    def __init__(self, *, result: "OrderEditPreviewFailure", **kwargs):
+        self.result = result
+        kwargs.pop("code", None)
+        super().__init__(code="EditPreviewFailed", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLEditPreviewFailedError":
+        from ._schemas.error import GraphQLEditPreviewFailedErrorSchema
+
+        return GraphQLEditPreviewFailedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLEditPreviewFailedErrorSchema
+
+        return GraphQLEditPreviewFailedErrorSchema().dump(self)
+
+
+class GraphQLEnumKeyAlreadyExistsError(GraphQLErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains a key that already exists."""
+
+    #: Conflicting enum key.
+    conflicting_enum_key: str
+    #: Name of the conflicting Attribute.
+    conflicting_attribute_name: str
+
+    def __init__(
+        self, *, conflicting_enum_key: str, conflicting_attribute_name: str, **kwargs
+    ):
+        self.conflicting_enum_key = conflicting_enum_key
+        self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
+        super().__init__(code="EnumKeyAlreadyExists", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLEnumKeyAlreadyExistsError":
+        from ._schemas.error import GraphQLEnumKeyAlreadyExistsErrorSchema
+
+        return GraphQLEnumKeyAlreadyExistsErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLEnumKeyAlreadyExistsErrorSchema
+
+        return GraphQLEnumKeyAlreadyExistsErrorSchema().dump(self)
+
+
+class GraphQLEnumKeyDoesNotExistError(GraphQLErrorObject):
+    """Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) already contains a value with the given key.
+
+    The error is returned as a failed response to the [Change the key of an EnumValue](ctp:api:type:ProductTypeChangeEnumKeyAction) update action.
+
+    """
+
+    #: Conflicting enum key.
+    conflicting_enum_key: str
+    #: Name of the conflicting Attribute.
+    conflicting_attribute_name: str
+
+    def __init__(
+        self, *, conflicting_enum_key: str, conflicting_attribute_name: str, **kwargs
+    ):
+        self.conflicting_enum_key = conflicting_enum_key
+        self.conflicting_attribute_name = conflicting_attribute_name
+        kwargs.pop("code", None)
+        super().__init__(code="EnumKeyDoesNotExist", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLEnumKeyDoesNotExistError":
+        from ._schemas.error import GraphQLEnumKeyDoesNotExistErrorSchema
+
+        return GraphQLEnumKeyDoesNotExistErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLEnumKeyDoesNotExistErrorSchema
+
+        return GraphQLEnumKeyDoesNotExistErrorSchema().dump(self)
+
+
+class GraphQLEnumValueIsUsedError(GraphQLErrorObject):
+    """Returned when an enum value cannot be removed from an Attribute as it is being used by a Product.
+
+    The error is returned as a failed response to the [Remove EnumValues from AttributeDefinition](ctp:api:type:ProductTypeRemoveEnumValuesAction) update action.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="EnumValueIsUsed", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLEnumValueIsUsedError":
+        from ._schemas.error import GraphQLEnumValueIsUsedErrorSchema
+
+        return GraphQLEnumValueIsUsedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLEnumValueIsUsedErrorSchema
+
+        return GraphQLEnumValueIsUsedErrorSchema().dump(self)
+
+
+class GraphQLEnumValuesMustMatchError(GraphQLErrorObject):
+    """Returned when during an order update of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) the new enum values do not match the existing ones.
+
+    The error is returned as a failed response to the [Change the order of EnumValues](ctp:api:type:ProductTypeChangePlainEnumValueOrderAction) and [Change the order of LocalizedEnumValues](ctp:api:type:ProductTypeChangeLocalizedEnumValueOrderAction) update actions.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="EnumValuesMustMatch", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLEnumValuesMustMatchError":
+        from ._schemas.error import GraphQLEnumValuesMustMatchErrorSchema
+
+        return GraphQLEnumValuesMustMatchErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLEnumValuesMustMatchErrorSchema
+
+        return GraphQLEnumValuesMustMatchErrorSchema().dump(self)
+
+
+class GraphQLExtensionBadResponseError(GraphQLErrorObject):
+    """Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response)."""
+
+    #: User-defined localized description of the error.
+    localized_message: typing.Optional["LocalizedString"]
+    #: Any information that should be returned to the API caller.
+    extension_extra_info: typing.Optional[object]
+    #: Additional errors related to the API Extension.
+    extension_errors: typing.List["ExtensionError"]
+    #: The response body returned by the Extension.
+    extension_body: typing.Optional[str]
+    #: Http status code returned by the Extension.
+    extension_status_code: typing.Optional[int]
+    #: Unique identifier of the Extension.
+    extension_id: str
+    #: User-defined unique identifier of the Extension.
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        localized_message: typing.Optional["LocalizedString"] = None,
+        extension_extra_info: typing.Optional[object] = None,
+        extension_errors: typing.List["ExtensionError"],
+        extension_body: typing.Optional[str] = None,
+        extension_status_code: typing.Optional[int] = None,
+        extension_id: str,
+        extension_key: typing.Optional[str] = None,
+        **kwargs
+    ):
+        self.localized_message = localized_message
+        self.extension_extra_info = extension_extra_info
+        self.extension_errors = extension_errors
+        self.extension_body = extension_body
+        self.extension_status_code = extension_status_code
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        kwargs.pop("code", None)
+        super().__init__(code="ExtensionBadResponse", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLExtensionBadResponseError":
+        from ._schemas.error import GraphQLExtensionBadResponseErrorSchema
+
+        return GraphQLExtensionBadResponseErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLExtensionBadResponseErrorSchema
+
+        return GraphQLExtensionBadResponseErrorSchema().dump(self)
+
+
+class GraphQLExtensionNoResponseError(GraphQLErrorObject):
+    """Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached."""
+
+    #: Unique identifier of the API Extension.
+    extension_id: str
+    #: User-defined unique identifier of the API Extension, if available.
+    extension_key: typing.Optional[str]
+
+    def __init__(
+        self, *, extension_id: str, extension_key: typing.Optional[str] = None, **kwargs
+    ):
+        self.extension_id = extension_id
+        self.extension_key = extension_key
+        kwargs.pop("code", None)
+        super().__init__(code="ExtensionNoResponse", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLExtensionNoResponseError":
+        from ._schemas.error import GraphQLExtensionNoResponseErrorSchema
+
+        return GraphQLExtensionNoResponseErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLExtensionNoResponseErrorSchema
+
+        return GraphQLExtensionNoResponseErrorSchema().dump(self)
+
+
+class GraphQLExtensionPredicateEvaluationFailedError(GraphQLErrorObject):
+    """Returned when the predicate defined in the [ExtensionTrigger](ctp:api:type:ExtensionTrigger) could not be evaluated due to a missing field."""
+
+    #: Details about the API Extension that was involved in the error.
+    error_by_extension: "ErrorByExtension"
+
+    def __init__(self, *, error_by_extension: "ErrorByExtension", **kwargs):
+        self.error_by_extension = error_by_extension
+        kwargs.pop("code", None)
+        super().__init__(code="ExtensionPredicateEvaluationFailed", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLExtensionPredicateEvaluationFailedError":
+        from ._schemas.error import GraphQLExtensionPredicateEvaluationFailedErrorSchema
+
+        return GraphQLExtensionPredicateEvaluationFailedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLExtensionPredicateEvaluationFailedErrorSchema
+
+        return GraphQLExtensionPredicateEvaluationFailedErrorSchema().dump(self)
+
+
+class GraphQLExtensionUpdateActionsFailedError(GraphQLErrorObject):
+    """Returned when update actions could not be applied to the resource (for example, because a referenced resource does not exist).
+    This would result in a [400 Bad Request](#400-bad-request) response if the same update action was sent from a regular client.
+
+    """
+
+    #: User-defined localized description of the error.
+    localized_message: typing.Optional["LocalizedString"]
+    #: Any information that should be returned to the API caller.
+    extension_extra_info: typing.Optional[object]
+    #: Additional errors related to the API Extension.
+    extension_errors: typing.List["ExtensionError"]
+
+    def __init__(
+        self,
+        *,
+        localized_message: typing.Optional["LocalizedString"] = None,
+        extension_extra_info: typing.Optional[object] = None,
+        extension_errors: typing.List["ExtensionError"],
+        **kwargs
+    ):
+        self.localized_message = localized_message
+        self.extension_extra_info = extension_extra_info
+        self.extension_errors = extension_errors
+        kwargs.pop("code", None)
+        super().__init__(code="ExtensionUpdateActionsFailed", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLExtensionUpdateActionsFailedError":
+        from ._schemas.error import GraphQLExtensionUpdateActionsFailedErrorSchema
+
+        return GraphQLExtensionUpdateActionsFailedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLExtensionUpdateActionsFailedErrorSchema
+
+        return GraphQLExtensionUpdateActionsFailedErrorSchema().dump(self)
+
+
+class GraphQLExternalOAuthFailedError(GraphQLErrorObject):
+    """Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`)."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="ExternalOAuthFailed", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLExternalOAuthFailedError":
+        from ._schemas.error import GraphQLExternalOAuthFailedErrorSchema
+
+        return GraphQLExternalOAuthFailedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLExternalOAuthFailedErrorSchema
+
+        return GraphQLExternalOAuthFailedErrorSchema().dump(self)
+
+
+class GraphQLFeatureRemovedError(GraphQLErrorObject):
+    """Returned when the requested feature was removed."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="FeatureRemoved", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLFeatureRemovedError":
+        from ._schemas.error import GraphQLFeatureRemovedErrorSchema
+
+        return GraphQLFeatureRemovedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLFeatureRemovedErrorSchema
+
+        return GraphQLFeatureRemovedErrorSchema().dump(self)
+
+
+class GraphQLGeneralError(GraphQLErrorObject):
+    """Returned when a server-side problem occurs.
+
+    If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="General", **kwargs)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "GraphQLGeneralError":
+        from ._schemas.error import GraphQLGeneralErrorSchema
+
+        return GraphQLGeneralErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLGeneralErrorSchema
+
+        return GraphQLGeneralErrorSchema().dump(self)
+
+
+class GraphQLInsufficientScopeError(GraphQLErrorObject):
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="insufficient_scope", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInsufficientScopeError":
+        from ._schemas.error import GraphQLInsufficientScopeErrorSchema
+
+        return GraphQLInsufficientScopeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInsufficientScopeErrorSchema
+
+        return GraphQLInsufficientScopeErrorSchema().dump(self)
+
+
+class GraphQLInternalConstraintViolatedError(GraphQLErrorObject):
+    """Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InternalConstraintViolated", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInternalConstraintViolatedError":
+        from ._schemas.error import GraphQLInternalConstraintViolatedErrorSchema
+
+        return GraphQLInternalConstraintViolatedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInternalConstraintViolatedErrorSchema
+
+        return GraphQLInternalConstraintViolatedErrorSchema().dump(self)
+
+
+class GraphQLInvalidCredentialsError(GraphQLErrorObject):
+    """Returned when a Customer with the given credentials (matching the given email/password pair) is not found and authentication fails.
+
+    The error is returned as a failed response to:
+
+    - [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
+    - [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidCredentials", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidCredentialsError":
+        from ._schemas.error import GraphQLInvalidCredentialsErrorSchema
+
+        return GraphQLInvalidCredentialsErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidCredentialsErrorSchema
+
+        return GraphQLInvalidCredentialsErrorSchema().dump(self)
+
+
+class GraphQLInvalidCurrentPasswordError(GraphQLErrorObject):
+    """Returned when the current password of the Customer does not match.
+
+    The error is returned as a failed response to:
+
+    - [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
+    - [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidCurrentPassword", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidCurrentPasswordError":
+        from ._schemas.error import GraphQLInvalidCurrentPasswordErrorSchema
+
+        return GraphQLInvalidCurrentPasswordErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidCurrentPasswordErrorSchema
+
+        return GraphQLInvalidCurrentPasswordErrorSchema().dump(self)
+
+
+class GraphQLInvalidFieldError(GraphQLErrorObject):
+    """Returned when a field has an invalid value."""
+
+    #: Name of the field with the invalid value.
+    field: str
+    #: Value invalid for the field.
+    invalid_value: typing.Any
+    #: Fixed set of allowed values for the field, if any.
+    allowed_values: typing.Optional[typing.List["typing.Any"]]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        invalid_value: typing.Any,
+        allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
+        **kwargs
+    ):
+        self.field = field
+        self.invalid_value = invalid_value
+        self.allowed_values = allowed_values
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidField", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidFieldError":
+        from ._schemas.error import GraphQLInvalidFieldErrorSchema
+
+        return GraphQLInvalidFieldErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidFieldErrorSchema
+
+        return GraphQLInvalidFieldErrorSchema().dump(self)
+
+
+class GraphQLInvalidInputError(GraphQLErrorObject):
+    """Returned when an invalid input has been sent."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidInput", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidInputError":
+        from ._schemas.error import GraphQLInvalidInputErrorSchema
+
+        return GraphQLInvalidInputErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidInputErrorSchema
+
+        return GraphQLInvalidInputErrorSchema().dump(self)
+
+
+class GraphQLInvalidItemShippingDetailsError(GraphQLErrorObject):
+    """Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
+
+    The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    #: `"LineItem"` or `"CustomLineItem"`
+    subject: str
+    #: Unique identifier of the Line Item or Custom Line Item.
+    item_id: str
+
+    def __init__(self, *, subject: str, item_id: str, **kwargs):
+        self.subject = subject
+        self.item_id = item_id
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidItemShippingDetails", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidItemShippingDetailsError":
+        from ._schemas.error import GraphQLInvalidItemShippingDetailsErrorSchema
+
+        return GraphQLInvalidItemShippingDetailsErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidItemShippingDetailsErrorSchema
+
+        return GraphQLInvalidItemShippingDetailsErrorSchema().dump(self)
+
+
+class GraphQLInvalidJsonInputError(GraphQLErrorObject):
+    """Returned when an invalid JSON input has been sent.
+    Either the JSON is syntactically incorrect or does not conform to the expected shape (for example is missing a required field).
+
+    The client application should validate the input according to the constraints described in the error message before sending the request.
+
+    """
+
+    #: Further explanation about why the JSON is invalid.
+    detailed_error_message: str
+
+    def __init__(self, *, detailed_error_message: str, **kwargs):
+        self.detailed_error_message = detailed_error_message
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidJsonInput", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidJsonInputError":
+        from ._schemas.error import GraphQLInvalidJsonInputErrorSchema
+
+        return GraphQLInvalidJsonInputErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidJsonInputErrorSchema
+
+        return GraphQLInvalidJsonInputErrorSchema().dump(self)
+
+
+class GraphQLInvalidOperationError(GraphQLErrorObject):
+    """Returned when the resources involved in the request are not in a valid state for the operation.
+
+    The client application should validate the constraints described in the error message before sending the request.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidOperation", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidOperationError":
+        from ._schemas.error import GraphQLInvalidOperationErrorSchema
+
+        return GraphQLInvalidOperationErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidOperationErrorSchema
+
+        return GraphQLInvalidOperationErrorSchema().dump(self)
+
+
+class GraphQLInvalidSubjectError(GraphQLErrorObject):
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="InvalidSubject", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidSubjectError":
+        from ._schemas.error import GraphQLInvalidSubjectErrorSchema
+
+        return GraphQLInvalidSubjectErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidSubjectErrorSchema
+
+        return GraphQLInvalidSubjectErrorSchema().dump(self)
+
+
+class GraphQLInvalidTokenError(GraphQLErrorObject):
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="invalid_token", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLInvalidTokenError":
+        from ._schemas.error import GraphQLInvalidTokenErrorSchema
+
+        return GraphQLInvalidTokenErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLInvalidTokenErrorSchema
+
+        return GraphQLInvalidTokenErrorSchema().dump(self)
+
+
+class GraphQLLanguageUsedInStoresError(GraphQLErrorObject):
+    """Returned when a language cannot be removed from a Project as it is being used by a Store.
+
+    The error is returned as a failed response to the [Change Languages](ctp:api:type:ProjectChangeLanguagesAction) update action.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="LanguageUsedInStores", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLLanguageUsedInStoresError":
+        from ._schemas.error import GraphQLLanguageUsedInStoresErrorSchema
+
+        return GraphQLLanguageUsedInStoresErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLLanguageUsedInStoresErrorSchema
+
+        return GraphQLLanguageUsedInStoresErrorSchema().dump(self)
+
+
+class GraphQLMatchingPriceNotFoundError(GraphQLErrorObject):
+    """Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
+
+    The error is returned as a failed response to:
+
+    - [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
+    - [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifier of a [Product](ctp:api:type:Product).
+    product_id: str
+    #: Unique identifier of a [ProductVariant](ctp:api:type:ProductVariant) in the Product.
+    variant_id: int
+    #: Currency code of the country.
+    currency: typing.Optional[str]
+    #: Country code of the geographic location.
+    country: typing.Optional[str]
+    #: Customer Group associated with the Price.
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: Channel associated with the Price.
+    channel: typing.Optional["ChannelReference"]
+
+    def __init__(
+        self,
+        *,
+        product_id: str,
+        variant_id: int,
+        currency: typing.Optional[str] = None,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
+        channel: typing.Optional["ChannelReference"] = None,
+        **kwargs
+    ):
+        self.product_id = product_id
+        self.variant_id = variant_id
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        kwargs.pop("code", None)
+        super().__init__(code="MatchingPriceNotFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMatchingPriceNotFoundError":
+        from ._schemas.error import GraphQLMatchingPriceNotFoundErrorSchema
+
+        return GraphQLMatchingPriceNotFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMatchingPriceNotFoundErrorSchema
+
+        return GraphQLMatchingPriceNotFoundErrorSchema().dump(self)
+
+
+class GraphQLMaxResourceLimitExceededError(GraphQLErrorObject):
+    """Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+
+    The limits must be adjusted for this resource before sending the request again.
+
+    """
+
+    #: Resource type that reached its maximum limit of configured elements (for example, 100 Zones per Project).
+    exceeded_resource: "ReferenceTypeId"
+
+    def __init__(self, *, exceeded_resource: "ReferenceTypeId", **kwargs):
+        self.exceeded_resource = exceeded_resource
+        kwargs.pop("code", None)
+        super().__init__(code="MaxResourceLimitExceeded", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMaxResourceLimitExceededError":
+        from ._schemas.error import GraphQLMaxResourceLimitExceededErrorSchema
+
+        return GraphQLMaxResourceLimitExceededErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMaxResourceLimitExceededErrorSchema
+
+        return GraphQLMaxResourceLimitExceededErrorSchema().dump(self)
+
+
+class GraphQLMissingRoleOnChannelError(GraphQLErrorObject):
+    """Returned when one of the following states occur:
+
+    - [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
+    - [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+
+    The error is returned as a failed response to:
+
+    - [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
+    - [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a given [Channel](ctp:api:type:Channel).
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    #: - `ProductDistribution` for Product Distribution Channels allowed for the Store. Also required for [Standalone Prices](ctp:api:type:StandalonePrice).
+    #: - `InventorySupply` for Inventory Supply Channels allowed for the Store.
+    missing_role: "ChannelRoleEnum"
+
+    def __init__(
+        self,
+        *,
+        channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        missing_role: "ChannelRoleEnum",
+        **kwargs
+    ):
+        self.channel = channel
+        self.missing_role = missing_role
+        kwargs.pop("code", None)
+        super().__init__(code="MissingRoleOnChannel", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMissingRoleOnChannelError":
+        from ._schemas.error import GraphQLMissingRoleOnChannelErrorSchema
+
+        return GraphQLMissingRoleOnChannelErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMissingRoleOnChannelErrorSchema
+
+        return GraphQLMissingRoleOnChannelErrorSchema().dump(self)
+
+
+class GraphQLMissingTaxRateForCountryError(GraphQLErrorObject):
+    """Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
+
+    The error is returned as a failed response to:
+
+    - [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    #: Unique identifier of the [TaxCategory](ctp:api:type:TaxCategory).
+    tax_category_id: str
+    #: Country code of the geographic location.
+    country: typing.Optional[str]
+    #: State within the country, such as Texas in the United States.
+    state: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        tax_category_id: str,
+        country: typing.Optional[str] = None,
+        state: typing.Optional[str] = None,
+        **kwargs
+    ):
+        self.tax_category_id = tax_category_id
+        self.country = country
+        self.state = state
+        kwargs.pop("code", None)
+        super().__init__(code="MissingTaxRateForCountry", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMissingTaxRateForCountryError":
+        from ._schemas.error import GraphQLMissingTaxRateForCountryErrorSchema
+
+        return GraphQLMissingTaxRateForCountryErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMissingTaxRateForCountryErrorSchema
+
+        return GraphQLMissingTaxRateForCountryErrorSchema().dump(self)
+
+
+class GraphQLMoneyOverflowError(GraphQLErrorObject):
+    """Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
+    See [Money usage](/types#usage) for more information.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="MoneyOverflow", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMoneyOverflowError":
+        from ._schemas.error import GraphQLMoneyOverflowErrorSchema
+
+        return GraphQLMoneyOverflowErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMoneyOverflowErrorSchema
+
+        return GraphQLMoneyOverflowErrorSchema().dump(self)
+
+
+class GraphQLNoMatchingProductDiscountFoundError(GraphQLErrorObject):
+    """Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
+
+    The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="NoMatchingProductDiscountFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLNoMatchingProductDiscountFoundError":
+        from ._schemas.error import GraphQLNoMatchingProductDiscountFoundErrorSchema
+
+        return GraphQLNoMatchingProductDiscountFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLNoMatchingProductDiscountFoundErrorSchema
+
+        return GraphQLNoMatchingProductDiscountFoundErrorSchema().dump(self)
+
+
+class GraphQLNotEnabledError(GraphQLErrorObject):
+    """Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="NotEnabled", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLNotEnabledError":
+        from ._schemas.error import GraphQLNotEnabledErrorSchema
+
+        return GraphQLNotEnabledErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLNotEnabledErrorSchema
+
+        return GraphQLNotEnabledErrorSchema().dump(self)
+
+
+class GraphQLObjectNotFoundError(GraphQLErrorObject):
+    """Returned when the requested resource was not found."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="ObjectNotFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLObjectNotFoundError":
+        from ._schemas.error import GraphQLObjectNotFoundErrorSchema
+
+        return GraphQLObjectNotFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLObjectNotFoundErrorSchema
+
+        return GraphQLObjectNotFoundErrorSchema().dump(self)
+
+
+class GraphQLOutOfStockError(GraphQLErrorObject):
+    """Returned when some of the [Line Items](ctp:api:type:LineItem) are out of stock at the time of placing an [Order](ctp:api:type:Order).
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifiers of the Line Items that are out of stock.
+    line_items: typing.List["str"]
+    #: SKUs of the Line Items that are out of stock.
+    skus: typing.List["str"]
+
+    def __init__(
+        self, *, line_items: typing.List["str"], skus: typing.List["str"], **kwargs
+    ):
+        self.line_items = line_items
+        self.skus = skus
+        kwargs.pop("code", None)
+        super().__init__(code="OutOfStock", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLOutOfStockError":
+        from ._schemas.error import GraphQLOutOfStockErrorSchema
+
+        return GraphQLOutOfStockErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLOutOfStockErrorSchema
+
+        return GraphQLOutOfStockErrorSchema().dump(self)
+
+
+class GraphQLOverCapacityError(GraphQLErrorObject):
+    """Returned when the service is having trouble handling the load.
+
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="OverCapacity", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLOverCapacityError":
+        from ._schemas.error import GraphQLOverCapacityErrorSchema
+
+        return GraphQLOverCapacityErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLOverCapacityErrorSchema
+
+        return GraphQLOverCapacityErrorSchema().dump(self)
+
+
+class GraphQLOverlappingStandalonePriceValidityError(GraphQLErrorObject):
+    """Returned when a given Price validity period conflicts with an existing one.
+    Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
+
+    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+
+    """
+
+    #: Reference to the conflicting Standalone Price.
+    conflicting_standalone_price: "StandalonePriceReference"
+    #: SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+    sku: str
+    #: Currency code of the country.
+    currency: str
+    #: Country code of the geographic location.
+    country: typing.Optional[str]
+    #: [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+    customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
+    #: [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+    channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Date and time (UTC) from which the Standalone Price is valid.
+    valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the Standalone Price is valid.
+    valid_until: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) from which the conflicting Standalone Price is valid.
+    conflicting_valid_from: typing.Optional[datetime.datetime]
+    #: Date and time (UTC) until which the conflicting Standalone Price is valid.
+    conflicting_valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        conflicting_standalone_price: "StandalonePriceReference",
+        sku: str,
+        currency: str,
+        country: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
+        channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None,
+        conflicting_valid_from: typing.Optional[datetime.datetime] = None,
+        conflicting_valid_until: typing.Optional[datetime.datetime] = None,
+        **kwargs
+    ):
+        self.conflicting_standalone_price = conflicting_standalone_price
+        self.sku = sku
+        self.currency = currency
+        self.country = country
+        self.customer_group = customer_group
+        self.channel = channel
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+        self.conflicting_valid_from = conflicting_valid_from
+        self.conflicting_valid_until = conflicting_valid_until
+        kwargs.pop("code", None)
+        super().__init__(code="OverlappingStandalonePriceValidity", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLOverlappingStandalonePriceValidityError":
+        from ._schemas.error import GraphQLOverlappingStandalonePriceValidityErrorSchema
+
+        return GraphQLOverlappingStandalonePriceValidityErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLOverlappingStandalonePriceValidityErrorSchema
+
+        return GraphQLOverlappingStandalonePriceValidityErrorSchema().dump(self)
+
+
+class GraphQLPendingOperationError(GraphQLErrorObject):
+    """Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
+
+    The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+    If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="PendingOperation", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLPendingOperationError":
+        from ._schemas.error import GraphQLPendingOperationErrorSchema
+
+        return GraphQLPendingOperationErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLPendingOperationErrorSchema
+
+        return GraphQLPendingOperationErrorSchema().dump(self)
+
+
+class GraphQLPriceChangedError(GraphQLErrorObject):
+    """Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+
+    The error is returned as a failed response to:
+
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+
+    """
+
+    #: Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
+    line_items: typing.List["str"]
+    #: `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
+    shipping: bool
+
+    def __init__(self, *, line_items: typing.List["str"], shipping: bool, **kwargs):
+        self.line_items = line_items
+        self.shipping = shipping
+        kwargs.pop("code", None)
+        super().__init__(code="PriceChanged", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLPriceChangedError":
+        from ._schemas.error import GraphQLPriceChangedErrorSchema
+
+        return GraphQLPriceChangedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLPriceChangedErrorSchema
+
+        return GraphQLPriceChangedErrorSchema().dump(self)
+
+
+class GraphQLProductAssignmentMissingError(GraphQLErrorObject):
+    """Returned when a Product is not assigned to the Product Selection.
+    The error is returned as a failed response either to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) or to the [Set Variant Exclusion](ctp:api:type:ProductSelectionSetVariantExclusionAction) update action.
+
+    """
+
+    #: [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+    product: "ProductReference"
+
+    def __init__(self, *, product: "ProductReference", **kwargs):
+        self.product = product
+        kwargs.pop("code", None)
+        super().__init__(code="ProductAssignmentMissing", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLProductAssignmentMissingError":
+        from ._schemas.error import GraphQLProductAssignmentMissingErrorSchema
+
+        return GraphQLProductAssignmentMissingErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLProductAssignmentMissingErrorSchema
+
+        return GraphQLProductAssignmentMissingErrorSchema().dump(self)
+
+
+class GraphQLProductPresentWithDifferentVariantSelectionError(GraphQLErrorObject):
+    """Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
+
+    The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
+
+    """
+
+    #: [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+    product: "ProductReference"
+    #: Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+    existing_variant_selection: "ProductVariantSelection"
+
+    def __init__(
+        self,
+        *,
+        product: "ProductReference",
+        existing_variant_selection: "ProductVariantSelection",
+        **kwargs
+    ):
+        self.product = product
+        self.existing_variant_selection = existing_variant_selection
+        kwargs.pop("code", None)
+        super().__init__(code="ProductPresentWithDifferentVariantSelection", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLProductPresentWithDifferentVariantSelectionError":
+        from ._schemas.error import (
+            GraphQLProductPresentWithDifferentVariantSelectionErrorSchema,
+        )
+
+        return GraphQLProductPresentWithDifferentVariantSelectionErrorSchema().load(
+            data
+        )
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import (
+            GraphQLProductPresentWithDifferentVariantSelectionErrorSchema,
+        )
+
+        return GraphQLProductPresentWithDifferentVariantSelectionErrorSchema().dump(
+            self
+        )
+
+
+class GraphQLProjectNotConfiguredForLanguagesError(GraphQLErrorObject):
+    """Returned when the languages set for a Store are not supported by the Project.
+
+    The error is returned as a failed response to the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+
+    """
+
+    #: Languages configured for the Store.
+    languages: typing.Optional[typing.List["str"]]
+
+    def __init__(
+        self, *, languages: typing.Optional[typing.List["str"]] = None, **kwargs
+    ):
+        self.languages = languages
+        kwargs.pop("code", None)
+        super().__init__(code="ProjectNotConfiguredForLanguages", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLProjectNotConfiguredForLanguagesError":
+        from ._schemas.error import GraphQLProjectNotConfiguredForLanguagesErrorSchema
+
+        return GraphQLProjectNotConfiguredForLanguagesErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLProjectNotConfiguredForLanguagesErrorSchema
+
+        return GraphQLProjectNotConfiguredForLanguagesErrorSchema().dump(self)
+
+
+class GraphQLQueryComplexityLimitExceededError(GraphQLErrorObject):
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="QueryComplexityLimitExceeded", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLQueryComplexityLimitExceededError":
+        from ._schemas.error import GraphQLQueryComplexityLimitExceededErrorSchema
+
+        return GraphQLQueryComplexityLimitExceededErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLQueryComplexityLimitExceededErrorSchema
+
+        return GraphQLQueryComplexityLimitExceededErrorSchema().dump(self)
+
+
+class GraphQLQueryTimedOutError(GraphQLErrorObject):
+    """Returned when the query times out.
+
+    If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="QueryTimedOut", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLQueryTimedOutError":
+        from ._schemas.error import GraphQLQueryTimedOutErrorSchema
+
+        return GraphQLQueryTimedOutErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLQueryTimedOutErrorSchema
+
+        return GraphQLQueryTimedOutErrorSchema().dump(self)
+
+
+class GraphQLReferenceExistsError(GraphQLErrorObject):
+    """Returned when a resource cannot be deleted because it is being referenced by another resource."""
+
+    #: Type of referenced resource.
+    referenced_by: typing.Optional["ReferenceTypeId"]
+
+    def __init__(
+        self, *, referenced_by: typing.Optional["ReferenceTypeId"] = None, **kwargs
+    ):
+        self.referenced_by = referenced_by
+        kwargs.pop("code", None)
+        super().__init__(code="ReferenceExists", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLReferenceExistsError":
+        from ._schemas.error import GraphQLReferenceExistsErrorSchema
+
+        return GraphQLReferenceExistsErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLReferenceExistsErrorSchema
+
+        return GraphQLReferenceExistsErrorSchema().dump(self)
+
+
+class GraphQLReferencedResourceNotFoundError(GraphQLErrorObject):
+    """Returned when a resource referenced by a [Reference](ctp:api:type:Reference) or a [ResourceIdentifier](ctp:api:type:ResourceIdentifier) could not be found."""
+
+    #: Type of referenced resource.
+    type_id: "ReferenceTypeId"
+    #: Unique identifier of the referenced resource, if known.
+    id: typing.Optional[str]
+    #: User-defined unique identifier of the referenced resource, if known.
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        type_id: "ReferenceTypeId",
+        id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
+        **kwargs
+    ):
+        self.type_id = type_id
+        self.id = id
+        self.key = key
+        kwargs.pop("code", None)
+        super().__init__(code="ReferencedResourceNotFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLReferencedResourceNotFoundError":
+        from ._schemas.error import GraphQLReferencedResourceNotFoundErrorSchema
+
+        return GraphQLReferencedResourceNotFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLReferencedResourceNotFoundErrorSchema
+
+        return GraphQLReferencedResourceNotFoundErrorSchema().dump(self)
+
+
+class GraphQLRequiredFieldError(GraphQLErrorObject):
+    """Returned when a value is not defined for a required field."""
+
+    #: Name of the field missing the value.
+    field: str
+
+    def __init__(self, *, field: str, **kwargs):
+        self.field = field
+        kwargs.pop("code", None)
+        super().__init__(code="RequiredField", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLRequiredFieldError":
+        from ._schemas.error import GraphQLRequiredFieldErrorSchema
+
+        return GraphQLRequiredFieldErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLRequiredFieldErrorSchema
+
+        return GraphQLRequiredFieldErrorSchema().dump(self)
+
+
+class GraphQLResourceNotFoundError(GraphQLErrorObject):
+    """Returned when the resource addressed by the request URL does not exist."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="ResourceNotFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLResourceNotFoundError":
+        from ._schemas.error import GraphQLResourceNotFoundErrorSchema
+
+        return GraphQLResourceNotFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLResourceNotFoundErrorSchema
+
+        return GraphQLResourceNotFoundErrorSchema().dump(self)
+
+
+class GraphQLResourceSizeLimitExceededError(GraphQLErrorObject):
+    """Returned when the resource exceeds the maximum allowed size of 16 MB."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="ResourceSizeLimitExceeded", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLResourceSizeLimitExceededError":
+        from ._schemas.error import GraphQLResourceSizeLimitExceededErrorSchema
+
+        return GraphQLResourceSizeLimitExceededErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLResourceSizeLimitExceededErrorSchema
+
+        return GraphQLResourceSizeLimitExceededErrorSchema().dump(self)
+
+
+class GraphQLSearchDeactivatedError(GraphQLErrorObject):
+    """Returned when the indexing of Product information is deactivated in a Project.
+
+    To activate indexing, call [Change Product Search Indexing Enabled](ctp:api:type:ProjectChangeProductSearchIndexingEnabledAction) and set `enabled` to `true`.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SearchDeactivated", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSearchDeactivatedError":
+        from ._schemas.error import GraphQLSearchDeactivatedErrorSchema
+
+        return GraphQLSearchDeactivatedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSearchDeactivatedErrorSchema
+
+        return GraphQLSearchDeactivatedErrorSchema().dump(self)
+
+
+class GraphQLSearchExecutionFailureError(GraphQLErrorObject):
+    """Returned when a search query could not be completed due to an unexpected failure."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SearchExecutionFailure", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSearchExecutionFailureError":
+        from ._schemas.error import GraphQLSearchExecutionFailureErrorSchema
+
+        return GraphQLSearchExecutionFailureErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSearchExecutionFailureErrorSchema
+
+        return GraphQLSearchExecutionFailureErrorSchema().dump(self)
+
+
+class GraphQLSearchFacetPathNotFoundError(GraphQLErrorObject):
+    """Returned when a search facet path could not be found."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SearchFacetPathNotFound", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSearchFacetPathNotFoundError":
+        from ._schemas.error import GraphQLSearchFacetPathNotFoundErrorSchema
+
+        return GraphQLSearchFacetPathNotFoundErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSearchFacetPathNotFoundErrorSchema
+
+        return GraphQLSearchFacetPathNotFoundErrorSchema().dump(self)
+
+
+class GraphQLSearchIndexingInProgressError(GraphQLErrorObject):
+    """Returned when the indexing of Product information is still in progress for Projects that have indexing activated."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SearchIndexingInProgress", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSearchIndexingInProgressError":
+        from ._schemas.error import GraphQLSearchIndexingInProgressErrorSchema
+
+        return GraphQLSearchIndexingInProgressErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSearchIndexingInProgressErrorSchema
+
+        return GraphQLSearchIndexingInProgressErrorSchema().dump(self)
+
+
+class GraphQLSemanticErrorError(GraphQLErrorObject):
+    """Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SemanticError", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSemanticErrorError":
+        from ._schemas.error import GraphQLSemanticErrorErrorSchema
+
+        return GraphQLSemanticErrorErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSemanticErrorErrorSchema
+
+        return GraphQLSemanticErrorErrorSchema().dump(self)
+
+
+class GraphQLShippingMethodDoesNotMatchCartError(GraphQLErrorObject):
+    """Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
+
+    The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+
+    """
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="ShippingMethodDoesNotMatchCart", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLShippingMethodDoesNotMatchCartError":
+        from ._schemas.error import GraphQLShippingMethodDoesNotMatchCartErrorSchema
+
+        return GraphQLShippingMethodDoesNotMatchCartErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLShippingMethodDoesNotMatchCartErrorSchema
+
+        return GraphQLShippingMethodDoesNotMatchCartErrorSchema().dump(self)
+
+
+class GraphQLSyntaxErrorError(GraphQLErrorObject):
+    """Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax."""
+
+    def __init__(self, **kwargs):
+        kwargs.pop("code", None)
+        super().__init__(code="SyntaxError", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLSyntaxErrorError":
+        from ._schemas.error import GraphQLSyntaxErrorErrorSchema
+
+        return GraphQLSyntaxErrorErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLSyntaxErrorErrorSchema
+
+        return GraphQLSyntaxErrorErrorSchema().dump(self)

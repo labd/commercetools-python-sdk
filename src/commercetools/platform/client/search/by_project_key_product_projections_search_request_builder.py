@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsSearchRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -34,7 +33,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjectionPagedSearchResponse"]:
-        """Search Product Projection"""
+        """Product Projection Search"""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/product-projections/search",
@@ -57,7 +56,6 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         fuzzy: bool = None,
         fuzzy_level: float = None,
         mark_matching_variants: bool = None,
-        staged: bool = None,
         filter: typing.List["str"] = None,
         filter_facets: typing.List["str"] = None,
         filter_query: typing.List["str"] = None,
@@ -67,6 +65,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
+        staged: bool = None,
         price_currency: str = None,
         price_country: str = None,
         price_customer_group: str = None,
@@ -77,12 +76,11 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjectionPagedSearchResponse"]:
-        """Search Product Projection"""
+        """Product Projection Search"""
         params = {
             "fuzzy": fuzzy,
             "fuzzyLevel": fuzzy_level,
             "markMatchingVariants": mark_matching_variants,
-            "staged": staged,
             "filter": filter,
             "filter.facets": filter_facets,
             "filter.query": filter_query,
@@ -91,6 +89,7 @@ class ByProjectKeyProductProjectionsSearchRequestBuilder:
             "limit": limit,
             "offset": offset,
             "withTotal": with_total,
+            "staged": staged,
             "priceCurrency": price_currency,
             "priceCountry": price_country,
             "priceCustomerGroup": price_customer_group,

@@ -111,7 +111,6 @@ class Reference(_BaseType):
 
 class CategoryReference(Reference):
     def __init__(self, *, id: str):
-
         super().__init__(id=id, type_id=ReferenceTypeId.CATEGORY)
 
     @classmethod
@@ -128,7 +127,6 @@ class CategoryReference(Reference):
 
 class ProductReference(Reference):
     def __init__(self, *, id: str):
-
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT)
 
     @classmethod
@@ -145,7 +143,6 @@ class ProductReference(Reference):
 
 class ProductTypeReference(Reference):
     def __init__(self, *, id: str):
-
         super().__init__(id=id, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
     @classmethod

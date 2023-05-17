@@ -21,13 +21,13 @@ from ..common import TaskStatusEnum
 # Marshmallow Schemas
 class AttributeCountSchema(helpers.BaseSchema):
     product_type_attributes = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="productTypeAttributes"
+        allow_none=True, load_default=None, data_key="productTypeAttributes"
     )
     variant_attributes = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantAttributes"
+        allow_none=True, load_default=None, data_key="variantAttributes"
     )
     missing_attribute_values = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="missingAttributeValues"
+        allow_none=True, load_default=None, data_key="missingAttributeValues"
     )
 
     class Meta:
@@ -35,30 +35,28 @@ class AttributeCountSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeCount(**data)
 
 
 class AttributeCoverageSchema(helpers.BaseSchema):
-    names = marshmallow.fields.Float(allow_none=True, missing=None)
-    values = marshmallow.fields.Float(allow_none=True, missing=None)
+    names = marshmallow.fields.Float(allow_none=True, load_default=None)
+    values = marshmallow.fields.Float(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeCoverage(**data)
 
 
 class MissingAttributesDetailsSchema(helpers.BaseSchema):
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
     missing_attribute_names = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="missingAttributeNames"
+        allow_none=True, load_default=None, data_key="missingAttributeNames"
     )
     missing_attribute_values = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="missingAttributeValues"
+        allow_none=True, load_default=None, data_key="missingAttributeValues"
     )
 
     class Meta:
@@ -66,7 +64,6 @@ class MissingAttributesDetailsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingAttributesDetails(**data)
 
 
@@ -75,29 +72,29 @@ class MissingAttributesSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     product_type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductTypeReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productType",
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     missing_attribute_values = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="missingAttributeValues",
     )
     missing_attribute_names = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="missingAttributeNames",
     )
     attribute_count = helpers.LazyNestedField(
@@ -105,7 +102,7 @@ class MissingAttributesSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="attributeCount",
     )
     attribute_coverage = helpers.LazyNestedField(
@@ -113,7 +110,7 @@ class MissingAttributesSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="attributeCoverage",
     )
 
@@ -122,7 +119,6 @@ class MissingAttributesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingAttributes(**data)
 
 
@@ -131,21 +127,21 @@ class MissingAttributesMetaSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".MissingAttributesDetailsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productLevel",
     )
     variant_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingAttributesDetailsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="variantLevel",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productTypeIds",
     )
 
@@ -154,71 +150,73 @@ class MissingAttributesMetaSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingAttributesMeta(**data)
 
 
 class MissingAttributesSearchRequestSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     offset = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_set_limit = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="includeVariants",
     )
     coverage_min = marshmallow.fields.Float(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="coverageMin",
     )
     coverage_max = marshmallow.fields.Float(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="coverageMax",
     )
     sort_by = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="sortBy"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="sortBy",
     )
     show_missing_attribute_names = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="showMissingAttributeNames",
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productTypeIds",
     )
     attribute_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="attributeName",
     )
 
@@ -227,26 +225,25 @@ class MissingAttributesSearchRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingAttributesSearchRequest(**data)
 
 
 class MissingAttributesPagedQueryResultSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingAttributesSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingAttributesMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -254,20 +251,19 @@ class MissingAttributesPagedQueryResultSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingAttributesPagedQueryResult(**data)
 
 
 class MissingDataTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
-        TaskStatusEnum, by_value=True, allow_none=True, missing=None
+        TaskStatusEnum, by_value=True, allow_none=True, load_default=None
     )
-    expires = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    expires = marshmallow.fields.DateTime(allow_none=True, load_default=None)
     result = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingAttributesPagedQueryResultSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -275,7 +271,6 @@ class MissingDataTaskStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingDataTaskStatus(**data)
 
 
@@ -284,13 +279,13 @@ class MissingImagesSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     image_count = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="imageCount"
+        allow_none=True, load_default=None, data_key="imageCount"
     )
 
     class Meta:
@@ -298,22 +293,20 @@ class MissingImagesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImages(**data)
 
 
 class MissingImagesCountSchema(helpers.BaseSchema):
     missing_images = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="missingImages"
+        allow_none=True, load_default=None, data_key="missingImages"
     )
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesCount(**data)
 
 
@@ -323,7 +316,6 @@ class MissingImagesProductLevelSchema(MissingImagesCountSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesProductLevel(**data)
 
 
@@ -333,7 +325,6 @@ class MissingImagesVariantLevelSchema(MissingImagesCountSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesVariantLevel(**data)
 
 
@@ -342,70 +333,69 @@ class MissingImagesMetaSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".MissingImagesProductLevelSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productLevel",
     )
     variant_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingImagesVariantLevelSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="variantLevel",
     )
-    threshold = marshmallow.fields.Integer(allow_none=True, missing=None)
+    threshold = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesMeta(**data)
 
 
 class MissingImagesSearchRequestSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     offset = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_set_limit = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="includeVariants",
     )
     auto_threshold = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="autoThreshold",
     )
     threshold = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productTypeIds",
     )
 
@@ -414,26 +404,25 @@ class MissingImagesSearchRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesSearchRequest(**data)
 
 
 class MissingImagesPagedQueryResultSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingImagesSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingImagesMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -441,20 +430,19 @@ class MissingImagesPagedQueryResultSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesPagedQueryResult(**data)
 
 
 class MissingImagesTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
-        TaskStatusEnum, by_value=True, allow_none=True, missing=None
+        TaskStatusEnum, by_value=True, allow_none=True, load_default=None
     )
-    expires = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    expires = marshmallow.fields.DateTime(allow_none=True, load_default=None)
     result = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingImagesPagedQueryResultSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -462,7 +450,6 @@ class MissingImagesTaskStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingImagesTaskStatus(**data)
 
 
@@ -471,10 +458,10 @@ class MissingPricesSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
 
     class Meta:
@@ -482,14 +469,13 @@ class MissingPricesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPrices(**data)
 
 
 class MissingPricesProductCountSchema(helpers.BaseSchema):
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
     missing_prices = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="missingPrices"
+        allow_none=True, load_default=None, data_key="missingPrices"
     )
 
     class Meta:
@@ -497,7 +483,6 @@ class MissingPricesProductCountSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesProductCount(**data)
 
 
@@ -507,7 +492,6 @@ class MissingPricesProductLevelSchema(MissingPricesProductCountSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesProductLevel(**data)
 
 
@@ -517,7 +501,6 @@ class MissingPricesVariantLevelSchema(MissingPricesProductCountSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesVariantLevel(**data)
 
 
@@ -526,14 +509,14 @@ class MissingPricesMetaSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".MissingPricesProductLevelSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productLevel",
     )
     variant_level = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingPricesVariantLevelSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="variantLevel",
     )
 
@@ -542,68 +525,67 @@ class MissingPricesMetaSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesMeta(**data)
 
 
 class MissingPricesSearchRequestSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     offset = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     product_set_limit = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSetLimit",
     )
     include_variants = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="includeVariants",
     )
     currency_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="currencyCode",
     )
     check_date = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="checkDate",
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productTypeIds",
     )
 
@@ -612,26 +594,25 @@ class MissingPricesSearchRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesSearchRequest(**data)
 
 
 class MissingPricesPagedQueryResultSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingPricesSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingPricesMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -639,20 +620,19 @@ class MissingPricesPagedQueryResultSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesPagedQueryResult(**data)
 
 
 class MissingPricesTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
-        TaskStatusEnum, by_value=True, allow_none=True, missing=None
+        TaskStatusEnum, by_value=True, allow_none=True, load_default=None
     )
-    expires = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    expires = marshmallow.fields.DateTime(allow_none=True, load_default=None)
     result = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MissingPricesPagedQueryResultSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -660,5 +640,4 @@ class MissingPricesTaskStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MissingPricesTaskStatus(**data)

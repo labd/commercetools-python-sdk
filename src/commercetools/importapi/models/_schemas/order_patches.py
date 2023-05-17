@@ -22,27 +22,27 @@ from ..order_patches import ReturnShipmentState
 
 
 class ReturnItemDraftSchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, missing=None)
+    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
     line_item_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lineItemId",
     )
     custom_line_item_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customLineItemId",
     )
     comment = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     shipment_state = marshmallow_enum.EnumField(
         ReturnShipmentState,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="shipmentState",
     )
 
@@ -51,7 +51,6 @@ class ReturnItemDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ReturnItemDraft(**data)
 
 
@@ -61,18 +60,18 @@ class ReturnInfoSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     return_tracking_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="returnTrackingId",
     )
     return_date = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="returnDate",
     )
 
@@ -81,27 +80,26 @@ class ReturnInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ReturnInfo(**data)
 
 
 class DeliveryParcelSchema(helpers.BaseSchema):
     delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
+        allow_none=True, load_default=None, data_key="deliveryId"
     )
     measurements = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     tracking_data = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="trackingData",
     )
     items = helpers.LazyNestedField(
@@ -110,7 +108,7 @@ class DeliveryParcelSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -118,7 +116,6 @@ class DeliveryParcelSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.DeliveryParcel(**data)
 
 
@@ -128,14 +125,14 @@ class DeliveryParcelDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     tracking_data = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="trackingData",
     )
     items = helpers.LazyNestedField(
@@ -144,7 +141,7 @@ class DeliveryParcelDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -152,7 +149,6 @@ class DeliveryParcelDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.DeliveryParcelDraft(**data)
 
 
@@ -162,21 +158,21 @@ class DeliveryDraftSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     parcels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DeliveryParcelDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -184,20 +180,19 @@ class DeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.DeliveryDraft(**data)
 
 
 class DeliveryAddressDraftSchema(helpers.BaseSchema):
     delivery_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="deliveryId"
+        allow_none=True, load_default=None, data_key="deliveryId"
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -205,20 +200,19 @@ class DeliveryAddressDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.DeliveryAddressDraft(**data)
 
 
 class ParcelMeasurementDraftSchema(helpers.BaseSchema):
     parcel_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="parcelId"
+        allow_none=True, load_default=None, data_key="parcelId"
     )
     measurements = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.ParcelMeasurementsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -226,20 +220,19 @@ class ParcelMeasurementDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ParcelMeasurementDraft(**data)
 
 
 class ParcelTrackingDataSchema(helpers.BaseSchema):
     parcel_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="parcelId"
+        allow_none=True, load_default=None, data_key="parcelId"
     )
     tracking_data = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.TrackingDataSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="trackingData",
     )
 
@@ -248,13 +241,12 @@ class ParcelTrackingDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ParcelTrackingData(**data)
 
 
 class ParcelItemsSchema(helpers.BaseSchema):
     parcel_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="parcelId"
+        allow_none=True, load_default=None, data_key="parcelId"
     )
     items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".orders.DeliveryItemSchema"),
@@ -262,7 +254,7 @@ class ParcelItemsSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -270,25 +262,23 @@ class ParcelItemsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ParcelItems(**data)
 
 
 class RemoveDeliveryDraftSchema(helpers.BaseSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.RemoveDeliveryDraft(**data)
 
 
 class RemoveParcelFromDeliveryDraftSchema(helpers.BaseSchema):
     parcel_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="parcelId"
+        allow_none=True, load_default=None, data_key="parcelId"
     )
 
     class Meta:
@@ -296,7 +286,6 @@ class RemoveParcelFromDeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.RemoveParcelFromDeliveryDraft(**data)
 
 
@@ -306,7 +295,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="addReturnInfo",
     )
     add_parcel_to_delivery = helpers.LazyNestedField(
@@ -314,7 +303,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="addParcelToDelivery",
     )
     add_deliveries = helpers.LazyNestedField(
@@ -323,7 +312,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="addDeliveries",
     )
     remove_delivery = helpers.LazyNestedField(
@@ -331,7 +320,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="removeDelivery",
     )
     remove_parcel_from_delivery = helpers.LazyNestedField(
@@ -339,7 +328,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="removeParcelFromDelivery",
     )
     set_delivery_address = helpers.LazyNestedField(
@@ -347,7 +336,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="setDeliveryAddress",
     )
     set_parcel_measurements = helpers.LazyNestedField(
@@ -355,7 +344,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="setParcelMeasurements",
     )
     set_parcel_tracking_data = helpers.LazyNestedField(
@@ -363,7 +352,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="setParcelTrackingData",
     )
     set_parcel_items = helpers.LazyNestedField(
@@ -372,7 +361,7 @@ class OrderFieldSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="setParcelItems",
     )
 
@@ -381,19 +370,18 @@ class OrderFieldSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.OrderField(**data)
 
 
 class OrderPatchImportSchema(helpers.BaseSchema):
     order_number = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderNumber"
+        allow_none=True, load_default=None, data_key="orderNumber"
     )
     fields = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".OrderFieldSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -401,5 +389,4 @@ class OrderPatchImportSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.OrderPatchImport(**data)

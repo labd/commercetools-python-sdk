@@ -27,7 +27,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -94,9 +93,9 @@ class ByProjectKeyProductProjectionsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjectionPagedQueryResponse"]:
-        """You can use the product projections query endpoint to get the current or staged representations of Products.
-        When used with an API client that has the view_published_products:{projectKey} scope,
-        this endpoint only returns published (current) product projections.
+        """Use the Product Projections query endpoint to get the current or staged representations of Products.
+        When used with an API Client that has the `view_published_products:{projectKey}` scope,
+        this endpoint only returns published (current) Product Projections.
 
         """
         params = {

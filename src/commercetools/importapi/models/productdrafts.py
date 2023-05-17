@@ -224,6 +224,7 @@ class PriceDraftImport(_BaseType):
     discounted: typing.Optional["DiscountedPrice"]
     #: The tiered prices for this price.
     tiers: typing.Optional[typing.List["PriceTier"]]
+    #: User-defined unique identifier for the Embedded Price.
     key: typing.Optional[str]
 
     def __init__(

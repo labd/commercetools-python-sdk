@@ -13,7 +13,12 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..subscription import AwsAuthenticationMode, SubscriptionHealthStatus
+from ..subscription import (
+    AwsAuthenticationMode,
+    ChangeSubscriptionResourceTypeId,
+    MessageSubscriptionResourceTypeId,
+    SubscriptionHealthStatus,
+)
 from .common import BaseResourceSchema
 
 # Fields
@@ -23,8 +28,12 @@ from .common import BaseResourceSchema
 
 
 class ChangeSubscriptionSchema(helpers.BaseSchema):
-    resource_type_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="resourceTypeId"
+    resource_type_id = marshmallow_enum.EnumField(
+        ChangeSubscriptionResourceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="resourceTypeId",
     )
 
     class Meta:
@@ -32,12 +41,53 @@ class ChangeSubscriptionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ChangeSubscription(**data)
 
 
+class CloudEventsPayloadSchema(helpers.BaseSchema):
+    specversion = marshmallow.fields.String(allow_none=True, load_default=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
+    source = marshmallow.fields.String(allow_none=True, load_default=None)
+    subject = marshmallow.fields.String(allow_none=True, load_default=None)
+    time = marshmallow.fields.DateTime(allow_none=True, load_default=None)
+    sequence = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    sequencetype = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    dataref = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    data = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("notificationType", "notification_type"),
+        discriminator_schemas={
+            "Message": helpers.absmod(__name__, ".MessageDeliveryPayloadSchema"),
+            "ResourceCreated": helpers.absmod(
+                __name__, ".ResourceCreatedDeliveryPayloadSchema"
+            ),
+            "ResourceDeleted": helpers.absmod(
+                __name__, ".ResourceDeletedDeliveryPayloadSchema"
+            ),
+            "ResourceUpdated": helpers.absmod(
+                __name__, ".ResourceUpdatedDeliveryPayloadSchema"
+            ),
+        },
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        return models.CloudEventsPayload(**data)
+
+
 class DeliveryFormatSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -50,7 +100,7 @@ class DeliveryFormatSchema(helpers.BaseSchema):
 
 class CloudEventsFormatSchema(DeliveryFormatSchema):
     cloud_events_version = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="cloudEventsVersion"
+        allow_none=True, load_default=None, data_key="cloudEventsVersion"
     )
 
     class Meta:
@@ -64,15 +114,21 @@ class CloudEventsFormatSchema(DeliveryFormatSchema):
 
 class DeliveryPayloadSchema(helpers.BaseSchema):
     project_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="projectKey"
+        allow_none=True, load_default=None, data_key="projectKey"
     )
     notification_type = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="notificationType"
+        allow_none=True, load_default=None, data_key="notificationType"
     )
     resource = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "associate-role": helpers.absmod(
+                __name__, ".associate_role.AssociateRoleReferenceSchema"
+            ),
+            "attribute-group": helpers.absmod(
+                __name__, ".attribute_group.AttributeGroupReferenceSchema"
+            ),
             "business-unit": helpers.absmod(
                 __name__, ".business_unit.BusinessUnitReferenceSchema"
             ),
@@ -80,6 +136,9 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
             "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "direct-discount": helpers.absmod(
+                __name__, ".cart.DirectDiscountReferenceSchema"
+            ),
             "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
             "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
             "key-value-document": helpers.absmod(
@@ -135,14 +194,14 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     resource_user_provided_identifiers = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".message.UserProvidedIdentifiersSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="resourceUserProvidedIdentifiers",
     )
 
@@ -156,7 +215,7 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
 
 
 class DestinationSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -168,9 +227,9 @@ class DestinationSchema(helpers.BaseSchema):
 
 
 class AzureEventGridDestinationSchema(DestinationSchema):
-    uri = marshmallow.fields.String(allow_none=True, missing=None)
+    uri = marshmallow.fields.String(allow_none=True, load_default=None)
     access_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessKey"
+        allow_none=True, load_default=None, data_key="accessKey"
     )
 
     class Meta:
@@ -184,7 +243,7 @@ class AzureEventGridDestinationSchema(DestinationSchema):
 
 class AzureServiceBusDestinationSchema(DestinationSchema):
     connection_string = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="connectionString"
+        allow_none=True, load_default=None, data_key="connectionString"
     )
 
     class Meta:
@@ -196,10 +255,35 @@ class AzureServiceBusDestinationSchema(DestinationSchema):
         return models.AzureServiceBusDestination(**data)
 
 
+class ConfluentCloudDestinationSchema(DestinationSchema):
+    bootstrap_server = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="bootstrapServer"
+    )
+    api_key = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="apiKey"
+    )
+    api_secret = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="apiSecret"
+    )
+    acks = marshmallow.fields.String(allow_none=True, load_default=None)
+    topic = marshmallow.fields.String(allow_none=True, load_default=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.ConfluentCloudDestination(**data)
+
+
 class EventBridgeDestinationSchema(DestinationSchema):
-    region = marshmallow.fields.String(allow_none=True, missing=None)
+    region = marshmallow.fields.String(allow_none=True, load_default=None)
     account_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accountId"
+        allow_none=True, load_default=None, data_key="accountId"
     )
 
     class Meta:
@@ -213,9 +297,9 @@ class EventBridgeDestinationSchema(DestinationSchema):
 
 class GoogleCloudPubSubDestinationSchema(DestinationSchema):
     project_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="projectId"
+        allow_none=True, load_default=None, data_key="projectId"
     )
-    topic = marshmallow.fields.String(allow_none=True, missing=None)
+    topic = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -227,7 +311,7 @@ class GoogleCloudPubSubDestinationSchema(DestinationSchema):
 
 
 class IronMqDestinationSchema(DestinationSchema):
-    uri = marshmallow.fields.String(allow_none=True, missing=None)
+    uri = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -239,25 +323,26 @@ class IronMqDestinationSchema(DestinationSchema):
 
 
 class MessageDeliveryPayloadSchema(DeliveryPayloadSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
+        allow_none=True, load_default=None, data_key="createdAt"
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True, load_default=None, data_key="lastModifiedAt"
     )
     sequence_number = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="sequenceNumber"
+        allow_none=True, load_default=None, data_key="sequenceNumber"
     )
     resource_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="resourceVersion"
+        allow_none=True, load_default=None, data_key="resourceVersion"
     )
     payload_not_included = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PayloadNotIncludedSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        metadata={"omit_empty": True},
+        load_default=None,
         data_key="payloadNotIncluded",
     )
 
@@ -271,14 +356,18 @@ class MessageDeliveryPayloadSchema(DeliveryPayloadSchema):
 
 
 class MessageSubscriptionSchema(helpers.BaseSchema):
-    resource_type_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="resourceTypeId"
+    resource_type_id = marshmallow_enum.EnumField(
+        MessageSubscriptionResourceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="resourceTypeId",
     )
     types = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -286,14 +375,13 @@ class MessageSubscriptionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.MessageSubscription(**data)
 
 
 class PayloadNotIncludedSchema(helpers.BaseSchema):
-    reason = marshmallow.fields.String(allow_none=True, missing=None)
+    reason = marshmallow.fields.String(allow_none=True, load_default=None)
     payload_type = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="payloadType"
+        allow_none=True, load_default=None, data_key="payloadType"
     )
 
     class Meta:
@@ -301,7 +389,6 @@ class PayloadNotIncludedSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PayloadNotIncluded(**data)
 
 
@@ -316,9 +403,9 @@ class PlatformFormatSchema(DeliveryFormatSchema):
 
 
 class ResourceCreatedDeliveryPayloadSchema(DeliveryPayloadSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
+        allow_none=True, load_default=None, data_key="modifiedAt"
     )
 
     class Meta:
@@ -331,14 +418,14 @@ class ResourceCreatedDeliveryPayloadSchema(DeliveryPayloadSchema):
 
 
 class ResourceDeletedDeliveryPayloadSchema(DeliveryPayloadSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
+        allow_none=True, load_default=None, data_key="modifiedAt"
     )
     data_erasure = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="dataErasure",
     )
 
@@ -352,12 +439,12 @@ class ResourceDeletedDeliveryPayloadSchema(DeliveryPayloadSchema):
 
 
 class ResourceUpdatedDeliveryPayloadSchema(DeliveryPayloadSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     old_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="oldVersion"
+        allow_none=True, load_default=None, data_key="oldVersion"
     )
     modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="modifiedAt"
+        allow_none=True, load_default=None, data_key="modifiedAt"
     )
 
     class Meta:
@@ -373,24 +460,24 @@ class SnsDestinationSchema(DestinationSchema):
     access_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessKey",
     )
     access_secret = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessSecret",
     )
     topic_arn = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="topicArn"
+        allow_none=True, load_default=None, data_key="topicArn"
     )
     authentication_mode = marshmallow_enum.EnumField(
         AwsAuthenticationMode,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="authenticationMode",
     )
 
@@ -407,25 +494,25 @@ class SqsDestinationSchema(DestinationSchema):
     access_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessKey",
     )
     access_secret = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="accessSecret",
     )
     queue_url = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="queueUrl"
+        allow_none=True, load_default=None, data_key="queueUrl"
     )
-    region = marshmallow.fields.String(allow_none=True, missing=None)
+    region = marshmallow.fields.String(allow_none=True, load_default=None)
     authentication_mode = marshmallow_enum.EnumField(
         AwsAuthenticationMode,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="authenticationMode",
     )
 
@@ -444,7 +531,7 @@ class SubscriptionSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -452,7 +539,7 @@ class SubscriptionSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     changes = helpers.LazyNestedField(
@@ -460,7 +547,7 @@ class SubscriptionSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     destination = helpers.Discriminator(
         allow_none=True,
@@ -470,6 +557,9 @@ class SubscriptionSchema(BaseResourceSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "ConfluentCloud": helpers.absmod(
+                __name__, ".ConfluentCloudDestinationSchema"
+            ),
             "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
@@ -478,17 +568,17 @@ class SubscriptionSchema(BaseResourceSchema):
             "SNS": helpers.absmod(__name__, ".SnsDestinationSchema"),
             "SQS": helpers.absmod(__name__, ".SqsDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     messages = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MessageSubscriptionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     format = helpers.Discriminator(
         allow_none=True,
@@ -497,10 +587,10 @@ class SubscriptionSchema(BaseResourceSchema):
             "CloudEvents": helpers.absmod(__name__, ".CloudEventsFormatSchema"),
             "Platform": helpers.absmod(__name__, ".PlatformFormatSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     status = marshmallow_enum.EnumField(
-        SubscriptionHealthStatus, by_value=True, allow_none=True, missing=None
+        SubscriptionHealthStatus, by_value=True, allow_none=True, load_default=None
     )
 
     class Meta:
@@ -508,7 +598,6 @@ class SubscriptionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Subscription(**data)
 
 
@@ -519,7 +608,7 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     destination = helpers.Discriminator(
         allow_none=True,
@@ -529,6 +618,9 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "ConfluentCloud": helpers.absmod(
+                __name__, ".ConfluentCloudDestinationSchema"
+            ),
             "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
@@ -537,10 +629,10 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
             "SNS": helpers.absmod(__name__, ".SnsDestinationSchema"),
             "SQS": helpers.absmod(__name__, ".SqsDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     messages = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".MessageSubscriptionSchema"),
@@ -548,7 +640,7 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     format = helpers.Discriminator(
         allow_none=True,
@@ -558,7 +650,7 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
             "Platform": helpers.absmod(__name__, ".PlatformFormatSchema"),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -566,23 +658,22 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SubscriptionDraft(**data)
 
 
 class SubscriptionPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SubscriptionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -590,12 +681,11 @@ class SubscriptionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SubscriptionPagedQueryResponse(**data)
 
 
 class SubscriptionUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -614,7 +704,7 @@ class SubscriptionUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -622,12 +712,11 @@ class SubscriptionUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SubscriptionUpdate(**data)
 
 
 class SubscriptionUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -647,6 +736,9 @@ class SubscriptionChangeDestinationActionSchema(SubscriptionUpdateActionSchema):
             "AzureServiceBus": helpers.absmod(
                 __name__, ".AzureServiceBusDestinationSchema"
             ),
+            "ConfluentCloud": helpers.absmod(
+                __name__, ".ConfluentCloudDestinationSchema"
+            ),
             "EventBridge": helpers.absmod(__name__, ".EventBridgeDestinationSchema"),
             "GoogleCloudPubSub": helpers.absmod(
                 __name__, ".GoogleCloudPubSubDestinationSchema"
@@ -655,7 +747,7 @@ class SubscriptionChangeDestinationActionSchema(SubscriptionUpdateActionSchema):
             "SNS": helpers.absmod(__name__, ".SnsDestinationSchema"),
             "SQS": helpers.absmod(__name__, ".SqsDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -674,7 +766,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -688,7 +780,7 @@ class SubscriptionSetChangesActionSchema(SubscriptionUpdateActionSchema):
 
 class SubscriptionSetKeyActionSchema(SubscriptionUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -707,7 +799,7 @@ class SubscriptionSetMessagesActionSchema(SubscriptionUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:

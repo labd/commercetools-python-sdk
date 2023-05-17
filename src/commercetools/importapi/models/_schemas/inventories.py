@@ -20,20 +20,20 @@ from .common import ImportResourceSchema
 
 # Marshmallow Schemas
 class InventoryImportSchema(ImportResourceSchema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     quantity_on_stock = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="quantityOnStock"
+        allow_none=True, load_default=None, data_key="quantityOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="restockableInDays",
     )
     expected_delivery = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="expectedDelivery",
     )
     supply_channel = helpers.LazyNestedField(
@@ -41,7 +41,7 @@ class InventoryImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
     custom = helpers.LazyNestedField(
@@ -49,7 +49,7 @@ class InventoryImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -57,5 +57,4 @@ class InventoryImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.InventoryImport(**data)

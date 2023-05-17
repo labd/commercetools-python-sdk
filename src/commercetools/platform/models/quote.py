@@ -28,7 +28,7 @@ if typing.TYPE_CHECKING:
         TaxMode,
     )
     from .common import Address, CreatedBy, LastModifiedBy, ReferenceTypeId, TypedMoney
-    from .customer import CustomerReference
+    from .customer import CustomerReference, CustomerResourceIdentifier
     from .customer_group import CustomerGroupReference
     from .order import PaymentInfo
     from .quote_request import QuoteRequestReference
@@ -44,6 +44,7 @@ if typing.TYPE_CHECKING:
 
 __all__ = [
     "Quote",
+    "QuoteChangeCustomerAction",
     "QuoteChangeQuoteStateAction",
     "QuoteDraft",
     "QuotePagedQueryResponse",
@@ -70,9 +71,10 @@ class Quote(BaseResource):
     quote_request: "QuoteRequestReference"
     #: Staged Quote related to the Quote.
     staged_quote: "StagedQuoteReference"
-    #: The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+    #: The [Buyer](/../api/quotes-overview#buyer) who owns the Quote.
     customer: typing.Optional["CustomerReference"]
     #: Set automatically when `customer` is set and the Customer is a member of a Customer Group.
+    #: Not updated if Customer is changed after Quote creation.
     #: Used for Product Variant price selection.
     customer_group: typing.Optional["CustomerGroupReference"]
     #: Expiration date for the Quote.
@@ -124,9 +126,14 @@ class Quote(BaseResource):
     direct_discounts: typing.Optional[typing.List["DirectDiscount"]]
     #: Custom Fields on the Quote.
     custom: typing.Optional["CustomFields"]
+    #: Predefined states tracking the status of the Quote.
+    quote_state: "QuoteState"
     #: [State](ctp:api:type:State) of the Quote.
     #: This reference can point to a State in a custom workflow.
     state: typing.Optional["StateReference"]
+    #: The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
+    #: track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+    purchase_order_number: typing.Optional[str]
     #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote.
     business_unit: typing.Optional["BusinessUnitKeyReference"]
 
@@ -165,7 +172,9 @@ class Quote(BaseResource):
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         direct_discounts: typing.Optional[typing.List["DirectDiscount"]] = None,
         custom: typing.Optional["CustomFields"] = None,
+        quote_state: "QuoteState",
         state: typing.Optional["StateReference"] = None,
+        purchase_order_number: typing.Optional[str] = None,
         business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
@@ -196,7 +205,9 @@ class Quote(BaseResource):
         self.item_shipping_addresses = item_shipping_addresses
         self.direct_discounts = direct_discounts
         self.custom = custom
+        self.quote_state = quote_state
         self.state = state
+        self.purchase_order_number = purchase_order_number
         self.business_unit = business_unit
 
         super().__init__(
@@ -219,39 +230,39 @@ class Quote(BaseResource):
 
 
 class QuoteDraft(_BaseType):
+    #: User-defined unique identifier for the Quote.
+    key: typing.Optional[str]
     #: StagedQuote from which the Quote is created.
     staged_quote: "StagedQuoteResourceIdentifier"
     #: Current version of the StagedQuote.
     staged_quote_version: int
     #: If `true`, the `stagedQuoteState` of the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) will be set to `Sent`.
     staged_quote_state_to_sent: typing.Optional[bool]
-    #: User-defined unique identifier for the Quote.
-    key: typing.Optional[str]
+    #: [State](ctp:api:type:State) of the Quote.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
     #: [Custom Fields](/../api/projects/custom-fields) to be added to the Quote.
     #:
     #: - If specified, the Custom Fields are merged with the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) and added to the Quote.
     #: - If empty, the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) are added to the Quote automatically.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: [State](ctp:api:type:State) of the Quote.
-    #: This reference can point to a State in a custom workflow.
-    state: typing.Optional["StateReference"]
 
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         staged_quote: "StagedQuoteResourceIdentifier",
         staged_quote_version: int,
         staged_quote_state_to_sent: typing.Optional[bool] = None,
-        key: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        state: typing.Optional["StateReference"] = None
+        state: typing.Optional["StateReference"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.staged_quote = staged_quote
         self.staged_quote_version = staged_quote_version
         self.staged_quote_state_to_sent = staged_quote_state_to_sent
-        self.key = key
-        self.custom = custom
         self.state = state
+        self.custom = custom
 
         super().__init__()
 
@@ -346,7 +357,6 @@ class QuoteResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.QUOTE)
 
     @classmethod
@@ -369,6 +379,7 @@ class QuoteState(enum.Enum):
     PENDING = "Pending"
     DECLINED = "Declined"
     DECLINED_FOR_RENEGOTIATION = "DeclinedForRenegotiation"
+    RENEGOTIATION_ADDRESSED = "RenegotiationAddressed"
     ACCEPTED = "Accepted"
     FAILED = "Failed"
     WITHDRAWN = "Withdrawn"
@@ -409,6 +420,10 @@ class QuoteUpdateAction(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "QuoteUpdateAction":
+        if data["action"] == "changeCustomer":
+            from ._schemas.quote import QuoteChangeCustomerActionSchema
+
+            return QuoteChangeCustomerActionSchema().load(data)
         if data["action"] == "changeQuoteState":
             from ._schemas.quote import QuoteChangeQuoteStateActionSchema
 
@@ -434,6 +449,35 @@ class QuoteUpdateAction(_BaseType):
         from ._schemas.quote import QuoteUpdateActionSchema
 
         return QuoteUpdateActionSchema().dump(self)
+
+
+class QuoteChangeCustomerAction(QuoteUpdateAction):
+    """Changes the owner of a Quote to a different Customer.
+    Customer Group is not updated.
+    This update action produces the [Quote Customer Changed](ctp:api:type:QuoteCustomerChangedMessage) Message.
+
+    """
+
+    #: New Customer to own the Quote.
+    customer: "CustomerResourceIdentifier"
+
+    def __init__(self, *, customer: "CustomerResourceIdentifier"):
+        self.customer = customer
+
+        super().__init__(action="changeCustomer")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteChangeCustomerAction":
+        from ._schemas.quote import QuoteChangeCustomerActionSchema
+
+        return QuoteChangeCustomerActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.quote import QuoteChangeCustomerActionSchema
+
+        return QuoteChangeCustomerActionSchema().dump(self)
 
 
 class QuoteChangeQuoteStateAction(QuoteUpdateAction):
@@ -488,7 +532,7 @@ class QuoteSetCustomFieldAction(QuoteUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

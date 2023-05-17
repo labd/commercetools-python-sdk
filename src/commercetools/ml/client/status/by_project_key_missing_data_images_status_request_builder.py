@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMissingDataImagesStatusRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

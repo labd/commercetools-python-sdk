@@ -120,6 +120,8 @@ class CustomFieldLocalizedEnumValue(_BaseType):
 class CustomFieldReferenceValue(enum.Enum):
     """Defines which resource type a [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType) can reference."""
 
+    ASSOCIATE_ROLE = "associate-role"
+    BUSINESS_UNIT = "business-unit"
     CART = "cart"
     CATEGORY = "category"
     CHANNEL = "channel"
@@ -211,7 +213,6 @@ class FieldDefinition(_BaseType):
     label: "LocalizedString"
     #: Defines whether the field is required to have a value.
     required: bool
-    #: Must be either `SingleLine` or `MultiLine`.
     #: Defines the visual representation of the field in user interfaces like the Merchant Center.
     #: It is only relevant for string-based [FieldTypes](ctp:api:type:FieldType) like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
     input_hint: typing.Optional["TypeTextInputHint"]
@@ -314,7 +315,6 @@ class CustomFieldBooleanType(FieldType):
     """Field type for Boolean values."""
 
     def __init__(self):
-
         super().__init__(name="Boolean")
 
     @classmethod
@@ -335,7 +335,6 @@ class CustomFieldDateTimeType(FieldType):
     """Field type for [DateTime](ctp:api:type:DateTime) values."""
 
     def __init__(self):
-
         super().__init__(name="DateTime")
 
     @classmethod
@@ -356,7 +355,6 @@ class CustomFieldDateType(FieldType):
     """Field type for [Date](ctp:api:type:Date) values."""
 
     def __init__(self):
-
         super().__init__(name="Date")
 
     @classmethod
@@ -423,7 +421,6 @@ class CustomFieldLocalizedStringType(FieldType):
     """Field type for [LocalizedString](ctp:api:type:LocalizedString) values."""
 
     def __init__(self):
-
         super().__init__(name="LocalizedString")
 
     @classmethod
@@ -444,7 +441,6 @@ class CustomFieldMoneyType(FieldType):
     """Field type for [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney) values."""
 
     def __init__(self):
-
         super().__init__(name="Money")
 
     @classmethod
@@ -463,7 +459,6 @@ class CustomFieldNumberType(FieldType):
     """Field type for number values."""
 
     def __init__(self):
-
         super().__init__(name="Number")
 
     @classmethod
@@ -530,7 +525,6 @@ class CustomFieldStringType(FieldType):
     """Field type for string values."""
 
     def __init__(self):
-
         super().__init__(name="String")
 
     @classmethod
@@ -549,7 +543,6 @@ class CustomFieldTimeType(FieldType):
     """Field type for [Time](ctp:api:type:Time) values."""
 
     def __init__(self):
-
         super().__init__(name="Time")
 
     @classmethod
@@ -569,6 +562,7 @@ class ResourceTypeId(enum.Enum):
 
     ADDRESS = "address"
     ASSET = "asset"
+    ASSOCIATE_ROLE = "associate-role"
     BUSINESS_UNIT = "business-unit"
     CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
@@ -590,6 +584,7 @@ class ResourceTypeId(enum.Enum):
     PRODUCT_SELECTION = "product-selection"
     QUOTE = "quote"
     REVIEW = "review"
+    SHIPPING = "shipping"
     SHIPPING_METHOD = "shipping-method"
     SHOPPING_LIST = "shopping-list"
     SHOPPING_LIST_TEXT_LINE_ITEM = "shopping-list-text-line-item"
@@ -776,7 +771,6 @@ class TypeResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.TYPE)
 
     @classmethod
@@ -802,7 +796,7 @@ class TypeTextInputHint(enum.Enum):
 
 class TypeUpdate(_BaseType):
     #: Expected version of the type on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Type.
     actions: typing.List["TypeUpdateAction"]
@@ -934,6 +928,12 @@ class TypeAddEnumValueAction(TypeUpdateAction):
 
 
 class TypeAddFieldDefinitionAction(TypeUpdateAction):
+    """Defines a new field for a Type. Adding new required fields to a Type that is already referenced by existing entities can put those entities in a temporarily inconsistent state.
+
+    If a Type that is already in use requires new fields, we recommend making them optional (`required` set to `false`) whenever possible. Alternatively, any new required fields should be added one at a time followed by an update to all the resources using the Type. This prevents validation errors caused by an entity missing more than one required custom field.
+
+    """
+
     #: Value to append to the array.
     field_definition: "FieldDefinition"
 

@@ -20,30 +20,29 @@ from .common import ImportResourceSchema
 
 # Marshmallow Schemas
 class SubRateSchema(helpers.BaseSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    amount = marshmallow.fields.Float(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    amount = marshmallow.fields.Float(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SubRate(**data)
 
 
 class TaxRateSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    amount = marshmallow.fields.Float(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    amount = marshmallow.fields.Float(allow_none=True, load_default=None)
     included_in_price = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="includedInPrice"
+        allow_none=True, load_default=None, data_key="includedInPrice"
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(allow_none=True, load_default=None)
     state = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     sub_rates = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SubRateSchema"),
@@ -51,7 +50,7 @@ class TaxRateSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="subRates",
     )
 
@@ -60,7 +59,6 @@ class TaxRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.TaxRate(**data)
 
 
@@ -74,21 +72,21 @@ class PriceImportSchema(ImportResourceSchema):
             ),
             "centPrecision": helpers.absmod(__name__, ".common.MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     customer_group = helpers.LazyNestedField(
@@ -96,7 +94,7 @@ class PriceImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -104,17 +102,17 @@ class PriceImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     publish = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     tiers = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceTierSchema"),
@@ -122,27 +120,27 @@ class PriceImportSchema(ImportResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     product_variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductVariantKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productVariant",
     )
     product = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -150,5 +148,4 @@ class PriceImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PriceImport(**data)

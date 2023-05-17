@@ -23,15 +23,17 @@ from .common import ImportResourceSchema, LocalizedStringField
 class SearchKeywordsSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("^[a-z]{2}(-[A-Z]{2})?$")},
-        type=helpers.LazyNestedField(
-            nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
-            allow_none=True,
-            many=True,
-            unknown=marshmallow.EXCLUDE,
-            missing=None,
-            data_key="/^[a-z]{2}(-[A-Z]{2})?$/",
-        ),
+        metadata={
+            "pattern": re.compile("^[a-z]{2}(-[A-Z]{2})?$"),
+            "type": helpers.LazyNestedField(
+                nested=helpers.absmod(__name__, ".SearchKeywordSchema"),
+                allow_none=True,
+                many=True,
+                unknown=marshmallow.EXCLUDE,
+                load_default=None,
+                data_key="/^[a-z]{2}(-[A-Z]{2})?$/",
+            ),
+        },
     )
 
     class Meta:
@@ -55,7 +57,7 @@ class SearchKeywordsSchema(helpers.BaseSchema):
 
 
 class SearchKeywordSchema(helpers.BaseSchema):
-    text = marshmallow.fields.String(allow_none=True, missing=None)
+    text = marshmallow.fields.String(allow_none=True, load_default=None)
     suggest_tokenizer = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -64,7 +66,7 @@ class SearchKeywordSchema(helpers.BaseSchema):
             "whitespace": helpers.absmod(__name__, ".WhitespaceTokenizerSchema"),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="suggestTokenizer",
     )
 
@@ -73,12 +75,11 @@ class SearchKeywordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SearchKeyword(**data)
 
 
 class SuggestTokenizerSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -91,7 +92,7 @@ class SuggestTokenizerSchema(helpers.BaseSchema):
 
 class CustomTokenizerSchema(SuggestTokenizerSchema):
     inputs = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -115,23 +116,27 @@ class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
 
 class ProductImportSchema(ImportResourceSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     product_type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.ProductTypeKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productType",
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     categories = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CategoryKeyReferenceSchema"),
@@ -139,27 +144,27 @@ class ProductImportSchema(ImportResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     tax_category = helpers.LazyNestedField(
@@ -167,7 +172,7 @@ class ProductImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="taxCategory",
     )
     search_keywords = helpers.LazyNestedField(
@@ -175,7 +180,7 @@ class ProductImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="searchKeywords",
     )
     state = helpers.LazyNestedField(
@@ -183,17 +188,17 @@ class ProductImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     publish = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     price_mode = marshmallow_enum.EnumField(
         ProductPriceModeEnum,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="priceMode",
     )
 
@@ -202,5 +207,4 @@ class ProductImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductImport(**data)

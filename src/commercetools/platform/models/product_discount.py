@@ -310,7 +310,6 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_DISCOUNT)
 
     @classmethod
@@ -328,7 +327,7 @@ class ProductDiscountResourceIdentifier(ResourceIdentifier):
 
 
 class ProductDiscountUpdate(_BaseType):
-    #: Expected version of the ProductDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the ProductDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the ProductDiscount.
     actions: typing.List["ProductDiscountUpdateAction"]
@@ -545,13 +544,12 @@ class ProductDiscountValueAbsoluteDraft(ProductDiscountValueDraft):
 
 
 class ProductDiscountValueExternal(ProductDiscountValue):
-    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](ctp:api:type:ProductSetDiscountedPriceAction).
     Used when setting discounts using an external service.
 
     """
 
     def __init__(self):
-
         super().__init__(type="external")
 
     @classmethod
@@ -569,13 +567,12 @@ class ProductDiscountValueExternal(ProductDiscountValue):
 
 
 class ProductDiscountValueExternalDraft(ProductDiscountValueDraft):
-    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+    """Discounts the Product Price by allowing the client to explicitly [set a discounted value](ctp:api:type:ProductSetDiscountedPriceAction).
     Use this when setting discounts using an external service.
 
     """
 
     def __init__(self):
-
         super().__init__(type="external")
 
     @classmethod

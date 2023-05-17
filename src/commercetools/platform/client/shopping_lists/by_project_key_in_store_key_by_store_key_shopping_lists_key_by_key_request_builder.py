@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -40,7 +39,10 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Gets a shopping list by Key."""
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists/key={self._key}",
@@ -65,7 +67,10 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Update a shopping list found by its Key."""
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists/key={self._key}",
@@ -86,16 +91,20 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder:
     def delete(
         self,
         *,
+        expand: typing.List["str"] = None,
         data_erasure: bool = None,
         version: int,
-        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists/key={self._key}",
-            params={"dataErasure": data_erasure, "version": version, "expand": expand},
+            params={"expand": expand, "dataErasure": data_erasure, "version": version},
             headers=headers,
             options=options,
         )

@@ -49,13 +49,13 @@ from .products.by_project_key_products_request_builder import (
 from .standalone_prices.by_project_key_standalone_prices_request_builder import (
     ByProjectKeyStandalonePricesRequestBuilder,
 )
+from .types.by_project_key_types_request_builder import ByProjectKeyTypesRequestBuilder
 
 if typing.TYPE_CHECKING:
     from ..base_client import BaseClient
 
 
 class ByProjectKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -149,6 +149,12 @@ class ByProjectKeyRequestBuilder:
 
     def inventories(self) -> ByProjectKeyInventoriesRequestBuilder:
         return ByProjectKeyInventoriesRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def types(self) -> ByProjectKeyTypesRequestBuilder:
+        return ByProjectKeyTypesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

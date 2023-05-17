@@ -22,7 +22,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeBusinessUnitsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -96,6 +95,7 @@ class ByProjectKeyMeBusinessUnitsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["BusinessUnit"]:
+        """Automatically assigns the Associate to the Business Unit in the default [Associate Role](ctp:api:type:AssociateRole) defined in [BusinessUnitConfiguration](ctp:api:type:BusinessUnitConfiguration). If there is no default Associate Role configured, this request fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error. When creating a Division, the Associate must have the `AddChildUnits` [Permission](ctp:api:type:Permission) in the parent unit. If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/business-units",

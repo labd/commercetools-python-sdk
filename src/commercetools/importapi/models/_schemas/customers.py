@@ -13,103 +13,109 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
+from ..customers import AuthenticationMode
 from .common import ImportResourceSchema
 
 # Fields
 
 
 # Marshmallow Schemas
+
+
 class CustomerAddressSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     title = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     salutation = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="firstName",
     )
     last_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastName",
     )
     street_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="streetName",
     )
     street_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="streetNumber",
     )
     additional_street_info = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="additionalStreetInfo",
     )
     postal_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="postalCode",
     )
     city = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     region = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     state = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    country = marshmallow.fields.String(allow_none=True, missing=None)
+    country = marshmallow.fields.String(allow_none=True, load_default=None)
     company = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     department = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     building = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     apartment = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     p_o_box = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="pOBox"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="pOBox",
     )
     phone = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     mobile = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     email = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     fax = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     additional_address_info = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="additionalAddressInfo",
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     custom = helpers.LazyNestedField(
@@ -117,7 +123,7 @@ class CustomerAddressSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -125,7 +131,6 @@ class CustomerAddressSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerAddress(**data)
 
 
@@ -133,68 +138,73 @@ class CustomerImportSchema(ImportResourceSchema):
     customer_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerNumber",
     )
-    email = marshmallow.fields.String(allow_none=True, missing=None)
-    password = marshmallow.fields.String(allow_none=True, missing=None)
+    email = marshmallow.fields.String(allow_none=True, load_default=None)
+    password = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     stores = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.StoreKeyReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     first_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="firstName",
     )
     last_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastName",
     )
     middle_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="middleName",
     )
     title = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     salutation = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     date_of_birth = marshmallow.fields.Date(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="dateOfBirth",
     )
     company_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="companyName",
     )
     vat_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="vatId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="vatId",
     )
     is_email_verified = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isEmailVerified",
     )
     customer_group = helpers.LazyNestedField(
@@ -202,7 +212,7 @@ class CustomerImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     addresses = helpers.LazyNestedField(
@@ -210,43 +220,51 @@ class CustomerImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     default_billing_address = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="defaultBillingAddress",
     )
     billing_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="billingAddresses",
     )
     default_shipping_address = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="defaultShippingAddress",
     )
     shipping_addresses = marshmallow.fields.List(
         marshmallow.fields.Integer(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="shippingAddresses",
     )
     locale = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+    )
+    authentication_mode = marshmallow_enum.EnumField(
+        AuthenticationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="authenticationMode",
     )
 
     class Meta:
@@ -254,5 +272,4 @@ class CustomerImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerImport(**data)

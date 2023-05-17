@@ -21,7 +21,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyPaymentsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -95,7 +94,7 @@ class ByProjectKeyPaymentsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Payment"]:
-        """To create a payment object a payment draft object has to be given with the request."""
+        """Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/payments",

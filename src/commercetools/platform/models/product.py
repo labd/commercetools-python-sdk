@@ -94,6 +94,7 @@ __all__ = [
     "ProductSetMetaDescriptionAction",
     "ProductSetMetaKeywordsAction",
     "ProductSetMetaTitleAction",
+    "ProductSetPriceKeyAction",
     "ProductSetPriceModeAction",
     "ProductSetPricesAction",
     "ProductSetProductPriceCustomFieldAction",
@@ -626,34 +627,54 @@ class ProductPagedQueryResponse(_BaseType):
 
 
 class ProductPriceModeEnum(enum.Enum):
-    """This mode determines the type of Prices used for [Product Price Selection](ctp:api:type:ProductPriceSelection) as well as for [LineItem Price selection](ctp:api:type:CartLineItemPriceSelection)."""
+    """This mode determines the type of Prices used for [Product Price Selection](ctp:api:type:ProductPriceSelection) and for [LineItem Price selection](ctp:api:type:LineItemPriceSelection)."""
 
     EMBEDDED = "Embedded"
     STANDALONE = "Standalone"
 
 
 class ProductProjection(BaseResource):
-    #: User-specific unique identifier of the Product.
+    #: User-defined unique identifier of the [Product](ctp:api:type:Product).
     key: typing.Optional[str]
+    #: The [ProductType](ctp:api:type:ProductType) defining the Attributes of the [Product](ctp:api:type:Product).
     product_type: "ProductTypeReference"
+    #: Name of the [Product](ctp:api:type:Product).
     name: "LocalizedString"
+    #: Description of the [Product](ctp:api:type:Product).
     description: typing.Optional["LocalizedString"]
+    #: User-defined identifier used in a deep-link URL for the [Product](ctp:api:type:Product).
+    #: Must be unique across a Project, but can be the same for Products in different locales.
+    #: Matches the pattern `[a-zA-Z0-9_\-]{2,256}`.
+    #: For [good performance](/../api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in the [Project](ctp:api:type:Project).
     slug: "LocalizedString"
-    #: References to categories the product is in.
+    #: [Categories](ctp:api:type:Category) assigned to the [Product](ctp:api:type:Product).
     categories: typing.List["CategoryReference"]
+    #: Order of [Product](ctp:api:type:Product) in [Categories](ctp:api:type:Category).
     category_order_hints: typing.Optional["CategoryOrderHints"]
+    #: Title of the [Product](ctp:api:type:Product) displayed in search results.
     meta_title: typing.Optional["LocalizedString"]
+    #: Description of the [Product](ctp:api:type:Product) displayed in search results below the meta title.
     meta_description: typing.Optional["LocalizedString"]
+    #: Keywords that give additional information about the [Product](ctp:api:type:Product) to search engines.
     meta_keywords: typing.Optional["LocalizedString"]
+    #: Used by [Product Suggestions](/../api/projects/products-suggestions), but is also considered for a [full text search](ctp:api:type:FullTextSearch).
     search_keywords: typing.Optional["SearchKeywords"]
+    #: `true` if the staged data is different from the current data.
     has_staged_changes: typing.Optional[bool]
+    #: `true` if the [Product](ctp:api:type:Product) is [published](ctp:api:type:CurrentStaged).
     published: typing.Optional[bool]
+    #: The Master Variant of the [Product](ctp:api:type:Product).
     master_variant: "ProductVariant"
+    #: Additional Product Variants.
     variants: typing.List["ProductVariant"]
+    #: The [TaxCategory](ctp:api:type:TaxCategory) of the [Product](ctp:api:type:Product).
     tax_category: typing.Optional["TaxCategoryReference"]
+    #: [State](ctp:api:type:State) of the [Product](ctp:api:type:Product).
     state: typing.Optional["StateReference"]
-    #: Statistics about the review ratings taken into account for this product.
+    #: Review statistics of the [Product](ctp:api:type:Product).
     review_rating_statistics: typing.Optional["ReviewRatingStatistics"]
+    #: Indicates whether the Prices of the Product Projection are [embedded](ctp:api:type:Price) or [standalone](ctp:api:type:StandalonePrice). [Projecting Prices](#prices) only works with `Embedded`, there is currently no support for `Standalone`.
+    price_mode: typing.Optional["ProductPriceModeEnum"]
 
     def __init__(
         self,
@@ -679,7 +700,8 @@ class ProductProjection(BaseResource):
         variants: typing.List["ProductVariant"],
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
-        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None
+        review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None
     ):
         self.key = key
         self.product_type = product_type
@@ -699,6 +721,7 @@ class ProductProjection(BaseResource):
         self.tax_category = tax_category
         self.state = state
         self.review_rating_statistics = review_rating_statistics
+        self.price_mode = price_mode
 
         super().__init__(
             id=id,
@@ -722,10 +745,17 @@ class ProductProjection(BaseResource):
 class ProductProjectionPagedQueryResponse(_BaseType):
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
+    #: Actual number of results returned.
     count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: [ProductProjections](ctp:api:type:ProductProjection) matching the query.
     results: typing.List["ProductProjection"]
 
     def __init__(
@@ -831,7 +861,6 @@ class ProductResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT)
 
     @classmethod
@@ -1030,6 +1059,10 @@ class ProductUpdateAction(_BaseType):
             from ._schemas.product import ProductSetMetaTitleActionSchema
 
             return ProductSetMetaTitleActionSchema().load(data)
+        if data["action"] == "setPriceKey":
+            from ._schemas.product import ProductSetPriceKeyActionSchema
+
+            return ProductSetPriceKeyActionSchema().load(data)
         if data["action"] == "setPriceMode":
             from ._schemas.product import ProductSetPriceModeActionSchema
 
@@ -1471,7 +1504,6 @@ class WhitespaceTokenizer(SuggestTokenizer):
     """Creates tokens by splitting the `text` field in [SearchKeyword](ctp:api:type:SearchKeyword) by whitespaces."""
 
     def __init__(self):
-
         super().__init__(type="whitespace")
 
     @classmethod
@@ -1663,7 +1695,7 @@ class ProductAddVariantAction(ProductUpdateAction):
     #: If `true` the new Product Variant is only staged. If `false` the new Product Variant is both current and staged.
     staged: typing.Optional[bool]
     #: Media assets for the Product Variant.
-    assets: typing.Optional[typing.List["Asset"]]
+    assets: typing.Optional[typing.List["AssetDraft"]]
 
     def __init__(
         self,
@@ -1674,7 +1706,7 @@ class ProductAddVariantAction(ProductUpdateAction):
         images: typing.Optional[typing.List["Image"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         staged: typing.Optional[bool] = None,
-        assets: typing.Optional[typing.List["Asset"]] = None
+        assets: typing.Optional[typing.List["AssetDraft"]] = None
     ):
         self.sku = sku
         self.key = key
@@ -2139,11 +2171,33 @@ class ProductRemoveImageAction(ProductUpdateAction):
 class ProductRemovePriceAction(ProductUpdateAction):
     #: The `id` of the Embedded Price to remove.
     price_id: str
+    #: The `sku` of the ProductVariant the provided Price should be removed from.
+    #: Either 'variantId' or 'sku' is required" when `priceId` is not provided.
+    #: This field is now deprecated, use 'priceId' instead.
+    sku: typing.Optional[str]
+    #: The `id` of the ProductVariant the provided Price should be removed from.
+    #: Either 'variantId' or 'sku' is required" when `priceId` is not provided.
+    #: This field is now deprecated, use 'priceId' instead.
+    variant_id: typing.Optional[int]
+    #: The Price identical to the one to be removed from the ProductVariant.
+    #: This field is now deprecated, use 'priceId' instead.
+    price: typing.Optional["PriceDraft"]
     #: If `true`, only the staged Embedded Price is removed. If `false`, both the current and staged Embedded Price are removed.
     staged: typing.Optional[bool]
 
-    def __init__(self, *, price_id: str, staged: typing.Optional[bool] = None):
+    def __init__(
+        self,
+        *,
+        price_id: str,
+        sku: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        price: typing.Optional["PriceDraft"] = None,
+        staged: typing.Optional[bool] = None
+    ):
         self.price_id = price_id
+        self.sku = sku
+        self.variant_id = variant_id
+        self.price = price
         self.staged = staged
 
         super().__init__(action="removePrice")
@@ -2163,7 +2217,12 @@ class ProductRemovePriceAction(ProductUpdateAction):
 
 
 class ProductRemoveVariantAction(ProductUpdateAction):
-    """Either `id` or `sku` is required. Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message."""
+    """Either `id` or `sku` is required.
+    Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message.
+    If the Product Variant to remove is part of a [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment)
+    its SKU will be automatically removed from the respective [ProductVariantSelection](ctp:api:type:ProductVariantSelection).
+
+    """
 
     #: The `id` of the ProductVariant to remove.
     id: typing.Optional[int]
@@ -2203,7 +2262,6 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
     """Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChanges](ctp:api:type:ProductRevertedStagedChangesMessage) Message."""
 
     def __init__(self):
-
         super().__init__(action="revertStagedChanges")
 
     @classmethod
@@ -2261,7 +2319,7 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2721,7 +2779,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
 class ProductSetDiscountedPriceAction(ProductUpdateAction):
     """Produces the [ProductPriceExternalDiscountSet](ctp:api:type:ProductPriceExternalDiscountSetMessage) Message."""
 
-    #: The `id` of the [Embedded Price](ctp:api:type:Price) to set the Discount.
+    #: The `id` of the [Price](ctp:api:type:Price) to set the Discount.
     price_id: str
     #: If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
     staged: typing.Optional[bool]
@@ -2915,6 +2973,43 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
         return ProductSetMetaTitleActionSchema().dump(self)
 
 
+class ProductSetPriceKeyAction(ProductUpdateAction):
+    """Sets the key of an [Embedded Price](/projects/products#embedded-price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message."""
+
+    #: The `id` of the [Price](ctp:api:type:Price) to set the key.
+    price_id: str
+    #: If `true`, only the staged [Embedded Price](/projects/products#embedded-price) is updated. If `false`, both the current and staged Embedded Price are updated.
+    staged: typing.Optional[bool]
+    #: Value to set. If empty, any existing value will be removed.
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        price_id: str,
+        staged: typing.Optional[bool] = None,
+        key: typing.Optional[str] = None
+    ):
+        self.price_id = price_id
+        self.staged = staged
+        self.key = key
+
+        super().__init__(action="setPriceKey")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSetPriceKeyAction":
+        from ._schemas.product import ProductSetPriceKeyActionSchema
+
+        return ProductSetPriceKeyActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product import ProductSetPriceKeyActionSchema
+
+        return ProductSetPriceKeyActionSchema().dump(self)
+
+
 class ProductSetPriceModeAction(ProductUpdateAction):
     """Controls whether the Prices of a Product Variant are embedded into the Product or standalone."""
 
@@ -2990,7 +3085,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3133,7 +3228,11 @@ class ProductSetSearchKeywordsAction(ProductUpdateAction):
 
 
 class ProductSetSkuAction(ProductUpdateAction):
-    """SKU cannot be changed or removed if it is associated with an [InventoryEntry](ctp:api:type:InventoryEntry)."""
+    """SKU cannot be changed or removed if it is associated with an [InventoryEntry](ctp:api:type:InventoryEntry).
+    If the SKU to set or unset is part of a [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment)
+    it will be automatically added or removed from the respective [ProductVariantSelection](ctp:api:type:ProductVariantSelection).
+
+    """
 
     #: The `id` of the ProductVariant to update.
     variant_id: int
@@ -3228,10 +3327,13 @@ class ProductTransitionStateAction(ProductUpdateAction):
 
 
 class ProductUnpublishAction(ProductUpdateAction):
-    """Removes the current projection of the Product. The staged projection is unaffected. Unpublished Products only appear in query/search results with `staged=false`. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message."""
+    """Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](/projects/productProjections#query-productprojections)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
+
+    Unpublished Products cannot be added to a Cart. However, if a Cart contains Line Items for Products that were added before the Product was unpublished, the Cart is unaffected and can still be used to create an Order. To prevent this, in addition to unpublishing the Product you should remove the Prices from the Product using [Remove Price](ctp:api:type:ProductRemovePriceAction) for Embedded Prices or [Delete StandalonePrice](/projects/standalone-prices#delete-standaloneprice) for Standalone Prices.
+
+    """
 
     def __init__(self):
-
         super().__init__(action="unpublish")
 
     @classmethod

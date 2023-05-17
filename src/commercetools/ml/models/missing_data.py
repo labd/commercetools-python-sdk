@@ -408,7 +408,6 @@ class MissingImagesCount(_BaseType):
 
 class MissingImagesProductLevel(MissingImagesCount):
     def __init__(self, *, missing_images: int, total: int):
-
         super().__init__(missing_images=missing_images, total=total)
 
     @classmethod
@@ -427,7 +426,6 @@ class MissingImagesProductLevel(MissingImagesCount):
 
 class MissingImagesVariantLevel(MissingImagesCount):
     def __init__(self, *, missing_images: int, total: int):
-
         super().__init__(missing_images=missing_images, total=total)
 
     @classmethod
@@ -658,7 +656,6 @@ class MissingPricesProductCount(_BaseType):
 
 class MissingPricesProductLevel(MissingPricesProductCount):
     def __init__(self, *, total: int, missing_prices: int):
-
         super().__init__(total=total, missing_prices=missing_prices)
 
     @classmethod
@@ -677,7 +674,6 @@ class MissingPricesProductLevel(MissingPricesProductCount):
 
 class MissingPricesVariantLevel(MissingPricesProductCount):
     def __init__(self, *, total: int, missing_prices: int):
-
         super().__init__(total=total, missing_prices=missing_prices)
 
     @classmethod

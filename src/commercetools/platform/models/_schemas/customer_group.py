@@ -27,7 +27,7 @@ class CustomerGroupSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -35,19 +35,19 @@ class CustomerGroupSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -55,23 +55,22 @@ class CustomerGroupSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerGroup(**data)
 
 
 class CustomerGroupDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     group_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="groupName"
+        allow_none=True, load_default=None, data_key="groupName"
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -79,23 +78,22 @@ class CustomerGroupDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerGroupDraft(**data)
 
 
 class CustomerGroupPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomerGroupSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -103,7 +101,6 @@ class CustomerGroupPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerGroupPagedQueryResponse(**data)
 
 
@@ -113,7 +110,7 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -136,7 +133,7 @@ class CustomerGroupResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class CustomerGroupUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -155,7 +152,7 @@ class CustomerGroupUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -163,12 +160,11 @@ class CustomerGroupUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomerGroupUpdate(**data)
 
 
 class CustomerGroupUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -180,7 +176,7 @@ class CustomerGroupUpdateActionSchema(helpers.BaseSchema):
 
 
 class CustomerGroupChangeNameActionSchema(CustomerGroupUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -192,9 +188,9 @@ class CustomerGroupChangeNameActionSchema(CustomerGroupUpdateActionSchema):
 
 
 class CustomerGroupSetCustomFieldActionSchema(CustomerGroupUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -212,13 +208,13 @@ class CustomerGroupSetCustomTypeActionSchema(CustomerGroupUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -232,7 +228,7 @@ class CustomerGroupSetCustomTypeActionSchema(CustomerGroupUpdateActionSchema):
 
 class CustomerGroupSetKeyActionSchema(CustomerGroupUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

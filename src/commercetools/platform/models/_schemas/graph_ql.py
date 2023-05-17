@@ -19,16 +19,242 @@ from ... import models
 
 # Marshmallow Schemas
 class GraphQLErrorSchema(helpers.BaseSchema):
-    message = marshmallow.fields.String(allow_none=True, missing=None)
+    message = marshmallow.fields.String(allow_none=True, load_default=None)
     locations = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".GraphQLErrorLocationSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     path = marshmallow.fields.List(
-        marshmallow.fields.Raw(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Raw(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    extensions = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("code", "code"),
+        discriminator_schemas={
+            "AnonymousIdAlreadyInUse": helpers.absmod(
+                __name__, ".error.GraphQLAnonymousIdAlreadyInUseErrorSchema"
+            ),
+            "AssociateMissingPermission": helpers.absmod(
+                __name__, ".error.GraphQLAssociateMissingPermissionErrorSchema"
+            ),
+            "AttributeDefinitionAlreadyExists": helpers.absmod(
+                __name__, ".error.GraphQLAttributeDefinitionAlreadyExistsErrorSchema"
+            ),
+            "AttributeDefinitionTypeConflict": helpers.absmod(
+                __name__, ".error.GraphQLAttributeDefinitionTypeConflictErrorSchema"
+            ),
+            "AttributeNameDoesNotExist": helpers.absmod(
+                __name__, ".error.GraphQLAttributeNameDoesNotExistErrorSchema"
+            ),
+            "BadGateway": helpers.absmod(
+                __name__, ".error.GraphQLBadGatewayErrorSchema"
+            ),
+            "ConcurrentModification": helpers.absmod(
+                __name__, ".error.GraphQLConcurrentModificationErrorSchema"
+            ),
+            "CountryNotConfiguredInStore": helpers.absmod(
+                __name__, ".error.GraphQLCountryNotConfiguredInStoreErrorSchema"
+            ),
+            "DiscountCodeNonApplicable": helpers.absmod(
+                __name__, ".error.GraphQLDiscountCodeNonApplicableErrorSchema"
+            ),
+            "DuplicateAttributeValue": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateAttributeValueErrorSchema"
+            ),
+            "DuplicateAttributeValues": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateAttributeValuesErrorSchema"
+            ),
+            "DuplicateEnumValues": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateEnumValuesErrorSchema"
+            ),
+            "DuplicateField": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateFieldErrorSchema"
+            ),
+            "DuplicateFieldWithConflictingResource": helpers.absmod(
+                __name__,
+                ".error.GraphQLDuplicateFieldWithConflictingResourceErrorSchema",
+            ),
+            "DuplicatePriceKey": helpers.absmod(
+                __name__, ".error.GraphQLDuplicatePriceKeyErrorSchema"
+            ),
+            "DuplicatePriceScope": helpers.absmod(
+                __name__, ".error.GraphQLDuplicatePriceScopeErrorSchema"
+            ),
+            "DuplicateStandalonePriceScope": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateStandalonePriceScopeErrorSchema"
+            ),
+            "DuplicateVariantValues": helpers.absmod(
+                __name__, ".error.GraphQLDuplicateVariantValuesErrorSchema"
+            ),
+            "EditPreviewFailed": helpers.absmod(
+                __name__, ".error.GraphQLEditPreviewFailedErrorSchema"
+            ),
+            "EnumKeyAlreadyExists": helpers.absmod(
+                __name__, ".error.GraphQLEnumKeyAlreadyExistsErrorSchema"
+            ),
+            "EnumKeyDoesNotExist": helpers.absmod(
+                __name__, ".error.GraphQLEnumKeyDoesNotExistErrorSchema"
+            ),
+            "EnumValueIsUsed": helpers.absmod(
+                __name__, ".error.GraphQLEnumValueIsUsedErrorSchema"
+            ),
+            "EnumValuesMustMatch": helpers.absmod(
+                __name__, ".error.GraphQLEnumValuesMustMatchErrorSchema"
+            ),
+            "ExtensionBadResponse": helpers.absmod(
+                __name__, ".error.GraphQLExtensionBadResponseErrorSchema"
+            ),
+            "ExtensionNoResponse": helpers.absmod(
+                __name__, ".error.GraphQLExtensionNoResponseErrorSchema"
+            ),
+            "ExtensionPredicateEvaluationFailed": helpers.absmod(
+                __name__, ".error.GraphQLExtensionPredicateEvaluationFailedErrorSchema"
+            ),
+            "ExtensionUpdateActionsFailed": helpers.absmod(
+                __name__, ".error.GraphQLExtensionUpdateActionsFailedErrorSchema"
+            ),
+            "ExternalOAuthFailed": helpers.absmod(
+                __name__, ".error.GraphQLExternalOAuthFailedErrorSchema"
+            ),
+            "FeatureRemoved": helpers.absmod(
+                __name__, ".error.GraphQLFeatureRemovedErrorSchema"
+            ),
+            "General": helpers.absmod(__name__, ".error.GraphQLGeneralErrorSchema"),
+            "insufficient_scope": helpers.absmod(
+                __name__, ".error.GraphQLInsufficientScopeErrorSchema"
+            ),
+            "InternalConstraintViolated": helpers.absmod(
+                __name__, ".error.GraphQLInternalConstraintViolatedErrorSchema"
+            ),
+            "InvalidCredentials": helpers.absmod(
+                __name__, ".error.GraphQLInvalidCredentialsErrorSchema"
+            ),
+            "InvalidCurrentPassword": helpers.absmod(
+                __name__, ".error.GraphQLInvalidCurrentPasswordErrorSchema"
+            ),
+            "InvalidField": helpers.absmod(
+                __name__, ".error.GraphQLInvalidFieldErrorSchema"
+            ),
+            "InvalidInput": helpers.absmod(
+                __name__, ".error.GraphQLInvalidInputErrorSchema"
+            ),
+            "InvalidItemShippingDetails": helpers.absmod(
+                __name__, ".error.GraphQLInvalidItemShippingDetailsErrorSchema"
+            ),
+            "InvalidJsonInput": helpers.absmod(
+                __name__, ".error.GraphQLInvalidJsonInputErrorSchema"
+            ),
+            "InvalidOperation": helpers.absmod(
+                __name__, ".error.GraphQLInvalidOperationErrorSchema"
+            ),
+            "InvalidSubject": helpers.absmod(
+                __name__, ".error.GraphQLInvalidSubjectErrorSchema"
+            ),
+            "invalid_token": helpers.absmod(
+                __name__, ".error.GraphQLInvalidTokenErrorSchema"
+            ),
+            "LanguageUsedInStores": helpers.absmod(
+                __name__, ".error.GraphQLLanguageUsedInStoresErrorSchema"
+            ),
+            "MatchingPriceNotFound": helpers.absmod(
+                __name__, ".error.GraphQLMatchingPriceNotFoundErrorSchema"
+            ),
+            "MaxResourceLimitExceeded": helpers.absmod(
+                __name__, ".error.GraphQLMaxResourceLimitExceededErrorSchema"
+            ),
+            "MissingRoleOnChannel": helpers.absmod(
+                __name__, ".error.GraphQLMissingRoleOnChannelErrorSchema"
+            ),
+            "MissingTaxRateForCountry": helpers.absmod(
+                __name__, ".error.GraphQLMissingTaxRateForCountryErrorSchema"
+            ),
+            "MoneyOverflow": helpers.absmod(
+                __name__, ".error.GraphQLMoneyOverflowErrorSchema"
+            ),
+            "NoMatchingProductDiscountFound": helpers.absmod(
+                __name__, ".error.GraphQLNoMatchingProductDiscountFoundErrorSchema"
+            ),
+            "NotEnabled": helpers.absmod(
+                __name__, ".error.GraphQLNotEnabledErrorSchema"
+            ),
+            "ObjectNotFound": helpers.absmod(
+                __name__, ".error.GraphQLObjectNotFoundErrorSchema"
+            ),
+            "OutOfStock": helpers.absmod(
+                __name__, ".error.GraphQLOutOfStockErrorSchema"
+            ),
+            "OverCapacity": helpers.absmod(
+                __name__, ".error.GraphQLOverCapacityErrorSchema"
+            ),
+            "OverlappingStandalonePriceValidity": helpers.absmod(
+                __name__, ".error.GraphQLOverlappingStandalonePriceValidityErrorSchema"
+            ),
+            "PendingOperation": helpers.absmod(
+                __name__, ".error.GraphQLPendingOperationErrorSchema"
+            ),
+            "PriceChanged": helpers.absmod(
+                __name__, ".error.GraphQLPriceChangedErrorSchema"
+            ),
+            "ProductAssignmentMissing": helpers.absmod(
+                __name__, ".error.GraphQLProductAssignmentMissingErrorSchema"
+            ),
+            "ProductPresentWithDifferentVariantSelection": helpers.absmod(
+                __name__,
+                ".error.GraphQLProductPresentWithDifferentVariantSelectionErrorSchema",
+            ),
+            "ProjectNotConfiguredForLanguages": helpers.absmod(
+                __name__, ".error.GraphQLProjectNotConfiguredForLanguagesErrorSchema"
+            ),
+            "QueryComplexityLimitExceeded": helpers.absmod(
+                __name__, ".error.GraphQLQueryComplexityLimitExceededErrorSchema"
+            ),
+            "QueryTimedOut": helpers.absmod(
+                __name__, ".error.GraphQLQueryTimedOutErrorSchema"
+            ),
+            "ReferenceExists": helpers.absmod(
+                __name__, ".error.GraphQLReferenceExistsErrorSchema"
+            ),
+            "ReferencedResourceNotFound": helpers.absmod(
+                __name__, ".error.GraphQLReferencedResourceNotFoundErrorSchema"
+            ),
+            "RequiredField": helpers.absmod(
+                __name__, ".error.GraphQLRequiredFieldErrorSchema"
+            ),
+            "ResourceNotFound": helpers.absmod(
+                __name__, ".error.GraphQLResourceNotFoundErrorSchema"
+            ),
+            "ResourceSizeLimitExceeded": helpers.absmod(
+                __name__, ".error.GraphQLResourceSizeLimitExceededErrorSchema"
+            ),
+            "SearchDeactivated": helpers.absmod(
+                __name__, ".error.GraphQLSearchDeactivatedErrorSchema"
+            ),
+            "SearchExecutionFailure": helpers.absmod(
+                __name__, ".error.GraphQLSearchExecutionFailureErrorSchema"
+            ),
+            "SearchFacetPathNotFound": helpers.absmod(
+                __name__, ".error.GraphQLSearchFacetPathNotFoundErrorSchema"
+            ),
+            "SearchIndexingInProgress": helpers.absmod(
+                __name__, ".error.GraphQLSearchIndexingInProgressErrorSchema"
+            ),
+            "SemanticError": helpers.absmod(
+                __name__, ".error.GraphQLSemanticErrorErrorSchema"
+            ),
+            "ShippingMethodDoesNotMatchCart": helpers.absmod(
+                __name__, ".error.GraphQLShippingMethodDoesNotMatchCartErrorSchema"
+            ),
+            "SyntaxError": helpers.absmod(
+                __name__, ".error.GraphQLSyntaxErrorErrorSchema"
+            ),
+        },
+        load_default=None,
     )
 
     class Meta:
@@ -36,29 +262,27 @@ class GraphQLErrorSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.GraphQLError(**data)
 
 
 class GraphQLErrorLocationSchema(helpers.BaseSchema):
-    line = marshmallow.fields.Integer(allow_none=True, missing=None)
-    column = marshmallow.fields.Integer(allow_none=True, missing=None)
+    line = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    column = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.GraphQLErrorLocation(**data)
 
 
 class GraphQLRequestSchema(helpers.BaseSchema):
-    query = marshmallow.fields.String(allow_none=True, missing=None)
+    query = marshmallow.fields.String(allow_none=True, load_default=None)
     operation_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="operationName",
     )
     variables = helpers.LazyNestedField(
@@ -66,7 +290,7 @@ class GraphQLRequestSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -74,13 +298,12 @@ class GraphQLRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.GraphQLRequest(**data)
 
 
 class GraphQLResponseSchema(helpers.BaseSchema):
     data = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     errors = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".GraphQLErrorSchema"),
@@ -88,7 +311,7 @@ class GraphQLResponseSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -96,15 +319,16 @@ class GraphQLResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.GraphQLResponse(**data)
 
 
 class GraphQLVariablesMapSchema(helpers.BaseSchema):
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("")},
-        type=marshmallow.fields.Raw(allow_none=True, missing=None),
+        metadata={
+            "pattern": re.compile(""),
+            "type": marshmallow.fields.Raw(allow_none=True, load_default=None),
+        },
     )
 
     class Meta:

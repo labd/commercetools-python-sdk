@@ -13,6 +13,7 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
+from ..associate_role import Permission
 from ..channel import ChannelRoleEnum
 from ..common import ReferenceTypeId
 from .common import LocalizedStringField
@@ -22,9 +23,9 @@ from .common import LocalizedStringField
 
 # Marshmallow Schemas
 class ErrorByExtensionSchema(helpers.BaseSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -32,17 +33,18 @@ class ErrorByExtensionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ErrorByExtension(**data)
 
 
 class ErrorObjectSchema(helpers.BaseSchema):
-    code = marshmallow.fields.String(allow_none=True, missing=None)
-    message = marshmallow.fields.String(allow_none=True, missing=None)
+    code = marshmallow.fields.String(allow_none=True, load_default=None)
+    message = marshmallow.fields.String(allow_none=True, load_default=None)
     _regex = helpers.RegexField(
         unknown=marshmallow.EXCLUDE,
-        metadata={"pattern": re.compile("")},
-        type=marshmallow.fields.Raw(allow_none=True, missing=None),
+        metadata={
+            "pattern": re.compile(""),
+            "type": marshmallow.fields.Raw(allow_none=True, load_default=None),
+        },
     )
 
     class Meta:
@@ -58,27 +60,6 @@ class ErrorObjectSchema(helpers.BaseSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.ErrorObject(**data)
-
-    @marshmallow.post_dump(pass_original=True)
-    def post_dump(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.post_dump(data, original_data)
-
-
-class AccessDeniedErrorSchema(ErrorObjectSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.pre_load
-    def pre_load(self, data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.pre_load(self, data)
-
-    @marshmallow.post_load(pass_original=True)
-    def post_load(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        data = field.post_load(data, original_data)
-        return models.AccessDeniedError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -107,15 +88,65 @@ class AnonymousIdAlreadyInUseErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class AssociateMissingPermissionErrorSchema(ErrorObjectSchema):
+    associate = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="businessUnit",
+    )
+    associate_on_behalf = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="associateOnBehalf",
+    )
+    permissions = marshmallow.fields.List(
+        marshmallow_enum.EnumField(Permission, by_value=True, allow_none=True),
+        allow_none=True,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.AssociateMissingPermissionError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class AttributeDefinitionAlreadyExistsErrorSchema(ErrorObjectSchema):
     conflicting_product_type_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingProductTypeId"
+        allow_none=True, load_default=None, data_key="conflictingProductTypeId"
     )
     conflicting_product_type_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingProductTypeName"
+        allow_none=True, load_default=None, data_key="conflictingProductTypeName"
     )
     conflicting_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingAttributeName"
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
     )
 
     class Meta:
@@ -140,13 +171,13 @@ class AttributeDefinitionAlreadyExistsErrorSchema(ErrorObjectSchema):
 
 class AttributeDefinitionTypeConflictErrorSchema(ErrorObjectSchema):
     conflicting_product_type_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingProductTypeId"
+        allow_none=True, load_default=None, data_key="conflictingProductTypeId"
     )
     conflicting_product_type_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingProductTypeName"
+        allow_none=True, load_default=None, data_key="conflictingProductTypeName"
     )
     conflicting_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingAttributeName"
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
     )
 
     class Meta:
@@ -171,7 +202,7 @@ class AttributeDefinitionTypeConflictErrorSchema(ErrorObjectSchema):
 
 class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
     invalid_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="invalidAttributeName"
+        allow_none=True, load_default=None, data_key="invalidAttributeName"
     )
 
     class Meta:
@@ -219,7 +250,7 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
     current_version = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="currentVersion",
     )
 
@@ -243,38 +274,67 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class CountryNotConfiguredInStoreErrorSchema(ErrorObjectSchema):
+    store_countries = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        load_default=None,
+        data_key="storeCountries",
+    )
+    country = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.CountryNotConfiguredInStoreError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class DiscountCodeNonApplicableErrorSchema(ErrorObjectSchema):
     discount_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="discountCode",
     )
     reason = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    dicount_code_id = marshmallow.fields.String(
+    discount_code_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
-        data_key="dicountCodeId",
+        load_default=None,
+        data_key="discountCodeId",
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     validity_check_time = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validityCheckTime",
     )
 
@@ -303,7 +363,7 @@ class DuplicateAttributeValueErrorSchema(ErrorObjectSchema):
         nested=helpers.absmod(__name__, ".product.AttributeSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -332,7 +392,7 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -357,7 +417,7 @@ class DuplicateAttributeValuesErrorSchema(ErrorObjectSchema):
 
 class DuplicateEnumValuesErrorSchema(ErrorObjectSchema):
     duplicates = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -381,84 +441,9 @@ class DuplicateEnumValuesErrorSchema(ErrorObjectSchema):
 
 
 class DuplicateFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
     duplicate_value = marshmallow.fields.Raw(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="duplicateValue",
-    )
-    conflicting_resource = helpers.Discriminator(
-        allow_none=True,
-        discriminator_field=("typeId", "type_id"),
-        discriminator_schemas={
-            "business-unit": helpers.absmod(
-                __name__, ".business_unit.BusinessUnitReferenceSchema"
-            ),
-            "cart-discount": helpers.absmod(
-                __name__, ".cart_discount.CartDiscountReferenceSchema"
-            ),
-            "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
-            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
-            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
-            "key-value-document": helpers.absmod(
-                __name__, ".custom_object.CustomObjectReferenceSchema"
-            ),
-            "customer-group": helpers.absmod(
-                __name__, ".customer_group.CustomerGroupReferenceSchema"
-            ),
-            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
-            "discount-code": helpers.absmod(
-                __name__, ".discount_code.DiscountCodeReferenceSchema"
-            ),
-            "inventory-entry": helpers.absmod(
-                __name__, ".inventory.InventoryEntryReferenceSchema"
-            ),
-            "order-edit": helpers.absmod(
-                __name__, ".order_edit.OrderEditReferenceSchema"
-            ),
-            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
-            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
-            "product-discount": helpers.absmod(
-                __name__, ".product_discount.ProductDiscountReferenceSchema"
-            ),
-            "product-selection": helpers.absmod(
-                __name__, ".product_selection.ProductSelectionReferenceSchema"
-            ),
-            "product-type": helpers.absmod(
-                __name__, ".product_type.ProductTypeReferenceSchema"
-            ),
-            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
-            "quote-request": helpers.absmod(
-                __name__, ".quote_request.QuoteRequestReferenceSchema"
-            ),
-            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
-            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
-            "shipping-method": helpers.absmod(
-                __name__, ".shipping_method.ShippingMethodReferenceSchema"
-            ),
-            "shopping-list": helpers.absmod(
-                __name__, ".shopping_list.ShoppingListReferenceSchema"
-            ),
-            "staged-quote": helpers.absmod(
-                __name__, ".staged_quote.StagedQuoteReferenceSchema"
-            ),
-            "standalone-price": helpers.absmod(
-                __name__, ".standalone_price.StandalonePriceReferenceSchema"
-            ),
-            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
-            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
-            "tax-category": helpers.absmod(
-                __name__, ".tax_category.TaxCategoryReferenceSchema"
-            ),
-            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
-            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
-        },
-        metadata={"omit_empty": True},
-        missing=None,
-        data_key="conflictingResource",
+        allow_none=True, load_default=None, data_key="duplicateValue"
     )
 
     class Meta:
@@ -482,14 +467,20 @@ class DuplicateFieldErrorSchema(ErrorObjectSchema):
 
 
 class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(allow_none=True, missing=None)
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
     duplicate_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="duplicateValue"
+        allow_none=True, load_default=None, data_key="duplicateValue"
     )
     conflicting_resource = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "associate-role": helpers.absmod(
+                __name__, ".associate_role.AssociateRoleReferenceSchema"
+            ),
+            "attribute-group": helpers.absmod(
+                __name__, ".attribute_group.AttributeGroupReferenceSchema"
+            ),
             "business-unit": helpers.absmod(
                 __name__, ".business_unit.BusinessUnitReferenceSchema"
             ),
@@ -497,6 +488,9 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
             "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "direct-discount": helpers.absmod(
+                __name__, ".cart.DirectDiscountReferenceSchema"
+            ),
             "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
             "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
             "key-value-document": helpers.absmod(
@@ -552,7 +546,7 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
-        missing=None,
+        load_default=None,
         data_key="conflictingResource",
     )
 
@@ -576,14 +570,42 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
-class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
-    conflicting_prices = helpers.LazyNestedField(
+class DuplicatePriceKeyErrorSchema(ErrorObjectSchema):
+    conflicting_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceSchema"),
         allow_none=True,
-        many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="conflictingPrices",
+        load_default=None,
+        data_key="conflictingPrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.DuplicatePriceKeyError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class DuplicatePriceScopeErrorSchema(ErrorObjectSchema):
+    conflicting_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="conflictingPrice",
     )
 
     class Meta:
@@ -613,13 +635,13 @@ class DuplicateStandalonePriceScopeErrorSchema(ErrorObjectSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="conflictingStandalonePrice",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    currency = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
+    currency = marshmallow.fields.String(allow_none=True, load_default=None)
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -628,7 +650,7 @@ class DuplicateStandalonePriceScopeErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -636,18 +658,18 @@ class DuplicateStandalonePriceScopeErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
 
@@ -676,7 +698,7 @@ class DuplicateVariantValuesErrorSchema(ErrorObjectSchema):
         nested=helpers.absmod(__name__, ".VariantValuesSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="variantValues",
     )
 
@@ -705,7 +727,7 @@ class EditPreviewFailedErrorSchema(ErrorObjectSchema):
         nested=helpers.absmod(__name__, ".order_edit.OrderEditPreviewFailureSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -730,10 +752,10 @@ class EditPreviewFailedErrorSchema(ErrorObjectSchema):
 
 class EnumKeyAlreadyExistsErrorSchema(ErrorObjectSchema):
     conflicting_enum_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingEnumKey"
+        allow_none=True, load_default=None, data_key="conflictingEnumKey"
     )
     conflicting_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingAttributeName"
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
     )
 
     class Meta:
@@ -758,10 +780,10 @@ class EnumKeyAlreadyExistsErrorSchema(ErrorObjectSchema):
 
 class EnumKeyDoesNotExistErrorSchema(ErrorObjectSchema):
     conflicting_enum_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingEnumKey"
+        allow_none=True, load_default=None, data_key="conflictingEnumKey"
     )
     conflicting_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="conflictingAttributeName"
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
     )
 
     class Meta:
@@ -828,23 +850,19 @@ class EnumValuesMustMatchErrorSchema(ErrorObjectSchema):
 
 class ErrorResponseSchema(helpers.BaseSchema):
     status_code = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="statusCode"
+        allow_none=True, load_default=None, data_key="statusCode"
     )
-    message = marshmallow.fields.String(allow_none=True, missing=None)
-    error = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
-    error_description = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
-    )
+    message = marshmallow.fields.String(allow_none=True, load_default=None)
     errors = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
             discriminator_field=("code", "code"),
             discriminator_schemas={
-                "access_denied": helpers.absmod(__name__, ".AccessDeniedErrorSchema"),
                 "AnonymousIdAlreadyInUse": helpers.absmod(
                     __name__, ".AnonymousIdAlreadyInUseErrorSchema"
+                ),
+                "AssociateMissingPermission": helpers.absmod(
+                    __name__, ".AssociateMissingPermissionErrorSchema"
                 ),
                 "AttributeDefinitionAlreadyExists": helpers.absmod(
                     __name__, ".AttributeDefinitionAlreadyExistsErrorSchema"
@@ -858,6 +876,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "BadGateway": helpers.absmod(__name__, ".BadGatewayErrorSchema"),
                 "ConcurrentModification": helpers.absmod(
                     __name__, ".ConcurrentModificationErrorSchema"
+                ),
+                "CountryNotConfiguredInStore": helpers.absmod(
+                    __name__, ".CountryNotConfiguredInStoreErrorSchema"
                 ),
                 "DiscountCodeNonApplicable": helpers.absmod(
                     __name__, ".DiscountCodeNonApplicableErrorSchema"
@@ -876,6 +897,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 ),
                 "DuplicateFieldWithConflictingResource": helpers.absmod(
                     __name__, ".DuplicateFieldWithConflictingResourceErrorSchema"
+                ),
+                "DuplicatePriceKey": helpers.absmod(
+                    __name__, ".DuplicatePriceKeyErrorSchema"
                 ),
                 "DuplicatePriceScope": helpers.absmod(
                     __name__, ".DuplicatePriceScopeErrorSchema"
@@ -906,6 +930,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 ),
                 "ExtensionNoResponse": helpers.absmod(
                     __name__, ".ExtensionNoResponseErrorSchema"
+                ),
+                "ExtensionPredicateEvaluationFailed": helpers.absmod(
+                    __name__, ".ExtensionPredicateEvaluationFailedErrorSchema"
                 ),
                 "ExtensionUpdateActionsFailed": helpers.absmod(
                     __name__, ".ExtensionUpdateActionsFailedErrorSchema"
@@ -959,6 +986,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "MissingTaxRateForCountry": helpers.absmod(
                     __name__, ".MissingTaxRateForCountryErrorSchema"
                 ),
+                "MoneyOverflow": helpers.absmod(__name__, ".MoneyOverflowErrorSchema"),
                 "NoMatchingProductDiscountFound": helpers.absmod(
                     __name__, ".NoMatchingProductDiscountFoundErrorSchema"
                 ),
@@ -975,6 +1003,12 @@ class ErrorResponseSchema(helpers.BaseSchema):
                     __name__, ".PendingOperationErrorSchema"
                 ),
                 "PriceChanged": helpers.absmod(__name__, ".PriceChangedErrorSchema"),
+                "ProductAssignmentMissing": helpers.absmod(
+                    __name__, ".ProductAssignmentMissingErrorSchema"
+                ),
+                "ProductPresentWithDifferentVariantSelection": helpers.absmod(
+                    __name__, ".ProductPresentWithDifferentVariantSelectionErrorSchema"
+                ),
                 "ProjectNotConfiguredForLanguages": helpers.absmod(
                     __name__, ".ProjectNotConfiguredForLanguagesErrorSchema"
                 ),
@@ -1012,12 +1046,11 @@ class ErrorResponseSchema(helpers.BaseSchema):
                     __name__, ".ShippingMethodDoesNotMatchCartErrorSchema"
                 ),
                 "SyntaxError": helpers.absmod(__name__, ".SyntaxErrorErrorSchema"),
-                "WeakPassword": helpers.absmod(__name__, ".WeakPasswordErrorSchema"),
             },
         ),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1025,8 +1058,21 @@ class ErrorResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ErrorResponse(**data)
+
+
+class AuthErrorResponseSchema(ErrorResponseSchema):
+    error = marshmallow.fields.String(allow_none=True, load_default=None)
+    error_description = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        return models.AuthErrorResponse(**data)
 
 
 class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
@@ -1034,21 +1080,43 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="localizedMessage",
     )
     extension_extra_info = marshmallow.fields.Raw(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="extensionExtraInfo",
     )
-    error_by_extension = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
+    extension_errors = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ExtensionErrorSchema"),
         allow_none=True,
+        many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="errorByExtension",
+        load_default=None,
+        data_key="extensionErrors",
+    )
+    extension_body = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionBody",
+    )
+    extension_status_code = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionStatusCode",
+    )
+    extension_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="extensionId"
+    )
+    extension_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionKey",
     )
 
     class Meta:
@@ -1071,14 +1139,54 @@ class ExtensionBadResponseErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
-class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
+class ExtensionErrorSchema(helpers.BaseSchema):
+    code = marshmallow.fields.String(allow_none=True, load_default=None)
+    message = marshmallow.fields.String(allow_none=True, load_default=None)
     extension_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="extensionId"
+        allow_none=True, load_default=None, data_key="extensionId"
     )
     extension_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+        data_key="extensionKey",
+    )
+    _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
+        metadata={
+            "pattern": re.compile(""),
+            "type": marshmallow.fields.Raw(allow_none=True, load_default=None),
+        },
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExtensionError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
+    extension_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="extensionId"
+    )
+    extension_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
         data_key="extensionKey",
     )
 
@@ -1102,26 +1210,56 @@ class ExtensionNoResponseErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class ExtensionPredicateEvaluationFailedErrorSchema(ErrorObjectSchema):
+    error_by_extension = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="errorByExtension",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ExtensionPredicateEvaluationFailedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
     localized_message = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="localizedMessage",
     )
     extension_extra_info = marshmallow.fields.Raw(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="extensionExtraInfo",
     )
-    error_by_extension = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
+    extension_errors = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ExtensionErrorSchema"),
         allow_none=True,
+        many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
-        data_key="errorByExtension",
+        load_default=None,
+        data_key="extensionErrors",
     )
 
     class Meta:
@@ -1292,15 +1430,15 @@ class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
 
 
 class InvalidFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(allow_none=True, missing=None)
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
     invalid_value = marshmallow.fields.Raw(
-        allow_none=True, missing=None, data_key="invalidValue"
+        allow_none=True, load_default=None, data_key="invalidValue"
     )
     allowed_values = marshmallow.fields.List(
         marshmallow.fields.Raw(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="allowedValues",
     )
 
@@ -1346,9 +1484,9 @@ class InvalidInputErrorSchema(ErrorObjectSchema):
 
 
 class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
-    subject = marshmallow.fields.String(allow_none=True, missing=None)
+    subject = marshmallow.fields.String(allow_none=True, load_default=None)
     item_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="itemId"
+        allow_none=True, load_default=None, data_key="itemId"
     )
 
     class Meta:
@@ -1372,6 +1510,10 @@ class InvalidItemShippingDetailsErrorSchema(ErrorObjectSchema):
 
 
 class InvalidJsonInputErrorSchema(ErrorObjectSchema):
+    detailed_error_message = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="detailedErrorMessage"
+    )
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1478,23 +1620,23 @@ class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
 
 class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
     product_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="productId"
+        allow_none=True, load_default=None, data_key="productId"
     )
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
     currency = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -1502,7 +1644,7 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1530,7 +1672,7 @@ class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
         ReferenceTypeId,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="exceededResource",
     )
 
@@ -1560,13 +1702,13 @@ class MissingRoleOnChannelErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     missing_role = marshmallow_enum.EnumField(
         ChannelRoleEnum,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="missingRole",
     )
 
@@ -1592,13 +1734,13 @@ class MissingRoleOnChannelErrorSchema(ErrorObjectSchema):
 
 class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
     tax_category_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="taxCategoryId"
+        allow_none=True, load_default=None, data_key="taxCategoryId"
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     state = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1614,6 +1756,27 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.MissingTaxRateForCountryError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class MoneyOverflowErrorSchema(ErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MoneyOverflowError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -1688,11 +1851,11 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
     line_items = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="lineItems",
     )
     skus = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -1743,13 +1906,13 @@ class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="conflictingStandalonePrice",
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
-    currency = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
+    currency = marshmallow.fields.String(allow_none=True, load_default=None)
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -1758,7 +1921,7 @@ class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -1766,30 +1929,30 @@ class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     conflicting_valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="conflictingValidFrom",
     )
     conflicting_valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="conflictingValidUntil",
     )
 
@@ -1838,10 +2001,10 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
     line_items = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="lineItems",
     )
-    shipping = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    shipping = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1863,12 +2026,89 @@ class PriceChangedErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class ProductAssignmentMissingErrorSchema(ErrorObjectSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ProductAssignmentMissingError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class ProductPresentWithDifferentVariantSelectionErrorSchema(ErrorObjectSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    existing_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "includeAllExcept": helpers.absmod(
+                __name__,
+                ".product_selection.ProductVariantSelectionIncludeAllExceptSchema",
+            ),
+            "includeOnly": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionIncludeOnlySchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        load_default=None,
+        data_key="existingVariantSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ProductPresentWithDifferentVariantSelectionError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1939,7 +2179,7 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="referencedBy",
     )
 
@@ -1965,13 +2205,17 @@ class ReferenceExistsErrorSchema(ErrorObjectSchema):
 
 class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
     type_id = marshmallow_enum.EnumField(
-        ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="typeId",
     )
     id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1995,7 +2239,7 @@ class ReferencedResourceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class RequiredFieldErrorSchema(ErrorObjectSchema):
-    field = marshmallow.fields.String(allow_none=True, missing=None)
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2208,21 +2452,21 @@ class SyntaxErrorErrorSchema(ErrorObjectSchema):
 
 class VariantValuesSchema(helpers.BaseSchema):
     sku = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     prices = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".product.AttributeSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -2230,11 +2474,19 @@ class VariantValuesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.VariantValues(**data)
 
 
-class WeakPasswordErrorSchema(ErrorObjectSchema):
+class GraphQLErrorObjectSchema(helpers.BaseSchema):
+    code = marshmallow.fields.String(allow_none=True, load_default=None)
+    _regex = helpers.RegexField(
+        unknown=marshmallow.EXCLUDE,
+        metadata={
+            "pattern": re.compile(""),
+            "type": marshmallow.fields.Raw(allow_none=True, load_default=None),
+        },
+    )
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2247,7 +2499,2125 @@ class WeakPasswordErrorSchema(ErrorObjectSchema):
     def post_load(self, data, original_data, **kwargs):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
-        return models.WeakPasswordError(**data)
+        return models.GraphQLErrorObject(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLAnonymousIdAlreadyInUseErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLAnonymousIdAlreadyInUseError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLAssociateMissingPermissionErrorSchema(GraphQLErrorObjectSchema):
+    associate = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="businessUnit",
+    )
+    associate_on_behalf = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer.CustomerResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="associateOnBehalf",
+    )
+    permissions = marshmallow.fields.List(
+        marshmallow_enum.EnumField(Permission, by_value=True, allow_none=True),
+        allow_none=True,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLAssociateMissingPermissionError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLAttributeDefinitionAlreadyExistsErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_product_type_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingProductTypeId"
+    )
+    conflicting_product_type_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingProductTypeName"
+    )
+    conflicting_attribute_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLAttributeDefinitionAlreadyExistsError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLAttributeDefinitionTypeConflictErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_product_type_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingProductTypeId"
+    )
+    conflicting_product_type_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingProductTypeName"
+    )
+    conflicting_attribute_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLAttributeDefinitionTypeConflictError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLAttributeNameDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
+    invalid_attribute_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="invalidAttributeName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLAttributeNameDoesNotExistError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLBadGatewayErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLBadGatewayError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLConcurrentModificationErrorSchema(GraphQLErrorObjectSchema):
+    current_version = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="currentVersion",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLConcurrentModificationError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLCountryNotConfiguredInStoreErrorSchema(GraphQLErrorObjectSchema):
+    store_countries = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        load_default=None,
+        data_key="storeCountries",
+    )
+    country = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLCountryNotConfiguredInStoreError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDiscountCodeNonApplicableErrorSchema(GraphQLErrorObjectSchema):
+    discount_code = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="discountCode",
+    )
+    reason = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    discount_code_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="discountCodeId",
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validUntil",
+    )
+    validity_check_time = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validityCheckTime",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDiscountCodeNonApplicableError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateAttributeValueErrorSchema(GraphQLErrorObjectSchema):
+    attribute = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.AttributeSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateAttributeValueError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateAttributeValuesErrorSchema(GraphQLErrorObjectSchema):
+    attributes = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.AttributeSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateAttributeValuesError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateEnumValuesErrorSchema(GraphQLErrorObjectSchema):
+    duplicates = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateEnumValuesError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateFieldErrorSchema(GraphQLErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+    duplicate_value = marshmallow.fields.Raw(
+        allow_none=True, load_default=None, data_key="duplicateValue"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateFieldError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateFieldWithConflictingResourceErrorSchema(GraphQLErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+    duplicate_value = marshmallow.fields.Raw(
+        allow_none=True, load_default=None, data_key="duplicateValue"
+    )
+    conflicting_resource = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("typeId", "type_id"),
+        discriminator_schemas={
+            "associate-role": helpers.absmod(
+                __name__, ".associate_role.AssociateRoleReferenceSchema"
+            ),
+            "attribute-group": helpers.absmod(
+                __name__, ".attribute_group.AttributeGroupReferenceSchema"
+            ),
+            "business-unit": helpers.absmod(
+                __name__, ".business_unit.BusinessUnitReferenceSchema"
+            ),
+            "cart-discount": helpers.absmod(
+                __name__, ".cart_discount.CartDiscountReferenceSchema"
+            ),
+            "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "direct-discount": helpers.absmod(
+                __name__, ".cart.DirectDiscountReferenceSchema"
+            ),
+            "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
+            "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
+            "key-value-document": helpers.absmod(
+                __name__, ".custom_object.CustomObjectReferenceSchema"
+            ),
+            "customer-group": helpers.absmod(
+                __name__, ".customer_group.CustomerGroupReferenceSchema"
+            ),
+            "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
+            "discount-code": helpers.absmod(
+                __name__, ".discount_code.DiscountCodeReferenceSchema"
+            ),
+            "inventory-entry": helpers.absmod(
+                __name__, ".inventory.InventoryEntryReferenceSchema"
+            ),
+            "order-edit": helpers.absmod(
+                __name__, ".order_edit.OrderEditReferenceSchema"
+            ),
+            "order": helpers.absmod(__name__, ".order.OrderReferenceSchema"),
+            "payment": helpers.absmod(__name__, ".payment.PaymentReferenceSchema"),
+            "product-discount": helpers.absmod(
+                __name__, ".product_discount.ProductDiscountReferenceSchema"
+            ),
+            "product-selection": helpers.absmod(
+                __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-type": helpers.absmod(
+                __name__, ".product_type.ProductTypeReferenceSchema"
+            ),
+            "product": helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+            "quote-request": helpers.absmod(
+                __name__, ".quote_request.QuoteRequestReferenceSchema"
+            ),
+            "quote": helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
+            "review": helpers.absmod(__name__, ".review.ReviewReferenceSchema"),
+            "shipping-method": helpers.absmod(
+                __name__, ".shipping_method.ShippingMethodReferenceSchema"
+            ),
+            "shopping-list": helpers.absmod(
+                __name__, ".shopping_list.ShoppingListReferenceSchema"
+            ),
+            "staged-quote": helpers.absmod(
+                __name__, ".staged_quote.StagedQuoteReferenceSchema"
+            ),
+            "standalone-price": helpers.absmod(
+                __name__, ".standalone_price.StandalonePriceReferenceSchema"
+            ),
+            "state": helpers.absmod(__name__, ".state.StateReferenceSchema"),
+            "store": helpers.absmod(__name__, ".store.StoreReferenceSchema"),
+            "tax-category": helpers.absmod(
+                __name__, ".tax_category.TaxCategoryReferenceSchema"
+            ),
+            "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
+            "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
+        },
+        load_default=None,
+        data_key="conflictingResource",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateFieldWithConflictingResourceError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicatePriceKeyErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="conflictingPrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicatePriceKeyError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicatePriceScopeErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="conflictingPrice",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicatePriceScopeError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateStandalonePriceScopeErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".standalone_price.StandalonePriceReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="conflictingStandalonePrice",
+    )
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
+    currency = marshmallow.fields.String(allow_none=True, load_default=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customerGroup",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateStandalonePriceScopeError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLDuplicateVariantValuesErrorSchema(GraphQLErrorObjectSchema):
+    variant_values = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".VariantValuesSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="variantValues",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLDuplicateVariantValuesError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLEditPreviewFailedErrorSchema(GraphQLErrorObjectSchema):
+    result = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".order_edit.OrderEditPreviewFailureSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLEditPreviewFailedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLEnumKeyAlreadyExistsErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_enum_key = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingEnumKey"
+    )
+    conflicting_attribute_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLEnumKeyAlreadyExistsError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLEnumKeyDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_enum_key = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingEnumKey"
+    )
+    conflicting_attribute_name = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="conflictingAttributeName"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLEnumKeyDoesNotExistError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLEnumValueIsUsedErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLEnumValueIsUsedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLEnumValuesMustMatchErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLEnumValuesMustMatchError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLExtensionBadResponseErrorSchema(GraphQLErrorObjectSchema):
+    localized_message = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="localizedMessage",
+    )
+    extension_extra_info = marshmallow.fields.Raw(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionExtraInfo",
+    )
+    extension_errors = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ExtensionErrorSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="extensionErrors",
+    )
+    extension_body = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionBody",
+    )
+    extension_status_code = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionStatusCode",
+    )
+    extension_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="extensionId"
+    )
+    extension_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLExtensionBadResponseError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLExtensionNoResponseErrorSchema(GraphQLErrorObjectSchema):
+    extension_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="extensionId"
+    )
+    extension_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionKey",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLExtensionNoResponseError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLExtensionPredicateEvaluationFailedErrorSchema(GraphQLErrorObjectSchema):
+    error_by_extension = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ErrorByExtensionSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="errorByExtension",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLExtensionPredicateEvaluationFailedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLExtensionUpdateActionsFailedErrorSchema(GraphQLErrorObjectSchema):
+    localized_message = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="localizedMessage",
+    )
+    extension_extra_info = marshmallow.fields.Raw(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="extensionExtraInfo",
+    )
+    extension_errors = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ExtensionErrorSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="extensionErrors",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLExtensionUpdateActionsFailedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLExternalOAuthFailedErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLExternalOAuthFailedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLFeatureRemovedErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLFeatureRemovedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLGeneralErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLGeneralError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInsufficientScopeErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInsufficientScopeError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInternalConstraintViolatedErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInternalConstraintViolatedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidCredentialsErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidCredentialsError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidCurrentPasswordErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidCurrentPasswordError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidFieldErrorSchema(GraphQLErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+    invalid_value = marshmallow.fields.Raw(
+        allow_none=True, load_default=None, data_key="invalidValue"
+    )
+    allowed_values = marshmallow.fields.List(
+        marshmallow.fields.Raw(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="allowedValues",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidFieldError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidInputErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidInputError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidItemShippingDetailsErrorSchema(GraphQLErrorObjectSchema):
+    subject = marshmallow.fields.String(allow_none=True, load_default=None)
+    item_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="itemId"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidItemShippingDetailsError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidJsonInputErrorSchema(GraphQLErrorObjectSchema):
+    detailed_error_message = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="detailedErrorMessage"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidJsonInputError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidOperationErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidOperationError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidSubjectErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidSubjectError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLInvalidTokenErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLInvalidTokenError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLLanguageUsedInStoresErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLLanguageUsedInStoresError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMatchingPriceNotFoundErrorSchema(GraphQLErrorObjectSchema):
+    product_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="productId"
+    )
+    variant_id = marshmallow.fields.Integer(
+        allow_none=True, load_default=None, data_key="variantId"
+    )
+    currency = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customerGroup",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMatchingPriceNotFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMaxResourceLimitExceededErrorSchema(GraphQLErrorObjectSchema):
+    exceeded_resource = marshmallow_enum.EnumField(
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="exceededResource",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMaxResourceLimitExceededError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMissingRoleOnChannelErrorSchema(GraphQLErrorObjectSchema):
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    missing_role = marshmallow_enum.EnumField(
+        ChannelRoleEnum,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="missingRole",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMissingRoleOnChannelError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMissingTaxRateForCountryErrorSchema(GraphQLErrorObjectSchema):
+    tax_category_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="taxCategoryId"
+    )
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    state = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMissingTaxRateForCountryError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMoneyOverflowErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMoneyOverflowError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLNoMatchingProductDiscountFoundErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLNoMatchingProductDiscountFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLNotEnabledErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLNotEnabledError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLObjectNotFoundErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLObjectNotFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLOutOfStockErrorSchema(GraphQLErrorObjectSchema):
+    line_items = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        load_default=None,
+        data_key="lineItems",
+    )
+    skus = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLOutOfStockError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLOverCapacityErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLOverCapacityError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLOverlappingStandalonePriceValidityErrorSchema(GraphQLErrorObjectSchema):
+    conflicting_standalone_price = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".standalone_price.StandalonePriceReferenceSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="conflictingStandalonePrice",
+    )
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
+    currency = marshmallow.fields.String(allow_none=True, load_default=None)
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customerGroup",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validUntil",
+    )
+    conflicting_valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="conflictingValidFrom",
+    )
+    conflicting_valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="conflictingValidUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLOverlappingStandalonePriceValidityError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLPendingOperationErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLPendingOperationError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLPriceChangedErrorSchema(GraphQLErrorObjectSchema):
+    line_items = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        load_default=None,
+        data_key="lineItems",
+    )
+    shipping = marshmallow.fields.Boolean(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLPriceChangedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLProductAssignmentMissingErrorSchema(GraphQLErrorObjectSchema):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLProductAssignmentMissingError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLProductPresentWithDifferentVariantSelectionErrorSchema(
+    GraphQLErrorObjectSchema
+):
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".product.ProductReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    existing_variant_selection = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "exclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionExclusionSchema"
+            ),
+            "includeAllExcept": helpers.absmod(
+                __name__,
+                ".product_selection.ProductVariantSelectionIncludeAllExceptSchema",
+            ),
+            "includeOnly": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionIncludeOnlySchema"
+            ),
+            "inclusion": helpers.absmod(
+                __name__, ".product_selection.ProductVariantSelectionInclusionSchema"
+            ),
+        },
+        load_default=None,
+        data_key="existingVariantSelection",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLProductPresentWithDifferentVariantSelectionError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLProjectNotConfiguredForLanguagesErrorSchema(GraphQLErrorObjectSchema):
+    languages = marshmallow.fields.List(
+        marshmallow.fields.String(allow_none=True),
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLProjectNotConfiguredForLanguagesError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLQueryComplexityLimitExceededErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLQueryComplexityLimitExceededError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLQueryTimedOutErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLQueryTimedOutError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLReferenceExistsErrorSchema(GraphQLErrorObjectSchema):
+    referenced_by = marshmallow_enum.EnumField(
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="referencedBy",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLReferenceExistsError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLReferencedResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
+    type_id = marshmallow_enum.EnumField(
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="typeId",
+    )
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLReferencedResourceNotFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLRequiredFieldErrorSchema(GraphQLErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLRequiredFieldError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLResourceNotFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLResourceSizeLimitExceededErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLResourceSizeLimitExceededError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSearchDeactivatedErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSearchDeactivatedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSearchExecutionFailureErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSearchExecutionFailureError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSearchFacetPathNotFoundErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSearchFacetPathNotFoundError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSearchIndexingInProgressErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSearchIndexingInProgressError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSemanticErrorErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSemanticErrorError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLShippingMethodDoesNotMatchCartErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLShippingMethodDoesNotMatchCartError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLSyntaxErrorErrorSchema(GraphQLErrorObjectSchema):
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLSyntaxErrorError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):

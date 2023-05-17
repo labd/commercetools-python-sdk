@@ -26,10 +26,10 @@ class LocalizedStringField(marshmallow.fields.Dict):
 # Marshmallow Schemas
 class MoneySchema(helpers.BaseSchema):
     cent_amount = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="centAmount"
+        allow_none=True, load_default=None, data_key="centAmount"
     )
     currency_code = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="currencyCode"
+        allow_none=True, load_default=None, data_key="currencyCode"
     )
 
     class Meta:
@@ -37,15 +37,18 @@ class MoneySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Money(**data)
 
 
 class ReferenceSchema(helpers.BaseSchema):
     type_id = marshmallow_enum.EnumField(
-        ReferenceTypeId, by_value=True, allow_none=True, missing=None, data_key="typeId"
+        ReferenceTypeId,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="typeId",
     )
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -91,11 +94,11 @@ class ProductVariantSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".ProductReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
-    staged = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    staged = marshmallow.fields.Boolean(allow_none=True, load_default=None)
     variant_id = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="variantId"
+        allow_none=True, load_default=None, data_key="variantId"
     )
 
     class Meta:
@@ -103,16 +106,15 @@ class ProductVariantSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductVariant(**data)
 
 
 class TaskTokenSchema(helpers.BaseSchema):
     task_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="taskId"
+        allow_none=True, load_default=None, data_key="taskId"
     )
     uri_path = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="uriPath"
+        allow_none=True, load_default=None, data_key="uriPath"
     )
 
     class Meta:
@@ -120,5 +122,4 @@ class TaskTokenSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.TaskToken(**data)

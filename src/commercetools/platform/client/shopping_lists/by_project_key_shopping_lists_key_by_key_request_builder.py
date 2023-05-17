@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyShoppingListsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -37,7 +36,6 @@ class ByProjectKeyShoppingListsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Gets a shopping list by Key."""
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/shopping-lists/key={self._key}",
@@ -62,7 +60,6 @@ class ByProjectKeyShoppingListsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """Update a shopping list found by its Key."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/shopping-lists/key={self._key}",
@@ -83,16 +80,16 @@ class ByProjectKeyShoppingListsKeyByKeyRequestBuilder:
     def delete(
         self,
         *,
+        expand: typing.List["str"] = None,
         data_erasure: bool = None,
         version: int,
-        expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/shopping-lists/key={self._key}",
-            params={"dataErasure": data_erasure, "version": version, "expand": expand},
+            params={"expand": expand, "dataErasure": data_erasure, "version": version},
             headers=headers,
             options=options,
         )

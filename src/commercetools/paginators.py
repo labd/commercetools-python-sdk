@@ -38,7 +38,6 @@ class Paginator:
         self._limit = None
 
     def __iter__(self) -> typing.Generator[models.BaseResource, None, None]:
-
         offset = self._offset or 0
         limit = self._limit
         num = 0

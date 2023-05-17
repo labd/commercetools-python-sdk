@@ -122,7 +122,7 @@ class Customer(BaseResource):
     date_of_birth: typing.Optional[datetime.date]
     #: Company name of the Customer.
     company_name: typing.Optional[str]
-    #: Unique VAT ID of the Customer.
+    #: Individual VAT ID of the Customer.
     vat_id: typing.Optional[str]
     #: Addresses used by the Customer.
     addresses: typing.List["Address"]
@@ -360,7 +360,7 @@ class CustomerDraft(_BaseType):
     date_of_birth: typing.Optional[datetime.date]
     #: Company name of the Customer. When representing a company as a Customer, [Business Units](ctp:api:type:BusinessUnit) provide extended funtionality.
     company_name: typing.Optional[str]
-    #: Unique VAT ID of the Customer.
+    #: Individual VAT ID of the Customer.
     vat_id: typing.Optional[str]
     #: Addresses of the Customer.
     addresses: typing.Optional[typing.List["BaseAddress"]]
@@ -605,7 +605,6 @@ class CustomerResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CUSTOMER)
 
     @classmethod
@@ -623,7 +622,7 @@ class CustomerResourceIdentifier(ResourceIdentifier):
 
 
 class CustomerSignInResult(_BaseType):
-    #: Customer [signed up](#create-sign-up-customer) or [signed in](#authenticate-sign-in-customer) after authentication.
+    #: Customer [signed up](ctp:api:endpoint:/{projectKey}/customers:POST) or [signed in](ctp:api:endpoint:/{projectKey}/login:POST) after authentication.
     customer: "Customer"
     #: Cart associated with the Customer.
     #: If empty, the Customer does not have a Cart assigned.
@@ -659,7 +658,7 @@ class CustomerSignin(_BaseType):
     #: - Set to `MergeWithExistingCustomerCart` if [LineItems](ctp:api:type:LineItem) of the anonymous Cart should be merged with the active Customer Cart that has been modified most recently.
     #: - Set to `UseAsNewActiveCustomerCart` if the anonymous Cart should be used as the new active Customer Cart and no [LineItems](ctp:api:type:LineItem) are to be merged.
     anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"]
-    #: If both `anonymousCart` and `anonymousId` are provided, the `anonymousId` on the CustomerSignin must match that of the anonymous [Cart](ctp:api:type:Cart].
+    #: If both `anonymousCart` and `anonymousId` are provided, the `anonymousId` on the CustomerSignin must match that of the anonymous [Cart](ctp:api:type:Cart).
     #: Otherwise a [400 Bad Request](ctp:api:type:InvalidOperationError) `Invalid Operation` error is returned with the message:
     #: "Cart with the ID cart-id does not have the expected anonymousId.".
     anonymous_id: typing.Optional[str]
@@ -1352,8 +1351,8 @@ class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     value: typing.Optional[typing.Any]
 
     def __init__(
@@ -1474,8 +1473,8 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     value: typing.Optional[typing.Any]
 
     def __init__(self, *, name: str, value: typing.Optional[typing.Any] = None):

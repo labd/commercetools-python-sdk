@@ -18,7 +18,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -49,6 +48,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
@@ -62,6 +62,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
+                "localeProjection": locale_projection,
                 "expand": expand,
             },
             headers=headers,
@@ -107,10 +108,12 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Product"]:
+        """A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/products/key={self._key}",
@@ -119,6 +122,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
+                "localeProjection": locale_projection,
                 "expand": expand,
             },
             json=body.serialize(),
@@ -141,6 +145,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
         price_country: str = None,
         price_customer_group: str = None,
         price_channel: str = None,
+        locale_projection: typing.List["str"] = None,
         version: int,
         expand: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
@@ -157,6 +162,7 @@ class ByProjectKeyProductsKeyByKeyRequestBuilder:
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,
                 "priceChannel": price_channel,
+                "localeProjection": locale_projection,
                 "version": version,
                 "expand": expand,
             },

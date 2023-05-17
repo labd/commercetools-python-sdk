@@ -23,17 +23,16 @@ class ProjectCategoryRecommendationSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.CategoryReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
-    confidence = marshmallow.fields.Float(allow_none=True, missing=None)
-    path = marshmallow.fields.String(allow_none=True, missing=None)
+    confidence = marshmallow.fields.Float(allow_none=True, load_default=None)
+    path = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProjectCategoryRecommendation(**data)
 
 
@@ -41,19 +40,19 @@ class ProjectCategoryRecommendationMetaSchema(helpers.BaseSchema):
     product_name = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productName",
     )
     product_image_url = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productImageUrl",
     )
     general_category_names = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="generalCategoryNames",
     )
 
@@ -62,26 +61,25 @@ class ProjectCategoryRecommendationMetaSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProjectCategoryRecommendationMeta(**data)
 
 
 class ProjectCategoryRecommendationPagedQueryResponseSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProjectCategoryRecommendationSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProjectCategoryRecommendationMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -89,5 +87,4 @@ class ProjectCategoryRecommendationPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProjectCategoryRecommendationPagedQueryResponse(**data)

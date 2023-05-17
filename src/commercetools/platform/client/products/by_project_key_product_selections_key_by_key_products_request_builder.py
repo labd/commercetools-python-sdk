@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductSelectionsKeyByKeyProductsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -37,6 +36,7 @@ class ByProjectKeyProductSelectionsKeyByKeyProductsRequestBuilder:
         limit: int = None,
         offset: int = None,
         with_total: bool = None,
+        sort: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductSelectionProductPagedQueryResponse"]:
@@ -48,6 +48,7 @@ class ByProjectKeyProductSelectionsKeyByKeyProductsRequestBuilder:
                 "limit": limit,
                 "offset": offset,
                 "withTotal": with_total,
+                "sort": sort,
             },
             headers=headers,
             options=options,

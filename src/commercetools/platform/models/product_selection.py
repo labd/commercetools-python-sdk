@@ -26,12 +26,15 @@ __all__ = [
     "AssignedProductReference",
     "AssignedProductSelection",
     "AssignedProductSelectionPagedQueryResponse",
+    "IndividualExclusionProductSelectionType",
     "IndividualProductSelectionType",
     "ProductSelection",
     "ProductSelectionAddProductAction",
     "ProductSelectionAssignment",
     "ProductSelectionChangeNameAction",
     "ProductSelectionDraft",
+    "ProductSelectionExcludeProductAction",
+    "ProductSelectionMode",
     "ProductSelectionPagedQueryResponse",
     "ProductSelectionProductPagedQueryResponse",
     "ProductSelectionReference",
@@ -40,13 +43,17 @@ __all__ = [
     "ProductSelectionSetCustomFieldAction",
     "ProductSelectionSetCustomTypeAction",
     "ProductSelectionSetKeyAction",
+    "ProductSelectionSetVariantExclusionAction",
     "ProductSelectionSetVariantSelectionAction",
     "ProductSelectionType",
     "ProductSelectionTypeEnum",
     "ProductSelectionUpdate",
     "ProductSelectionUpdateAction",
+    "ProductVariantExclusion",
     "ProductVariantSelection",
     "ProductVariantSelectionExclusion",
+    "ProductVariantSelectionIncludeAllExcept",
+    "ProductVariantSelectionIncludeOnly",
     "ProductVariantSelectionInclusion",
     "ProductVariantSelectionTypeEnum",
     "ProductsInStorePagedQueryResponse",
@@ -56,18 +63,27 @@ __all__ = [
 class AssignedProductReference(_BaseType):
     #: Reference to a Product that is assigned to the Product Selection.
     product: "ProductReference"
-    #: The Variants of the Product that are included, or excluded, from the Product Selection.
+    #: The Variants of the Product that are included from the Product Selection.
+    #:
+    #: This field may exist only in Product Selections with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
     #: In absence of this field, all Variants are deemed to be included.
     variant_selection: typing.Optional["ProductVariantSelection"]
+    #: The Variants of the Product that are excluded from the Product Selection.
+    #:
+    #: This field may exist only in Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    #: In absence of this field, all Variants are deemed to be excluded.
+    variant_exclusion: typing.Optional["ProductVariantExclusion"]
 
     def __init__(
         self,
         *,
         product: "ProductReference",
-        variant_selection: typing.Optional["ProductVariantSelection"] = None
+        variant_selection: typing.Optional["ProductVariantSelection"] = None,
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
     ):
         self.product = product
         self.variant_selection = variant_selection
+        self.variant_exclusion = variant_exclusion
 
         super().__init__()
 
@@ -88,17 +104,29 @@ class AssignedProductReference(_BaseType):
 class AssignedProductSelection(_BaseType):
     #: Reference to the Product Selection that this assignment is part of.
     product_selection: "ProductSelectionReference"
-    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    #: Defines which Variants of the Product will be included in the Product Selection.
+    #:
+    #: This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
     variant_selection: typing.Optional["ProductVariantSelection"]
+    #: Defines which Variants of the Product will be excluded from the Product Selection.
+    #:
+    #: This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    variant_exclusion: typing.Optional["ProductVariantExclusion"]
+    #: Date and time (UTC) this assignment was initially created.
+    created_at: datetime.datetime
 
     def __init__(
         self,
         *,
         product_selection: "ProductSelectionReference",
-        variant_selection: typing.Optional["ProductVariantSelection"] = None
+        variant_selection: typing.Optional["ProductVariantSelection"] = None,
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
+        created_at: datetime.datetime
     ):
         self.product_selection = product_selection
         self.variant_selection = variant_selection
+        self.variant_exclusion = variant_exclusion
+        self.created_at = created_at
 
         super().__init__()
 
@@ -180,9 +208,13 @@ class ProductSelection(BaseResource):
     name: "LocalizedString"
     #: Number of Products that are currently assigned to this ProductSelection.
     product_count: int
-    #: Specifies in which way the Products are assigned to the ProductSelection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
-    type: "ProductSelectionTypeEnum"
-    #: Custom Fields of this ProductSelection.
+    #: Specifies in which way the Products are assigned to the ProductSelection.
+    #: Currently, the only way of doing this is to specify each Product individually, either by [including or excluding](ctp:api:type:ProductSelectionMode) them explicitly.
+    type: typing.Optional["ProductSelectionTypeEnum"]
+    #: Specifies in which way the Products are assigned to the ProductSelection.
+    #: Currently, the only way of doing this is to specify each Product individually, either by [including or excluding](ctp:api:type:ProductSelectionMode) them explicitly.
+    mode: "ProductSelectionMode"
+    #: Custom Fields of the ProductSelection.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -197,7 +229,8 @@ class ProductSelection(BaseResource):
         key: typing.Optional[str] = None,
         name: "LocalizedString",
         product_count: int,
-        type: "ProductSelectionTypeEnum",
+        type: typing.Optional["ProductSelectionTypeEnum"] = None,
+        mode: "ProductSelectionMode",
         custom: typing.Optional["CustomFields"] = None
     ):
         self.last_modified_by = last_modified_by
@@ -206,6 +239,7 @@ class ProductSelection(BaseResource):
         self.name = name
         self.product_count = product_count
         self.type = type
+        self.mode = mode
         self.custom = custom
 
         super().__init__(
@@ -228,25 +262,40 @@ class ProductSelection(BaseResource):
 
 
 class ProductSelectionAssignment(_BaseType):
-    """Specifies which Product is assigned to which ProductSelection."""
+    """
+    Given the mode of Product Selection, this assignment refers to, it may contain:
+
+    - `variantSelection` field for a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    - `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) ([BETA](/../offering/api-contract#public-beta)).
+    """
 
     #: Reference to a Product that is assigned to the ProductSelection.
     product: "ProductReference"
     #: Reference to the Product Selection that this assignment is part of.
     product_selection: "ProductSelectionReference"
-    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    #: Define which Variants of the added Product will be included in the Product Selection.
+    #:
+    #: This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    #: The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
     variant_selection: typing.Optional["ProductVariantSelection"]
+    #: Defines which Variants of the Product will be excluded from the Product Selection.
+    #:
+    #: This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    #: The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+    variant_exclusion: typing.Optional["ProductVariantExclusion"]
 
     def __init__(
         self,
         *,
         product: "ProductReference",
         product_selection: "ProductSelectionReference",
-        variant_selection: typing.Optional["ProductVariantSelection"] = None
+        variant_selection: typing.Optional["ProductVariantSelection"] = None,
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
     ):
         self.product = product
         self.product_selection = product_selection
         self.variant_selection = variant_selection
+        self.variant_exclusion = variant_exclusion
 
         super().__init__()
 
@@ -271,17 +320,25 @@ class ProductSelectionDraft(_BaseType):
     name: "LocalizedString"
     #: Custom Fields of this ProductSelection.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Type of the Product Selection.
+    type: typing.Optional["ProductSelectionTypeEnum"]
+    #: Mode of the Product Selection.
+    mode: typing.Optional["ProductSelectionMode"]
 
     def __init__(
         self,
         *,
         key: typing.Optional[str] = None,
         name: "LocalizedString",
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
+        type: typing.Optional["ProductSelectionTypeEnum"] = None,
+        mode: typing.Optional["ProductSelectionMode"] = None
     ):
         self.key = key
         self.name = name
         self.custom = custom
+        self.type = type
+        self.mode = mode
 
         super().__init__()
 
@@ -295,6 +352,13 @@ class ProductSelectionDraft(_BaseType):
         from ._schemas.product_selection import ProductSelectionDraftSchema
 
         return ProductSelectionDraftSchema().dump(self)
+
+
+class ProductSelectionMode(enum.Enum):
+    """Product Selections can have the following modes:"""
+
+    INDIVIDUAL = "Individual"
+    INDIVIDUAL_EXCLUSION = "IndividualExclusion"
 
 
 class ProductSelectionPagedQueryResponse(_BaseType):
@@ -430,7 +494,6 @@ class ProductSelectionResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_SELECTION)
 
     @classmethod
@@ -448,7 +511,7 @@ class ProductSelectionResourceIdentifier(ResourceIdentifier):
 
 
 class ProductSelectionType(_BaseType):
-    #: The following type of Product Selections is supported:
+    #: The following types of Product Selections are supported:
     type: "ProductSelectionTypeEnum"
 
     def __init__(self, *, type: "ProductSelectionTypeEnum"):
@@ -458,6 +521,12 @@ class ProductSelectionType(_BaseType):
 
     @classmethod
     def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProductSelectionType":
+        if data["type"] == "individualExclusion":
+            from ._schemas.product_selection import (
+                IndividualExclusionProductSelectionTypeSchema,
+            )
+
+            return IndividualExclusionProductSelectionTypeSchema().load(data)
         if data["type"] == "individual":
             from ._schemas.product_selection import IndividualProductSelectionTypeSchema
 
@@ -467,6 +536,33 @@ class ProductSelectionType(_BaseType):
         from ._schemas.product_selection import ProductSelectionTypeSchema
 
         return ProductSelectionTypeSchema().dump(self)
+
+
+class IndividualExclusionProductSelectionType(ProductSelectionType):
+    #: The name of the ProductSelection which is recommended to be unique.
+    name: "LocalizedString"
+
+    def __init__(self, *, name: "LocalizedString"):
+        self.name = name
+
+        super().__init__(type=ProductSelectionTypeEnum.INDIVIDUAL_EXCLUSION)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "IndividualExclusionProductSelectionType":
+        from ._schemas.product_selection import (
+            IndividualExclusionProductSelectionTypeSchema,
+        )
+
+        return IndividualExclusionProductSelectionTypeSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import (
+            IndividualExclusionProductSelectionTypeSchema,
+        )
+
+        return IndividualExclusionProductSelectionTypeSchema().dump(self)
 
 
 class IndividualProductSelectionType(ProductSelectionType):
@@ -493,9 +589,10 @@ class IndividualProductSelectionType(ProductSelectionType):
 
 
 class ProductSelectionTypeEnum(enum.Enum):
-    """The following type of Product Selections is supported:"""
+    """The following types of Product Selections are supported:"""
 
     INDIVIDUAL = "individual"
+    INDIVIDUAL_EXCLUSION = "individualExclusion"
 
 
 class ProductSelectionUpdate(_BaseType):
@@ -548,6 +645,12 @@ class ProductSelectionUpdateAction(_BaseType):
             )
 
             return ProductSelectionChangeNameActionSchema().load(data)
+        if data["action"] == "excludeProduct":
+            from ._schemas.product_selection import (
+                ProductSelectionExcludeProductActionSchema,
+            )
+
+            return ProductSelectionExcludeProductActionSchema().load(data)
         if data["action"] == "removeProduct":
             from ._schemas.product_selection import (
                 ProductSelectionRemoveProductActionSchema,
@@ -570,6 +673,12 @@ class ProductSelectionUpdateAction(_BaseType):
             from ._schemas.product_selection import ProductSelectionSetKeyActionSchema
 
             return ProductSelectionSetKeyActionSchema().load(data)
+        if data["action"] == "setVariantExclusion":
+            from ._schemas.product_selection import (
+                ProductSelectionSetVariantExclusionActionSchema,
+            )
+
+            return ProductSelectionSetVariantExclusionActionSchema().load(data)
         if data["action"] == "setVariantSelection":
             from ._schemas.product_selection import (
                 ProductSelectionSetVariantSelectionActionSchema,
@@ -581,6 +690,31 @@ class ProductSelectionUpdateAction(_BaseType):
         from ._schemas.product_selection import ProductSelectionUpdateActionSchema
 
         return ProductSelectionUpdateActionSchema().dump(self)
+
+
+class ProductVariantExclusion(_BaseType):
+    """Only Product Variants with the explicitly listed SKUs are part of a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode)."""
+
+    #: Non-empty array of SKUs representing Product Variants to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    skus: typing.List["str"]
+
+    def __init__(self, *, skus: typing.List["str"]):
+        self.skus = skus
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantExclusion":
+        from ._schemas.product_selection import ProductVariantExclusionSchema
+
+        return ProductVariantExclusionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import ProductVariantExclusionSchema
+
+        return ProductVariantExclusionSchema().dump(self)
 
 
 class ProductVariantSelection(_BaseType):
@@ -604,6 +738,18 @@ class ProductVariantSelection(_BaseType):
             )
 
             return ProductVariantSelectionExclusionSchema().load(data)
+        if data["type"] == "includeAllExcept":
+            from ._schemas.product_selection import (
+                ProductVariantSelectionIncludeAllExceptSchema,
+            )
+
+            return ProductVariantSelectionIncludeAllExceptSchema().load(data)
+        if data["type"] == "includeOnly":
+            from ._schemas.product_selection import (
+                ProductVariantSelectionIncludeOnlySchema,
+            )
+
+            return ProductVariantSelectionIncludeOnlySchema().load(data)
         if data["type"] == "inclusion":
             from ._schemas.product_selection import (
                 ProductVariantSelectionInclusionSchema,
@@ -642,6 +788,60 @@ class ProductVariantSelectionExclusion(ProductVariantSelection):
         return ProductVariantSelectionExclusionSchema().dump(self)
 
 
+class ProductVariantSelectionIncludeAllExcept(ProductVariantSelection):
+    """All Product Variants except the explicitly stated SKUs are part of the Product Selection."""
+
+    #: Non-empty array of SKUs representing Product Variants to be excluded from the Product Selection.
+    skus: typing.List["str"]
+
+    def __init__(self, *, skus: typing.List["str"]):
+        self.skus = skus
+
+        super().__init__(type=ProductVariantSelectionTypeEnum.INCLUDE_ALL_EXCEPT)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantSelectionIncludeAllExcept":
+        from ._schemas.product_selection import (
+            ProductVariantSelectionIncludeAllExceptSchema,
+        )
+
+        return ProductVariantSelectionIncludeAllExceptSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import (
+            ProductVariantSelectionIncludeAllExceptSchema,
+        )
+
+        return ProductVariantSelectionIncludeAllExceptSchema().dump(self)
+
+
+class ProductVariantSelectionIncludeOnly(ProductVariantSelection):
+    """Only Product Variants with explicitly stated SKUs are part of the Product Selection."""
+
+    #: Non-empty array of SKUs representing Product Variants to be included into the Product Selection.
+    skus: typing.List["str"]
+
+    def __init__(self, *, skus: typing.List["str"]):
+        self.skus = skus
+
+        super().__init__(type=ProductVariantSelectionTypeEnum.INCLUDE_ONLY)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductVariantSelectionIncludeOnly":
+        from ._schemas.product_selection import ProductVariantSelectionIncludeOnlySchema
+
+        return ProductVariantSelectionIncludeOnlySchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import ProductVariantSelectionIncludeOnlySchema
+
+        return ProductVariantSelectionIncludeOnlySchema().dump(self)
+
+
 class ProductVariantSelectionInclusion(ProductVariantSelection):
     """Only Product Variants with explicitly stated SKUs are part of the Product Selection."""
 
@@ -670,6 +870,8 @@ class ProductVariantSelectionInclusion(ProductVariantSelection):
 class ProductVariantSelectionTypeEnum(enum.Enum):
     INCLUSION = "inclusion"
     EXCLUSION = "exclusion"
+    INCLUDE_ONLY = "includeOnly"
+    INCLUDE_ALL_EXCEPT = "includeAllExcept"
 
 
 class ProductsInStorePagedQueryResponse(_BaseType):
@@ -723,14 +925,14 @@ class ProductsInStorePagedQueryResponse(_BaseType):
 
 class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
     """Adds a Product to the Product Selection.
-    If the given Product is already assigned to the Product Selection with the same Variant Selection nothing happens
-    but if the existing Assignment has a different Variant Selection [ProductPresentWithDifferentVariantSelection](/errors#product-selections) is raised.'
+
+    If the specified Product is already assigned to the Product Selection, but the existing Product Selection has a different Product Variant Selection, a [ProductPresentWithDifferentVariantSelection](ctp:api:type:ProductPresentWithDifferentVariantSelectionError) error is returned.
 
     """
 
     #: ResourceIdentifier of the Product
     product: "ProductResourceIdentifier"
-    #: Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+    #: Defines which Variants of the Product will be included in the Product Selection.
     #: If not supplied all Variants are deemed to be included.
     variant_selection: typing.Optional["ProductVariantSelection"]
 
@@ -782,6 +984,48 @@ class ProductSelectionChangeNameAction(ProductSelectionUpdateAction):
         return ProductSelectionChangeNameActionSchema().dump(self)
 
 
+class ProductSelectionExcludeProductAction(ProductSelectionUpdateAction):
+    """Excludes a Product from a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+
+    If the specified Product is already assigned to the Product Selection, but the existing Product Selection has a different Product Variant Exclusion, a [ProductPresentWithDifferentVariantSelection](ctp:api:type:ProductPresentWithDifferentVariantSelectionError) error is returned.
+
+    """
+
+    #: ResourceIdentifier of the Product
+    product: "ProductResourceIdentifier"
+    #: Defines which Variants of the Product will be excluded from the Product Selection.
+    #: If not supplied all Variants are deemed to be excluded.
+    variant_exclusion: typing.Optional["ProductVariantExclusion"]
+
+    def __init__(
+        self,
+        *,
+        product: "ProductResourceIdentifier",
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+    ):
+        self.product = product
+        self.variant_exclusion = variant_exclusion
+
+        super().__init__(action="excludeProduct")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionExcludeProductAction":
+        from ._schemas.product_selection import (
+            ProductSelectionExcludeProductActionSchema,
+        )
+
+        return ProductSelectionExcludeProductActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import (
+            ProductSelectionExcludeProductActionSchema,
+        )
+
+        return ProductSelectionExcludeProductActionSchema().dump(self)
+
+
 class ProductSelectionRemoveProductAction(ProductSelectionUpdateAction):
     #: ResourceIdentifier of the Product
     product: "ProductResourceIdentifier"
@@ -813,7 +1057,7 @@ class ProductSelectionSetCustomFieldAction(ProductSelectionUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -900,9 +1144,54 @@ class ProductSelectionSetKeyAction(ProductSelectionUpdateAction):
         return ProductSelectionSetKeyActionSchema().dump(self)
 
 
+class ProductSelectionSetVariantExclusionAction(ProductSelectionUpdateAction):
+    """Updates the Product Variant Exclusion of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
+    A [ProductVariantExclusion](ctp:api:type:ProductVariantExclusion) can only be set if the [Product](ctp:api:type:Product) has already been excluded from the [Product Selection](ctp:api:type:ProductSelection) with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+
+    If the specified Product is not assigned to the Product Selection, a [ProductAssignmentMissing](ctp:api:type:ProductAssignmentMissingError) error is returned.
+
+    """
+
+    #: ResourceIdentifier of the Product
+    product: "ProductResourceIdentifier"
+    #: Determines which Variants of the previously excluded Product are to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+    #: Leave it empty to unset an existing Variant Exclusion.
+    variant_exclusion: typing.Optional["ProductVariantExclusion"]
+
+    def __init__(
+        self,
+        *,
+        product: "ProductResourceIdentifier",
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+    ):
+        self.product = product
+        self.variant_exclusion = variant_exclusion
+
+        super().__init__(action="setVariantExclusion")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProductSelectionSetVariantExclusionAction":
+        from ._schemas.product_selection import (
+            ProductSelectionSetVariantExclusionActionSchema,
+        )
+
+        return ProductSelectionSetVariantExclusionActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.product_selection import (
+            ProductSelectionSetVariantExclusionActionSchema,
+        )
+
+        return ProductSelectionSetVariantExclusionActionSchema().dump(self)
+
+
 class ProductSelectionSetVariantSelectionAction(ProductSelectionUpdateAction):
     """Updates the Product Variant Selection of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
-    If the given Product is not assigned to the Product Selection [ProductAssignmentMissing](/errors#product-selections) error is raised.
+    A [ProductVariantSelection](ctp:api:type:ProductVariantSelection) can only be set if the [Product](ctp:api:type:Product) has already been included in the Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+
+    If the specified Product is not assigned to the Product Selection, a [ProductAssignmentMissing](ctp:api:type:ProductAssignmentMissingError) error is returned.
 
     """
 

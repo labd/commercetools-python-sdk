@@ -51,7 +51,6 @@ class BaseClient:
         token_saver: BaseTokenSaver = None,
         http_adapter: HTTPAdapter = None,
     ) -> None:
-
         # Use environment variables as fallback
         config = {
             "project_key": project_key,

@@ -203,7 +203,6 @@ class AccessDeniedError(ErrorObject):
     """This is the generic error code for access denied. In case of a wrong scope, an [InvalidScopeError](#invalidscopeerror) will be returned."""
 
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="access_denied")
 
     @classmethod
@@ -222,7 +221,6 @@ class InvalidScopeError(ErrorObject):
     """The requested scope is invalid, unknown, malformed, or exceeds the scope granted by the resource owner."""
 
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="invalid_scope")
 
     @classmethod
@@ -244,7 +242,6 @@ class InvalidOperation(ErrorObject):
     """
 
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="InvalidOperation")
 
     @classmethod
@@ -400,7 +397,6 @@ class VariantValues(_BaseType):
 
 class InsufficientScopeError(ErrorObject):
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="insufficient_scope")
 
     @classmethod
@@ -419,7 +415,6 @@ class InsufficientScopeError(ErrorObject):
 
 class InvalidCredentialsError(ErrorObject):
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="InvalidCredentials")
 
     @classmethod
@@ -438,7 +433,6 @@ class InvalidCredentialsError(ErrorObject):
 
 class InvalidTokenError(ErrorObject):
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="invalid_token")
 
     @classmethod
@@ -503,7 +497,6 @@ class InvalidJsonInput(ErrorObject):
     """
 
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="InvalidJsonInput")
 
     @classmethod
@@ -525,7 +518,6 @@ class InvalidInput(ErrorObject):
     """
 
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="InvalidInput")
 
     @classmethod
@@ -719,7 +711,6 @@ class ConcurrentModificationError(ErrorObject):
 
 class ContentionError(ErrorObject):
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="Contention")
 
     @classmethod
@@ -736,7 +727,6 @@ class ContentionError(ErrorObject):
 
 class GenericError(ErrorObject):
     def __init__(self, *, message: str):
-
         super().__init__(message=message, code="Generic")
 
     @classmethod

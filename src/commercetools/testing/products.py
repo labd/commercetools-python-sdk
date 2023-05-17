@@ -84,7 +84,6 @@ class ProductsModel(BaseModel):
     def _create_variant_from_draft(
         self, draft: models.ProductVariantDraft
     ) -> models.ProductVariant:
-
         assets: Optional[List[models.Asset]] = None
         if draft.assets:
             assets = self._create_assets_from_draft(draft.assets)

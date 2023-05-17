@@ -21,7 +21,10 @@ __all__ = [
     "AzureEventGridDestination",
     "AzureServiceBusDestination",
     "ChangeSubscription",
+    "ChangeSubscriptionResourceTypeId",
     "CloudEventsFormat",
+    "CloudEventsPayload",
+    "ConfluentCloudDestination",
     "DeliveryFormat",
     "DeliveryPayload",
     "Destination",
@@ -30,6 +33,7 @@ __all__ = [
     "IronMqDestination",
     "MessageDeliveryPayload",
     "MessageSubscription",
+    "MessageSubscriptionResourceTypeId",
     "PayloadNotIncluded",
     "PlatformFormat",
     "ResourceCreatedDeliveryPayload",
@@ -51,16 +55,23 @@ __all__ = [
 
 
 class AwsAuthenticationMode(enum.Enum):
-    """Defines the method of authentication for AWS SQS and SNS Destinations. Subscriptions with `Credentials` authentication mode are authenticated using an `accessKey` and `accessSecret` pair. Subscriptions with `IAM` authentication mode are authenticated using Identity and Access Management (IAM). In this case, the user `arn:aws:iam::362576667341:user/subscriptions` requires permissions to send messages to the queue or publish to the topic. This is the recommended `authenticationMode`, as it doesn't require additional key management."""
+    """Defines the method of authentication for AWS SQS and SNS Destinations."""
 
     CREDENTIALS = "Credentials"
     IAM = "IAM"
 
 
 class ChangeSubscription(_BaseType):
-    resource_type_id: str
+    """Notification about changes to a resource. The payload format differs for resource [creation](ctp:api:type:ResourceCreatedDeliveryPayload),
+    [update](ctp:api:type:ResourceUpdatedDeliveryPayload),
+    and [deletion](ctp:api:type:ResourceDeletedDeliveryPayload).
 
-    def __init__(self, *, resource_type_id: str):
+    """
+
+    #: Unique identifier for the type of resource, for example, `cart`.
+    resource_type_id: "ChangeSubscriptionResourceTypeId"
+
+    def __init__(self, *, resource_type_id: "ChangeSubscriptionResourceTypeId"):
         self.resource_type_id = resource_type_id
 
         super().__init__()
@@ -75,6 +86,109 @@ class ChangeSubscription(_BaseType):
         from ._schemas.subscription import ChangeSubscriptionSchema
 
         return ChangeSubscriptionSchema().dump(self)
+
+
+class ChangeSubscriptionResourceTypeId(enum.Enum):
+    """Resource types supported by [ChangeSubscriptions](ctp:api:type:ChangeSubscription):"""
+
+    BUSINESS_UNIT = "business-unit"
+    CART = "cart"
+    CART_DISCOUNT = "cart-discount"
+    CATEGORY = "category"
+    CHANNEL = "channel"
+    CUSTOMER = "customer"
+    CUSTOMER_EMAIL_TOKEN = "customer-email-token"
+    CUSTOMER_GROUP = "customer-group"
+    CUSTOMER_PASSWORD_TOKEN = "customer-password-token"
+    DISCOUNT_CODE = "discount-code"
+    EXTENSION = "extension"
+    INVENTORY_ENTRY = "inventory-entry"
+    KEY_VALUE_DOCUMENT = "key-value-document"
+    ORDER = "order"
+    ORDER_EDIT = "order-edit"
+    PAYMENT = "payment"
+    PRODUCT = "product"
+    PRODUCT_DISCOUNT = "product-discount"
+    PRODUCT_PRICE = "product-price"
+    PRODUCT_SELECTION = "product-selection"
+    PRODUCT_TYPE = "product-type"
+    QUOTE = "quote"
+    QUOTE_REQUEST = "quote-request"
+    REVIEW = "review"
+    SHIPPING_METHOD = "shipping-method"
+    SHOPPING_LIST = "shopping-list"
+    STAGED_QUOTE = "staged-quote"
+    STANDALONE_PRICE = "standalone-price"
+    STATE = "state"
+    STORE = "store"
+    SUBSCRIPTION = "subscription"
+    TAX_CATEGORY = "tax-category"
+    TYPE = "type"
+    ZONE = "zone"
+
+
+class CloudEventsPayload(_BaseType):
+    """The [CloudEventsFormat](ctp:api:type:CloudEventsFormat) represents event data in a way that conforms to a common specification. The message payload can be found inside the `data` field."""
+
+    #: The version of the [CloudEvents](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md) specification which the event uses.
+    specversion: str
+    #: Unique identifier of the event.
+    id: str
+    #: The `type` is namespaced with `com.commercetools`, followed by the [ReferenceTypeId](ctp:api:type:ReferenceTypeId), the type of Subscription (either `message` or `change`), and the message or change type.
+    #: For example, `com.commercetools.product.message.ProductPublished` or `com.commercetools.order.change.ResourceCreated`.
+    type: str
+    #: The default REST URI of the [ReferenceTypeId](ctp:api:type:ReferenceTypeId) that triggered this event, including the project key.
+    source: str
+    #: Unique identifier of the resource that triggered the event.
+    subject: str
+    #: Corresponds to the `lastModifiedAt` of the resource at the time the event was triggered.
+    time: datetime.datetime
+    #: Corresponds to the `sequenceNumber` of a [MessageSubscription](ctp:api:type:MessageSubscription). Can be used to process messages in the correct order.
+    sequence: typing.Optional[str]
+    #: `"Integer"`
+    sequencetype: typing.Optional[str]
+    #: The URI from which the message can be retrieved if messages are [enabled](/../api/projects/messages#enable-querying-messages-via-the-api). Only set for [MessageSubscriptions](ctp:api:type:MessageSubscription).
+    dataref: typing.Optional[str]
+    #: [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload), [ResourceCreatedDeliveryPayload](ctp:api:type:ResourceCreatedDeliveryPayload), [ResourceUpdatedDeliveryPayload](ctp:api:type:ResourceUpdatedDeliveryPayload), or [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload).
+    data: "DeliveryPayload"
+
+    def __init__(
+        self,
+        *,
+        specversion: str,
+        id: str,
+        type: str,
+        source: str,
+        subject: str,
+        time: datetime.datetime,
+        sequence: typing.Optional[str] = None,
+        sequencetype: typing.Optional[str] = None,
+        dataref: typing.Optional[str] = None,
+        data: "DeliveryPayload"
+    ):
+        self.specversion = specversion
+        self.id = id
+        self.type = type
+        self.source = source
+        self.subject = subject
+        self.time = time
+        self.sequence = sequence
+        self.sequencetype = sequencetype
+        self.dataref = dataref
+        self.data = data
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "CloudEventsPayload":
+        from ._schemas.subscription import CloudEventsPayloadSchema
+
+        return CloudEventsPayloadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import CloudEventsPayloadSchema
+
+        return CloudEventsPayloadSchema().dump(self)
 
 
 class DeliveryFormat(_BaseType):
@@ -103,6 +217,8 @@ class DeliveryFormat(_BaseType):
 
 
 class CloudEventsFormat(DeliveryFormat):
+    """The CloudEventsFormat can be used with any [Destination](#destination), and the payload is delivered in the `JSON Event Format`. [AzureEventGridDestination](ctp:api:type:AzureEventGridDestination) offers native support to filter and route CloudEvents."""
+
     cloud_events_version: str
 
     def __init__(self, *, cloud_events_version: str):
@@ -123,11 +239,16 @@ class CloudEventsFormat(DeliveryFormat):
 
 
 class DeliveryPayload(_BaseType):
+    """All payloads for the [PlatformFormat](ctp:api:type:PlatformFormat) share these common fields."""
+
+    #: `key` of the [Project](ctp:api:type:Project).
+    #: Useful in message processing if the Destination receives events from multiple Projects.
     project_key: str
+    #: Identifies the payload.
     notification_type: str
-    #: A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+    #: Reference to the resource that triggered the message.
     resource: "Reference"
-    #: User-provided identifiers present on the resource for which the Message is created. The value of the identifier stored in the Message corresponds to the one that was set on the resource at the version shown in `resourceVersion`.
+    #: User-defined unique identifiers of the resource.
     resource_user_provided_identifiers: typing.Optional["UserProvidedIdentifiers"]
 
     def __init__(
@@ -190,6 +311,10 @@ class Destination(_BaseType):
             from ._schemas.subscription import AzureServiceBusDestinationSchema
 
             return AzureServiceBusDestinationSchema().load(data)
+        if data["type"] == "ConfluentCloud":
+            from ._schemas.subscription import ConfluentCloudDestinationSchema
+
+            return ConfluentCloudDestinationSchema().load(data)
         if data["type"] == "EventBridge":
             from ._schemas.subscription import EventBridgeDestinationSchema
 
@@ -218,7 +343,14 @@ class Destination(_BaseType):
 
 
 class AzureEventGridDestination(Destination):
+    """[Azure Event Grid](https://azure.microsoft.com/en-us/products/event-grid/) can be used to push messages to Azure Functions, HTTP endpoints (webhooks), and several other Azure tools. Event Grid can only be used with the [CloudEventsFormat](ctp:api:type:CloudEventsFormat).
+    To set up a Subscription with Azure Event Grid, first create a topic in the [Azure Portal](https://azure.microsoft.com/en-us/get-started/azure-portal/). To allow Composable Commerce to push messages to your topic, provide an [access key](https://docs.microsoft.com/en-us/azure/event-grid/get-access-keys).
+
+    """
+
+    #: URI of the topic.
     uri: str
+    #: Partially hidden on retrieval for security reasons.
     access_key: str
 
     def __init__(self, *, uri: str, access_key: str):
@@ -242,6 +374,12 @@ class AzureEventGridDestination(Destination):
 
 
 class AzureServiceBusDestination(Destination):
+    """[Azure Service Bus](https://azure.microsoft.com/en-us/products/service-bus/) can be used as a pull-queue with [Queues](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#queues), or to fan-out messages with [Topics and Subscriptions](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions).
+    To set up a Subscription with Azure Service Bus, first create a queue/topic in the [Azure Portal](https://azure.microsoft.com/en-us/get-started/azure-portal/) with a Shared Access Policy including the `Send` permission.
+
+    """
+
+    #: SharedAccessKey is partially hidden on retrieval for security reasons.
     connection_string: str
 
     def __init__(self, *, connection_string: str):
@@ -263,12 +401,70 @@ class AzureServiceBusDestination(Destination):
         return AzureServiceBusDestinationSchema().dump(self)
 
 
-class EventBridgeDestination(Destination):
-    """[AWS EventBridge](https://aws.amazon.com/eventbridge/) can be used to push events and messages to a serverless event bus that can forward them to AWS SQS, SNS, Lambda, and other AWS services based on forwarding rules."""
+class ConfluentCloudDestination(Destination):
+    """This destination can be used to push events and messages to [Confluent Cloud](https://www.confluent.io/confluent-cloud/).
+    To set up a Subscription of this type, first, create a topic in Confluent Cloud.
+    Then, to allow Composable Commerce to push events and messages to your topic, generate [API keys](https://docs.confluent.io/cloud/current/access-management/authenticate/api-keys/api-keys.html) for your topic, and create the Subscription destination using the generated credentials.
 
-    #: AWS region of the Subscriptions that receives the events.
+    The Composable Commerce producer uses the following values: `SASL_SSL` for`security.protocol`, `PLAIN` for`sasl.mechanism`, and the default value (1048576) for `max.request.size`.
+
+    """
+
+    #: URL to the bootstrap server including the port number in the format `<xxxxx>.<region>.<provider>.confluent.cloud:9092`.
+    bootstrap_server: str
+    #: Partially hidden on retrieval for security reasons.
+    api_key: str
+    #: Partially hidden on retrieval for security reasons.
+    api_secret: str
+    #: The Kafka `acks` value. Can be `"0"`, `"1"`, or `"all"`.
+    acks: str
+    #: The name of the topic.
+    topic: str
+    #: The Kafka record key.
+    key: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        bootstrap_server: str,
+        api_key: str,
+        api_secret: str,
+        acks: str,
+        topic: str,
+        key: typing.Optional[str] = None
+    ):
+        self.bootstrap_server = bootstrap_server
+        self.api_key = api_key
+        self.api_secret = api_secret
+        self.acks = acks
+        self.topic = topic
+        self.key = key
+
+        super().__init__(type="ConfluentCloud")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ConfluentCloudDestination":
+        from ._schemas.subscription import ConfluentCloudDestinationSchema
+
+        return ConfluentCloudDestinationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.subscription import ConfluentCloudDestinationSchema
+
+        return ConfluentCloudDestinationSchema().dump(self)
+
+
+class EventBridgeDestination(Destination):
+    """[AWS EventBridge](https://aws.amazon.com/eventbridge/) can be used to push events and messages to a serverless event bus that can forward them to AWS SQS, SNS, Lambda, and other AWS services based on forwarding rules.
+    Once the Subscription is created, an equivalent "partner event source" is created in AWS EventBridge. This event source must be associated with an event bus for the Subscription setup to be complete.
+
+    """
+
+    #: AWS region that receives the events.
     region: str
-    #: ID of the AWS account that receives events.
+    #: ID of the AWS account that receives the events.
     account_id: str
 
     def __init__(self, *, region: str, account_id: str):
@@ -292,7 +488,16 @@ class EventBridgeDestination(Destination):
 
 
 class GoogleCloudPubSubDestination(Destination):
+    """Destination for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/) that can be used
+    for [Pull subscriptions](https://cloud.google.com/pubsub/docs/pull) as well as for [Push subscriptions](https://cloud.google.com/pubsub/docs/push).
+    The `topic` must give the `pubsub.topics.publish` permission to the service account `subscriptions@commercetools-platform.iam.gserviceaccount.com`.
+    If used with the [CloudEventsFormat](#cloudeventsformat), the message conforms to the [PubSub Protocol Binding](https://github.com/google/knative-gcp/blob/master/docs/spec/pubsub-protocol-binding.md) of the [Structured Content Mode](https://github.com/google/knative-gcp/blob/master/docs/spec/pubsub-protocol-binding.md#32-structured-content-mode).
+
+    """
+
+    #: ID of the Google Cloud project that contains the Pub/Sub topic.
     project_id: str
+    #: Name of the topic.
     topic: str
 
     def __init__(self, *, project_id: str, topic: str):
@@ -336,13 +541,23 @@ class IronMqDestination(Destination):
 
 
 class MessageDeliveryPayload(DeliveryPayload):
+    """This payload is sent for a [MessageSubscription](ctp:api:type:MessageSubscription)."""
+
+    #: Unique ID of the message.
     id: str
+    #: Last seen version of the resource.
     version: int
+    #: Date and time (UTC) the resource was initially created.
     created_at: datetime.datetime
+    #: Date and time (UTC) the resource was last modified.
     last_modified_at: datetime.datetime
+    #: Used to ensure all messages of the resource are processed in correct order.
+    #: The `sequenceNumber` of the next message of the resource is a successor of the `sequenceNumber` of the current message.
     sequence_number: int
+    #: Version of the resource on which the change was performed.
     resource_version: int
-    payload_not_included: "PayloadNotIncluded"
+    #: If the payload does not fit into the size limit or its format is not accepted by the messaging service, the `payloadNotIncluded` field is present.
+    payload_not_included: typing.Optional["PayloadNotIncluded"]
 
     def __init__(
         self,
@@ -358,7 +573,7 @@ class MessageDeliveryPayload(DeliveryPayload):
         last_modified_at: datetime.datetime,
         sequence_number: int,
         resource_version: int,
-        payload_not_included: "PayloadNotIncluded"
+        payload_not_included: typing.Optional["PayloadNotIncluded"] = None
     ):
         self.id = id
         self.version = version
@@ -390,13 +605,22 @@ class MessageDeliveryPayload(DeliveryPayload):
 
 
 class MessageSubscription(_BaseType):
-    resource_type_id: str
+    """For supported resources and message types, see [Message Types](/../api/projects/messages#message-types). Messages will be delivered even if the Messages Query HTTP API [is not enabled](/../api/projects/messages#enable-querying-messages-via-the-api).
+
+    For MessageSubscriptions, the format of the payload is [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload).
+
+    """
+
+    #: Unique identifier for the type of resource, for example, `order`.
+    resource_type_id: "MessageSubscriptionResourceTypeId"
+    #: Must contain valid message types for the resource. For example, for resource type `product` the message type `ProductPublished` is valid.
+    #: If no `types` of messages are given, the Subscription will receive all messages for this resource.
     types: typing.Optional[typing.List["str"]]
 
     def __init__(
         self,
         *,
-        resource_type_id: str,
+        resource_type_id: "MessageSubscriptionResourceTypeId",
         types: typing.Optional[typing.List["str"]] = None
     ):
         self.resource_type_id = resource_type_id
@@ -416,8 +640,30 @@ class MessageSubscription(_BaseType):
         return MessageSubscriptionSchema().dump(self)
 
 
+class MessageSubscriptionResourceTypeId(enum.Enum):
+    """Resource types supported by [MessageSubscriptions](ctp:api:type:MessageSubscription):"""
+
+    ASSOCIATE_ROLE = "associate-role"
+    BUSINESS_UNIT = "business-unit"
+    CATEGORY = "category"
+    CUSTOMER = "customer"
+    INVENTORY_ENTRY = "inventory-entry"
+    ORDER = "order"
+    PAYMENT = "payment"
+    PRODUCT = "product"
+    PRODUCT_SELECTION = "product-selection"
+    QUOTE = "quote"
+    QUOTE_REQUEST = "quote-request"
+    REVIEW = "review"
+    STAGED_QUOTE = "staged-quote"
+    STANDALONE_PRICE = "standalone-price"
+    STORE = "store"
+
+
 class PayloadNotIncluded(_BaseType):
+    #: Reason the payload is not included. For example, the payload is too large, or its content is not supported by the Subscription destination.
     reason: str
+    #: Value of the `type` field in the original payload.
     payload_type: str
 
     def __init__(self, *, reason: str, payload_type: str):
@@ -439,8 +685,9 @@ class PayloadNotIncluded(_BaseType):
 
 
 class PlatformFormat(DeliveryFormat):
-    def __init__(self):
+    """The PlatformFormat uses constructs that are similar to the ones used in the REST API, for example, on the [Messages Query HTTP API](/../api/projects/messages)."""
 
+    def __init__(self):
         super().__init__(type="Platform")
 
     @classmethod
@@ -456,7 +703,11 @@ class PlatformFormat(DeliveryFormat):
 
 
 class ResourceCreatedDeliveryPayload(DeliveryPayload):
+    """This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is created."""
+
+    #: Last seen version of the resource.
     version: int
+    #: Date and time (UTC) the resource was last modified.
     modified_at: datetime.datetime
 
     def __init__(
@@ -495,8 +746,13 @@ class ResourceCreatedDeliveryPayload(DeliveryPayload):
 
 
 class ResourceDeletedDeliveryPayload(DeliveryPayload):
+    """This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is deleted."""
+
+    #: Last seen version of the resource.
     version: int
+    #: Date and time (UTC) the resource was last deleted.
     modified_at: datetime.datetime
+    #: `true` if the `dataErasure` [parameter](/../api/general-concepts#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
     data_erasure: typing.Optional[bool]
 
     def __init__(
@@ -537,8 +793,13 @@ class ResourceDeletedDeliveryPayload(DeliveryPayload):
 
 
 class ResourceUpdatedDeliveryPayload(DeliveryPayload):
+    """This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is updated. This includes updates by a background process, like a change in product availability."""
+
+    #: Last seen version of the resource.
     version: int
+    #: Version of the resource before the update.
     old_version: int
+    #: Date and time (UTC) the resource was last updated.
     modified_at: datetime.datetime
 
     def __init__(
@@ -579,10 +840,21 @@ class ResourceUpdatedDeliveryPayload(DeliveryPayload):
 
 
 class SnsDestination(Destination):
+    """[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues. The SQS queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type.
+
+    We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test message will not be sent.
+
+    If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+
+    The IAM user should only have the `sns:Publish` permission on this topic.
+
+    """
+
     #: Only present if `authenticationMode` is set to `Credentials`.
     access_key: typing.Optional[str]
     #: Only present if `authenticationMode` is set to `Credentials`.
     access_secret: typing.Optional[str]
+    #: Amazon Resource Name (ARN) of the topic.
     topic_arn: str
     #: Defines the method of authentication for the SNS topic.
     authentication_mode: typing.Optional["AwsAuthenticationMode"]
@@ -615,11 +887,24 @@ class SnsDestination(Destination):
 
 
 class SqsDestination(Destination):
+    """[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
+    The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
+
+    We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test message will not be sent.
+
+    If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+
+    The IAM user should only have the `sqs:SendMessage` permission on this queue.
+
+    """
+
     #: Only present if `authenticationMode` is set to `Credentials`.
     access_key: typing.Optional[str]
     #: Only present if `authenticationMode` is set to `Credentials`.
     access_secret: typing.Optional[str]
+    #: URL of the Amazon SQS queue.
     queue_url: str
+    #: [AWS Region](https://docs.aws.amazon.com/general/latest/gr/rande-manage.html) the message queue is located in.
     region: str
     #: Defines the method of authentication for the SQS queue.
     authentication_mode: typing.Optional["AwsAuthenticationMode"]
@@ -654,16 +939,21 @@ class SqsDestination(Destination):
 
 
 class Subscription(BaseResource):
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
+    #: Change notifications subscribed to.
     changes: typing.List["ChangeSubscription"]
+    #: Messaging service to which the messages are to be sent.
     destination: "Destination"
     #: User-defined unique identifier of the Subscription.
     key: typing.Optional[str]
+    #: Messages subscribed to.
     messages: typing.List["MessageSubscription"]
+    #: Format in which the payload is delivered.
     format: "DeliveryFormat"
+    #: Status of the Subscription.
     status: "SubscriptionHealthStatus"
 
     def __init__(
@@ -711,11 +1001,17 @@ class Subscription(BaseResource):
 
 
 class SubscriptionDraft(_BaseType):
+    """Either `messages` or `changes` must be set."""
+
+    #: Change notifications to be subscribed to.
     changes: typing.Optional[typing.List["ChangeSubscription"]]
+    #: Messaging service to which the messages are sent.
     destination: "Destination"
     #: User-defined unique identifier for the Subscription.
     key: typing.Optional[str]
+    #: Messages to be subscribed to.
     messages: typing.Optional[typing.List["MessageSubscription"]]
+    #: Format in which the payload is delivered. When not provided, the [PlatformFormat](ctp:api:type:PlatformFormat) is selected by default.
     format: typing.Optional["DeliveryFormat"]
 
     def __init__(
@@ -748,6 +1044,8 @@ class SubscriptionDraft(_BaseType):
 
 
 class SubscriptionHealthStatus(enum.Enum):
+    """The health status of the Subscription that indicates whether messages are being delivered to the Destination."""
+
     HEALTHY = "Healthy"
     CONFIGURATION_ERROR = "ConfigurationError"
     CONFIGURATION_ERROR_DELIVERY_STOPPED = "ConfigurationErrorDeliveryStopped"
@@ -755,27 +1053,36 @@ class SubscriptionHealthStatus(enum.Enum):
 
 
 class SubscriptionPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Subscription](ctp:api:type:Subscription)."""
+
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: Subscriptions matching the query.
     results: typing.List["Subscription"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Subscription"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -795,7 +1102,9 @@ class SubscriptionPagedQueryResponse(_BaseType):
 
 
 class SubscriptionUpdate(_BaseType):
+    #: Expected version of the Subscription on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: Update actions to be performed on the Subscription.
     actions: typing.List["SubscriptionUpdateAction"]
 
     def __init__(
@@ -854,6 +1163,9 @@ class SubscriptionUpdateAction(_BaseType):
 
 
 class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
+    """A test message is sent to ensure the correct configuration of the Destination. If the message cannot be delivered, the update will fail. The payload of the test message is a notification of type [ResourceCreated](ctp:api:type:ResourceCreatedDeliveryPayload) for the `resourceTypeId` `subscription`. The `status` will change to [Healthy](ctp:api:type:SubscriptionHealthStatus), if it isn't already."""
+
+    #: New value to set. Must not be empty.
     destination: "Destination"
 
     def __init__(self, *, destination: "Destination"):
@@ -876,6 +1188,7 @@ class SubscriptionChangeDestinationAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetChangesAction(SubscriptionUpdateAction):
+    #: Value to set. Can only be unset if `messages` is set.
     changes: typing.Optional[typing.List["ChangeSubscription"]]
 
     def __init__(
@@ -900,7 +1213,7 @@ class SubscriptionSetChangesAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetKeyAction(SubscriptionUpdateAction):
-    #: If `key` is absent or `null`, this field will be removed if it exists.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -923,6 +1236,7 @@ class SubscriptionSetKeyAction(SubscriptionUpdateAction):
 
 
 class SubscriptionSetMessagesAction(SubscriptionUpdateAction):
+    #: Value to set. Can only be unset if `changes` is set.
     messages: typing.Optional[typing.List["MessageSubscription"]]
 
     def __init__(

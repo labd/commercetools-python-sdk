@@ -192,6 +192,7 @@ __all__ = [
     "StagedOrderSetParcelItemsAction",
     "StagedOrderSetParcelMeasurementsAction",
     "StagedOrderSetParcelTrackingDataAction",
+    "StagedOrderSetPurchaseOrderNumberAction",
     "StagedOrderSetReturnInfoAction",
     "StagedOrderSetReturnItemCustomFieldAction",
     "StagedOrderSetReturnItemCustomTypeAction",
@@ -413,7 +414,6 @@ class OrderEditResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ORDER_EDIT)
 
     @classmethod
@@ -495,7 +495,6 @@ class OrderEditApplied(OrderEditResult):
 
 class OrderEditNotProcessed(OrderEditResult):
     def __init__(self):
-
         super().__init__(type="NotProcessed")
 
     @classmethod
@@ -684,6 +683,8 @@ class StagedOrder(Order):
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         shipping_mode: "ShippingMode",
+        shipping_key: typing.Optional[str] = None,
+        shipping_custom_fields: typing.Optional["CustomFields"] = None,
         shipping: typing.List["Shipping"],
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
@@ -696,6 +697,7 @@ class StagedOrder(Order):
         shipping_info: typing.Optional["ShippingInfo"] = None,
         sync_info: typing.List["SyncInfo"],
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
+        purchase_order_number: typing.Optional[str] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
         last_message_sequence_number: typing.Optional[int] = None,
         cart: typing.Optional["CartReference"] = None,
@@ -710,7 +712,6 @@ class StagedOrder(Order):
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         refused_gifts: typing.List["CartDiscountReference"]
     ):
-
         super().__init__(
             id=id,
             version=version,
@@ -733,6 +734,8 @@ class StagedOrder(Order):
             shipping_address=shipping_address,
             billing_address=billing_address,
             shipping_mode=shipping_mode,
+            shipping_key=shipping_key,
+            shipping_custom_fields=shipping_custom_fields,
             shipping=shipping,
             tax_mode=tax_mode,
             tax_rounding_mode=tax_rounding_mode,
@@ -745,6 +748,7 @@ class StagedOrder(Order):
             shipping_info=shipping_info,
             sync_info=sync_info,
             return_info=return_info,
+            purchase_order_number=purchase_order_number,
             discount_codes=discount_codes,
             last_message_sequence_number=last_message_sequence_number,
             cart=cart,
@@ -820,7 +824,7 @@ class OrderEditSetCustomFieldAction(OrderEditUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -921,9 +925,7 @@ class OrderEditSetStagedActionsAction(OrderEditUpdateAction):
 
 
 class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     money: "Money"
     #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
     name: "LocalizedString"
@@ -933,6 +935,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
     #: are applied to the Custom Line Item.
@@ -977,7 +980,12 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
+    #: User-defined unique identifier of a Delivery.
+    delivery_key: typing.Optional[str]
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
     #: Custom Fields for the Transaction.
@@ -986,11 +994,13 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
+        delivery_key: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.delivery_key = delivery_key
         self.items = items
         self.address = address
         self.parcels = parcels
@@ -1035,6 +1045,9 @@ class StagedOrderAddDiscountCodeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -1057,10 +1070,13 @@ class StagedOrderAddItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
+    #: User-defined unique identifier of the LineItem.
+    key: typing.Optional[str]
     #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
     custom: typing.Optional["CustomFieldsDraft"]
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     product_id: typing.Optional[str]
     variant_id: typing.Optional[int]
@@ -1069,16 +1085,16 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
     added_at: typing.Optional[datetime.datetime]
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     supply_channel: typing.Optional["ChannelResourceIdentifier"]
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
@@ -1092,6 +1108,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
+        self.key = key
         self.custom = custom
         self.distribution_channel = distribution_channel
         self.external_tax_rate = external_tax_rate
@@ -1122,7 +1139,11 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
+    parcel_key: typing.Optional[str]
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
@@ -1130,12 +1151,16 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
+        self.parcel_key = parcel_key
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
@@ -1157,7 +1182,7 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderAddPaymentAction(StagedOrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1248,9 +1273,7 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
 
 class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
     custom_line_item_id: str
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     money: "Money"
 
     def __init__(self, *, custom_line_item_id: str, money: "Money"):
@@ -1308,9 +1331,7 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: int
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
@@ -1410,6 +1431,7 @@ class StagedOrderChangeShipmentStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
+    #: Determines in which [Tax calculation mode](/carts-orders-overview#tax-calculation-mode) taxed prices are calculated.
     tax_calculation_mode: "TaxCalculationMode"
 
     def __init__(self, *, tax_calculation_mode: "TaxCalculationMode"):
@@ -1432,6 +1454,7 @@ class StagedOrderChangeTaxCalculationModeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
+    #: Indicates how taxes are set on the Cart.
     tax_mode: "TaxMode"
 
     def __init__(self, *, tax_mode: "TaxMode"):
@@ -1454,6 +1477,7 @@ class StagedOrderChangeTaxModeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeTaxRoundingModeAction(StagedOrderUpdateAction):
+    #: Determines how monetary values are rounded.
     tax_rounding_mode: "RoundingMode"
 
     def __init__(self, *, tax_rounding_mode: "RoundingMode"):
@@ -1550,10 +1574,19 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
 
-    def __init__(self, *, delivery_id: str):
+    def __init__(
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None
+    ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
 
         super().__init__(action="removeDelivery")
 
@@ -1623,11 +1656,10 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     line_item_id: str
     quantity: typing.Optional[int]
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -1662,10 +1694,19 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
 
-    def __init__(self, *, parcel_id: str):
+    def __init__(
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None
+    ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
 
         super().__init__(action="removeParcelFromDelivery")
 
@@ -1684,7 +1725,7 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -1707,6 +1748,9 @@ class StagedOrderRemovePaymentAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetBillingAddressAction(StagedOrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -1732,7 +1776,7 @@ class StagedOrderSetBillingAddressCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1822,7 +1866,7 @@ class StagedOrderSetCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1851,7 +1895,7 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1927,6 +1971,7 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -1960,6 +2005,12 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
 
 class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: Cannot be used in [LineItemDraft](ctp:api:type:LineItemDraft) or [CustomLineItemDraft](ctp:api:type:CustomLineItemDraft).
+    #:
+    #: Can only be set by these update actions:
+    #:
+    #: - [Set LineItem TaxAmount](ctp:api:type:CartSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:CartSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:CartSetShippingMethodTaxAmountAction) on Carts
+    #: - [Set LineItem TaxAmount](ctp:api:type:OrderEditSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:OrderEditSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:OrderEditSetShippingMethodTaxAmountAction) on Order Edits
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
@@ -1993,6 +2044,7 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
 
 class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
     custom_line_item_id: str
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
@@ -2025,6 +2077,7 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
     shipping_rate: "ShippingRateDraft"
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
@@ -2160,13 +2213,24 @@ class StagedOrderSetCustomerIdAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(
-        self, *, delivery_id: str, address: typing.Optional["BaseAddress"] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        address: typing.Optional["BaseAddress"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.address = address
 
         super().__init__(action="setDeliveryAddress")
@@ -2186,18 +2250,27 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.name = name
         self.value = value
 
@@ -2222,7 +2295,10 @@ class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2232,11 +2308,13 @@ class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.type = type
         self.fields = fields
 
@@ -2261,18 +2339,27 @@ class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.name = name
         self.value = value
 
@@ -2293,7 +2380,10 @@ class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2303,11 +2393,13 @@ class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.type = type
         self.fields = fields
 
@@ -2328,11 +2420,21 @@ class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, delivery_id: str, items: typing.List["DeliveryItem"]):
+    def __init__(
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        items: typing.List["DeliveryItem"]
+    ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.items = items
 
         super().__init__(action="setDeliveryItems")
@@ -2356,7 +2458,7 @@ class StagedOrderSetItemShippingAddressCustomFieldAction(StagedOrderUpdateAction
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2431,7 +2533,7 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2529,9 +2631,7 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
     line_item_id: str
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
 
     def __init__(
@@ -2558,6 +2658,7 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -2591,16 +2692,27 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: Cannot be used in [LineItemDraft](ctp:api:type:LineItemDraft) or [CustomLineItemDraft](ctp:api:type:CustomLineItemDraft).
+    #:
+    #: Can only be set by these update actions:
+    #:
+    #: - [Set LineItem TaxAmount](ctp:api:type:CartSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:CartSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:CartSetShippingMethodTaxAmountAction) on Carts
+    #: - [Set LineItem TaxAmount](ctp:api:type:OrderEditSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:OrderEditSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:OrderEditSetShippingMethodTaxAmountAction) on Order Edits
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Line Item.```
+    #: This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
         line_item_id: str,
-        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
+        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
+        shipping_key: typing.Optional[str] = None
     ):
         self.line_item_id = line_item_id
         self.external_tax_amount = external_tax_amount
+        self.shipping_key = shipping_key
 
         super().__init__(action="setLineItemTaxAmount")
 
@@ -2620,16 +2732,22 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
 
 class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
     line_item_id: str
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Line Item.
+    #: This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
 
     def __init__(
         self,
         *,
         line_item_id: str,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
+        shipping_key: typing.Optional[str] = None
     ):
         self.line_item_id = line_item_id
         self.external_tax_rate = external_tax_rate
+        self.shipping_key = shipping_key
 
         super().__init__(action="setLineItemTaxRate")
 
@@ -2721,9 +2839,7 @@ class StagedOrderSetOrderNumberAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     external_total_gross: "Money"
     external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]]
 
@@ -2753,18 +2869,27 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelCustomFieldAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, parcel_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.name = name
         self.value = value
 
@@ -2785,7 +2910,10 @@ class StagedOrderSetParcelCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Parcel.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2795,11 +2923,13 @@ class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        parcel_id: str,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.type = type
         self.fields = fields
 
@@ -2820,11 +2950,21 @@ class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, parcel_id: str, items: typing.List["DeliveryItem"]):
+    def __init__(
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        items: typing.List["DeliveryItem"]
+    ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.items = items
 
         super().__init__(action="setParcelItems")
@@ -2844,16 +2984,21 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        parcel_id: str,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.measurements = measurements
 
         super().__init__(action="setParcelMeasurements")
@@ -2873,13 +3018,21 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
-        self, *, parcel_id: str, tracking_data: typing.Optional["TrackingData"] = None
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        tracking_data: typing.Optional["TrackingData"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.tracking_data = tracking_data
 
         super().__init__(action="setParcelTrackingData")
@@ -2896,6 +3049,30 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
         from ._schemas.order_edit import StagedOrderSetParcelTrackingDataActionSchema
 
         return StagedOrderSetParcelTrackingDataActionSchema().dump(self)
+
+
+class StagedOrderSetPurchaseOrderNumberAction(StagedOrderUpdateAction):
+    #: Identifier for a purchase order, usually in a B2B context.
+    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+    purchase_order_number: typing.Optional[str]
+
+    def __init__(self, *, purchase_order_number: typing.Optional[str] = None):
+        self.purchase_order_number = purchase_order_number
+
+        super().__init__(action="setPurchaseOrderNumber")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StagedOrderSetPurchaseOrderNumberAction":
+        from ._schemas.order_edit import StagedOrderSetPurchaseOrderNumberActionSchema
+
+        return StagedOrderSetPurchaseOrderNumberActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order_edit import StagedOrderSetPurchaseOrderNumberActionSchema
+
+        return StagedOrderSetPurchaseOrderNumberActionSchema().dump(self)
 
 
 class StagedOrderSetReturnInfoAction(StagedOrderUpdateAction):
@@ -2927,7 +3104,7 @@ class StagedOrderSetReturnItemCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3042,6 +3219,9 @@ class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -3066,11 +3246,15 @@ class StagedOrderSetShippingAddressAction(StagedOrderUpdateAction):
 class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
     StagedOrderUpdateAction
 ):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
     shipping_method_name: str
     shipping_rate: "ShippingRateDraft"
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
@@ -3113,9 +3297,13 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
 
 
 class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
@@ -3153,7 +3341,7 @@ class StagedOrderSetShippingAddressCustomFieldAction(StagedOrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3220,6 +3408,7 @@ class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
 class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
@@ -3248,11 +3437,23 @@ class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) to update. This is required for Orders with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Cannot be used in [LineItemDraft](ctp:api:type:LineItemDraft) or [CustomLineItemDraft](ctp:api:type:CustomLineItemDraft).
+    #:
+    #: Can only be set by these update actions:
+    #:
+    #: - [Set LineItem TaxAmount](ctp:api:type:CartSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:CartSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:CartSetShippingMethodTaxAmountAction) on Carts
+    #: - [Set LineItem TaxAmount](ctp:api:type:OrderEditSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:OrderEditSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:OrderEditSetShippingMethodTaxAmountAction) on Order Edits
     external_tax_amount: typing.Optional["ExternalTaxAmountDraft"]
 
     def __init__(
-        self, *, external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
+        self,
+        *,
+        shipping_key: typing.Optional[str] = None,
+        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
     ):
+        self.shipping_key = shipping_key
         self.external_tax_amount = external_tax_amount
 
         super().__init__(action="setShippingMethodTaxAmount")
@@ -3276,11 +3477,18 @@ class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) to update. This is required for Orders with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
 
     def __init__(
-        self, *, external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        self,
+        *,
+        shipping_key: typing.Optional[str] = None,
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
     ):
+        self.shipping_key = shipping_key
         self.external_tax_rate = external_tax_rate
 
         super().__init__(action="setShippingMethodTaxRate")
@@ -3300,6 +3508,7 @@ class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetShippingRateInputAction(StagedOrderUpdateAction):
+    #: Generic type holding specifc ShippingRateInputDraft types.
     shipping_rate_input: typing.Optional["ShippingRateInputDraft"]
 
     def __init__(
@@ -3435,6 +3644,9 @@ class StagedOrderTransitionStateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderUpdateItemShippingAddressAction(StagedOrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):

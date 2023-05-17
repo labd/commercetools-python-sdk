@@ -36,16 +36,23 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "StagedStandalonePrice",
     "StandalonePrice",
+    "StandalonePriceAddPriceTierAction",
     "StandalonePriceApplyStagedChangesAction",
     "StandalonePriceChangeActiveAction",
     "StandalonePriceChangeValueAction",
     "StandalonePriceDraft",
     "StandalonePricePagedQueryResponse",
     "StandalonePriceReference",
+    "StandalonePriceRemovePriceTierAction",
     "StandalonePriceResourceIdentifier",
     "StandalonePriceSetCustomFieldAction",
     "StandalonePriceSetCustomTypeAction",
     "StandalonePriceSetDiscountedPriceAction",
+    "StandalonePriceSetKeyAction",
+    "StandalonePriceSetPriceTiersAction",
+    "StandalonePriceSetValidFromAction",
+    "StandalonePriceSetValidFromAndUntilAction",
+    "StandalonePriceSetValidUntilAction",
     "StandalonePriceUpdate",
     "StandalonePriceUpdateAction",
 ]
@@ -57,9 +64,14 @@ class StagedStandalonePrice(_BaseType):
     #: Money value of the StagedStandalonePrice.
     value: "TypedMoney"
     #: Discounted price for the StagedStandalonePrice.
-    discounted: "DiscountedPrice"
+    discounted: typing.Optional["DiscountedPrice"]
 
-    def __init__(self, *, value: "TypedMoney", discounted: "DiscountedPrice"):
+    def __init__(
+        self,
+        *,
+        value: "TypedMoney",
+        discounted: typing.Optional["DiscountedPrice"] = None
+    ):
         self.value = value
         self.discounted = discounted
 
@@ -96,11 +108,11 @@ class StandalonePrice(BaseResource):
     channel: typing.Optional["ChannelReference"]
     #: Date from which the Price is valid.
     valid_from: typing.Optional[datetime.datetime]
-    #: Date until the Price is valid.
+    #: Date until the Price is valid. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
     valid_until: typing.Optional[datetime.datetime]
     #: Price tiers if any are defined.
     tiers: typing.Optional[typing.List["PriceTier"]]
-    #: Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](/../api/projects/carts#lineitem-price-selection).
+    #: Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
     #: When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
     discounted: typing.Optional["DiscountedPrice"]
     #: Custom Fields for the StandalonePrice.
@@ -171,7 +183,8 @@ class StandalonePrice(BaseResource):
 
 class StandalonePriceDraft(_BaseType):
     """Standalone Prices are defined with a scope consisting of `currency` and optionally `country`, `customerGroup`, and `channel` and/or a validity period (`validFrom` and/or `validTo`). For more information see [price selection](/../api/projects/products#price-selection).
-    Creating a Standalone Price is rejected if there already exists a Standalone Price for the same SKU with exactly the same price scope, or with overlapping validity periods within the same price scope. A Price without validity period does not conflict with a Price defined for a time period.
+
+    Creating a Standalone Price for an SKU which has a Standalone Price with exactly the same price scope, or with overlapping validity periods within the same price scope returns the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
     """
 
     #: User-defined unique identifier for the StandalonePrice.
@@ -189,7 +202,7 @@ class StandalonePriceDraft(_BaseType):
     channel: typing.Optional["ChannelResourceIdentifier"]
     #: Sets the date from which the Price is valid. Must be at least 1 ms earlier than `validUntil`.
     valid_from: typing.Optional[datetime.datetime]
-    #: Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`.
+    #: Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
     valid_until: typing.Optional[datetime.datetime]
     #: Sets price tiers.
     tiers: typing.Optional[typing.List["PriceTierDraft"]]
@@ -322,7 +335,6 @@ class StandalonePriceResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STANDALONE_PRICE)
 
     @classmethod
@@ -340,7 +352,7 @@ class StandalonePriceResourceIdentifier(ResourceIdentifier):
 
 
 class StandalonePriceUpdate(_BaseType):
-    #: Expected version of the StandalonePrice on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the StandalonePrice on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the StandalonePrice.
     actions: typing.List["StandalonePriceUpdateAction"]
@@ -377,6 +389,12 @@ class StandalonePriceUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "StandalonePriceUpdateAction":
+        if data["action"] == "addPriceTier":
+            from ._schemas.standalone_price import (
+                StandalonePriceAddPriceTierActionSchema,
+            )
+
+            return StandalonePriceAddPriceTierActionSchema().load(data)
         if data["action"] == "applyStagedChanges":
             from ._schemas.standalone_price import (
                 StandalonePriceApplyStagedChangesActionSchema,
@@ -395,6 +413,12 @@ class StandalonePriceUpdateAction(_BaseType):
             )
 
             return StandalonePriceChangeValueActionSchema().load(data)
+        if data["action"] == "removePriceTier":
+            from ._schemas.standalone_price import (
+                StandalonePriceRemovePriceTierActionSchema,
+            )
+
+            return StandalonePriceRemovePriceTierActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.standalone_price import (
                 StandalonePriceSetCustomFieldActionSchema,
@@ -413,6 +437,34 @@ class StandalonePriceUpdateAction(_BaseType):
             )
 
             return StandalonePriceSetDiscountedPriceActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.standalone_price import StandalonePriceSetKeyActionSchema
+
+            return StandalonePriceSetKeyActionSchema().load(data)
+        if data["action"] == "setPriceTier":
+            from ._schemas.standalone_price import (
+                StandalonePriceSetPriceTiersActionSchema,
+            )
+
+            return StandalonePriceSetPriceTiersActionSchema().load(data)
+        if data["action"] == "setValidFrom":
+            from ._schemas.standalone_price import (
+                StandalonePriceSetValidFromActionSchema,
+            )
+
+            return StandalonePriceSetValidFromActionSchema().load(data)
+        if data["action"] == "setValidFromAndUntil":
+            from ._schemas.standalone_price import (
+                StandalonePriceSetValidFromAndUntilActionSchema,
+            )
+
+            return StandalonePriceSetValidFromAndUntilActionSchema().load(data)
+        if data["action"] == "setValidUntil":
+            from ._schemas.standalone_price import (
+                StandalonePriceSetValidUntilActionSchema,
+            )
+
+            return StandalonePriceSetValidUntilActionSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.standalone_price import StandalonePriceUpdateActionSchema
@@ -420,11 +472,39 @@ class StandalonePriceUpdateAction(_BaseType):
         return StandalonePriceUpdateActionSchema().dump(self)
 
 
+class StandalonePriceAddPriceTierAction(StandalonePriceUpdateAction):
+    """Adding a [PriceTier](ctp:api:type:PriceTier) to a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [Standalone Price Tier Added](ctp:api:type:StandalonePriceTierAddedMessage) Message."""
+
+    #: The [PriceTier](ctp:api:type:PriceTier) to be added to the `tiers` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+    #: The action returns an [InvalidField](ctp:api:type:InvalidFieldError) error in the following cases:
+    #:
+    #: * Trying to add a PriceTier with `minimumQuantity` < `2`.
+    #: * Trying to add a PriceTier with `minimumQuantity` that already exists for the StandalonePrice.
+    tier: "PriceTierDraft"
+
+    def __init__(self, *, tier: "PriceTierDraft"):
+        self.tier = tier
+
+        super().__init__(action="addPriceTier")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceAddPriceTierAction":
+        from ._schemas.standalone_price import StandalonePriceAddPriceTierActionSchema
+
+        return StandalonePriceAddPriceTierActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceAddPriceTierActionSchema
+
+        return StandalonePriceAddPriceTierActionSchema().dump(self)
+
+
 class StandalonePriceApplyStagedChangesAction(StandalonePriceUpdateAction):
     """Applies all staged changes to the StandalonePrice by overwriting all current values with the values in the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). After successfully applied, the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice) will be removed from the StandalonePrice. An `applyStagedChanges` update action on a StandalonePrice that does not contain any staged changes will return a `400 Bad Request` error. Applying staged changes successfully will produce the [StandalonePriceStagedChangesApplied](ctp:api:type:StandalonePriceStagedChangesAppliedMessage) Message."""
 
     def __init__(self):
-
         super().__init__(action="applyStagedChanges")
 
     @classmethod
@@ -498,11 +578,40 @@ class StandalonePriceChangeValueAction(StandalonePriceUpdateAction):
         return StandalonePriceChangeValueActionSchema().dump(self)
 
 
+class StandalonePriceRemovePriceTierAction(StandalonePriceUpdateAction):
+    """Removing a [PriceTier](ctp:api:type:PriceTier) from a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [Standalone Price Tier Removed](ctp:api:type:StandalonePriceTierRemovedMessage) Message."""
+
+    #: The `minimumQuantity` of the [PriceTier](ctp:api:type:PriceTier) to be removed from the `tiers` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+    tier_minimum_quantity: int
+
+    def __init__(self, *, tier_minimum_quantity: int):
+        self.tier_minimum_quantity = tier_minimum_quantity
+
+        super().__init__(action="removePriceTier")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceRemovePriceTierAction":
+        from ._schemas.standalone_price import (
+            StandalonePriceRemovePriceTierActionSchema,
+        )
+
+        return StandalonePriceRemovePriceTierActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import (
+            StandalonePriceRemovePriceTierActionSchema,
+        )
+
+        return StandalonePriceRemovePriceTierActionSchema().dump(self)
+
+
 class StandalonePriceSetCustomFieldAction(StandalonePriceUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -585,3 +694,157 @@ class StandalonePriceSetDiscountedPriceAction(StandalonePriceUpdateAction):
         )
 
         return StandalonePriceSetDiscountedPriceActionSchema().dump(self)
+
+
+class StandalonePriceSetKeyAction(StandalonePriceUpdateAction):
+    """Sets the key on a Standalone Price. Produces the [StandalonePriceKeySet](ctp:api:type:StandalonePriceKeySetMessage) Message."""
+
+    #: Value to set. Must be unique. If empty, any existing value will be removed.
+    key: typing.Optional[str]
+
+    def __init__(self, *, key: typing.Optional[str] = None):
+        self.key = key
+
+        super().__init__(action="setKey")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceSetKeyAction":
+        from ._schemas.standalone_price import StandalonePriceSetKeyActionSchema
+
+        return StandalonePriceSetKeyActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceSetKeyActionSchema
+
+        return StandalonePriceSetKeyActionSchema().dump(self)
+
+
+class StandalonePriceSetPriceTiersAction(StandalonePriceUpdateAction):
+    """Sets all [PriceTiers](ctp:api:type:PriceTier) for a [StandalonePrice](ctp:api:type:StandalonePrice) in one action, produces the [Standalone Price Tiers Set](ctp:api:type:StandalonePriceTiersSetMessage) Message."""
+
+    #: Value to set. If empty, any existing value will be removed.
+    #: The `minimumQuantity` of the PriceTiers must be unique and greater than `1`, otherwise an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
+    tiers: typing.List["PriceTierDraft"]
+
+    def __init__(self, *, tiers: typing.List["PriceTierDraft"]):
+        self.tiers = tiers
+
+        super().__init__(action="setPriceTier")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceSetPriceTiersAction":
+        from ._schemas.standalone_price import StandalonePriceSetPriceTiersActionSchema
+
+        return StandalonePriceSetPriceTiersActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceSetPriceTiersActionSchema
+
+        return StandalonePriceSetPriceTiersActionSchema().dump(self)
+
+
+class StandalonePriceSetValidFromAction(StandalonePriceUpdateAction):
+    """Updating the `validFrom` value generates the [StandalonePriceValidFromSet](ctp:api:type:StandalonePriceValidFromSetMessage) Message.
+
+    As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    valid_from: typing.Optional[datetime.datetime]
+
+    def __init__(self, *, valid_from: typing.Optional[datetime.datetime] = None):
+        self.valid_from = valid_from
+
+        super().__init__(action="setValidFrom")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceSetValidFromAction":
+        from ._schemas.standalone_price import StandalonePriceSetValidFromActionSchema
+
+        return StandalonePriceSetValidFromActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceSetValidFromActionSchema
+
+        return StandalonePriceSetValidFromActionSchema().dump(self)
+
+
+class StandalonePriceSetValidFromAndUntilAction(StandalonePriceUpdateAction):
+    """Updating the `validFrom` and `validUntil` values generates the [StandalonePriceValidFromAndUntilSet](ctp:api:type:StandalonePriceValidFromAndUntilSetMessage) Message.
+
+    As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    valid_from: typing.Optional[datetime.datetime]
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        valid_from: typing.Optional[datetime.datetime] = None,
+        valid_until: typing.Optional[datetime.datetime] = None
+    ):
+        self.valid_from = valid_from
+        self.valid_until = valid_until
+
+        super().__init__(action="setValidFromAndUntil")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceSetValidFromAndUntilAction":
+        from ._schemas.standalone_price import (
+            StandalonePriceSetValidFromAndUntilActionSchema,
+        )
+
+        return StandalonePriceSetValidFromAndUntilActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import (
+            StandalonePriceSetValidFromAndUntilActionSchema,
+        )
+
+        return StandalonePriceSetValidFromAndUntilActionSchema().dump(self)
+
+
+class StandalonePriceSetValidUntilAction(StandalonePriceUpdateAction):
+    """Updating the `validUntil` value generates the [StandalonePriceValidUntilSet](ctp:api:type:StandalonePriceValidUntilSetMessage) Message.
+
+    As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    valid_until: typing.Optional[datetime.datetime]
+
+    def __init__(self, *, valid_until: typing.Optional[datetime.datetime] = None):
+        self.valid_until = valid_until
+
+        super().__init__(action="setValidUntil")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StandalonePriceSetValidUntilAction":
+        from ._schemas.standalone_price import StandalonePriceSetValidUntilActionSchema
+
+        return StandalonePriceSetValidUntilActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.standalone_price import StandalonePriceSetValidUntilActionSchema
+
+        return StandalonePriceSetValidUntilActionSchema().dump(self)

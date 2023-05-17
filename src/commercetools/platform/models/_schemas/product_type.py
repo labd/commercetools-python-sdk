@@ -52,38 +52,40 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
             "text": helpers.absmod(__name__, ".AttributeTextTypeSchema"),
             "time": helpers.absmod(__name__, ".AttributeTimeTypeSchema"),
         },
-        missing=None,
+        load_default=None,
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     is_required = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isRequired"
+        allow_none=True, load_default=None, data_key="isRequired"
     )
     attribute_constraint = marshmallow_enum.EnumField(
         AttributeConstraintEnum,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="attributeConstraint",
     )
     input_tip = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputTip",
     )
     input_hint = marshmallow_enum.EnumField(
         TextInputHint,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="inputHint",
     )
     is_searchable = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isSearchable"
+        allow_none=True, load_default=None, data_key="isSearchable"
     )
 
     class Meta:
@@ -91,7 +93,6 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeDefinition(**data)
 
 
@@ -114,28 +115,30 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
             "text": helpers.absmod(__name__, ".AttributeTextTypeSchema"),
             "time": helpers.absmod(__name__, ".AttributeTimeTypeSchema"),
         },
-        missing=None,
+        load_default=None,
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     is_required = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isRequired"
+        allow_none=True, load_default=None, data_key="isRequired"
     )
     attribute_constraint = marshmallow_enum.EnumField(
         AttributeConstraintEnum,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="attributeConstraint",
     )
     input_tip = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputTip",
     )
     input_hint = marshmallow_enum.EnumField(
@@ -143,13 +146,13 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputHint",
     )
     is_searchable = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="isSearchable",
     )
 
@@ -158,14 +161,15 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeDefinitionDraft(**data)
 
 
 class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -173,25 +177,23 @@ class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributeLocalizedEnumValue(**data)
 
 
 class AttributePlainEnumValueSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    label = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
+    label = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.AttributePlainEnumValue(**data)
 
 
 class AttributeTypeSchema(helpers.BaseSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -238,7 +240,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -266,7 +268,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -293,7 +295,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
         nested=helpers.absmod(__name__, ".ProductTypeReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="typeReference",
     )
 
@@ -321,7 +323,7 @@ class AttributeReferenceTypeSchema(AttributeTypeSchema):
         AttributeReferenceTypeId,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="referenceTypeId",
     )
 
@@ -353,7 +355,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
             "text": helpers.absmod(__name__, ".AttributeTextTypeSchema"),
             "time": helpers.absmod(__name__, ".AttributeTimeTypeSchema"),
         },
-        missing=None,
+        load_default=None,
         data_key="elementType",
     )
 
@@ -392,7 +394,7 @@ class ProductTypeSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -400,21 +402,21 @@ class ProductTypeSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    description = marshmallow.fields.String(allow_none=True, load_default=None)
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeDefinitionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -422,23 +424,22 @@ class ProductTypeSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductType(**data)
 
 
 class ProductTypeDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
+    description = marshmallow.fields.String(allow_none=True, load_default=None)
     attributes = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeDefinitionDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -446,23 +447,22 @@ class ProductTypeDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductTypeDraft(**data)
 
 
 class ProductTypePagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductTypeSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -470,7 +470,6 @@ class ProductTypePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductTypePagedQueryResponse(**data)
 
 
@@ -480,7 +479,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -503,7 +502,7 @@ class ProductTypeResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class ProductTypeUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -573,7 +572,7 @@ class ProductTypeUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -581,12 +580,11 @@ class ProductTypeUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductTypeUpdate(**data)
 
 
 class ProductTypeUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -602,7 +600,7 @@ class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchem
         nested=helpers.absmod(__name__, ".AttributeDefinitionDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -616,13 +614,13 @@ class ProductTypeAddAttributeDefinitionActionSchema(ProductTypeUpdateActionSchem
 
 class ProductTypeAddLocalizedEnumValueActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeLocalizedEnumValueSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -636,13 +634,13 @@ class ProductTypeAddLocalizedEnumValueActionSchema(ProductTypeUpdateActionSchema
 
 class ProductTypeAddPlainEnumValueActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributePlainEnumValueSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -656,13 +654,13 @@ class ProductTypeAddPlainEnumValueActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangeAttributeConstraintActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     new_value = marshmallow_enum.EnumField(
         AttributeConstraintEnumDraft,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="newValue",
     )
 
@@ -677,10 +675,10 @@ class ProductTypeChangeAttributeConstraintActionSchema(ProductTypeUpdateActionSc
 
 class ProductTypeChangeAttributeNameActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     new_attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="newAttributeName"
+        allow_none=True, load_default=None, data_key="newAttributeName"
     )
 
     class Meta:
@@ -698,7 +696,7 @@ class ProductTypeChangeAttributeOrderActionSchema(ProductTypeUpdateActionSchema)
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -714,7 +712,7 @@ class ProductTypeChangeAttributeOrderByNameActionSchema(ProductTypeUpdateActionS
     attribute_names = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="attributeNames",
     )
 
@@ -728,7 +726,7 @@ class ProductTypeChangeAttributeOrderByNameActionSchema(ProductTypeUpdateActionS
 
 
 class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):
-    description = marshmallow.fields.String(allow_none=True, missing=None)
+    description = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -741,11 +739,11 @@ class ProductTypeChangeDescriptionActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangeEnumKeyActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     new_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="newKey"
+        allow_none=True, load_default=None, data_key="newKey"
     )
 
     class Meta:
@@ -759,10 +757,14 @@ class ProductTypeChangeEnumKeyActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangeInputHintActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     new_value = marshmallow_enum.EnumField(
-        TextInputHint, by_value=True, allow_none=True, missing=None, data_key="newValue"
+        TextInputHint,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="newValue",
     )
 
     class Meta:
@@ -776,10 +778,10 @@ class ProductTypeChangeInputHintActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangeIsSearchableActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     is_searchable = marshmallow.fields.Boolean(
-        allow_none=True, missing=None, data_key="isSearchable"
+        allow_none=True, load_default=None, data_key="isSearchable"
     )
 
     class Meta:
@@ -793,10 +795,12 @@ class ProductTypeChangeIsSearchableActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangeLabelActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     label = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -812,13 +816,13 @@ class ProductTypeChangeLocalizedEnumValueLabelActionSchema(
     ProductTypeUpdateActionSchema
 ):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     new_value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeLocalizedEnumValueSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="newValue",
     )
 
@@ -835,14 +839,14 @@ class ProductTypeChangeLocalizedEnumValueOrderActionSchema(
     ProductTypeUpdateActionSchema
 ):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     values = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributeLocalizedEnumValueSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -855,7 +859,7 @@ class ProductTypeChangeLocalizedEnumValueOrderActionSchema(
 
 
 class ProductTypeChangeNameActionSchema(ProductTypeUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -868,13 +872,13 @@ class ProductTypeChangeNameActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeChangePlainEnumValueLabelActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     new_value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributePlainEnumValueSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="newValue",
     )
 
@@ -889,14 +893,14 @@ class ProductTypeChangePlainEnumValueLabelActionSchema(ProductTypeUpdateActionSc
 
 class ProductTypeChangePlainEnumValueOrderActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     values = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".AttributePlainEnumValueSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -909,7 +913,7 @@ class ProductTypeChangePlainEnumValueOrderActionSchema(ProductTypeUpdateActionSc
 
 
 class ProductTypeRemoveAttributeDefinitionActionSchema(ProductTypeUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -922,10 +926,10 @@ class ProductTypeRemoveAttributeDefinitionActionSchema(ProductTypeUpdateActionSc
 
 class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     keys = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -939,13 +943,13 @@ class ProductTypeRemoveEnumValuesActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
     attribute_name = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="attributeName"
+        allow_none=True, load_default=None, data_key="attributeName"
     )
     input_tip = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="inputTip",
     )
 
@@ -960,7 +964,7 @@ class ProductTypeSetInputTipActionSchema(ProductTypeUpdateActionSchema):
 
 class ProductTypeSetKeyActionSchema(ProductTypeUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

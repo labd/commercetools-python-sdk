@@ -229,7 +229,6 @@ class TaxCategoryResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.TAX_CATEGORY)
 
     @classmethod
@@ -247,7 +246,7 @@ class TaxCategoryResourceIdentifier(ResourceIdentifier):
 
 
 class TaxCategoryUpdate(_BaseType):
-    #: Expected version of the TaxCategory on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the TaxCategory on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the TaxCategory.
     actions: typing.List["TaxCategoryUpdateAction"]
@@ -319,11 +318,14 @@ class TaxRate(_BaseType):
     #: Present if the TaxRate is part of a [TaxCategory](ctp:api:type:TaxCategory).
     #: Absent for external TaxRates in [LineItem](ctp:api:type:LineItem), [CustomLineItem](ctp:api:type:CustomLineItem), and [ShippingInfo](ctp:api:type:ShippingInfo).
     id: typing.Optional[str]
+    #: User-defined unique identifier of the TaxRate.
+    #: Present when set using [TaxRateDraft](ctp:api:type:TaxRateDraft). Not available for external TaxRates created using [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
+    key: typing.Optional[str]
     #: Name of the TaxRate.
     name: str
     #: Tax rate. If subrates are used, the amount must be the sum of all subrates.
     amount: float
-    #: If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+    #: If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
     included_in_price: bool
     #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str
@@ -336,6 +338,7 @@ class TaxRate(_BaseType):
         self,
         *,
         id: typing.Optional[str] = None,
+        key: typing.Optional[str] = None,
         name: str,
         amount: float,
         included_in_price: bool,
@@ -344,6 +347,7 @@ class TaxRate(_BaseType):
         sub_rates: typing.Optional[typing.List["SubRate"]] = None
     ):
         self.id = id
+        self.key = key
         self.name = name
         self.amount = amount
         self.included_in_price = included_in_price
@@ -372,7 +376,7 @@ class TaxRateDraft(_BaseType):
     #: Must be supplied if no `subRates` are specified.
     #: If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
     amount: typing.Optional[float]
-    #: If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+    #: If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
     included_in_price: bool
     #: Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
     country: str
@@ -380,6 +384,8 @@ class TaxRateDraft(_BaseType):
     state: typing.Optional[str]
     #: Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
     sub_rates: typing.Optional[typing.List["SubRate"]]
+    #: User-defined unique identifier of the TaxRate.
+    key: typing.Optional[str]
 
     def __init__(
         self,
@@ -389,7 +395,8 @@ class TaxRateDraft(_BaseType):
         included_in_price: bool,
         country: str,
         state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None,
+        key: typing.Optional[str] = None
     ):
         self.name = name
         self.amount = amount
@@ -397,6 +404,7 @@ class TaxRateDraft(_BaseType):
         self.country = country
         self.state = state
         self.sub_rates = sub_rates
+        self.key = key
 
         super().__init__()
 
@@ -460,10 +468,20 @@ class TaxCategoryChangeNameAction(TaxCategoryUpdateAction):
 
 class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
     #: ID of the TaxRate to remove.
-    tax_rate_id: str
+    #: Either `taxRateId` or `taxRateKey` is required for this update action.
+    tax_rate_id: typing.Optional[str]
+    #: Key of the TaxRate to remove.
+    #: Either `taxRateId` or `taxRateKey` is required for this update action.
+    tax_rate_key: typing.Optional[str]
 
-    def __init__(self, *, tax_rate_id: str):
+    def __init__(
+        self,
+        *,
+        tax_rate_id: typing.Optional[str] = None,
+        tax_rate_key: typing.Optional[str] = None
+    ):
         self.tax_rate_id = tax_rate_id
+        self.tax_rate_key = tax_rate_key
 
         super().__init__(action="removeTaxRate")
 
@@ -483,12 +501,23 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
 
 class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
     #: ID of the TaxRate to replace.
-    tax_rate_id: str
+    #: Either `taxRateId` or `taxRateKey` is required for this update action.
+    tax_rate_id: typing.Optional[str]
+    #: Key of the TaxRate to replace.
+    #: Either `taxRateId` or `taxRateKey` is required for this update action.
+    tax_rate_key: typing.Optional[str]
     #: New TaxRate to replace with.
     tax_rate: "TaxRateDraft"
 
-    def __init__(self, *, tax_rate_id: str, tax_rate: "TaxRateDraft"):
+    def __init__(
+        self,
+        *,
+        tax_rate_id: typing.Optional[str] = None,
+        tax_rate_key: typing.Optional[str] = None,
+        tax_rate: "TaxRateDraft"
+    ):
         self.tax_rate_id = tax_rate_id
+        self.tax_rate_key = tax_rate_key
         self.tax_rate = tax_rate
 
         super().__init__(action="replaceTaxRate")

@@ -26,7 +26,7 @@ class CustomObjectSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -34,28 +34,27 @@ class CustomObjectSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
-    container = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    container = marshmallow.fields.String(allow_none=True, load_default=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
+    value = marshmallow.fields.Raw(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomObject(**data)
 
 
 class CustomObjectDraftSchema(helpers.BaseSchema):
-    container = marshmallow.fields.String(allow_none=True, missing=None)
-    key = marshmallow.fields.String(allow_none=True, missing=None)
-    value = marshmallow.fields.Raw(allow_none=True, missing=None)
+    container = marshmallow.fields.String(allow_none=True, load_default=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
+    value = marshmallow.fields.Raw(allow_none=True, load_default=None)
     version = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -63,23 +62,22 @@ class CustomObjectDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomObjectDraft(**data)
 
 
 class CustomObjectPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CustomObjectSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -87,7 +85,6 @@ class CustomObjectPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CustomObjectPagedQueryResponse(**data)
 
 
@@ -97,7 +94,7 @@ class CustomObjectReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:

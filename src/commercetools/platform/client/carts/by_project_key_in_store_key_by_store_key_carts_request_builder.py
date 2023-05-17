@@ -27,7 +27,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -94,7 +93,6 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CartPagedQueryResponse"]:
-        """Queries carts in a specific Store."""
         params = {
             "expand": expand,
             "sort": sort,
@@ -130,10 +128,9 @@ class ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Creates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
-        When using this endpoint the Cart's `store` field is always set to the store specified in the path parameter.
-        Creating a Cart can fail with an [InvalidOperationError](ctp:api:type:InvalidOperationError) if the referenced [ShippingMethod](ctp:api:type:ShippingMethod)
-        in the [CartDraft](ctp:api:type:CartDraft) has a predicate which does not match the Cart.
+        """The `store` field in the created [Cart](ctp:api:type:Cart) is set to the Store specified by the `storeKey` path parameter.
+
+        Specific Error Codes: [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
 
         """
         headers = {} if headers is None else headers

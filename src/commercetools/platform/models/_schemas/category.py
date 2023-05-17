@@ -32,7 +32,7 @@ class CategorySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -40,63 +40,67 @@ class CategorySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     ancestors = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CategoryReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     parent = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CategoryReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True, load_default=None, data_key="orderHint"
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     custom = helpers.LazyNestedField(
@@ -104,7 +108,7 @@ class CategorySchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetSchema"),
@@ -112,10 +116,10 @@ class CategorySchema(BaseResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -123,61 +127,64 @@ class CategorySchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Category(**data)
 
 
 class CategoryDraftSchema(helpers.BaseSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     parent = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CategoryResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     order_hint = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="orderHint",
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     meta_title = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
     meta_description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
     meta_keywords = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
     custom = helpers.LazyNestedField(
@@ -185,7 +192,7 @@ class CategoryDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     assets = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.AssetDraftSchema"),
@@ -193,10 +200,10 @@ class CategoryDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -204,23 +211,22 @@ class CategoryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CategoryDraft(**data)
 
 
 class CategoryPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".CategorySchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -228,7 +234,6 @@ class CategoryPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CategoryPagedQueryResponse(**data)
 
 
@@ -238,7 +243,7 @@ class CategoryReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -261,7 +266,7 @@ class CategoryResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class CategoryUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -332,7 +337,7 @@ class CategoryUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -340,12 +345,11 @@ class CategoryUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.CategoryUpdate(**data)
 
 
 class CategoryUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -361,10 +365,10 @@ class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.AssetDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     position = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -378,16 +382,21 @@ class CategoryAddAssetActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeAssetNameActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -403,7 +412,7 @@ class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
     asset_order = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="assetOrder",
     )
 
@@ -418,7 +427,9 @@ class CategoryChangeAssetOrderActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
     name = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -432,7 +443,7 @@ class CategoryChangeNameActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeOrderHintActionSchema(CategoryUpdateActionSchema):
     order_hint = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="orderHint"
+        allow_none=True, load_default=None, data_key="orderHint"
     )
 
     class Meta:
@@ -449,7 +460,7 @@ class CategoryChangeParentActionSchema(CategoryUpdateActionSchema):
         nested=helpers.absmod(__name__, ".CategoryResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -463,7 +474,9 @@ class CategoryChangeParentActionSchema(CategoryUpdateActionSchema):
 
 class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
     slug = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -477,12 +490,15 @@ class CategoryChangeSlugActionSchema(CategoryUpdateActionSchema):
 
 class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
 
@@ -497,17 +513,20 @@ class CategoryRemoveAssetActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -521,12 +540,15 @@ class CategorySetAssetCustomFieldActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     type = helpers.LazyNestedField(
@@ -534,13 +556,13 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -554,19 +576,22 @@ class CategorySetAssetCustomTypeActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -580,12 +605,12 @@ class CategorySetAssetDescriptionActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="assetId"
+        allow_none=True, load_default=None, data_key="assetId"
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
 
@@ -600,12 +625,15 @@ class CategorySetAssetKeyActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     sources = helpers.LazyNestedField(
@@ -613,7 +641,7 @@ class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -627,19 +655,22 @@ class CategorySetAssetSourcesActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
     asset_id = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="assetId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="assetId",
     )
     asset_key = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="assetKey",
     )
     tags = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -652,9 +683,9 @@ class CategorySetAssetTagsActionSchema(CategoryUpdateActionSchema):
 
 
 class CategorySetCustomFieldActionSchema(CategoryUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -672,13 +703,13 @@ class CategorySetCustomTypeActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -695,7 +726,7 @@ class CategorySetDescriptionActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -711,7 +742,7 @@ class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
 
@@ -726,7 +757,7 @@ class CategorySetExternalIdActionSchema(CategoryUpdateActionSchema):
 
 class CategorySetKeyActionSchema(CategoryUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -743,7 +774,7 @@ class CategorySetMetaDescriptionActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaDescription",
     )
 
@@ -761,7 +792,7 @@ class CategorySetMetaKeywordsActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaKeywords",
     )
 
@@ -779,7 +810,7 @@ class CategorySetMetaTitleActionSchema(CategoryUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="metaTitle",
     )
 

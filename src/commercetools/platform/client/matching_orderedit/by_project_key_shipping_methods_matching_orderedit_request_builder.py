@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -36,8 +35,9 @@ class ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShippingMethodPagedQueryResponse"]:
-        """Retrieves all the ShippingMethods that can ship to the given [Location](/projects/zones#location) for an [OrderEdit](/projects/order-edits).
-        In case the OrderEdit preview cannot be created an [EditPreviewFailed](ctp:api:type:EditPreviewFailedError) error is raised.
+        """Retrieves all the ShippingMethods that can ship to the given [Location](/../api/projects/zones#location) for an [OrderEdit](/../api/projects/order-edits).
+
+        If the OrderEdit preview cannot be generated, an [EditPreviewFailed](ctp:api:type:EditPreviewFailedError) error is returned.
 
         """
         headers = {} if headers is None else headers

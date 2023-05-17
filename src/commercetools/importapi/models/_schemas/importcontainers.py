@@ -20,21 +20,21 @@ from ..common import ImportResourceType
 
 # Marshmallow Schemas
 class ImportContainerSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="resourceType",
     )
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
+        allow_none=True, load_default=None, data_key="createdAt"
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True, load_default=None, data_key="lastModifiedAt"
     )
 
     class Meta:
@@ -42,18 +42,17 @@ class ImportContainerSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportContainer(**data)
 
 
 class ImportContainerDraftSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="resourceType",
     )
 
@@ -62,18 +61,17 @@ class ImportContainerDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportContainerDraft(**data)
 
 
 class ImportContainerUpdateDraftSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     resource_type = marshmallow_enum.EnumField(
         ImportResourceType,
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="resourceType",
     )
 
@@ -82,21 +80,20 @@ class ImportContainerUpdateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportContainerUpdateDraft(**data)
 
 
 class ImportContainerPagedResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ImportContainerSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -104,5 +101,4 @@ class ImportContainerPagedResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportContainerPagedResponse(**data)

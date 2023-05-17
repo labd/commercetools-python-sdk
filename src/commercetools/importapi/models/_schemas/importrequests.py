@@ -21,7 +21,7 @@ from ..common import ImportResourceType
 # Marshmallow Schemas
 class ImportRequestSchema(helpers.BaseSchema):
     type = marshmallow_enum.EnumField(
-        ImportResourceType, by_value=True, allow_none=True, missing=None
+        ImportResourceType, by_value=True, allow_none=True, load_default=None
     )
 
     class Meta:
@@ -41,7 +41,7 @@ class ImportResponseSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="operationStatus",
     )
 
@@ -50,7 +50,6 @@ class ImportResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportResponse(**data)
 
 
@@ -60,7 +59,7 @@ class CategoryImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -78,7 +77,7 @@ class ProductImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -96,7 +95,7 @@ class ProductDraftImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -114,7 +113,7 @@ class ProductTypeImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -132,7 +131,7 @@ class ProductVariantImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -150,7 +149,7 @@ class PriceImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -170,7 +169,7 @@ class StandalonePriceImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -188,7 +187,7 @@ class OrderImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -206,7 +205,7 @@ class OrderPatchImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -224,7 +223,7 @@ class ProductVariantPatchRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -242,7 +241,7 @@ class CustomerImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -260,7 +259,7 @@ class InventoryImportRequestSchema(ImportRequestSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -270,3 +269,21 @@ class InventoryImportRequestSchema(ImportRequestSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.InventoryImportRequest(**data)
+
+
+class TypeImportRequestSchema(ImportRequestSchema):
+    resources = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".types.TypeImportSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.TypeImportRequest(**data)

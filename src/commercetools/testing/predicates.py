@@ -78,7 +78,6 @@ class Tokenizer:
                     continue
                 yield self.get_symbol(identifier, NameToken)
             else:
-
                 if buf:
                     for item in buf:
                         yield self.get_symbol(item, NameToken)

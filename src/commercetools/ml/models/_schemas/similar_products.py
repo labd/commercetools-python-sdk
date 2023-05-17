@@ -22,35 +22,35 @@ from .common import LocalizedStringField
 # Marshmallow Schemas
 class ProductSetSelectorSchema(helpers.BaseSchema):
     project_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="projectKey"
+        allow_none=True, load_default=None, data_key="projectKey"
     )
     product_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productIds",
     )
     product_type_ids = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productTypeIds",
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     include_variants = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="includeVariants",
     )
     product_set_limit = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSetLimit",
     )
 
@@ -59,28 +59,27 @@ class ProductSetSelectorSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductSetSelector(**data)
 
 
 class SimilarityMeasuresSchema(helpers.BaseSchema):
     name = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     description = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     attribute = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     variant_count = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantCount",
     )
     price = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -88,24 +87,23 @@ class SimilarityMeasuresSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarityMeasures(**data)
 
 
 class SimilarProductSearchRequestSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     offset = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     language = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     currency_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="currencyCode",
     )
     similarity_measures = helpers.LazyNestedField(
@@ -113,7 +111,7 @@ class SimilarProductSearchRequestSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="similarityMeasures",
     )
     product_set_selectors = helpers.LazyNestedField(
@@ -122,19 +120,19 @@ class SimilarProductSearchRequestSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSetSelectors",
     )
     confidence_min = marshmallow.fields.Float(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="confidenceMin",
     )
     confidence_max = marshmallow.fields.Float(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="confidenceMax",
     )
 
@@ -143,7 +141,6 @@ class SimilarProductSearchRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductSearchRequest(**data)
 
 
@@ -153,12 +150,12 @@ class SimilarProductSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     variant_id = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantId",
     )
     meta = helpers.LazyNestedField(
@@ -166,7 +163,7 @@ class SimilarProductSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -174,7 +171,6 @@ class SimilarProductSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProduct(**data)
 
 
@@ -183,25 +179,25 @@ class SimilarProductMetaSchema(helpers.BaseSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     description = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     variant_count = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="variantCount",
     )
 
@@ -210,18 +206,17 @@ class SimilarProductMetaSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductMeta(**data)
 
 
 class SimilarProductPairSchema(helpers.BaseSchema):
-    confidence = marshmallow.fields.Float(allow_none=True, missing=None)
+    confidence = marshmallow.fields.Float(allow_none=True, load_default=None)
     products = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -229,7 +224,6 @@ class SimilarProductPairSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductPair(**data)
 
 
@@ -238,7 +232,7 @@ class SimilarProductSearchRequestMetaSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".SimilarityMeasuresSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="similarityMeasures",
     )
 
@@ -247,26 +241,25 @@ class SimilarProductSearchRequestMetaSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductSearchRequestMeta(**data)
 
 
 class SimilarProductsPagedQueryResultSchema(helpers.BaseSchema):
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductPairSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     meta = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductSearchRequestMetaSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -274,22 +267,21 @@ class SimilarProductsPagedQueryResultSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductsPagedQueryResult(**data)
 
 
 class SimilarProductsTaskStatusSchema(helpers.BaseSchema):
     state = marshmallow_enum.EnumField(
-        TaskStatusEnum, by_value=True, allow_none=True, missing=None
+        TaskStatusEnum, by_value=True, allow_none=True, load_default=None
     )
     expires = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     result = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SimilarProductsPagedQueryResultSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -297,5 +289,4 @@ class SimilarProductsTaskStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.SimilarProductsTaskStatus(**data)

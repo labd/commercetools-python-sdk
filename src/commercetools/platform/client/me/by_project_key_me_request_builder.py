@@ -52,7 +52,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -137,7 +136,7 @@ class ByProjectKeyMeRequestBuilder:
         )
 
     def shopping_lists(self) -> ByProjectKeyMeShoppingListsRequestBuilder:
-        """The My Shopping Lists endpoint creates and provides access to shopping lists scoped to a specific user."""
+        """The My Shopping Lists endpoint creates and provides access to Shopping Lists scoped to a specific user."""
         return ByProjectKeyMeShoppingListsRequestBuilder(
             project_key=self._project_key,
             client=self._client,

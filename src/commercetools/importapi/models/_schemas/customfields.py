@@ -29,7 +29,7 @@ class CustomSchema(helpers.BaseSchema):
         nested=helpers.absmod(__name__, ".common.TypeKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
@@ -68,7 +68,7 @@ class CustomSchema(helpers.BaseSchema):
             },
         ),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -76,12 +76,11 @@ class CustomSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Custom(**data)
 
 
 class CustomFieldSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -93,7 +92,7 @@ class CustomFieldSchema(helpers.BaseSchema):
 
 
 class BooleanFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    value = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -105,7 +104,7 @@ class BooleanFieldSchema(CustomFieldSchema):
 
 
 class StringFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -118,7 +117,9 @@ class StringFieldSchema(CustomFieldSchema):
 
 class LocalizedStringFieldSchema(CustomFieldSchema):
     value = LocalizedStringField(
-        allow_none=True, values=marshmallow.fields.String(allow_none=True), missing=None
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
     )
 
     class Meta:
@@ -131,7 +132,7 @@ class LocalizedStringFieldSchema(CustomFieldSchema):
 
 
 class EnumFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -143,7 +144,7 @@ class EnumFieldSchema(CustomFieldSchema):
 
 
 class LocalizedEnumFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.String(allow_none=True, missing=None)
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -155,7 +156,7 @@ class LocalizedEnumFieldSchema(CustomFieldSchema):
 
 
 class NumberFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.Float(allow_none=True, missing=None)
+    value = marshmallow.fields.Float(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -176,7 +177,7 @@ class MoneyFieldSchema(CustomFieldSchema):
             ),
             "centPrecision": helpers.absmod(__name__, ".common.MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -189,7 +190,7 @@ class MoneyFieldSchema(CustomFieldSchema):
 
 
 class DateFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.Date(allow_none=True, missing=None)
+    value = marshmallow.fields.Date(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -201,7 +202,7 @@ class DateFieldSchema(CustomFieldSchema):
 
 
 class TimeFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.Time(allow_none=True, missing=None)
+    value = marshmallow.fields.Time(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -213,7 +214,7 @@ class TimeFieldSchema(CustomFieldSchema):
 
 
 class DateTimeFieldSchema(CustomFieldSchema):
-    value = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    value = marshmallow.fields.DateTime(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -268,7 +269,7 @@ class ReferenceFieldSchema(CustomFieldSchema):
                 __name__, ".common.CustomObjectKeyReferenceSchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -282,7 +283,7 @@ class ReferenceFieldSchema(CustomFieldSchema):
 
 class BooleanSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Boolean(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Boolean(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -296,7 +297,7 @@ class BooleanSetFieldSchema(CustomFieldSchema):
 
 class StringSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -314,7 +315,7 @@ class LocalizedStringSetFieldSchema(CustomFieldSchema):
             allow_none=True, values=marshmallow.fields.String(allow_none=True)
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -328,7 +329,7 @@ class LocalizedStringSetFieldSchema(CustomFieldSchema):
 
 class EnumSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -342,7 +343,7 @@ class EnumSetFieldSchema(CustomFieldSchema):
 
 class LocalizedEnumSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -356,7 +357,7 @@ class LocalizedEnumSetFieldSchema(CustomFieldSchema):
 
 class NumberSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Float(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Float(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -374,7 +375,7 @@ class MoneySetFieldSchema(CustomFieldSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -388,7 +389,7 @@ class MoneySetFieldSchema(CustomFieldSchema):
 
 class DateSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Date(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Date(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -402,7 +403,7 @@ class DateSetFieldSchema(CustomFieldSchema):
 
 class TimeSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.Time(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.Time(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -416,7 +417,7 @@ class TimeSetFieldSchema(CustomFieldSchema):
 
 class DateTimeSetFieldSchema(CustomFieldSchema):
     value = marshmallow.fields.List(
-        marshmallow.fields.DateTime(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.DateTime(allow_none=True), allow_none=True, load_default=None
     )
 
     class Meta:
@@ -485,7 +486,7 @@ class ReferenceSetFieldSchema(CustomFieldSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:

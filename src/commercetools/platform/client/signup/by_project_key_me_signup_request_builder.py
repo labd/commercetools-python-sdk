@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeSignupRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -35,7 +34,7 @@ class ByProjectKeyMeSignupRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerSignInResult"]:
-        """If used with an [access token for an anonymous session](/../api/authorization#tokens-for-anonymous-sessions), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
+        """If used with an [access token for an anonymous session](ctp:api:type:AnonymousSession), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
 
         Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
 

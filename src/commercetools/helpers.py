@@ -237,7 +237,6 @@ class Discriminator(Field):
         try:
             discriminator_value = getattr(nested_obj, self.discriminator_field[1])
         except AttributeError:
-
             # We could make the error a bit more descriptive in the future
             raise ValueError(
                 "The value of %s.%s doesn't have the attribute %r (expected object of %s)"

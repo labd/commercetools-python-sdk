@@ -20,7 +20,7 @@ from .common import ImportResourceSchema
 
 # Marshmallow Schemas
 class StandalonePriceImportSchema(ImportResourceSchema):
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     value = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -30,17 +30,17 @@ class StandalonePriceImportSchema(ImportResourceSchema):
             ),
             "centPrecision": helpers.absmod(__name__, ".common.MoneySchema"),
         },
-        missing=None,
+        load_default=None,
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.CustomerGroupKeyReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -48,18 +48,18 @@ class StandalonePriceImportSchema(ImportResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     tiers = helpers.LazyNestedField(
@@ -68,21 +68,21 @@ class StandalonePriceImportSchema(ImportResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customfields.CustomSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -90,5 +90,4 @@ class StandalonePriceImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StandalonePriceImport(**data)

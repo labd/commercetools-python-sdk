@@ -10,6 +10,9 @@ import warnings
 from ...models.error import ErrorResponse
 from ...models.me import MyOrderFromCartDraft
 from ...models.order import Order, OrderPagedQueryResponse
+from ..quotes.by_project_key_me_orders_quotes_request_builder import (
+    ByProjectKeyMeOrdersQuotesRequestBuilder,
+)
 from .by_project_key_me_orders_by_id_request_builder import (
     ByProjectKeyMeOrdersByIDRequestBuilder,
 )
@@ -19,7 +22,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeOrdersRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 
@@ -34,6 +36,12 @@ class ByProjectKeyMeOrdersRequestBuilder:
     def with_id(self, id: str) -> ByProjectKeyMeOrdersByIDRequestBuilder:
         return ByProjectKeyMeOrdersByIDRequestBuilder(
             id=id,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def quotes(self) -> ByProjectKeyMeOrdersQuotesRequestBuilder:
+        return ByProjectKeyMeOrdersQuotesRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

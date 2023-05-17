@@ -26,6 +26,7 @@ if typing.TYPE_CHECKING:
     from .producttypes import ProductTypeImport
     from .productvariants import ProductVariantImport, ProductVariantPatch
     from .standalone_prices import StandalonePriceImport
+    from .types import TypeImport
 
 __all__ = [
     "CategoryImportRequest",
@@ -42,13 +43,14 @@ __all__ = [
     "ProductVariantImportRequest",
     "ProductVariantPatchRequest",
     "StandalonePriceImportRequest",
+    "TypeImportRequest",
 ]
 
 
 class ImportRequest(_BaseType):
     """An import request batches multiple import resources of the same import resource type for processing by an import container."""
 
-    #: The type of the import resource.
+    #: The resource types that can be imported.
     type: "ImportResourceType"
 
     def __init__(self, *, type: "ImportResourceType"):
@@ -106,6 +108,10 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import InventoryImportRequestSchema
 
             return InventoryImportRequestSchema().load(data)
+        if data["type"] == "type":
+            from ._schemas.importrequests import TypeImportRequestSchema
+
+            return TypeImportRequestSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.importrequests import ImportRequestSchema
@@ -260,7 +266,7 @@ class ProductVariantImportRequest(ImportRequest):
 
 
 class PriceImportRequest(ImportRequest):
-    """The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/types#embedded-price) to be created or updated in a Project."""
+    """The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/projects/products#embedded-price) to be created or updated in a Project."""
 
     #: The price import resources of this request.
     resources: typing.List["PriceImport"]
@@ -308,7 +314,7 @@ class StandalonePriceImportRequest(ImportRequest):
 
 
 class OrderImportRequest(ImportRequest):
-    """The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a Project."""
+    """The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created in a Project."""
 
     #: The order import resources of this request.
     resources: typing.List["OrderImport"]
@@ -426,3 +432,26 @@ class InventoryImportRequest(ImportRequest):
         from ._schemas.importrequests import InventoryImportRequestSchema
 
         return InventoryImportRequestSchema().dump(self)
+
+
+class TypeImportRequest(ImportRequest):
+    """The request body to [import Types](#import-types). Contains data for [Types](/../api/projects/types#type) to be created or updated in a Project."""
+
+    #: The type import resources of this request.
+    resources: typing.List["TypeImport"]
+
+    def __init__(self, *, resources: typing.List["TypeImport"]):
+        self.resources = resources
+
+        super().__init__(type=ImportResourceType.TYPE)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "TypeImportRequest":
+        from ._schemas.importrequests import TypeImportRequestSchema
+
+        return TypeImportRequestSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importrequests import TypeImportRequestSchema
+
+        return TypeImportRequestSchema().dump(self)

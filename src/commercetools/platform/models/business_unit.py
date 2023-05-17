@@ -19,6 +19,10 @@ from .common import (
 )
 
 if typing.TYPE_CHECKING:
+    from .associate_role import (
+        AssociateRoleKeyReference,
+        AssociateRoleResourceIdentifier,
+    )
     from .common import Address, BaseAddress, CreatedBy, LastModifiedBy, ReferenceTypeId
     from .customer import CustomerReference, CustomerResourceIdentifier
     from .store import StoreKeyReference, StoreResourceIdentifier
@@ -32,15 +36,20 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "Associate",
     "AssociateDraft",
-    "AssociateRole",
+    "AssociateRoleAssignment",
+    "AssociateRoleAssignmentDraft",
+    "AssociateRoleDeprecated",
+    "AssociateRoleInheritanceMode",
     "BusinessUnit",
     "BusinessUnitAddAddressAction",
     "BusinessUnitAddAssociateAction",
     "BusinessUnitAddBillingAddressIdAction",
     "BusinessUnitAddShippingAddressIdAction",
     "BusinessUnitAddStoreAction",
+    "BusinessUnitAssociateMode",
     "BusinessUnitChangeAddressAction",
     "BusinessUnitChangeAssociateAction",
+    "BusinessUnitChangeAssociateModeAction",
     "BusinessUnitChangeNameAction",
     "BusinessUnitChangeParentUnitAction",
     "BusinessUnitChangeStatusAction",
@@ -73,18 +82,27 @@ __all__ = [
     "CompanyDraft",
     "Division",
     "DivisionDraft",
+    "InheritedAssociate",
+    "InheritedAssociateRoleAssignment",
 ]
 
 
 class Associate(_BaseType):
-    #: Roles the Associate holds within the Business Unit.
-    roles: typing.List["AssociateRole"]
-    #: The [Customer](ctp:api:type:Customer) that is part of the Business Unit.
+    #: Roles assigned to the Associate within a Business Unit.
+    associate_role_assignments: typing.List["AssociateRoleAssignment"]
+    #: Deprecated type. Use `associateRoleAssignment` instead.
+    roles: typing.List["AssociateRoleDeprecated"]
+    #: The [Customer](ctp:api:type:Customer) that acts as an Associate in the Business Unit.
     customer: "CustomerReference"
 
     def __init__(
-        self, *, roles: typing.List["AssociateRole"], customer: "CustomerReference"
+        self,
+        *,
+        associate_role_assignments: typing.List["AssociateRoleAssignment"],
+        roles: typing.List["AssociateRoleDeprecated"],
+        customer: "CustomerReference"
     ):
+        self.associate_role_assignments = associate_role_assignments
         self.roles = roles
         self.customer = customer
 
@@ -103,17 +121,25 @@ class Associate(_BaseType):
 
 
 class AssociateDraft(_BaseType):
-    #: Roles the Associate should hold within the Business Unit.
-    roles: typing.List["AssociateRole"]
+    #: Roles assigned to the Associate within a Business Unit.
+    associate_role_assignments: typing.Optional[
+        typing.List["AssociateRoleAssignmentDraft"]
+    ]
+    #: Deprecated type. Use `associateRoleAssignment` instead.
+    roles: typing.Optional[typing.List["AssociateRoleDeprecated"]]
     #: The [Customer](ctp:api:type:Customer) to be part of the Business Unit.
     customer: "CustomerResourceIdentifier"
 
     def __init__(
         self,
         *,
-        roles: typing.List["AssociateRole"],
+        associate_role_assignments: typing.Optional[
+            typing.List["AssociateRoleAssignmentDraft"]
+        ] = None,
+        roles: typing.Optional[typing.List["AssociateRoleDeprecated"]] = None,
         customer: "CustomerResourceIdentifier"
     ):
+        self.associate_role_assignments = associate_role_assignments
         self.roles = roles
         self.customer = customer
 
@@ -131,15 +157,84 @@ class AssociateDraft(_BaseType):
         return AssociateDraftSchema().dump(self)
 
 
-class AssociateRole(enum.Enum):
+class AssociateRoleAssignment(_BaseType):
+    #: Role the Associate holds within a Business Unit.
+    associate_role: "AssociateRoleKeyReference"
+    #: Determines whether the AssociateRoleAssignment can be inherited by child Business Units.
+    inheritance: "AssociateRoleInheritanceMode"
+
+    def __init__(
+        self,
+        *,
+        associate_role: "AssociateRoleKeyReference",
+        inheritance: "AssociateRoleInheritanceMode"
+    ):
+        self.associate_role = associate_role
+        self.inheritance = inheritance
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "AssociateRoleAssignment":
+        from ._schemas.business_unit import AssociateRoleAssignmentSchema
+
+        return AssociateRoleAssignmentSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.business_unit import AssociateRoleAssignmentSchema
+
+        return AssociateRoleAssignmentSchema().dump(self)
+
+
+class AssociateRoleAssignmentDraft(_BaseType):
+    #: Role the Associate holds within a Business Unit.
+    associate_role: "AssociateRoleResourceIdentifier"
+    #: Determines whether the AssociateRoleAssignment can be inherited by child Business Units.
+    inheritance: typing.Optional["AssociateRoleInheritanceMode"]
+
+    def __init__(
+        self,
+        *,
+        associate_role: "AssociateRoleResourceIdentifier",
+        inheritance: typing.Optional["AssociateRoleInheritanceMode"] = None
+    ):
+        self.associate_role = associate_role
+        self.inheritance = inheritance
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "AssociateRoleAssignmentDraft":
+        from ._schemas.business_unit import AssociateRoleAssignmentDraftSchema
+
+        return AssociateRoleAssignmentDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.business_unit import AssociateRoleAssignmentDraftSchema
+
+        return AssociateRoleAssignmentDraftSchema().dump(self)
+
+
+class AssociateRoleDeprecated(enum.Enum):
     """Roles defining how an [Associate](ctp:api:type:Associate) can interact with a Business Unit."""
 
     ADMIN = "Admin"
     BUYER = "Buyer"
 
 
+class AssociateRoleInheritanceMode(enum.Enum):
+    """Determines whether an [AssociateRoleAssignment](ctp:api:type:AssociateRoleAssignment) can be inherited by child Business Units."""
+
+    ENABLED = "Enabled"
+    DISABLED = "Disabled"
+
+
 class BusinessUnit(BaseResource):
-    """Generic type to model those fields all Business Units have in common."""
+    """Generic type to model the fields that all types of Business Units have in common."""
 
     #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
@@ -149,12 +244,13 @@ class BusinessUnit(BaseResource):
     key: str
     #: Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
     status: "BusinessUnitStatus"
-    #: References to [Stores](ctp:api:type:Store) the Business Unit is associated with.
-    #: If empty, the Business Unit can only create [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), or [Quotes](/../api/quotes-overview) that have no `store` value.
-    #: If not empty, the Business Unit can only be linked to [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) of a referenced Store.
-    #: Only present when `storeMode` is `Explicit`.
+    #: References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Only present when `storeMode` is `Explicit`.
+    #:
+    #: If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+    #:
+    #: If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
     stores: typing.Optional[typing.List["StoreKeyReference"]]
-    #: Defines whether the Stores of the Business Unit are set on the Business Unit or are inherited from a parent.
+    #: Defines whether the Stores of the Business Unit are set directly on the Business Unit or are inherited from a parent.
     store_mode: "BusinessUnitStoreMode"
     #: Type of the Business Unit indicating its position in a hierarchy.
     unit_type: "BusinessUnitType"
@@ -169,13 +265,17 @@ class BusinessUnit(BaseResource):
     #: Unique identifiers of addresses used as shipping addresses.
     shipping_address_ids: typing.Optional[typing.List["str"]]
     #: Unique identifier of the address used as the default shipping address.
-    default_shiping_address_id: typing.Optional[str]
+    default_shipping_address_id: typing.Optional[str]
     #: Unique identifiers of addresses used as billing addresses.
     billing_address_ids: typing.Optional[typing.List["str"]]
     #: Unique identifier of the address used as the default billing address.
     default_billing_address_id: typing.Optional[str]
-    #: Members that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
+    #: Set to `Explicit` to prevent the Business Unit inheriting Associates from a parent, set to `ExplicitAndFromParent` to enable inheritance.
+    associate_mode: "BusinessUnitAssociateMode"
+    #: Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
     associates: typing.List["Associate"]
+    #: Associates that are inherited from a parent Business Unit. This value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
+    inherited_associates: typing.Optional[typing.List["InheritedAssociate"]]
     #: Parent unit of the Business Unit. Only present when the `unitType` is `Division`.
     parent_unit: typing.Optional["BusinessUnitKeyReference"]
     #: Top-level unit of the Business Unit. The top-level unit is of `unitType` `Company`.
@@ -200,10 +300,12 @@ class BusinessUnit(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         addresses: typing.List["Address"],
         shipping_address_ids: typing.Optional[typing.List["str"]] = None,
-        default_shiping_address_id: typing.Optional[str] = None,
+        default_shipping_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List["str"]] = None,
         default_billing_address_id: typing.Optional[str] = None,
+        associate_mode: "BusinessUnitAssociateMode",
         associates: typing.List["Associate"],
+        inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         top_level_unit: "BusinessUnitKeyReference"
     ):
@@ -219,10 +321,12 @@ class BusinessUnit(BaseResource):
         self.custom = custom
         self.addresses = addresses
         self.shipping_address_ids = shipping_address_ids
-        self.default_shiping_address_id = default_shiping_address_id
+        self.default_shipping_address_id = default_shipping_address_id
         self.billing_address_ids = billing_address_ids
         self.default_billing_address_id = default_billing_address_id
+        self.associate_mode = associate_mode
         self.associates = associates
+        self.inherited_associates = inherited_associates
         self.parent_unit = parent_unit
         self.top_level_unit = top_level_unit
 
@@ -250,20 +354,29 @@ class BusinessUnit(BaseResource):
         return BusinessUnitSchema().dump(self)
 
 
+class BusinessUnitAssociateMode(enum.Enum):
+    """Determines whether a Business Unit can inherit Associates from a parent."""
+
+    EXPLICIT = "Explicit"
+    EXPLICIT_AND_FROM_PARENT = "ExplicitAndFromParent"
+
+
 class BusinessUnitDraft(_BaseType):
-    """Generic draft type to model those fields all Business Units have in common."""
+    """Generic draft type to model those fields all Business Units have in common. The additional fields required for creating a [Company](ctp:api:type:Company) or [Division](ctp:api:type:Division) are represented on [CompanyDraft](ctp:api:type:CompanyDraft) and [DivisionDraft](ctp:api:type:DivisionDraft)."""
 
     #: User-defined unique identifier for the Business Unit.
     key: str
     #: Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
     status: typing.Optional["BusinessUnitStatus"]
-    #: References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
-    #: If not empty, the Business Unit can only be linked to [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) of a referenced Store.
-    #: If empty, the Business Unit can only create [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), or [Quotes](/../api/quotes-overview) that have no `store` value.
+    #: Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
     #: Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
-    stores: typing.Optional[typing.List["StoreKeyReference"]]
-    #: Defines whether the Stores of the Business Unit are set on the Business Unit or are inherited from a parent.
-    #: Defaults to `Explicit` for [Companies](ctp:api:type:BusinessUnitType) and to `FromParent` for [Divisions](ctp:api:type:BusinessUnitType).
+    #:
+    #: If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+    #:
+    #: If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
+    #: Defines whether the Stores of the Business Unit are set directly on the Business Unit or are inherited from a parent.
+    #: `storeMode` is always `Explicit` for [Companies](ctp:api:type:BusinessUnitType) and defaults to `FromParent` for [Divisions](ctp:api:type:BusinessUnitType).
     store_mode: typing.Optional["BusinessUnitStoreMode"]
     #: Type of the Business Unit indicating its position in a hierarchy.
     unit_type: "BusinessUnitType"
@@ -271,6 +384,9 @@ class BusinessUnitDraft(_BaseType):
     name: str
     #: Email address of the Business Unit.
     contact_email: typing.Optional[str]
+    #: Determines whether the Business Unit can inherit Associates from a parent.
+    #: Always `Explicit` for [Companies](ctp:api:type:BusinessUnitType) and defaults to `ExplicitAndFromParent` for [Divisions](ctp:api:type:BusinessUnitType).
+    associate_mode: typing.Optional["BusinessUnitAssociateMode"]
     #: List of members that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
     associates: typing.Optional[typing.List["AssociateDraft"]]
     #: Addresses used by the Business Unit.
@@ -279,7 +395,7 @@ class BusinessUnitDraft(_BaseType):
     #: The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
     shipping_addresses: typing.Optional[typing.List["int"]]
     #: Index of the entry in `addresses` to set as the default shipping address.
-    default_shiping_address: typing.Optional[int]
+    default_shipping_address: typing.Optional[int]
     #: Indexes of entries in `addresses` to set as billing addresses.
     #: The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
     billing_addresses: typing.Optional[typing.List["int"]]
@@ -293,15 +409,16 @@ class BusinessUnitDraft(_BaseType):
         *,
         key: str,
         status: typing.Optional["BusinessUnitStatus"] = None,
-        stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
         store_mode: typing.Optional["BusinessUnitStoreMode"] = None,
         unit_type: "BusinessUnitType",
         name: str,
         contact_email: typing.Optional[str] = None,
+        associate_mode: typing.Optional["BusinessUnitAssociateMode"] = None,
         associates: typing.Optional[typing.List["AssociateDraft"]] = None,
         addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
-        default_shiping_address: typing.Optional[int] = None,
+        default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
@@ -313,10 +430,11 @@ class BusinessUnitDraft(_BaseType):
         self.unit_type = unit_type
         self.name = name
         self.contact_email = contact_email
+        self.associate_mode = associate_mode
         self.associates = associates
         self.addresses = addresses
         self.shipping_addresses = shipping_addresses
-        self.default_shiping_address = default_shiping_address
+        self.default_shipping_address = default_shipping_address
         self.billing_addresses = billing_addresses
         self.default_billing_address = default_billing_address
         self.custom = custom
@@ -344,7 +462,6 @@ class BusinessUnitKeyReference(KeyReference):
     """[Reference](/../api/types#reference) to a [BusinessUnit](ctp:api:type:BusinessUnit) by its key."""
 
     def __init__(self, *, key: str):
-
         super().__init__(key=key, type_id=ReferenceTypeId.BUSINESS_UNIT)
 
     @classmethod
@@ -439,7 +556,6 @@ class BusinessUnitResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.BUSINESS_UNIT)
 
     @classmethod
@@ -457,7 +573,7 @@ class BusinessUnitResourceIdentifier(ResourceIdentifier):
 
 
 class BusinessUnitStatus(enum.Enum):
-    """Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders), [Carts](/../api/projects/carts), or [Quotes](/../api/projects/quotes)."""
+    """Indicates whether the Business Unit can be edited and used in [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quote Requests](ctp:api:type:QuoteRequest), or [Quotes](ctp:api:type:Quote)."""
 
     ACTIVE = "Active"
     INACTIVE = "Inactive"
@@ -548,6 +664,12 @@ class BusinessUnitUpdateAction(_BaseType):
             from ._schemas.business_unit import BusinessUnitChangeAssociateActionSchema
 
             return BusinessUnitChangeAssociateActionSchema().load(data)
+        if data["action"] == "changeAssociateMode":
+            from ._schemas.business_unit import (
+                BusinessUnitChangeAssociateModeActionSchema,
+            )
+
+            return BusinessUnitChangeAssociateModeActionSchema().load(data)
         if data["action"] == "changeName":
             from ._schemas.business_unit import BusinessUnitChangeNameActionSchema
 
@@ -663,14 +785,15 @@ class Company(BusinessUnit):
         custom: typing.Optional["CustomFields"] = None,
         addresses: typing.List["Address"],
         shipping_address_ids: typing.Optional[typing.List["str"]] = None,
-        default_shiping_address_id: typing.Optional[str] = None,
+        default_shipping_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List["str"]] = None,
         default_billing_address_id: typing.Optional[str] = None,
+        associate_mode: "BusinessUnitAssociateMode",
         associates: typing.List["Associate"],
+        inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         top_level_unit: "BusinessUnitKeyReference"
     ):
-
         super().__init__(
             id=id,
             version=version,
@@ -687,10 +810,12 @@ class Company(BusinessUnit):
             custom=custom,
             addresses=addresses,
             shipping_address_ids=shipping_address_ids,
-            default_shiping_address_id=default_shiping_address_id,
+            default_shipping_address_id=default_shipping_address_id,
             billing_address_ids=billing_address_ids,
             default_billing_address_id=default_billing_address_id,
+            associate_mode=associate_mode,
             associates=associates,
+            inherited_associates=inherited_associates,
             parent_unit=parent_unit,
             top_level_unit=top_level_unit,
             unit_type=BusinessUnitType.COMPANY,
@@ -709,26 +834,26 @@ class Company(BusinessUnit):
 
 
 class CompanyDraft(BusinessUnitDraft):
-    """Draft type to represent the top level of a business. Contains the fields and values of the generic [BusinessUnitDraft](ctp:api:type:BusinessUnitDraft] that are used specifically for creating a [Company](ctp:api:type:Company)."""
+    """Draft type to represent the top level of a business. Contains the fields and values of the generic [BusinessUnitDraft](ctp:api:type:BusinessUnitDraft) that are used specifically for creating a [Company](ctp:api:type:Company)."""
 
     def __init__(
         self,
         *,
         key: str,
         status: typing.Optional["BusinessUnitStatus"] = None,
-        stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
         store_mode: typing.Optional["BusinessUnitStoreMode"] = None,
         name: str,
         contact_email: typing.Optional[str] = None,
+        associate_mode: typing.Optional["BusinessUnitAssociateMode"] = None,
         associates: typing.Optional[typing.List["AssociateDraft"]] = None,
         addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
-        default_shiping_address: typing.Optional[int] = None,
+        default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
-
         super().__init__(
             key=key,
             status=status,
@@ -736,10 +861,11 @@ class CompanyDraft(BusinessUnitDraft):
             store_mode=store_mode,
             name=name,
             contact_email=contact_email,
+            associate_mode=associate_mode,
             associates=associates,
             addresses=addresses,
             shipping_addresses=shipping_addresses,
-            default_shiping_address=default_shiping_address,
+            default_shipping_address=default_shipping_address,
             billing_addresses=billing_addresses,
             default_billing_address=default_billing_address,
             custom=custom,
@@ -759,7 +885,7 @@ class CompanyDraft(BusinessUnitDraft):
 
 
 class Division(BusinessUnit):
-    """Business Unit type to model divisions that are part of the [Company](ctp:api:type:Company) or a higher order Division.
+    """Business Unit type to model divisions that are part of the [Company](ctp:api:type:Company) or a higher-order Division.
     Contains specific fields and values that differentiate a Division from the generic [BusinessUnit](ctp:api:type:BusinessUnit).
 
     """
@@ -782,14 +908,15 @@ class Division(BusinessUnit):
         custom: typing.Optional["CustomFields"] = None,
         addresses: typing.List["Address"],
         shipping_address_ids: typing.Optional[typing.List["str"]] = None,
-        default_shiping_address_id: typing.Optional[str] = None,
+        default_shipping_address_id: typing.Optional[str] = None,
         billing_address_ids: typing.Optional[typing.List["str"]] = None,
         default_billing_address_id: typing.Optional[str] = None,
+        associate_mode: "BusinessUnitAssociateMode",
         associates: typing.List["Associate"],
+        inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: "BusinessUnitKeyReference",
         top_level_unit: "BusinessUnitKeyReference"
     ):
-
         super().__init__(
             id=id,
             version=version,
@@ -806,10 +933,12 @@ class Division(BusinessUnit):
             custom=custom,
             addresses=addresses,
             shipping_address_ids=shipping_address_ids,
-            default_shiping_address_id=default_shiping_address_id,
+            default_shipping_address_id=default_shipping_address_id,
             billing_address_ids=billing_address_ids,
             default_billing_address_id=default_billing_address_id,
+            associate_mode=associate_mode,
             associates=associates,
+            inherited_associates=inherited_associates,
             parent_unit=parent_unit,
             top_level_unit=top_level_unit,
             unit_type=BusinessUnitType.DIVISION,
@@ -828,7 +957,7 @@ class Division(BusinessUnit):
 
 
 class DivisionDraft(BusinessUnitDraft):
-    """Draft type to model divisions that are part of a [Company](ctp:api:type:Company) or a higher order [Division](ctp:api:type:Division).
+    """Draft type to model divisions that are part of a [Company](ctp:api:type:Company) or a higher-order [Division](ctp:api:type:Division).
     Contains the fields and values of the generic [BusinessUnitDraft](ctp:api:type:BusinessUnitDraft) that are used specifically for creating a Division.
 
     """
@@ -841,14 +970,15 @@ class DivisionDraft(BusinessUnitDraft):
         *,
         key: str,
         status: typing.Optional["BusinessUnitStatus"] = None,
-        stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
         store_mode: typing.Optional["BusinessUnitStoreMode"] = None,
         name: str,
         contact_email: typing.Optional[str] = None,
+        associate_mode: typing.Optional["BusinessUnitAssociateMode"] = None,
         associates: typing.Optional[typing.List["AssociateDraft"]] = None,
         addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
-        default_shiping_address: typing.Optional[int] = None,
+        default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
@@ -863,10 +993,11 @@ class DivisionDraft(BusinessUnitDraft):
             store_mode=store_mode,
             name=name,
             contact_email=contact_email,
+            associate_mode=associate_mode,
             associates=associates,
             addresses=addresses,
             shipping_addresses=shipping_addresses,
-            default_shiping_address=default_shiping_address,
+            default_shipping_address=default_shipping_address,
             billing_addresses=billing_addresses,
             default_billing_address=default_billing_address,
             custom=custom,
@@ -883,6 +1014,66 @@ class DivisionDraft(BusinessUnitDraft):
         from ._schemas.business_unit import DivisionDraftSchema
 
         return DivisionDraftSchema().dump(self)
+
+
+class InheritedAssociate(_BaseType):
+    #: Inherited roles of the Associate within a Business Unit.
+    associate_role_assignments: typing.List["InheritedAssociateRoleAssignment"]
+    #: The [Customer](ctp:api:type:Customer) that acts as an Associate in the Business Unit.
+    customer: "CustomerReference"
+
+    def __init__(
+        self,
+        *,
+        associate_role_assignments: typing.List["InheritedAssociateRoleAssignment"],
+        customer: "CustomerReference"
+    ):
+        self.associate_role_assignments = associate_role_assignments
+        self.customer = customer
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "InheritedAssociate":
+        from ._schemas.business_unit import InheritedAssociateSchema
+
+        return InheritedAssociateSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.business_unit import InheritedAssociateSchema
+
+        return InheritedAssociateSchema().dump(self)
+
+
+class InheritedAssociateRoleAssignment(_BaseType):
+    #: Inherited role the Associate holds within a Business Unit.
+    associate_role: "AssociateRoleKeyReference"
+    #: Reference to the parent Business Unit where the assignment is defined explicitly.
+    source: "BusinessUnitKeyReference"
+
+    def __init__(
+        self,
+        *,
+        associate_role: "AssociateRoleKeyReference",
+        source: "BusinessUnitKeyReference"
+    ):
+        self.associate_role = associate_role
+        self.source = source
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "InheritedAssociateRoleAssignment":
+        from ._schemas.business_unit import InheritedAssociateRoleAssignmentSchema
+
+        return InheritedAssociateRoleAssignmentSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.business_unit import InheritedAssociateRoleAssignmentSchema
+
+        return InheritedAssociateRoleAssignmentSchema().dump(self)
 
 
 class BusinessUnitAddAddressAction(BusinessUnitUpdateAction):
@@ -1089,6 +1280,34 @@ class BusinessUnitChangeAssociateAction(BusinessUnitUpdateAction):
         from ._schemas.business_unit import BusinessUnitChangeAssociateActionSchema
 
         return BusinessUnitChangeAssociateActionSchema().dump(self)
+
+
+class BusinessUnitChangeAssociateModeAction(BusinessUnitUpdateAction):
+    """Only Business Units of type `Division` can be changed to `ExplicitAndFromParent`.
+    This update action generates a [BusinessUnitAssociateModeChanged](ctp:api:type:BusinessUnitAssociateModeChangedMessage) Message.
+
+    """
+
+    #: The new value for `associateMode`.
+    associate_mode: "BusinessUnitAssociateMode"
+
+    def __init__(self, *, associate_mode: "BusinessUnitAssociateMode"):
+        self.associate_mode = associate_mode
+
+        super().__init__(action="changeAssociateMode")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "BusinessUnitChangeAssociateModeAction":
+        from ._schemas.business_unit import BusinessUnitChangeAssociateModeActionSchema
+
+        return BusinessUnitChangeAssociateModeActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.business_unit import BusinessUnitChangeAssociateModeActionSchema
+
+        return BusinessUnitChangeAssociateModeActionSchema().dump(self)
 
 
 class BusinessUnitChangeNameAction(BusinessUnitUpdateAction):
@@ -1302,7 +1521,7 @@ class BusinessUnitRemoveStoreAction(BusinessUnitUpdateAction):
     """Removes a Store from the Business Unit.
     Newly created [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) can no longer reference the removed Store for the Business Unit.
     We recommend cleaning up unordered Carts that still have the Store assigned after calling this update action since those cannot be converted to Orders.
-    Orders created prior to when the Store was removed remain unchanged.
+    Orders created before the Store was removed remain unchanged.
     Generates a [BusinessUnitStoreRemoved](ctp:api:type:BusinessUnitStoreRemovedMessage) Message.
     Only applicable when `storeMode` is `Explicit`.
 
@@ -1336,7 +1555,7 @@ class BusinessUnitSetAddressCustomFieldAction(BusinessUnitUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1458,7 +1677,7 @@ class BusinessUnitSetCustomFieldAction(BusinessUnitUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1589,8 +1808,7 @@ class BusinessUnitSetDefaultShippingAddressAction(BusinessUnitUpdateAction):
 
 
 class BusinessUnitSetStoreModeAction(BusinessUnitUpdateAction):
-    """If `storeMode` is changed to `FromParent`, current Stores defined for the Business Unit are removed.
-    Only Business Units of type `Division` can be set to `FromParent`.
+    """Only Business Units of type `Division` can be have a store mode of `FromParent`. Changing the `storeMode` to `FromParent` empties the `stores` array on the BusinessUnit.
     This update action generates a [BusinessUnitStoreModeChanged](ctp:api:type:BusinessUnitStoreModeChangedMessage) Message.
 
     """
@@ -1629,7 +1847,7 @@ class BusinessUnitSetStoresAction(BusinessUnitUpdateAction):
     """Sets the Stores of the Business Unit. Can only be set if the Business Unit `storeMode` is `Explicit`.
     [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) created after the Set Stores update must use the new Stores of
     the Business Unit and, if set, their [Product Selections](ctp:api:type:ProductSelection), and [Channels](ctp:api:type:Channel).
-    Orders created prior to the Set Stores update action are unchanged.
+    Orders created before the Set Stores update action remain unchanged.
     Setting the Stores on a Business Unit generates a [BusinessUnitStoresSet](ctp:api:type:BusinessUnitStoresSetMessage) Message.
 
     """

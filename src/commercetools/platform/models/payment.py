@@ -14,6 +14,7 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 
 if typing.TYPE_CHECKING:
     from .common import (
+        CentPrecisionMoney,
         CreatedBy,
         LastModifiedBy,
         LocalizedString,
@@ -73,38 +74,39 @@ __all__ = [
 
 
 class Payment(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    #: A reference to the customer this payment belongs to.
+    #: Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
     customer: typing.Optional["CustomerReference"]
-    #: Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
+    #: [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
     anonymous_id: typing.Optional[str]
+    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
     external_id: typing.Optional[str]
-    #: The identifier that is used by the interface that manages the payment (usually the PSP).
-    #: Cannot be changed once it has been set.
-    #: The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
+    #: Identifier used by the payment service that processes the Payment (for example, a PSP).
+    #: The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
     interface_id: typing.Optional[str]
-    #: How much money this payment intends to receive from the customer.
-    #: The value usually matches the cart or order gross total.
-    amount_planned: "TypedMoney"
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Money value the Payment intends to receive from the customer.
+    #: The value typically matches the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) gross total.
+    amount_planned: "CentPrecisionMoney"
+    #: Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_authorized: typing.Optional["TypedMoney"]
+    #: Deprecated because this field is of little practical value, as it is either not reliably known, or the authorization time is fixed for a PSP.
     authorized_until: typing.Optional[str]
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_paid: typing.Optional["TypedMoney"]
-    #: Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+    #: Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_refunded: typing.Optional["TypedMoney"]
+    #: Information regarding the payment interface (for example, a PSP), and the specific payment method used.
     payment_method_info: "PaymentMethodInfo"
+    #: Current status of the Payment.
     payment_status: "PaymentStatus"
-    #: A list of financial transactions of different TransactionTypes with different TransactionStates.
+    #: Financial transactions of the Payment. Each Transaction has a [TransactionType](ctp:api:type:TransactionType) and a [TransactionState](ctp:api:type:TransactionState).
     transactions: typing.List["Transaction"]
-    #: Interface interactions can be requests sent to the PSP, responses received from the PSP or notifications received from the PSP.
-    #: Some interactions may result in a transaction.
-    #: If so, the `interactionId` in the Transaction should be set to match the ID of the PSP for the interaction.
-    #: Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
+    #: Represents information exchange with the payment service, for example, a PSP. An interaction may be a request sent, or a response or notification received from the payment service.
     interface_interactions: typing.List["CustomFields"]
+    #: Custom Fields for the Payment.
     custom: typing.Optional["CustomFields"]
     #: User-defined unique identifier of the Payment.
     key: typing.Optional[str]
@@ -122,7 +124,7 @@ class Payment(BaseResource):
         anonymous_id: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
         interface_id: typing.Optional[str] = None,
-        amount_planned: "TypedMoney",
+        amount_planned: "CentPrecisionMoney",
         amount_authorized: typing.Optional["TypedMoney"] = None,
         authorized_until: typing.Optional[str] = None,
         amount_paid: typing.Optional["TypedMoney"] = None,
@@ -172,40 +174,36 @@ class Payment(BaseResource):
 
 
 class PaymentDraft(_BaseType):
-    #: A reference to the customer this payment belongs to.
+    #: Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
     customer: typing.Optional["CustomerResourceIdentifier"]
-    #: Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
+    #: [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
     anonymous_id: typing.Optional[str]
+    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
     external_id: typing.Optional[str]
-    #: The identifier that is used by the interface that manages the payment (usually the PSP).
-    #: Cannot be changed once it has been set.
-    #: The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
+    #: Identifier used by the payment service that processes the Payment (for example, a PSP).
+    #: The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
+    #: Once set, it cannot be changed.
     interface_id: typing.Optional[str]
-    #: How much money this payment intends to receive from the customer.
-    #: The value usually matches the cart or order gross total.
+    #: Money value the Payment intends to receive from the customer.
+    #: The value typically matches the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) gross total.
     amount_planned: "Money"
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_authorized: typing.Optional["Money"]
+    #: Deprecated because this field is of little practical value, as it is either not reliably known, or the authorization time is fixed for a PSP.
     authorized_until: typing.Optional[str]
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_paid: typing.Optional["Money"]
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
     amount_refunded: typing.Optional["Money"]
+    #: Information regarding the payment interface (for example, a PSP), and the specific payment method used.
     payment_method_info: typing.Optional["PaymentMethodInfo"]
+    #: Current status of the Payment.
     payment_status: typing.Optional["PaymentStatusDraft"]
-    #: A list of financial transactions of different TransactionTypes with different TransactionStates.
+    #: Financial transactions of the Payment. Each Transaction has a [TransactionType](ctp:api:type:TransactionType) and a [TransactionState](ctp:api:type:TransactionState).
     transactions: typing.Optional[typing.List["TransactionDraft"]]
-    #: Interface interactions can be requests send to the PSP, responses received from the PSP or notifications received from the PSP.
-    #: Some interactions may result in a transaction.
-    #: If so, the `interactionId` in the Transaction should be set to match the ID of the PSP for the interaction.
-    #: Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
+    #: Represents information exchange with the payment service, for example, a PSP. An interaction may be a request sent, or a response or notification received from the payment service.
     interface_interactions: typing.Optional[typing.List["CustomFieldsDraft"]]
+    #: Custom Fields for the Payment.
     custom: typing.Optional["CustomFieldsDraft"]
     #: User-defined unique identifier for the Payment.
     key: typing.Optional[str]
@@ -262,16 +260,13 @@ class PaymentDraft(_BaseType):
 
 
 class PaymentMethodInfo(_BaseType):
-    #: The interface that handles the payment (usually a PSP).
-    #: Cannot be changed once it has been set.
-    #: The combination of Payment`interfaceId` and this field must be unique.
+    #: Payment service that processes the Payment (for example, a PSP).
+    #: Once set, it cannot be changed.
+    #: The combination of `paymentInterface` and the `interfaceId` of a [Payment](ctp:api:type:Payment) must be unique.
     payment_interface: typing.Optional[str]
-    #: The payment method that is used, e.g.
-    #: e.g.
-    #: a conventional string representing Credit Card, Cash Advance etc.
+    #: Payment method used, for example, credit card, or cash advance.
     method: typing.Optional[str]
-    #: A human-readable, localized name for the payment method, e.g.
-    #: 'Credit Card'.
+    #: Localizable name of the payment method.
     name: typing.Optional["LocalizedString"]
 
     def __init__(
@@ -300,12 +295,21 @@ class PaymentMethodInfo(_BaseType):
 
 
 class PaymentPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Payment](ctp:api:type:Payment)."""
+
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
+    #: Actual number of results returned.
     count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: [Payments](ctp:api:type:Payment) matching the query.
     results: typing.List["Payment"]
 
     def __init__(
@@ -363,12 +367,11 @@ class PaymentReference(Reference):
 
 
 class PaymentResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment)."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PAYMENT)
 
     @classmethod
@@ -386,10 +389,11 @@ class PaymentResourceIdentifier(ResourceIdentifier):
 
 
 class PaymentStatus(_BaseType):
-    #: A code describing the current status returned by the interface that processes the payment.
+    #: External reference that identifies the current status of the Payment.
     interface_code: typing.Optional[str]
-    #: A text describing the current status returned by the interface that processes the payment.
+    #: Text describing the current status of the Payment.
     interface_text: typing.Optional[str]
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
     state: typing.Optional["StateReference"]
 
     def __init__(
@@ -418,7 +422,9 @@ class PaymentStatus(_BaseType):
 
 
 class PaymentStatusDraft(_BaseType):
+    #: External reference that identifies the current status of the Payment.
     interface_code: typing.Optional[str]
+    #: Text describing the current status of the Payment.
     interface_text: typing.Optional[str]
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     state: typing.Optional["StateResourceIdentifier"]
@@ -449,7 +455,9 @@ class PaymentStatusDraft(_BaseType):
 
 
 class PaymentUpdate(_BaseType):
+    #: Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the Payment.
     actions: typing.List["PaymentUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["PaymentUpdateAction"]):
@@ -586,19 +594,22 @@ class PaymentUpdateAction(_BaseType):
 
 
 class Transaction(_BaseType):
+    """Represents a financial transaction typically created as a result of a notification from the payment service."""
+
     #: Unique identifier of the Transaction.
     id: str
-    #: The time at which the transaction took place.
+    #: Date and time (UTC) the Transaction took place.
     timestamp: typing.Optional[datetime.datetime]
-    #: The type of this transaction.
+    #: Type of the Transaction. For example, `Authorization`.
     type: "TransactionType"
-    amount: "TypedMoney"
-    #: The identifier that is used by the interface that managed the transaction (usually the PSP).
-    #: If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
+    #: Money value of the Transaction.
+    amount: "CentPrecisionMoney"
+    #: Identifier used by the interface that manages the Transaction (usually the PSP).
+    #: If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction can be found with this ID.
     interaction_id: typing.Optional[str]
-    #: The state of this transaction.
-    state: typing.Optional["TransactionState"]
-    #: Custom Fields for the Transaction.
+    #: State of the Transaction.
+    state: "TransactionState"
+    #: Custom Fields defined for the Transaction.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -607,9 +618,9 @@ class Transaction(_BaseType):
         id: str,
         timestamp: typing.Optional[datetime.datetime] = None,
         type: "TransactionType",
-        amount: "TypedMoney",
+        amount: "CentPrecisionMoney",
         interaction_id: typing.Optional[str] = None,
-        state: typing.Optional["TransactionState"] = None,
+        state: "TransactionState",
         custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
@@ -635,18 +646,18 @@ class Transaction(_BaseType):
 
 
 class TransactionDraft(_BaseType):
-    #: The time at which the transaction took place.
+    #: Date and time (UTC) the Transaction took place.
     timestamp: typing.Optional[datetime.datetime]
-    #: The type of this transaction.
+    #: Type of the Transaction.
     type: "TransactionType"
+    #: Money value for the Transaction.
     amount: "Money"
-    #: The identifier that is used by the interface that managed the transaction (usually the PSP).
-    #: If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
+    #: Identifier used by the payment service that manages the Transaction.
+    #: Can be used to correlate the Transaction to an interface interaction.
     interaction_id: typing.Optional[str]
-    #: The state of this transaction.
-    #: If not set, defaults to `Initial`.
+    #: State of the Transaction.
     state: typing.Optional["TransactionState"]
-    #: Custom Fields for the Transaction.
+    #: Custom Fields of the Transaction.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -681,6 +692,8 @@ class TransactionDraft(_BaseType):
 
 
 class TransactionState(enum.Enum):
+    """Transactions can be in one of the following States:"""
+
     INITIAL = "Initial"
     PENDING = "Pending"
     SUCCESS = "Success"
@@ -696,7 +709,11 @@ class TransactionType(enum.Enum):
 
 
 class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
+    """Adding a Payment interaction generates the [PaymentInteractionAdded](ctp:api:type:PaymentInteractionAddedMessage) Message."""
+
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type).
     type: "TypeResourceIdentifier"
+    #: [Custom Fields](/../api/projects/custom-fields) as per [FieldDefinitions](ctp:api:type:FieldDefinition) of the [Type](ctp:api:type:Type).
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -725,6 +742,9 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
 
 
 class PaymentAddTransactionAction(PaymentUpdateAction):
+    """Adding a Transaction to a Payment generates the [PaymentTransactionAdded](ctp:api:type:PaymentTransactionAddedMessage) Message."""
+
+    #: Value to append to the `transactions` array.
     transaction: "TransactionDraft"
 
     def __init__(self, *, transaction: "TransactionDraft"):
@@ -747,6 +767,9 @@ class PaymentAddTransactionAction(PaymentUpdateAction):
 
 
 class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
+    """Can be used to update the Payment if a customer changes the [Cart](ctp:api:type:Cart), or adds or removes a [CartDiscount](ctp:api:type:CartDiscount) during checkout."""
+
+    #: New value to set.
     amount: "Money"
 
     def __init__(self, *, amount: "Money"):
@@ -769,7 +792,9 @@ class PaymentChangeAmountPlannedAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
+    #: Unique identifier of the [Transaction](ctp:api:type:Transaction).
     transaction_id: str
+    #: New value to set.
     interaction_id: str
 
     def __init__(self, *, transaction_id: str, interaction_id: str):
@@ -793,7 +818,11 @@ class PaymentChangeTransactionInteractionIdAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionStateAction(PaymentUpdateAction):
+    """Changing the [TransactionState](ctp:api:type:TransactionState) generates the [PaymentTransactionStateChanged](ctp:api:type:PaymentTransactionStateChangedMessage) Message."""
+
+    #: Unique identifier of the [Transaction](ctp:api:type:Transaction).
     transaction_id: str
+    #: New TransactionState.
     state: "TransactionState"
 
     def __init__(self, *, transaction_id: str, state: "TransactionState"):
@@ -817,7 +846,9 @@ class PaymentChangeTransactionStateAction(PaymentUpdateAction):
 
 
 class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
+    #: Unique identifier of the [Transaction](ctp:api:type:Transaction).
     transaction_id: str
+    #: Timestamp of the Transaction as reported by the payment service.
     timestamp: datetime.datetime
 
     def __init__(self, *, transaction_id: str, timestamp: datetime.datetime):
@@ -841,9 +872,7 @@ class PaymentChangeTransactionTimestampAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountPaidAction(PaymentUpdateAction):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     amount: typing.Optional["Money"]
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
@@ -866,9 +895,7 @@ class PaymentSetAmountPaidAction(PaymentUpdateAction):
 
 
 class PaymentSetAmountRefundedAction(PaymentUpdateAction):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     amount: typing.Optional["Money"]
 
     def __init__(self, *, amount: typing.Optional["Money"] = None):
@@ -891,8 +918,8 @@ class PaymentSetAmountRefundedAction(PaymentUpdateAction):
 
 
 class PaymentSetAnonymousIdAction(PaymentUpdateAction):
-    #: Anonymous ID of the anonymous customer that this payment belongs to.
-    #: If this field is not set any existing `anonymousId` is removed.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     anonymous_id: typing.Optional[str]
 
     def __init__(self, *, anonymous_id: typing.Optional[str] = None):
@@ -915,9 +942,7 @@ class PaymentSetAnonymousIdAction(PaymentUpdateAction):
 
 
 class PaymentSetAuthorizationAction(PaymentUpdateAction):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     amount: typing.Optional["Money"]
     until: typing.Optional[datetime.datetime]
 
@@ -950,7 +975,7 @@ class PaymentSetCustomFieldAction(PaymentUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1007,7 +1032,8 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
 
 
 class PaymentSetCustomerAction(PaymentUpdateAction):
-    #: A reference to the customer this payment belongs to.
+    #: Value to set.
+    #: If empty, any existing reference is removed.
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
@@ -1054,6 +1080,8 @@ class PaymentSetExternalIdAction(PaymentUpdateAction):
 
 
 class PaymentSetInterfaceIdAction(PaymentUpdateAction):
+    #: Value to set.
+    #: Once set, the `interfaceId` cannot be changed.
     interface_id: str
 
     def __init__(self, *, interface_id: str):
@@ -1076,9 +1104,8 @@ class PaymentSetInterfaceIdAction(PaymentUpdateAction):
 
 
 class PaymentSetKeyAction(PaymentUpdateAction):
-    #: User-specific unique identifier for the payment (max.
-    #: 256 characters).
-    #: If not provided an existing key will be removed.
+    #: Value to set.
+    #: If `key` is absent or `null`, the existing key, if any, will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -1099,6 +1126,8 @@ class PaymentSetKeyAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
+    #: Value to set.
+    #: Once set, the `paymentInterface` of the `paymentMethodInfo` cannot be changed.
     interface: str
 
     def __init__(self, *, interface: str):
@@ -1121,7 +1150,8 @@ class PaymentSetMethodInfoInterfaceAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
-    #: If not provided, the method is unset.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     method: typing.Optional[str]
 
     def __init__(self, *, method: typing.Optional[str] = None):
@@ -1144,7 +1174,8 @@ class PaymentSetMethodInfoMethodAction(PaymentUpdateAction):
 
 
 class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
-    #: If not provided, the name is unset.
+    #: Value to set.
+    #: If empty, any existing value will be removed.
     name: typing.Optional["LocalizedString"]
 
     def __init__(self, *, name: typing.Optional["LocalizedString"] = None):
@@ -1167,6 +1198,9 @@ class PaymentSetMethodInfoNameAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
+    """Produces the [PaymentStatusInterfaceCodeSet](ctp:api:type:PaymentStatusInterfaceCodeSetMessage) Message."""
+
+    #: Value to set. If empty, any existing value will be removed.
     interface_code: typing.Optional[str]
 
     def __init__(self, *, interface_code: typing.Optional[str] = None):
@@ -1189,6 +1223,7 @@ class PaymentSetStatusInterfaceCodeAction(PaymentUpdateAction):
 
 
 class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     interface_text: str
 
     def __init__(self, *, interface_text: str):
@@ -1211,12 +1246,12 @@ class PaymentSetStatusInterfaceTextAction(PaymentUpdateAction):
 
 
 class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
+    #: Unique identifier of the [Transaction](ctp:api:type:Transaction).
     transaction_id: str
-    #: description: |
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1248,6 +1283,7 @@ class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
 
 
 class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
+    #: Unique identifier of the [Transaction](ctp:api:type:Transaction). If the specified `transactionId` does not exist, the request will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     transaction_id: str
     #: Defines the [Type](ctp:api:type:Type) that extends the Transaction with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Transaction.
@@ -1283,7 +1319,17 @@ class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
 
 
 class PaymentTransitionStateAction(PaymentUpdateAction):
+    """If the Payment has no current [State](ctp:api:type:State), `initial` must be `true` for the new State.
+    If the existing State has transitions set, the new State must be a valid transition.
+    If the existing State has no transitions set, no validations are performed when transitioning to the new State.
+
+    Transitioning the State of a Payment produces the [PaymentStatusStateTransition](ctp:api:type:PaymentStatusStateTransitionMessage) Message.
+
+    """
+
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
     state: "StateResourceIdentifier"
+    #: Set to `true` to skip validations when transitioning to the new State.
     force: typing.Optional[bool]
 
     def __init__(

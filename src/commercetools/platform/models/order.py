@@ -107,8 +107,33 @@ __all__ = [
     "OrderRemoveParcelFromDeliveryAction",
     "OrderRemovePaymentAction",
     "OrderResourceIdentifier",
+    "OrderSearchAndExpression",
+    "OrderSearchAnyValue",
+    "OrderSearchCompoundExpression",
+    "OrderSearchDateRangeExpression",
+    "OrderSearchDateRangeValue",
+    "OrderSearchExactExpression",
+    "OrderSearchExistsExpression",
+    "OrderSearchFilterExpression",
+    "OrderSearchFullTextExpression",
+    "OrderSearchFullTextValue",
+    "OrderSearchLongRangeExpression",
+    "OrderSearchLongRangeValue",
+    "OrderSearchMatchType",
+    "OrderSearchNotExpression",
+    "OrderSearchNumberRangeExpression",
+    "OrderSearchNumberRangeValue",
+    "OrderSearchOrExpression",
+    "OrderSearchPrefixExpression",
     "OrderSearchQuery",
+    "OrderSearchQueryExpression",
+    "OrderSearchQueryExpressionValue",
     "OrderSearchRequest",
+    "OrderSearchSortMode",
+    "OrderSearchSortOrder",
+    "OrderSearchSorting",
+    "OrderSearchStringValue",
+    "OrderSearchWildCardExpression",
     "OrderSetBillingAddressAction",
     "OrderSetBillingAddressCustomFieldAction",
     "OrderSetBillingAddressCustomTypeAction",
@@ -137,6 +162,7 @@ __all__ = [
     "OrderSetParcelItemsAction",
     "OrderSetParcelMeasurementsAction",
     "OrderSetParcelTrackingDataAction",
+    "OrderSetPurchaseOrderNumberAction",
     "OrderSetReturnInfoAction",
     "OrderSetReturnItemCustomFieldAction",
     "OrderSetReturnItemCustomTypeAction",
@@ -511,6 +537,12 @@ class StagedOrderUpdateAction(_BaseType):
             )
 
             return StagedOrderSetParcelTrackingDataActionSchema().load(data)
+        if data["action"] == "setPurchaseOrderNumber":
+            from ._schemas.order_edit import (
+                StagedOrderSetPurchaseOrderNumberActionSchema,
+            )
+
+            return StagedOrderSetPurchaseOrderNumberActionSchema().load(data)
         if data["action"] == "setReturnInfo":
             from ._schemas.order_edit import StagedOrderSetReturnInfoActionSchema
 
@@ -694,9 +726,259 @@ class OrderPagedSearchResponse(_BaseType):
         return OrderPagedSearchResponseSchema().dump(self)
 
 
+class OrderSearchMatchType(enum.Enum):
+    ANY = "any"
+    ALL = "all"
+
+
+class OrderSearchQueryExpressionValue(_BaseType):
+    field: str
+    boost: typing.Optional[int]
+    custom_type: typing.Optional[str]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None
+    ):
+        self.field = field
+        self.boost = boost
+        self.custom_type = custom_type
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchQueryExpressionValue":
+        from ._schemas.order import OrderSearchQueryExpressionValueSchema
+
+        return OrderSearchQueryExpressionValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchQueryExpressionValueSchema
+
+        return OrderSearchQueryExpressionValueSchema().dump(self)
+
+
+class OrderSearchAnyValue(OrderSearchQueryExpressionValue):
+    value: typing.Any
+    language: typing.Optional[str]
+    case_insensitive: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        value: typing.Any,
+        language: typing.Optional[str] = None,
+        case_insensitive: typing.Optional[bool] = None
+    ):
+        self.value = value
+        self.language = language
+        self.case_insensitive = case_insensitive
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderSearchAnyValue":
+        from ._schemas.order import OrderSearchAnyValueSchema
+
+        return OrderSearchAnyValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchAnyValueSchema
+
+        return OrderSearchAnyValueSchema().dump(self)
+
+
+class OrderSearchDateRangeValue(OrderSearchQueryExpressionValue):
+    gte: typing.Optional[datetime.datetime]
+    lte: typing.Optional[datetime.datetime]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        gte: typing.Optional[datetime.datetime] = None,
+        lte: typing.Optional[datetime.datetime] = None
+    ):
+        self.gte = gte
+        self.lte = lte
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchDateRangeValue":
+        from ._schemas.order import OrderSearchDateRangeValueSchema
+
+        return OrderSearchDateRangeValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchDateRangeValueSchema
+
+        return OrderSearchDateRangeValueSchema().dump(self)
+
+
+class OrderSearchFullTextValue(OrderSearchQueryExpressionValue):
+    value: str
+    language: typing.Optional[str]
+    must_match: typing.Optional["OrderSearchMatchType"]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        value: str,
+        language: typing.Optional[str] = None,
+        must_match: typing.Optional["OrderSearchMatchType"] = None
+    ):
+        self.value = value
+        self.language = language
+        self.must_match = must_match
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchFullTextValue":
+        from ._schemas.order import OrderSearchFullTextValueSchema
+
+        return OrderSearchFullTextValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchFullTextValueSchema
+
+        return OrderSearchFullTextValueSchema().dump(self)
+
+
+class OrderSearchLongRangeValue(OrderSearchQueryExpressionValue):
+    gte: typing.Optional[int]
+    lte: typing.Optional[int]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        gte: typing.Optional[int] = None,
+        lte: typing.Optional[int] = None
+    ):
+        self.gte = gte
+        self.lte = lte
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchLongRangeValue":
+        from ._schemas.order import OrderSearchLongRangeValueSchema
+
+        return OrderSearchLongRangeValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchLongRangeValueSchema
+
+        return OrderSearchLongRangeValueSchema().dump(self)
+
+
+class OrderSearchNumberRangeValue(OrderSearchQueryExpressionValue):
+    gte: typing.Optional[float]
+    lte: typing.Optional[float]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        gte: typing.Optional[float] = None,
+        lte: typing.Optional[float] = None
+    ):
+        self.gte = gte
+        self.lte = lte
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchNumberRangeValue":
+        from ._schemas.order import OrderSearchNumberRangeValueSchema
+
+        return OrderSearchNumberRangeValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchNumberRangeValueSchema
+
+        return OrderSearchNumberRangeValueSchema().dump(self)
+
+
+class OrderSearchSortMode(enum.Enum):
+    MIN = "min"
+    MAX = "max"
+    AVG = "avg"
+    SUM = "sum"
+
+
+class OrderSearchSortOrder(enum.Enum):
+    ASC = "asc"
+    DESC = "desc"
+
+
+class OrderSearchStringValue(OrderSearchQueryExpressionValue):
+    value: str
+    language: typing.Optional[str]
+    case_insensitive: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        boost: typing.Optional[int] = None,
+        custom_type: typing.Optional[str] = None,
+        value: str,
+        language: typing.Optional[str] = None,
+        case_insensitive: typing.Optional[bool] = None
+    ):
+        self.value = value
+        self.language = language
+        self.case_insensitive = case_insensitive
+
+        super().__init__(field=field, boost=boost, custom_type=custom_type)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchStringValue":
+        from ._schemas.order import OrderSearchStringValueSchema
+
+        return OrderSearchStringValueSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchStringValueSchema
+
+        return OrderSearchStringValueSchema().dump(self)
+
+
 class Delivery(_BaseType):
     #: Unique identifier of the Delivery.
     id: str
+    #: User-defined unique identifier of the Delivery.
+    key: typing.Optional[str]
     created_at: datetime.datetime
     #: Items which are shipped in this delivery regardless their distribution over several parcels.
     #: Can also be specified individually for each Parcel.
@@ -710,6 +992,7 @@ class Delivery(_BaseType):
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         created_at: datetime.datetime,
         items: typing.List["DeliveryItem"],
         parcels: typing.List["Parcel"],
@@ -717,6 +1000,7 @@ class Delivery(_BaseType):
         custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
+        self.key = key
         self.created_at = created_at
         self.items = items
         self.parcels = parcels
@@ -738,6 +1022,8 @@ class Delivery(_BaseType):
 
 
 class DeliveryDraft(_BaseType):
+    #: User-defined unique identifier of the Delivery.
+    key: typing.Optional[str]
     #: Items which are shipped in this delivery regardless their distribution over several parcels.
     #: Can also be specified individually for each Parcel.
     items: typing.Optional[typing.List["DeliveryItem"]]
@@ -749,11 +1035,13 @@ class DeliveryDraft(_BaseType):
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         address: typing.Optional["AddressDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.items = items
         self.parcels = parcels
         self.address = address
@@ -797,9 +1085,7 @@ class DeliveryItem(_BaseType):
 
 
 class DiscountedLineItemPriceDraft(_BaseType):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     value: "Money"
     included_discounts: typing.List["DiscountedLineItemPortion"]
 
@@ -954,6 +1240,10 @@ class Order(BaseResource):
     billing_address: typing.Optional["Address"]
     #: Indicates whether one or multiple Shipping Methods are added to the Cart.
     shipping_mode: "ShippingMode"
+    #: User-defined unique identifier of the Shipping Method with `Single` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_custom_fields: typing.Optional["CustomFields"]
     #: Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
     #:
     #: It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
@@ -977,6 +1267,9 @@ class Order(BaseResource):
     shipping_info: typing.Optional["ShippingInfo"]
     sync_info: typing.List["SyncInfo"]
     return_info: typing.Optional[typing.List["ReturnInfo"]]
+    #: The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
+    #: track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+    purchase_order_number: typing.Optional[str]
     discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
     #: Internal-only field.
     last_message_sequence_number: typing.Optional[int]
@@ -992,7 +1285,12 @@ class Order(BaseResource):
     origin: "CartOrigin"
     #: When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
     tax_calculation_mode: typing.Optional["TaxCalculationMode"]
-    #: The shippingRateInput is used as an input to select a ShippingRatePriceTier.
+    #: Input used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+    #: The data type of this field depends on the `shippingRateInputType.type` configured in the [Project](ctp:api:type:Project):
+    #:
+    #: - If `CartClassification`, it is [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput).
+    #: - If `CartScore`, it is [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput).
+    #: - If `CartValue`, it cannot be used.
     shipping_rate_input: typing.Optional["ShippingRateInput"]
     #: Contains addresses for orders with multiple shipping addresses.
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
@@ -1023,6 +1321,8 @@ class Order(BaseResource):
         shipping_address: typing.Optional["Address"] = None,
         billing_address: typing.Optional["Address"] = None,
         shipping_mode: "ShippingMode",
+        shipping_key: typing.Optional[str] = None,
+        shipping_custom_fields: typing.Optional["CustomFields"] = None,
         shipping: typing.List["Shipping"],
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
@@ -1035,6 +1335,7 @@ class Order(BaseResource):
         shipping_info: typing.Optional["ShippingInfo"] = None,
         sync_info: typing.List["SyncInfo"],
         return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
+        purchase_order_number: typing.Optional[str] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
         last_message_sequence_number: typing.Optional[int] = None,
         cart: typing.Optional["CartReference"] = None,
@@ -1066,6 +1367,8 @@ class Order(BaseResource):
         self.shipping_address = shipping_address
         self.billing_address = billing_address
         self.shipping_mode = shipping_mode
+        self.shipping_key = shipping_key
+        self.shipping_custom_fields = shipping_custom_fields
         self.shipping = shipping
         self.tax_mode = tax_mode
         self.tax_rounding_mode = tax_rounding_mode
@@ -1078,6 +1381,7 @@ class Order(BaseResource):
         self.shipping_info = shipping_info
         self.sync_info = sync_info
         self.return_info = return_info
+        self.purchase_order_number = purchase_order_number
         self.discount_codes = discount_codes
         self.last_message_sequence_number = last_message_sequence_number
         self.cart = cart
@@ -1114,8 +1418,10 @@ class Order(BaseResource):
 class OrderFromCartDraft(_BaseType):
     #: Unique identifier of the Cart from which you can create an Order.
     id: typing.Optional[str]
-    #: ResourceIdentifier of the Cart from which this order is created.
+    #: ResourceIdentifier of the Cart from which the Order is created.
     cart: typing.Optional["CartResourceIdentifier"]
+    #: Expected version of the Cart from which the Order is created.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -1123,10 +1429,16 @@ class OrderFromCartDraft(_BaseType):
     #: Once it's set it cannot be changed.
     #: For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
     order_number: typing.Optional[str]
+    #: Identifier for a purchase order, usually in a B2B context.
+    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+    purchase_order_number: typing.Optional[str]
+    #: Payment state for the Order.
     payment_state: typing.Optional["PaymentState"]
+    #: Shipment state for the Order.
     shipment_state: typing.Optional["ShipmentState"]
     #: Order will be created with `Open` status by default.
     order_state: typing.Optional["OrderState"]
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
     state: typing.Optional["StateResourceIdentifier"]
     #: [Custom Fields](/../api/projects/custom-fields) for the Order. The Custom Field type must match the type of the Custom Fields in the referenced [Cart](/../api/projects/carts#cart).
     #: If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
@@ -1140,6 +1452,7 @@ class OrderFromCartDraft(_BaseType):
         cart: typing.Optional["CartResourceIdentifier"] = None,
         version: int,
         order_number: typing.Optional[str] = None,
+        purchase_order_number: typing.Optional[str] = None,
         payment_state: typing.Optional["PaymentState"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         order_state: typing.Optional["OrderState"] = None,
@@ -1150,6 +1463,7 @@ class OrderFromCartDraft(_BaseType):
         self.cart = cart
         self.version = version
         self.order_number = order_number
+        self.purchase_order_number = purchase_order_number
         self.payment_state = payment_state
         self.shipment_state = shipment_state
         self.order_state = order_state
@@ -1173,9 +1487,9 @@ class OrderFromCartDraft(_BaseType):
 class OrderFromQuoteDraft(_BaseType):
     #: ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
     quote: "QuoteResourceIdentifier"
-    #: `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
+    #: `version` of the [Quote](ctp:api:type:Quote) from which an Order is created.
     version: int
-    #: If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:quote) will be set to `Accepted`.
+    #: If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
     quote_state_to_accepted: typing.Optional[bool]
     #: String that uniquely identifies an order.
     #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
@@ -1183,10 +1497,13 @@ class OrderFromQuoteDraft(_BaseType):
     #: Once it's set it cannot be changed.
     #: For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
     order_number: typing.Optional[str]
+    #: Payment state of the Order.
     payment_state: typing.Optional["PaymentState"]
+    #: Shipment state of the Order.
     shipment_state: typing.Optional["ShipmentState"]
     #: Order will be created with `Open` status by default.
     order_state: typing.Optional["OrderState"]
+    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
     state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
@@ -1408,7 +1725,6 @@ class OrderResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ORDER)
 
     @classmethod
@@ -1429,11 +1745,283 @@ class OrderSearchQuery(typing.Dict[str, typing.Any]):
     pass
 
 
+class OrderSearchCompoundExpression(typing.Dict[str, typing.Any]):
+    pass
+
+
+class OrderSearchAndExpression(OrderSearchCompoundExpression):
+    and_: typing.List["OrderSearchQuery"]
+
+    def __init__(self, *, and_: typing.List["OrderSearchQuery"]):
+        self.and_ = and_
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchAndExpression":
+        from ._schemas.order import OrderSearchAndExpressionSchema
+
+        return OrderSearchAndExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchAndExpressionSchema
+
+        return OrderSearchAndExpressionSchema().dump(self)
+
+
+class OrderSearchFilterExpression(OrderSearchCompoundExpression):
+    filter: typing.List["OrderSearchQueryExpression"]
+
+    def __init__(self, *, filter: typing.List["OrderSearchQueryExpression"]):
+        self.filter = filter
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchFilterExpression":
+        from ._schemas.order import OrderSearchFilterExpressionSchema
+
+        return OrderSearchFilterExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchFilterExpressionSchema
+
+        return OrderSearchFilterExpressionSchema().dump(self)
+
+
+class OrderSearchNotExpression(OrderSearchCompoundExpression):
+    not_: typing.List["OrderSearchQuery"]
+
+    def __init__(self, *, not_: typing.List["OrderSearchQuery"]):
+        self.not_ = not_
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchNotExpression":
+        from ._schemas.order import OrderSearchNotExpressionSchema
+
+        return OrderSearchNotExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchNotExpressionSchema
+
+        return OrderSearchNotExpressionSchema().dump(self)
+
+
+class OrderSearchOrExpression(OrderSearchCompoundExpression):
+    or_: typing.List["OrderSearchQuery"]
+
+    def __init__(self, *, or_: typing.List["OrderSearchQuery"]):
+        self.or_ = or_
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchOrExpression":
+        from ._schemas.order import OrderSearchOrExpressionSchema
+
+        return OrderSearchOrExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchOrExpressionSchema
+
+        return OrderSearchOrExpressionSchema().dump(self)
+
+
+class OrderSearchQueryExpression(typing.Dict[str, typing.Any]):
+    pass
+
+
+class OrderSearchDateRangeExpression(OrderSearchQueryExpression):
+    range: "OrderSearchDateRangeValue"
+
+    def __init__(self, *, range: "OrderSearchDateRangeValue"):
+        self.range = range
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchDateRangeExpression":
+        from ._schemas.order import OrderSearchDateRangeExpressionSchema
+
+        return OrderSearchDateRangeExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchDateRangeExpressionSchema
+
+        return OrderSearchDateRangeExpressionSchema().dump(self)
+
+
+class OrderSearchExactExpression(OrderSearchQueryExpression):
+    exact: "OrderSearchAnyValue"
+
+    def __init__(self, *, exact: "OrderSearchAnyValue"):
+        self.exact = exact
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchExactExpression":
+        from ._schemas.order import OrderSearchExactExpressionSchema
+
+        return OrderSearchExactExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchExactExpressionSchema
+
+        return OrderSearchExactExpressionSchema().dump(self)
+
+
+class OrderSearchExistsExpression(OrderSearchQueryExpression):
+    exists: "OrderSearchQueryExpressionValue"
+
+    def __init__(self, *, exists: "OrderSearchQueryExpressionValue"):
+        self.exists = exists
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchExistsExpression":
+        from ._schemas.order import OrderSearchExistsExpressionSchema
+
+        return OrderSearchExistsExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchExistsExpressionSchema
+
+        return OrderSearchExistsExpressionSchema().dump(self)
+
+
+class OrderSearchFullTextExpression(OrderSearchQueryExpression):
+    full_text: "OrderSearchFullTextValue"
+
+    def __init__(self, *, full_text: "OrderSearchFullTextValue"):
+        self.full_text = full_text
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchFullTextExpression":
+        from ._schemas.order import OrderSearchFullTextExpressionSchema
+
+        return OrderSearchFullTextExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchFullTextExpressionSchema
+
+        return OrderSearchFullTextExpressionSchema().dump(self)
+
+
+class OrderSearchLongRangeExpression(OrderSearchQueryExpression):
+    range: "OrderSearchLongRangeValue"
+
+    def __init__(self, *, range: "OrderSearchLongRangeValue"):
+        self.range = range
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchLongRangeExpression":
+        from ._schemas.order import OrderSearchLongRangeExpressionSchema
+
+        return OrderSearchLongRangeExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchLongRangeExpressionSchema
+
+        return OrderSearchLongRangeExpressionSchema().dump(self)
+
+
+class OrderSearchNumberRangeExpression(OrderSearchQueryExpression):
+    range: "OrderSearchNumberRangeValue"
+
+    def __init__(self, *, range: "OrderSearchNumberRangeValue"):
+        self.range = range
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchNumberRangeExpression":
+        from ._schemas.order import OrderSearchNumberRangeExpressionSchema
+
+        return OrderSearchNumberRangeExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchNumberRangeExpressionSchema
+
+        return OrderSearchNumberRangeExpressionSchema().dump(self)
+
+
+class OrderSearchPrefixExpression(OrderSearchQueryExpression):
+    prefix: "OrderSearchStringValue"
+
+    def __init__(self, *, prefix: "OrderSearchStringValue"):
+        self.prefix = prefix
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchPrefixExpression":
+        from ._schemas.order import OrderSearchPrefixExpressionSchema
+
+        return OrderSearchPrefixExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchPrefixExpressionSchema
+
+        return OrderSearchPrefixExpressionSchema().dump(self)
+
+
+class OrderSearchWildCardExpression(OrderSearchQueryExpression):
+    wildcard: "OrderSearchStringValue"
+
+    def __init__(self, *, wildcard: "OrderSearchStringValue"):
+        self.wildcard = wildcard
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSearchWildCardExpression":
+        from ._schemas.order import OrderSearchWildCardExpressionSchema
+
+        return OrderSearchWildCardExpressionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchWildCardExpressionSchema
+
+        return OrderSearchWildCardExpressionSchema().dump(self)
+
+
 class OrderSearchRequest(_BaseType):
     #: The Order search query.
     query: "OrderSearchQuery"
     #: Controls how results to your query are sorted. If not provided, the results are sorted by relevance in descending order.
-    sort: typing.Optional[str]
+    sort: typing.Optional[typing.List["OrderSearchSorting"]]
     #: The maximum number of search results to be returned.
     limit: typing.Optional[int]
     #: The number of search results to be skipped in the response for pagination.
@@ -1443,7 +2031,7 @@ class OrderSearchRequest(_BaseType):
         self,
         *,
         query: "OrderSearchQuery",
-        sort: typing.Optional[str] = None,
+        sort: typing.Optional[typing.List["OrderSearchSorting"]] = None,
         limit: typing.Optional[int] = None,
         offset: typing.Optional[int] = None
     ):
@@ -1466,6 +2054,42 @@ class OrderSearchRequest(_BaseType):
         return OrderSearchRequestSchema().dump(self)
 
 
+class OrderSearchSorting(_BaseType):
+    field: str
+    language: typing.Optional[str]
+    order: typing.Optional["OrderSearchSortOrder"]
+    mode: typing.Optional["OrderSearchSortMode"]
+    filter: typing.Optional["OrderSearchQueryExpression"]
+
+    def __init__(
+        self,
+        *,
+        field: str,
+        language: typing.Optional[str] = None,
+        order: typing.Optional["OrderSearchSortOrder"] = None,
+        mode: typing.Optional["OrderSearchSortMode"] = None,
+        filter: typing.Optional["OrderSearchQueryExpression"] = None
+    ):
+        self.field = field
+        self.language = language
+        self.order = order
+        self.mode = mode
+        self.filter = filter
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderSearchSorting":
+        from ._schemas.order import OrderSearchSortingSchema
+
+        return OrderSearchSortingSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSearchSortingSchema
+
+        return OrderSearchSortingSchema().dump(self)
+
+
 class OrderState(enum.Enum):
     OPEN = "Open"
     CONFIRMED = "Confirmed"
@@ -1474,7 +2098,10 @@ class OrderState(enum.Enum):
 
 
 class OrderUpdate(_BaseType):
+    #: Expected version of the Order on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
     version: int
+    #: Update actions to be performed on the Order.
     actions: typing.List["OrderUpdateAction"]
 
     def __init__(self, *, version: int, actions: typing.List["OrderUpdateAction"]):
@@ -1679,6 +2306,10 @@ class OrderUpdateAction(_BaseType):
             from ._schemas.order import OrderSetParcelTrackingDataActionSchema
 
             return OrderSetParcelTrackingDataActionSchema().load(data)
+        if data["action"] == "setPurchaseOrderNumber":
+            from ._schemas.order import OrderSetPurchaseOrderNumberActionSchema
+
+            return OrderSetPurchaseOrderNumberActionSchema().load(data)
         if data["action"] == "setReturnInfo":
             from ._schemas.order import OrderSetReturnInfoActionSchema
 
@@ -1745,6 +2376,8 @@ class OrderUpdateAction(_BaseType):
 class Parcel(_BaseType):
     #: Unique identifier of the Parcel.
     id: str
+    #: User-defined unique identifier of the Parcel.
+    key: typing.Optional[str]
     created_at: datetime.datetime
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
@@ -1757,6 +2390,7 @@ class Parcel(_BaseType):
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         created_at: datetime.datetime,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
@@ -1764,6 +2398,7 @@ class Parcel(_BaseType):
         custom: typing.Optional["CustomFields"] = None
     ):
         self.id = id
+        self.key = key
         self.created_at = created_at
         self.measurements = measurements
         self.tracking_data = tracking_data
@@ -1785,6 +2420,8 @@ class Parcel(_BaseType):
 
 
 class ParcelDraft(_BaseType):
+    #: User-defined unique identifier of the Parcel.
+    key: typing.Optional[str]
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     #: The delivery items contained in this parcel.
@@ -1795,11 +2432,13 @@ class ParcelDraft(_BaseType):
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
@@ -2283,13 +2922,9 @@ class SyncInfo(_BaseType):
 
 
 class TaxedItemPriceDraft(_BaseType):
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     total_net: "Money"
-    #: Draft type that stores amounts in cent precision for the specified currency.
-    #:
-    #: For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+    #: Draft type that stores amounts only in cent precision for the specified currency.
     total_gross: "Money"
 
     def __init__(self, *, total_net: "Money", total_gross: "Money"):
@@ -2350,9 +2985,14 @@ class TrackingData(_BaseType):
 
 
 class OrderAddDeliveryAction(OrderUpdateAction):
+    #: User-defined unique identifier of a Delivery.
+    delivery_key: typing.Optional[str]
     items: typing.Optional[typing.List["DeliveryItem"]]
     #: User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
     shipping_key: typing.Optional[str]
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
     parcels: typing.Optional[typing.List["ParcelDraft"]]
     #: Custom Fields for the Transaction.
@@ -2361,12 +3001,14 @@ class OrderAddDeliveryAction(OrderUpdateAction):
     def __init__(
         self,
         *,
+        delivery_key: typing.Optional[str] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         shipping_key: typing.Optional[str] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.delivery_key = delivery_key
         self.items = items
         self.shipping_key = shipping_key
         self.address = address
@@ -2390,6 +3032,9 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddItemShippingAddressAction(OrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -2412,7 +3057,11 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderAddParcelToDeliveryAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
+    parcel_key: typing.Optional[str]
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
@@ -2420,12 +3069,16 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
+        self.parcel_key = parcel_key
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
@@ -2447,7 +3100,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddPaymentAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -2614,10 +3267,19 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
 
 
 class OrderRemoveDeliveryAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
 
-    def __init__(self, *, delivery_id: str):
+    def __init__(
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None
+    ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
 
         super().__init__(action="removeDelivery")
 
@@ -2658,10 +3320,19 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
 
-    def __init__(self, *, parcel_id: str):
+    def __init__(
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None
+    ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
 
         super().__init__(action="removeParcelFromDelivery")
 
@@ -2680,7 +3351,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemovePaymentAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -2703,6 +3374,9 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
 
 class OrderSetBillingAddressAction(OrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -2728,7 +3402,7 @@ class OrderSetBillingAddressCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2788,7 +3462,7 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2817,7 +3491,7 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -2885,6 +3559,7 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
 
 class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
     custom_line_item_id: str
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -2989,13 +3664,24 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(
-        self, *, delivery_id: str, address: typing.Optional["BaseAddress"] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        address: typing.Optional["BaseAddress"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.address = address
 
         super().__init__(action="setDeliveryAddress")
@@ -3015,18 +3701,27 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.name = name
         self.value = value
 
@@ -3047,7 +3742,10 @@ class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -3057,11 +3755,13 @@ class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.type = type
         self.fields = fields
 
@@ -3082,18 +3782,27 @@ class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, delivery_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.name = name
         self.value = value
 
@@ -3114,7 +3823,10 @@ class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Delivery.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -3124,11 +3836,13 @@ class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        delivery_id: str,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.type = type
         self.fields = fields
 
@@ -3149,11 +3863,21 @@ class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryItemsAction(OrderUpdateAction):
-    delivery_id: str
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_id: typing.Optional[str]
+    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    delivery_key: typing.Optional[str]
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, delivery_id: str, items: typing.List["DeliveryItem"]):
+    def __init__(
+        self,
+        *,
+        delivery_id: typing.Optional[str] = None,
+        delivery_key: typing.Optional[str] = None,
+        items: typing.List["DeliveryItem"]
+    ):
         self.delivery_id = delivery_id
+        self.delivery_key = delivery_key
         self.items = items
 
         super().__init__(action="setDeliveryItems")
@@ -3177,7 +3901,7 @@ class OrderSetItemShippingAddressCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3244,7 +3968,7 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3308,6 +4032,7 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
 
 class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
     line_item_id: str
+    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -3378,18 +4103,27 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 
 
 class OrderSetParcelCustomFieldAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, parcel_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.name = name
         self.value = value
 
@@ -3410,7 +4144,10 @@ class OrderSetParcelCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetParcelCustomTypeAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Parcel.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -3420,11 +4157,13 @@ class OrderSetParcelCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        parcel_id: str,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.type = type
         self.fields = fields
 
@@ -3445,11 +4184,21 @@ class OrderSetParcelCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetParcelItemsAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     items: typing.List["DeliveryItem"]
 
-    def __init__(self, *, parcel_id: str, items: typing.List["DeliveryItem"]):
+    def __init__(
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        items: typing.List["DeliveryItem"]
+    ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.items = items
 
         super().__init__(action="setParcelItems")
@@ -3469,16 +4218,21 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
 
 
 class OrderSetParcelMeasurementsAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
         self,
         *,
-        parcel_id: str,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.measurements = measurements
 
         super().__init__(action="setParcelMeasurements")
@@ -3498,13 +4252,21 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
 
 
 class OrderSetParcelTrackingDataAction(OrderUpdateAction):
-    parcel_id: str
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_id: typing.Optional[str]
+    #: Either `parcelId` or `parcelKey` is required for this update action.
+    parcel_key: typing.Optional[str]
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
-        self, *, parcel_id: str, tracking_data: typing.Optional["TrackingData"] = None
+        self,
+        *,
+        parcel_id: typing.Optional[str] = None,
+        parcel_key: typing.Optional[str] = None,
+        tracking_data: typing.Optional["TrackingData"] = None
     ):
         self.parcel_id = parcel_id
+        self.parcel_key = parcel_key
         self.tracking_data = tracking_data
 
         super().__init__(action="setParcelTrackingData")
@@ -3521,6 +4283,30 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
         from ._schemas.order import OrderSetParcelTrackingDataActionSchema
 
         return OrderSetParcelTrackingDataActionSchema().dump(self)
+
+
+class OrderSetPurchaseOrderNumberAction(OrderUpdateAction):
+    #: Identifier for a purchase order, usually in a B2B context.
+    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+    purchase_order_number: typing.Optional[str]
+
+    def __init__(self, *, purchase_order_number: typing.Optional[str] = None):
+        self.purchase_order_number = purchase_order_number
+
+        super().__init__(action="setPurchaseOrderNumber")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "OrderSetPurchaseOrderNumberAction":
+        from ._schemas.order import OrderSetPurchaseOrderNumberActionSchema
+
+        return OrderSetPurchaseOrderNumberActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import OrderSetPurchaseOrderNumberActionSchema
+
+        return OrderSetPurchaseOrderNumberActionSchema().dump(self)
 
 
 class OrderSetReturnInfoAction(OrderUpdateAction):
@@ -3552,7 +4338,7 @@ class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3667,6 +4453,9 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
 
 
 class OrderSetShippingAddressAction(OrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -3692,7 +4481,7 @@ class OrderSetShippingAddressCustomFieldAction(OrderUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -3877,6 +4666,9 @@ class OrderTransitionStateAction(OrderUpdateAction):
 
 
 class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
+    #: Polymorphic base type that represents a postal address and contact details.
+    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+    #: only differ in the data type for the optional `custom` field.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):

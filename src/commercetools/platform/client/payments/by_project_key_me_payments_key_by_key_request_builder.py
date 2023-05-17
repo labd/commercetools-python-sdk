@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _key: str
@@ -61,6 +60,7 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["MyPayment"]:
+        """This endpoint can only update a Payment when it has no [Transactions](ctp:api:type:Transaction)."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/payments/key={self._key}",
@@ -86,6 +86,7 @@ class ByProjectKeyMePaymentsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["MyPayment"]:
+        """This endpoint can only delete a Payment when it has no [Transactions](ctp:api:type:Transaction)."""
         headers = {} if headers is None else headers
         response = self._client._delete(
             endpoint=f"/{self._project_key}/me/payments/key={self._key}",

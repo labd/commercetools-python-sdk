@@ -33,7 +33,7 @@ class PaymentSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -41,7 +41,7 @@ class PaymentSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     customer = helpers.LazyNestedField(
@@ -49,38 +49,31 @@ class PaymentSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="anonymousId",
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     interface_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceId",
     )
-    amount_planned = helpers.Discriminator(
+    amount_planned = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.CentPrecisionMoneySchema"),
         allow_none=True,
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "centPrecision": helpers.absmod(
-                __name__, ".common.CentPrecisionMoneySchema"
-            ),
-            "highPrecision": helpers.absmod(
-                __name__, ".common.HighPrecisionMoneySchema"
-            ),
-        },
-        missing=None,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
         data_key="amountPlanned",
     )
     amount_authorized = helpers.Discriminator(
@@ -95,13 +88,13 @@ class PaymentSchema(BaseResourceSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="authorizedUntil",
     )
     amount_paid = helpers.Discriminator(
@@ -116,7 +109,7 @@ class PaymentSchema(BaseResourceSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountPaid",
     )
     amount_refunded = helpers.Discriminator(
@@ -131,21 +124,21 @@ class PaymentSchema(BaseResourceSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountRefunded",
     )
     payment_method_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PaymentMethodInfoSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="paymentMethodInfo",
     )
     payment_status = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PaymentStatusSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="paymentStatus",
     )
     transactions = helpers.LazyNestedField(
@@ -153,14 +146,14 @@ class PaymentSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     interface_interactions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="interfaceInteractions",
     )
     custom = helpers.LazyNestedField(
@@ -168,10 +161,10 @@ class PaymentSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -179,7 +172,6 @@ class PaymentSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Payment(**data)
 
 
@@ -189,31 +181,31 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="anonymousId",
     )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
     interface_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceId",
     )
     amount_planned = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="amountPlanned",
     )
     amount_authorized = helpers.LazyNestedField(
@@ -221,13 +213,13 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountAuthorized",
     )
     authorized_until = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="authorizedUntil",
     )
     amount_paid = helpers.LazyNestedField(
@@ -235,7 +227,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountPaid",
     )
     amount_refunded = helpers.LazyNestedField(
@@ -243,7 +235,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="amountRefunded",
     )
     payment_method_info = helpers.LazyNestedField(
@@ -251,7 +243,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="paymentMethodInfo",
     )
     payment_status = helpers.LazyNestedField(
@@ -259,7 +251,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="paymentStatus",
     )
     transactions = helpers.LazyNestedField(
@@ -268,7 +260,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     interface_interactions = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
@@ -276,7 +268,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceInteractions",
     )
     custom = helpers.LazyNestedField(
@@ -284,10 +276,10 @@ class PaymentDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -295,7 +287,6 @@ class PaymentDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentDraft(**data)
 
 
@@ -303,17 +294,17 @@ class PaymentMethodInfoSchema(helpers.BaseSchema):
     payment_interface = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="paymentInterface",
     )
     method = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     name = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -321,23 +312,22 @@ class PaymentMethodInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentMethodInfo(**data)
 
 
 class PaymentPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".PaymentSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -345,7 +335,6 @@ class PaymentPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentPagedQueryResponse(**data)
 
 
@@ -355,7 +344,7 @@ class PaymentReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -381,13 +370,13 @@ class PaymentStatusSchema(helpers.BaseSchema):
     interface_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceCode",
     )
     interface_text = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceText",
     )
     state = helpers.LazyNestedField(
@@ -395,7 +384,7 @@ class PaymentStatusSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -403,7 +392,6 @@ class PaymentStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentStatus(**data)
 
 
@@ -411,13 +399,13 @@ class PaymentStatusDraftSchema(helpers.BaseSchema):
     interface_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceCode",
     )
     interface_text = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceText",
     )
     state = helpers.LazyNestedField(
@@ -425,7 +413,7 @@ class PaymentStatusDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -433,12 +421,11 @@ class PaymentStatusDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentStatusDraft(**data)
 
 
 class PaymentUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -517,7 +504,7 @@ class PaymentUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -525,12 +512,11 @@ class PaymentUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.PaymentUpdate(**data)
 
 
 class PaymentUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -542,45 +528,34 @@ class PaymentUpdateActionSchema(helpers.BaseSchema):
 
 
 class TransactionSchema(helpers.BaseSchema):
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
     timestamp = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     type = marshmallow_enum.EnumField(
-        TransactionType, by_value=True, allow_none=True, missing=None
+        TransactionType, by_value=True, allow_none=True, load_default=None
     )
-    amount = helpers.Discriminator(
+    amount = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.CentPrecisionMoneySchema"),
         allow_none=True,
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "centPrecision": helpers.absmod(
-                __name__, ".common.CentPrecisionMoneySchema"
-            ),
-            "highPrecision": helpers.absmod(
-                __name__, ".common.HighPrecisionMoneySchema"
-            ),
-        },
-        missing=None,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
     )
     interaction_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interactionId",
     )
     state = marshmallow_enum.EnumField(
-        TransactionState,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        missing=None,
+        TransactionState, by_value=True, allow_none=True, load_default=None
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -588,27 +563,26 @@ class TransactionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Transaction(**data)
 
 
 class TransactionDraftSchema(helpers.BaseSchema):
     timestamp = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     type = marshmallow_enum.EnumField(
-        TransactionType, by_value=True, allow_none=True, missing=None
+        TransactionType, by_value=True, allow_none=True, load_default=None
     )
     amount = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     interaction_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interactionId",
     )
     state = marshmallow_enum.EnumField(
@@ -616,14 +590,14 @@ class TransactionDraftSchema(helpers.BaseSchema):
         by_value=True,
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -631,7 +605,6 @@ class TransactionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.TransactionDraft(**data)
 
 
@@ -640,13 +613,13 @@ class PaymentAddInterfaceInteractionActionSchema(PaymentUpdateActionSchema):
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -663,7 +636,7 @@ class PaymentAddTransactionActionSchema(PaymentUpdateActionSchema):
         nested=helpers.absmod(__name__, ".TransactionDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -680,7 +653,7 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -694,10 +667,10 @@ class PaymentChangeAmountPlannedActionSchema(PaymentUpdateActionSchema):
 
 class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchema):
     transaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="transactionId"
+        allow_none=True, load_default=None, data_key="transactionId"
     )
     interaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interactionId"
+        allow_none=True, load_default=None, data_key="interactionId"
     )
 
     class Meta:
@@ -711,10 +684,10 @@ class PaymentChangeTransactionInteractionIdActionSchema(PaymentUpdateActionSchem
 
 class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
     transaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="transactionId"
+        allow_none=True, load_default=None, data_key="transactionId"
     )
     state = marshmallow_enum.EnumField(
-        TransactionState, by_value=True, allow_none=True, missing=None
+        TransactionState, by_value=True, allow_none=True, load_default=None
     )
 
     class Meta:
@@ -728,9 +701,9 @@ class PaymentChangeTransactionStateActionSchema(PaymentUpdateActionSchema):
 
 class PaymentChangeTransactionTimestampActionSchema(PaymentUpdateActionSchema):
     transaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="transactionId"
+        allow_none=True, load_default=None, data_key="transactionId"
     )
-    timestamp = marshmallow.fields.DateTime(allow_none=True, missing=None)
+    timestamp = marshmallow.fields.DateTime(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -747,7 +720,7 @@ class PaymentSetAmountPaidActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -765,7 +738,7 @@ class PaymentSetAmountRefundedActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -781,7 +754,7 @@ class PaymentSetAnonymousIdActionSchema(PaymentUpdateActionSchema):
     anonymous_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="anonymousId",
     )
 
@@ -800,10 +773,10 @@ class PaymentSetAuthorizationActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     until = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -816,9 +789,9 @@ class PaymentSetAuthorizationActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetCustomFieldActionSchema(PaymentUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -836,13 +809,13 @@ class PaymentSetCustomTypeActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -860,7 +833,7 @@ class PaymentSetCustomerActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -876,7 +849,7 @@ class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="externalId",
     )
 
@@ -891,7 +864,7 @@ class PaymentSetExternalIdActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
     interface_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceId"
+        allow_none=True, load_default=None, data_key="interfaceId"
     )
 
     class Meta:
@@ -905,7 +878,7 @@ class PaymentSetInterfaceIdActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetKeyActionSchema(PaymentUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -918,7 +891,7 @@ class PaymentSetKeyActionSchema(PaymentUpdateActionSchema):
 
 
 class PaymentSetMethodInfoInterfaceActionSchema(PaymentUpdateActionSchema):
-    interface = marshmallow.fields.String(allow_none=True, missing=None)
+    interface = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -931,7 +904,7 @@ class PaymentSetMethodInfoInterfaceActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetMethodInfoMethodActionSchema(PaymentUpdateActionSchema):
     method = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -948,7 +921,7 @@ class PaymentSetMethodInfoNameActionSchema(PaymentUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -964,7 +937,7 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
     interface_code = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="interfaceCode",
     )
 
@@ -979,7 +952,7 @@ class PaymentSetStatusInterfaceCodeActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
     interface_text = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="interfaceText"
+        allow_none=True, load_default=None, data_key="interfaceText"
     )
 
     class Meta:
@@ -993,11 +966,11 @@ class PaymentSetStatusInterfaceTextActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetTransactionCustomFieldActionSchema(PaymentUpdateActionSchema):
     transaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="transactionId"
+        allow_none=True, load_default=None, data_key="transactionId"
     )
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -1011,20 +984,20 @@ class PaymentSetTransactionCustomFieldActionSchema(PaymentUpdateActionSchema):
 
 class PaymentSetTransactionCustomTypeActionSchema(PaymentUpdateActionSchema):
     transaction_id = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="transactionId"
+        allow_none=True, load_default=None, data_key="transactionId"
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -1041,10 +1014,10 @@ class PaymentTransitionStateActionSchema(PaymentUpdateActionSchema):
         nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     force = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

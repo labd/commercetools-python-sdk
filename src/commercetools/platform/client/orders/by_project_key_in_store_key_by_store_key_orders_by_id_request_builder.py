@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -42,7 +41,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
     ) -> typing.Optional["Order"]:
         """Returns an order by its ID from a specific Store.
         If the order exists in the project but does not have the store field,
-        or the store field references a different store, this method returns a ResourceNotFound error.
+        or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         """
         headers = {} if headers is None else headers
@@ -71,7 +70,7 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder:
     ) -> typing.Optional["Order"]:
         """Updates an order in the store specified by {storeKey}.
         If the order exists in the project but does not have the store field,
-        or the store field references a different store, this method returns a ResourceNotFound error.
+        or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         """
         headers = {} if headers is None else headers

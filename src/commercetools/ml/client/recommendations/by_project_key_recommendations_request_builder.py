@@ -19,7 +19,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyRecommendationsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

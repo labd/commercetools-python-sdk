@@ -66,7 +66,6 @@ class Storage:
 
 class BackendRepository:
     def __init__(self):
-
         self._storage = Storage()
         self.internal = InternalBackend()
 

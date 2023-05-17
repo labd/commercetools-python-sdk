@@ -33,6 +33,7 @@ __all__ = [
     "ExtensionTrigger",
     "ExtensionUpdate",
     "ExtensionUpdateAction",
+    "GoogleCloudFunctionDestination",
     "HttpDestination",
     "HttpDestinationAuthentication",
 ]
@@ -117,6 +118,10 @@ class ExtensionDestination(_BaseType):
             from ._schemas.extension import AWSLambdaDestinationSchema
 
             return AWSLambdaDestinationSchema().load(data)
+        if data["type"] == "GoogleCloudFunction":
+            from ._schemas.extension import GoogleCloudFunctionDestinationSchema
+
+            return GoogleCloudFunctionDestinationSchema().load(data)
         if data["type"] == "HTTP":
             from ._schemas.extension import HttpDestinationSchema
 
@@ -131,7 +136,7 @@ class ExtensionDestination(_BaseType):
 class AWSLambdaDestination(ExtensionDestination):
     """We recommend creating an Identify and Access Management (IAM) user with an `accessKey` and `accessSecret` pair, specifically for each Extension that only has the `lambda:InvokeFunction` permission on this function."""
 
-    #: Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`.
+    #: Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`. Use the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>:<functionAlias/version>` to point to a specific version of the function.
     arn: str
     #: Partially hidden on retrieval for security reasons.
     access_key: str
@@ -319,7 +324,7 @@ class ExtensionTrigger(_BaseType):
 
 
 class ExtensionUpdate(_BaseType):
-    #: Expected version of the Extension on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Extension on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Extension.
     actions: typing.List["ExtensionUpdateAction"]
@@ -375,10 +380,35 @@ class ExtensionUpdateAction(_BaseType):
         return ExtensionUpdateActionSchema().dump(self)
 
 
+class GoogleCloudFunctionDestination(ExtensionDestination):
+    """For GoogleCloudFunction destinations, you need to grant permissions to the `extensions@commercetools-platform.iam.gserviceaccount.com` service account to invoke your function. If your function's version is 1st gen, grant the service account the IAM role `Cloud Functions Invoker`. For version 2nd gen, assign the IAM role `Cloud Run Invoker` using the Cloud Run console."""
+
+    #: URL to the target function.
+    url: str
+
+    def __init__(self, *, url: str):
+        self.url = url
+
+        super().__init__(type="GoogleCloudFunction")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GoogleCloudFunctionDestination":
+        from ._schemas.extension import GoogleCloudFunctionDestinationSchema
+
+        return GoogleCloudFunctionDestinationSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.extension import GoogleCloudFunctionDestinationSchema
+
+        return GoogleCloudFunctionDestinationSchema().dump(self)
+
+
 class HttpDestination(ExtensionDestination):
     """We recommend an encrypted `HTTPS` connection for production setups. However, we also accept unencrypted `HTTP` connections for development purposes. HTTP redirects will not be followed and cache headers will be ignored."""
 
-    #: URL to the target destination.
+    #: URL to the target destination. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
     url: str
     #: Authentication methods (such as `Basic` or `Bearer`).
     authentication: typing.Optional["HttpDestinationAuthentication"]

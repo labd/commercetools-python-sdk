@@ -11,6 +11,9 @@ import typing
 
 from ._abstract import _BaseType
 
+if typing.TYPE_CHECKING:
+    from .error import GraphQLErrorObject
+
 __all__ = [
     "GraphQLError",
     "GraphQLErrorLocation",
@@ -23,18 +26,22 @@ __all__ = [
 class GraphQLError(_BaseType):
     message: str
     locations: typing.List["GraphQLErrorLocation"]
-    path: typing.List["typing.Any"]
+    path: typing.Optional[typing.List["typing.Any"]]
+    #: Represents a single error.
+    extensions: "GraphQLErrorObject"
 
     def __init__(
         self,
         *,
         message: str,
         locations: typing.List["GraphQLErrorLocation"],
-        path: typing.List["typing.Any"]
+        path: typing.Optional[typing.List["typing.Any"]] = None,
+        extensions: "GraphQLErrorObject"
     ):
         self.message = message
         self.locations = locations
         self.path = path
+        self.extensions = extensions
 
         super().__init__()
 

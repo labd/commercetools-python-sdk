@@ -13,6 +13,10 @@ from ._abstract import _BaseType
 from .shipping_method import ShippingRateTierType
 
 if typing.TYPE_CHECKING:
+    from .associate_role import (
+        AssociateRoleKeyReference,
+        AssociateRoleResourceIdentifier,
+    )
     from .common import LastModifiedBy
     from .message import MessagesConfiguration, MessagesConfigurationDraft
     from .shipping_method import ShippingRateTierType
@@ -40,6 +44,7 @@ __all__ = [
     "ProjectChangeOrderSearchStatusAction",
     "ProjectChangeProductSearchIndexingEnabledAction",
     "ProjectChangeShoppingListsConfigurationAction",
+    "ProjectSetBusinessUnitAssociateRoleOnCreationAction",
     "ProjectSetExternalOAuthAction",
     "ProjectSetShippingRateInputTypeAction",
     "ProjectUpdate",
@@ -53,13 +58,25 @@ __all__ = [
 
 
 class BusinessUnitConfiguration(_BaseType):
-    #: Status of Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+    #: Status of Business Units created using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
     my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus"
+    #: Default [Associate Role](ctp:api:type:AssociateRole) assigned to the Associate creating a Business Unit using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
+    my_business_unit_associate_role_on_creation: typing.Optional[
+        "AssociateRoleKeyReference"
+    ]
 
     def __init__(
-        self, *, my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus"
+        self,
+        *,
+        my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus",
+        my_business_unit_associate_role_on_creation: typing.Optional[
+            "AssociateRoleKeyReference"
+        ] = None
     ):
         self.my_business_unit_status_on_creation = my_business_unit_status_on_creation
+        self.my_business_unit_associate_role_on_creation = (
+            my_business_unit_associate_role_on_creation
+        )
 
         super().__init__()
 
@@ -85,7 +102,10 @@ class BusinessUnitConfigurationStatus(enum.Enum):
 
 
 class CartsConfiguration(_BaseType):
-    #: Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft). This field may not be present on Projects created before January 2020.
+    #: Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft) and [MyCartDraft](ctp:api:type:MyCartDraft).
+    #: If a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts exists, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent upon deletion of a Cart.
+    #:
+    #: This field may not be present on Projects created before January 2020.
     delete_days_after_last_modification: typing.Optional[int]
     #: Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
     country_tax_rate_fallback_enabled: typing.Optional[bool]
@@ -120,9 +140,9 @@ class ExternalOAuth(_BaseType):
 
     """
 
-    #: URL with authorization header.
+    #: URL with authorization header. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
     url: str
-    #: Partially hidden on retrieval.
+    #: Must not contain any leading or trailing whitespaces. Partially hidden on retrieval.
     authorization_header: str
 
     def __init__(self, *, url: str, authorization_header: str):
@@ -232,7 +252,7 @@ class Project(_BaseType):
 
 
 class ProjectUpdate(_BaseType):
-    #: Expected version of the Project on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Project on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the Project.
     actions: typing.List["ProjectUpdateAction"]
@@ -321,6 +341,14 @@ class ProjectUpdateAction(_BaseType):
             )
 
             return ProjectChangeShoppingListsConfigurationActionSchema().load(data)
+        if data["action"] == "setMyBusinessUnitAssociateRoleOnCreation":
+            from ._schemas.project import (
+                ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema,
+            )
+
+            return ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema().load(
+                data
+            )
         if data["action"] == "setExternalOAuth":
             from ._schemas.project import ProjectSetExternalOAuthActionSchema
 
@@ -474,7 +502,6 @@ class CartScoreType(ShippingRateInputType):
     """Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges)."""
 
     def __init__(self):
-
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     @classmethod
@@ -497,7 +524,6 @@ class CartValueType(ShippingRateInputType):
     """
 
     def __init__(self):
-
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     @classmethod
@@ -539,7 +565,7 @@ class ShoppingListsConfiguration(_BaseType):
 
 
 class ProjectChangeBusinessUnitStatusOnCreationAction(ProjectUpdateAction):
-    #: Status for Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+    #: Status for Business Units created using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
     status: "BusinessUnitConfigurationStatus"
 
     def __init__(self, *, status: "BusinessUnitConfigurationStatus"):
@@ -662,7 +688,7 @@ class ProjectChangeCurrenciesAction(ProjectUpdateAction):
 
 
 class ProjectChangeLanguagesAction(ProjectUpdateAction):
-    """If a language is used by a [Store](ctp:api:type:Store), it cannot be deleted. Attempts to delete such language will lead to [LanguageUsedInStores](/../api/errors#projects-400-language-used-in-stores) errors."""
+    """Removing a language used by a [Store](ctp:api:type:Store) returns a [LanguageUsedInStores](ctp:api:type:LanguageUsedInStoresError) error."""
 
     #: New value to set. Must not be empty.
     languages: typing.List["str"]
@@ -778,9 +804,8 @@ class ProjectChangeOrderSearchStatusAction(ProjectUpdateAction):
 
 
 class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
-    #: If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
-    #:
-    #: If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
+    #: - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
+    #: - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
     enabled: bool
 
     def __init__(self, *, enabled: bool):
@@ -831,6 +856,33 @@ class ProjectChangeShoppingListsConfigurationAction(ProjectUpdateAction):
         )
 
         return ProjectChangeShoppingListsConfigurationActionSchema().dump(self)
+
+
+class ProjectSetBusinessUnitAssociateRoleOnCreationAction(ProjectUpdateAction):
+    #: Default [Associate Role](ctp:api:type:AssociateRole) assigned to the Associate creating a Business Unit using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
+    associate_role: "AssociateRoleResourceIdentifier"
+
+    def __init__(self, *, associate_role: "AssociateRoleResourceIdentifier"):
+        self.associate_role = associate_role
+
+        super().__init__(action="setMyBusinessUnitAssociateRoleOnCreation")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "ProjectSetBusinessUnitAssociateRoleOnCreationAction":
+        from ._schemas.project import (
+            ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema,
+        )
+
+        return ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.project import (
+            ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema,
+        )
+
+        return ProjectSetBusinessUnitAssociateRoleOnCreationActionSchema().dump(self)
 
 
 class ProjectSetExternalOAuthAction(ProjectUpdateAction):

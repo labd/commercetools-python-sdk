@@ -34,17 +34,16 @@ class ProductSelectionSettingSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelection",
     )
-    active = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    active = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductSelectionSetting(**data)
 
 
@@ -55,11 +54,11 @@ class ProductSelectionSettingDraftSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelection",
     )
     active = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -67,7 +66,6 @@ class ProductSelectionSettingDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ProductSelectionSettingDraft(**data)
 
 
@@ -77,7 +75,7 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -85,25 +83,32 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     name = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     languages = marshmallow.fields.List(
-        marshmallow.fields.String(allow_none=True), allow_none=True, missing=None
+        marshmallow.fields.String(allow_none=True), allow_none=True, load_default=None
+    )
+    countries = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store_country.StoreCountrySchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
     )
     distribution_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="distributionChannels",
     )
     supply_channels = helpers.LazyNestedField(
@@ -111,7 +116,7 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="supplyChannels",
     )
     product_selections = helpers.LazyNestedField(
@@ -119,7 +124,7 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelections",
     )
     custom = helpers.LazyNestedField(
@@ -127,7 +132,7 @@ class StoreSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -135,23 +140,30 @@ class StoreSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Store(**data)
 
 
 class StoreDraftSchema(helpers.BaseSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
     name = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     languages = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+    )
+    countries = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store_country.StoreCountrySchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
     )
     distribution_channels = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
@@ -159,7 +171,7 @@ class StoreDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="distributionChannels",
     )
     supply_channels = helpers.LazyNestedField(
@@ -168,7 +180,7 @@ class StoreDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannels",
     )
     product_selections = helpers.LazyNestedField(
@@ -177,7 +189,7 @@ class StoreDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSelections",
     )
     custom = helpers.LazyNestedField(
@@ -185,7 +197,7 @@ class StoreDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -193,7 +205,6 @@ class StoreDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StoreDraft(**data)
 
 
@@ -208,18 +219,18 @@ class StoreKeyReferenceSchema(KeyReferenceSchema):
 
 
 class StorePagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StoreSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -227,7 +238,6 @@ class StorePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StorePagedQueryResponse(**data)
 
 
@@ -237,7 +247,7 @@ class StoreReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -260,12 +270,13 @@ class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class StoreUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "addCountry": helpers.absmod(__name__, ".StoreAddCountryActionSchema"),
                 "addDistributionChannel": helpers.absmod(
                     __name__, ".StoreAddDistributionChannelActionSchema"
                 ),
@@ -278,6 +289,9 @@ class StoreUpdateSchema(helpers.BaseSchema):
                 "changeProductSelectionActive": helpers.absmod(
                     __name__, ".StoreChangeProductSelectionActionSchema"
                 ),
+                "removeCountry": helpers.absmod(
+                    __name__, ".StoreRemoveCountryActionSchema"
+                ),
                 "removeDistributionChannel": helpers.absmod(
                     __name__, ".StoreRemoveDistributionChannelActionSchema"
                 ),
@@ -286,6 +300,9 @@ class StoreUpdateSchema(helpers.BaseSchema):
                 ),
                 "removeSupplyChannel": helpers.absmod(
                     __name__, ".StoreRemoveSupplyChannelActionSchema"
+                ),
+                "setCountries": helpers.absmod(
+                    __name__, ".StoreSetCountriesActionSchema"
                 ),
                 "setCustomField": helpers.absmod(
                     __name__, ".StoreSetCustomFieldActionSchema"
@@ -309,7 +326,7 @@ class StoreUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -317,12 +334,11 @@ class StoreUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StoreUpdate(**data)
 
 
 class StoreUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -333,12 +349,29 @@ class StoreUpdateActionSchema(helpers.BaseSchema):
         return models.StoreUpdateAction(**data)
 
 
+class StoreAddCountryActionSchema(StoreUpdateActionSchema):
+    country = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store_country.StoreCountrySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreAddCountryAction(**data)
+
+
 class StoreAddDistributionChannelActionSchema(StoreUpdateActionSchema):
     distribution_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="distributionChannel",
     )
 
@@ -358,11 +391,11 @@ class StoreAddProductSelectionActionSchema(StoreUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelection",
     )
     active = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -379,7 +412,7 @@ class StoreAddSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
 
@@ -399,11 +432,11 @@ class StoreChangeProductSelectionActionSchema(StoreUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelection",
     )
     active = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -415,12 +448,29 @@ class StoreChangeProductSelectionActionSchema(StoreUpdateActionSchema):
         return models.StoreChangeProductSelectionAction(**data)
 
 
+class StoreRemoveCountryActionSchema(StoreUpdateActionSchema):
+    country = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store_country.StoreCountrySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreRemoveCountryAction(**data)
+
+
 class StoreRemoveDistributionChannelActionSchema(StoreUpdateActionSchema):
     distribution_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="distributionChannel",
     )
 
@@ -440,7 +490,7 @@ class StoreRemoveProductSelectionActionSchema(StoreUpdateActionSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="productSelection",
     )
 
@@ -458,7 +508,7 @@ class StoreRemoveSupplyChannelActionSchema(StoreUpdateActionSchema):
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="supplyChannel",
     )
 
@@ -471,10 +521,29 @@ class StoreRemoveSupplyChannelActionSchema(StoreUpdateActionSchema):
         return models.StoreRemoveSupplyChannelAction(**data)
 
 
+class StoreSetCountriesActionSchema(StoreUpdateActionSchema):
+    countries = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store_country.StoreCountrySchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StoreSetCountriesAction(**data)
+
+
 class StoreSetCustomFieldActionSchema(StoreUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -492,13 +561,13 @@ class StoreSetCustomTypeActionSchema(StoreUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -517,7 +586,7 @@ class StoreSetDistributionChannelsActionSchema(StoreUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="distributionChannels",
     )
 
@@ -535,7 +604,7 @@ class StoreSetLanguagesActionSchema(StoreUpdateActionSchema):
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -552,7 +621,7 @@ class StoreSetNameActionSchema(StoreUpdateActionSchema):
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -571,7 +640,7 @@ class StoreSetProductSelectionsActionSchema(StoreUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="productSelections",
     )
 
@@ -591,7 +660,7 @@ class StoreSetSupplyChannelsActionSchema(StoreUpdateActionSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="supplyChannels",
     )
 

@@ -65,27 +65,34 @@ __all__ = [
 
 
 class ShoppingList(BaseResource):
+    #: Name of the ShoppingList.
+    name: "LocalizedString"
+    #: User-defined unique identifier of the ShoppingList.
+    key: typing.Optional[str]
+    #: Reference to a [Customer](ctp:api:type:Customer) associated with the ShoppingList.
+    customer: typing.Optional["CustomerReference"]
+    #: Human-readable identifiers usually used as deep-link URL to the related ShoppingList.
+    #: Each slug is unique across a Project, but a ShoppingList can have the same slug for different languages.
+    #: The slug must match the pattern `[a-zA-Z0-9_-]{2,256}`. For [good performance](/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set on the [Project](ctp:api:type:Project).
+    slug: typing.Optional["LocalizedString"]
+    #: Description of the ShoppingList.
+    description: typing.Optional["LocalizedString"]
+    #: Line Items (containing Products) of the ShoppingList.
+    line_items: typing.List["ShoppingListLineItem"]
+    #: Line Items (containing text values) of the ShoppingList.
+    text_line_items: typing.List["TextLineItem"]
+    #: Number of days after which the ShoppingList will be automatically deleted if it has not been modified.
+    delete_days_after_last_modification: typing.Optional[int]
+    #: Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
+    anonymous_id: typing.Optional[str]
+    #: Store to which the ShoppingList is assigned.
+    store: typing.Optional["StoreKeyReference"]
+    #: Custom Fields defined for the ShoppingList.
+    custom: typing.Optional["CustomFields"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
     created_by: typing.Optional["CreatedBy"]
-    custom: typing.Optional["CustomFields"]
-    customer: typing.Optional["CustomerReference"]
-    #: The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
-    delete_days_after_last_modification: typing.Optional[int]
-    description: typing.Optional["LocalizedString"]
-    #: User-defined unique identifier of the ShoppingList.
-    key: typing.Optional[str]
-    line_items: typing.Optional[typing.List["ShoppingListLineItem"]]
-    name: "LocalizedString"
-    #: Human-readable identifiers usually used as deep-link URL to the related shopping list.
-    #: Each slug is unique across a project, but a shopping list can have the same slug for different languages.
-    #: The slug must match the pattern [a-zA-Z0-9_-]{2,256}.
-    slug: typing.Optional["LocalizedString"]
-    text_line_items: typing.Optional[typing.List["TextLineItem"]]
-    #: Identifies shopping lists belonging to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional[str]
-    store: typing.Optional["StoreKeyReference"]
 
     def __init__(
         self,
@@ -94,33 +101,33 @@ class ShoppingList(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        custom: typing.Optional["CustomFields"] = None,
-        customer: typing.Optional["CustomerReference"] = None,
-        delete_days_after_last_modification: typing.Optional[int] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        key: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["ShoppingListLineItem"]] = None,
         name: "LocalizedString",
+        key: typing.Optional[str] = None,
+        customer: typing.Optional["CustomerReference"] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        text_line_items: typing.Optional[typing.List["TextLineItem"]] = None,
+        description: typing.Optional["LocalizedString"] = None,
+        line_items: typing.List["ShoppingListLineItem"],
+        text_line_items: typing.List["TextLineItem"],
+        delete_days_after_last_modification: typing.Optional[int] = None,
         anonymous_id: typing.Optional[str] = None,
-        store: typing.Optional["StoreKeyReference"] = None
+        store: typing.Optional["StoreKeyReference"] = None,
+        custom: typing.Optional["CustomFields"] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None
     ):
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
-        self.custom = custom
-        self.customer = customer
-        self.delete_days_after_last_modification = delete_days_after_last_modification
-        self.description = description
-        self.key = key
-        self.line_items = line_items
         self.name = name
+        self.key = key
+        self.customer = customer
         self.slug = slug
+        self.description = description
+        self.line_items = line_items
         self.text_line_items = text_line_items
+        self.delete_days_after_last_modification = delete_days_after_last_modification
         self.anonymous_id = anonymous_id
         self.store = store
+        self.custom = custom
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
 
         super().__init__(
             id=id,
@@ -142,51 +149,57 @@ class ShoppingList(BaseResource):
 
 
 class ShoppingListDraft(_BaseType):
-    #: The custom fields.
-    custom: typing.Optional["CustomFieldsDraft"]
+    #: Name of the ShoppingList.
+    name: "LocalizedString"
+    #: Human-readable identifiers usually used as deep-link URL to the related ShoppingList.
+    #: Each slug is unique across a Project, but a ShoppingList can have the same slug for different languages.
+    #: The slug must match the pattern `[a-zA-Z0-9_-]{2,256}`.
+    slug: typing.Optional["LocalizedString"]
+    #: The [Customer](ctp:api:type:Customer) the ShoppingList should be associated to.
     customer: typing.Optional["CustomerResourceIdentifier"]
-    #: The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
-    delete_days_after_last_modification: typing.Optional[int]
-    description: typing.Optional["LocalizedString"]
     #: User-defined unique identifier for the ShoppingList.
     key: typing.Optional[str]
-    line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
-    name: "LocalizedString"
-    #: Human-readable identifiers usually used as deep-link URL to the related shopping list.
-    #: Each slug is unique across a project, but a shopping list can have the same slug for different languages.
-    #: The slug must match the pattern [a-zA-Z0-9_-]{2,256}.
-    slug: typing.Optional["LocalizedString"]
-    text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
-    #: Identifies shopping lists belonging to an anonymous session (the customer has not signed up/in yet).
+    #: Description of the ShoppingList.
+    description: typing.Optional["LocalizedString"]
+    #: Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
     anonymous_id: typing.Optional[str]
+    #: Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
+    delete_days_after_last_modification: typing.Optional[int]
+    #: Line Items (containing Products) to add to the ShoppingList.
+    line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]]
+    #: Line Items (containing text values) to add to the ShoppingList.
+    text_line_items: typing.Optional[typing.List["TextLineItemDraft"]]
+    #: Assigns the new ShoppingList to the [Store](ctp:api:type:Store).
     store: typing.Optional["StoreResourceIdentifier"]
+    #: Custom Fields defined for the ShoppingList.
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        customer: typing.Optional["CustomerResourceIdentifier"] = None,
-        delete_days_after_last_modification: typing.Optional[int] = None,
-        description: typing.Optional["LocalizedString"] = None,
-        key: typing.Optional[str] = None,
-        line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
         name: "LocalizedString",
         slug: typing.Optional["LocalizedString"] = None,
-        text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
+        customer: typing.Optional["CustomerResourceIdentifier"] = None,
+        key: typing.Optional[str] = None,
+        description: typing.Optional["LocalizedString"] = None,
         anonymous_id: typing.Optional[str] = None,
-        store: typing.Optional["StoreResourceIdentifier"] = None
+        delete_days_after_last_modification: typing.Optional[int] = None,
+        line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
+        text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
-        self.custom = custom
-        self.customer = customer
-        self.delete_days_after_last_modification = delete_days_after_last_modification
-        self.description = description
-        self.key = key
-        self.line_items = line_items
         self.name = name
         self.slug = slug
-        self.text_line_items = text_line_items
+        self.customer = customer
+        self.key = key
+        self.description = description
         self.anonymous_id = anonymous_id
+        self.delete_days_after_last_modification = delete_days_after_last_modification
+        self.line_items = line_items
+        self.text_line_items = text_line_items
         self.store = store
+        self.custom = custom
 
         super().__init__()
 
@@ -203,23 +216,42 @@ class ShoppingListDraft(_BaseType):
 
 
 class ShoppingListLineItem(_BaseType):
+    """ShoppingListLineItems are Line Items that contain references to [ProductVariants](ctp:api:type:ProductVariant) in a [Product](ctp:api:type:Product).
+
+    In addition to standard [Reference Expansion](/general-concepts#reference-expansion), a ShoppingListLineItem offers expansion on `productSlug` and `variant`, defined with the query parameter `expand`.
+
+    """
+
+    #: Date and time (UTC) the ShoppingListLineItem was added to the ShoppingList.
     added_at: datetime.datetime
-    #: Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+    #: Custom Fields of the ShoppingListLineItem.
     custom: typing.Optional["CustomFields"]
+    #: If the Product or Product Variant is deleted, `deactivatedAt` is the date and time (UTC) of deletion.
+    #:
+    #: This data is updated in an [eventual consistent manner](/general-concepts#eventual-consistency) when the Product Variant cannot be ordered anymore.
     deactivated_at: typing.Optional[datetime.datetime]
     #: Unique identifier of the ShoppingListLineItem.
     id: str
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Name of the Product.
+    #:
+    #: This data is updated in an [eventual consistent manner](/general-concepts#eventual-consistency) when the Product's name changes.
     name: "LocalizedString"
+    #: Unique identifier of a [Product](ctp:api:type:Product).
     product_id: str
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-    product_slug: typing.Optional["LocalizedString"]
-    #: [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
+    #: The Product Type defining the Attributes of the [Product](ctp:api:type:Product).
     product_type: "ProductTypeReference"
+    #: Number of Products in the ShoppingListLineItem.
     quantity: int
-    #: A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
-    variant: typing.Optional["ProductVariant"]
+    #: `id` of the [ProductVariant](ctp:api:type:ProductVariant) the ShoppingListLineItem refers to. If not set, the ShoppingListLineItem refers to the Master Variant.
     variant_id: typing.Optional[int]
+    #: Data of the [ProductVariant](ctp:api:type:ProductVariant).
+    #:
+    #: Returned when expanded using `expand=lineItems[*].variant`. You cannot expand only a single element of the array.
+    variant: typing.Optional["ProductVariant"]
+    #: Slug of the current [ProductData](ctp:api:type:ProductData).
+    #:
+    #: Returned when expanded using `expand=lineItems[*].productSlug`. You cannot expand only a single element of the array.
+    product_slug: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
@@ -230,11 +262,11 @@ class ShoppingListLineItem(_BaseType):
         id: str,
         name: "LocalizedString",
         product_id: str,
-        product_slug: typing.Optional["LocalizedString"] = None,
         product_type: "ProductTypeReference",
         quantity: int,
+        variant_id: typing.Optional[int] = None,
         variant: typing.Optional["ProductVariant"] = None,
-        variant_id: typing.Optional[int] = None
+        product_slug: typing.Optional["LocalizedString"] = None
     ):
         self.added_at = added_at
         self.custom = custom
@@ -242,11 +274,11 @@ class ShoppingListLineItem(_BaseType):
         self.id = id
         self.name = name
         self.product_id = product_id
-        self.product_slug = product_slug
         self.product_type = product_type
         self.quantity = quantity
-        self.variant = variant
         self.variant_id = variant_id
+        self.variant = variant
+        self.product_slug = product_slug
 
         super().__init__()
 
@@ -263,30 +295,37 @@ class ShoppingListLineItem(_BaseType):
 
 
 class ShoppingListLineItemDraft(_BaseType):
-    added_at: typing.Optional[datetime.datetime]
-    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
-    custom: typing.Optional["CustomFieldsDraft"]
-    sku: typing.Optional[str]
+    """The [ProductVariant](ctp:api:type:ProductVariant) to be included in the ShoppingListLineItem must be specified using the `productID` and `variantID`, or by the `sku`."""
+
+    #: Unique identifier of a [Product](ctp:api:type:Product).
     product_id: typing.Optional[str]
-    quantity: typing.Optional[int]
+    #: `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
     variant_id: typing.Optional[int]
+    #: `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
+    sku: typing.Optional[str]
+    #: Date and time the ShoppingListLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
+    added_at: typing.Optional[datetime.datetime]
+    #: Custom Fields of the ShoppingListLineItem.
+    custom: typing.Optional["CustomFieldsDraft"]
+    #: Number of Products in the ShoppingListLineItem.
+    quantity: typing.Optional[int]
 
     def __init__(
         self,
         *,
+        product_id: typing.Optional[str] = None,
+        variant_id: typing.Optional[int] = None,
+        sku: typing.Optional[str] = None,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        sku: typing.Optional[str] = None,
-        product_id: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None,
-        variant_id: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None
     ):
+        self.product_id = product_id
+        self.variant_id = variant_id
+        self.sku = sku
         self.added_at = added_at
         self.custom = custom
-        self.sku = sku
-        self.product_id = product_id
         self.quantity = quantity
-        self.variant_id = variant_id
 
         super().__init__()
 
@@ -307,10 +346,17 @@ class ShoppingListLineItemDraft(_BaseType):
 class ShoppingListPagedQueryResponse(_BaseType):
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
+    #: Actual number of results returned.
     count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
     total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: [ShoppingLists](ctp:api:type:ShoppingList) matching the query.
     results: typing.List["ShoppingList"]
 
     def __init__(
@@ -373,7 +419,6 @@ class ShoppingListResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.SHOPPING_LIST)
 
     @classmethod
@@ -391,7 +436,9 @@ class ShoppingListResourceIdentifier(ResourceIdentifier):
 
 
 class ShoppingListUpdate(_BaseType):
+    #: Expected version of the ShoppingList on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
     version: int
+    #: List of update actions to be performed on the ShoppingList.
     actions: typing.List["ShoppingListUpdateAction"]
 
     def __init__(
@@ -556,13 +603,19 @@ class ShoppingListUpdateAction(_BaseType):
 
 
 class TextLineItem(_BaseType):
-    #: When the text line item was added to the shopping list.
+    """TextLineItems are Line Items that use text values instead of references to Products."""
+
+    #: Date and time (UTC) the TextLineItem was added to the [ShoppingList](ctp:api:type:ShoppingList).
     added_at: datetime.datetime
+    #: Custom Fields of the TextLineItem.
     custom: typing.Optional["CustomFields"]
+    #: Description of the TextLineItem.
     description: typing.Optional["LocalizedString"]
     #: Unique identifier of the TextLineItem.
     id: str
+    #: Name of the TextLineItem.
     name: "LocalizedString"
+    #: Number of entries in the TextLineItem.
     quantity: int
 
     def __init__(
@@ -597,13 +650,15 @@ class TextLineItem(_BaseType):
 
 
 class TextLineItemDraft(_BaseType):
-    #: Defaults to the current date and time.
+    #: Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
     added_at: typing.Optional[datetime.datetime]
-    #: The custom fields.
+    #: Custom Fields for the TextLineItem.
     custom: typing.Optional["CustomFieldsDraft"]
+    #: Description of the TextLineItem.
     description: typing.Optional["LocalizedString"]
+    #: Name of the TextLineItem.
     name: "LocalizedString"
-    #: Defaults to `1`.
+    #: Number of entries in the TextLineItem.
     quantity: typing.Optional[int]
 
     def __init__(
@@ -636,12 +691,23 @@ class TextLineItemDraft(_BaseType):
 
 
 class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
+    """The [ProductVariant](ctp:api:type:ProductVariant) to be included in the ShoppingListLineItem must be specified using the `productID` and `variantID`, or by the `sku`.
+    If the ShoppingList already contains a ShoppingListLineItem for the same Product Variant with the same Custom Fields, then only the quantity of the existing ShoppingListLineItem is increased.
+    A ShoppingListLineItem with an empty `variantId` is not considered the same as a ShoppingListLineItem with a `variantId` currently referring to the Master Variant.
+
+    """
+
+    #: `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
     sku: typing.Optional[str]
+    #: Unique identifier of a [Product](ctp:api:type:Product).
     product_id: typing.Optional[str]
+    #: `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
     variant_id: typing.Optional[int]
+    #: Number of Products in the ShoppingListLineItem.
     quantity: typing.Optional[int]
+    #: Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
     added_at: typing.Optional[datetime.datetime]
-    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+    #: Custom Fields defined for the ShoppingListLineItem.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -678,13 +744,15 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Name of the TextLineItem.
     name: "LocalizedString"
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Description of the TextLineItem.
     description: typing.Optional["LocalizedString"]
+    #: Number of entries in the TextLineItem.
     quantity: typing.Optional[int]
+    #: Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
     added_at: typing.Optional[datetime.datetime]
-    #: The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+    #: Custom Fields defined for the TextLineItem.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -719,7 +787,9 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
+    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
     line_item_id: str
+    #: New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
     quantity: int
 
     def __init__(self, *, line_item_id: str, quantity: int):
@@ -747,6 +817,7 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
+    #: All existing ShoppingListLineItem `id`s in the desired new order.
     line_item_order: typing.List["str"]
 
     def __init__(self, *, line_item_order: typing.List["str"]):
@@ -769,6 +840,7 @@ class ShoppingListChangeLineItemsOrderAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeNameAction(ShoppingListUpdateAction):
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, name: "LocalizedString"):
@@ -791,8 +863,9 @@ class ShoppingListChangeNameAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: New value to set. Must not be empty.
     name: "LocalizedString"
 
     def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
@@ -820,7 +893,9 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
+    #: New value to set. If `0`, the TextLineItem is removed from the ShoppingList.
     quantity: int
 
     def __init__(self, *, text_line_item_id: str, quantity: int):
@@ -848,6 +923,7 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
 
 
 class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
+    #: Must contain all existing [TextLineItem](ctp:api:type:TextLineItem) `id`s in the desired new order.
     text_line_item_order: typing.List["str"]
 
     def __init__(self, *, text_line_item_order: typing.List["str"]):
@@ -874,7 +950,9 @@ class ShoppingListChangeTextLineItemsOrderAction(ShoppingListUpdateAction):
 
 
 class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
+    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
     line_item_id: str
+    #: Amount to remove from the `quantity` of the ShoppingListLineItem. If not set, the ShoppingListLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the ShoppingListLineItem, the ShoppingListLineItem is removed from the ShoppingList.
     quantity: typing.Optional[int]
 
     def __init__(self, *, line_item_id: str, quantity: typing.Optional[int] = None):
@@ -898,7 +976,9 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
+    #: Amount to remove from the `quantity` of the TextLineItem. If not set, the TextLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the TextLineItem, the TextLineItem is removed from the ShoppingList.
     quantity: typing.Optional[int]
 
     def __init__(
@@ -924,8 +1004,7 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetAnonymousIdAction(ShoppingListUpdateAction):
-    #: Anonymous ID of the anonymous customer that this shopping list belongs to.
-    #: If this field is not set any existing `anonymousId` is removed.
+    #: Value to set. If empty, any existing value will be removed.
     anonymous_id: typing.Optional[str]
 
     def __init__(self, *, anonymous_id: typing.Optional[str] = None):
@@ -951,7 +1030,7 @@ class ShoppingListSetCustomFieldAction(ShoppingListUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1008,6 +1087,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
+    #: The [Customer](ctp:api:type:Customer) the ShoppingList should be associated to. If empty, any existing value will be removed.
     customer: typing.Optional["CustomerResourceIdentifier"]
 
     def __init__(
@@ -1032,6 +1112,7 @@ class ShoppingListSetCustomerAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     delete_days_after_last_modification: typing.Optional[int]
 
     def __init__(
@@ -1060,6 +1141,7 @@ class ShoppingListSetDeleteDaysAfterLastModificationAction(ShoppingListUpdateAct
 
 
 class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(self, *, description: typing.Optional["LocalizedString"] = None):
@@ -1082,7 +1164,7 @@ class ShoppingListSetDescriptionAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetKeyAction(ShoppingListUpdateAction):
-    #: User-specific unique identifier for the shopping list.
+    #: Value to set. If empty, any existing value will be removed.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):
@@ -1105,11 +1187,12 @@ class ShoppingListSetKeyAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
+    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
     line_item_id: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1141,11 +1224,12 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
+    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
     line_item_id: str
-    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
+    #: Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingListLineItem.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -1180,6 +1264,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetSlugAction(ShoppingListUpdateAction):
+    #: Value to set. If empty, any existing value will be removed. Each slug is unique across a Project, but a ShoppingList can have the same slug for different languages. Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`
     slug: typing.Optional["LocalizedString"]
 
     def __init__(self, *, slug: typing.Optional["LocalizedString"] = None):
@@ -1202,6 +1287,7 @@ class ShoppingListSetSlugAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetStoreAction(ShoppingListUpdateAction):
+    #: The [Store](ctp:api:type:Store) the ShoppingList should be assigned to. If empty, any existing value will be removed.
     store: typing.Optional["StoreResourceIdentifier"]
 
     def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
@@ -1224,11 +1310,12 @@ class ShoppingListSetStoreAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -1264,6 +1351,7 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
     #: Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the TextLineItem.
@@ -1303,8 +1391,9 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
 
 
 class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
     text_line_item_id: str
-    #: JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+    #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(

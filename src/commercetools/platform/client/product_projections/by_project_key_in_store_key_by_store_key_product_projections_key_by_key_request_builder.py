@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -36,6 +35,7 @@ class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestBuilder:
     def get(
         self,
         *,
+        staged: bool = None,
         price_currency: str = None,
         price_country: str = None,
         price_customer_group: str = None,
@@ -45,11 +45,19 @@ class ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductProjection"]:
-        """Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key from the specified Store."""
+        """Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key from the specified [Store](ctp:api:type:Store).
+        If the Store has defined some languages, countries, distribution or supply Channels,
+        they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices)
+        and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
+
+        When used with an API Client that has the `view_published_products:{projectKey}` scope, this endpoint only returns published (current) Product Projections.
+
+        """
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/product-projections/key={self._key}",
             params={
+                "staged": staged,
                 "priceCurrency": price_currency,
                 "priceCountry": price_country,
                 "priceCustomerGroup": price_customer_group,

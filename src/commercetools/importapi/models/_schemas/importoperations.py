@@ -21,21 +21,21 @@ from ..importoperations import ImportOperationState
 
 # Marshmallow Schemas
 class ImportOperationSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     import_container_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="importContainerKey"
+        allow_none=True, load_default=None, data_key="importContainerKey"
     )
     resource_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="resourceKey"
+        allow_none=True, load_default=None, data_key="resourceKey"
     )
-    id = marshmallow.fields.String(allow_none=True, missing=None)
+    id = marshmallow.fields.String(allow_none=True, load_default=None)
     state = marshmallow_enum.EnumField(
-        ProcessingState, by_value=True, allow_none=True, missing=None
+        ProcessingState, by_value=True, allow_none=True, load_default=None
     )
     resource_version = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="resourceVersion",
     )
     errors = marshmallow.fields.List(
@@ -107,7 +107,7 @@ class ImportOperationSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     unresolved_references = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.UnresolvedReferencesSchema"),
@@ -115,17 +115,17 @@ class ImportOperationSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="unresolvedReferences",
     )
     created_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="createdAt"
+        allow_none=True, load_default=None, data_key="createdAt"
     )
     last_modified_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="lastModifiedAt"
+        allow_none=True, load_default=None, data_key="lastModifiedAt"
     )
     expires_at = marshmallow.fields.DateTime(
-        allow_none=True, missing=None, data_key="expiresAt"
+        allow_none=True, load_default=None, data_key="expiresAt"
     )
 
     class Meta:
@@ -133,21 +133,20 @@ class ImportOperationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportOperation(**data)
 
 
 class ImportOperationPagedResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
-    total = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    total = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ImportOperationSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -155,7 +154,6 @@ class ImportOperationPagedResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportOperationPagedResponse(**data)
 
 
@@ -163,11 +161,11 @@ class ImportOperationStatusSchema(helpers.BaseSchema):
     operation_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="operationId",
     )
     state = marshmallow_enum.EnumField(
-        ImportOperationState, by_value=True, allow_none=True, missing=None
+        ImportOperationState, by_value=True, allow_none=True, load_default=None
     )
     errors = marshmallow.fields.List(
         helpers.Discriminator(
@@ -238,7 +236,7 @@ class ImportOperationStatusSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -246,5 +244,4 @@ class ImportOperationStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ImportOperationStatus(**data)

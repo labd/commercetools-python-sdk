@@ -29,7 +29,7 @@ if typing.TYPE_CHECKING:
         TaxMode,
     )
     from .common import Address, CreatedBy, LastModifiedBy, ReferenceTypeId, TypedMoney
-    from .customer import CustomerReference
+    from .customer import CustomerReference, CustomerResourceIdentifier
     from .customer_group import CustomerGroupReference
     from .order import PaymentInfo
     from .state import StateReference, StateResourceIdentifier
@@ -43,6 +43,7 @@ if typing.TYPE_CHECKING:
 
 __all__ = [
     "QuoteRequest",
+    "QuoteRequestChangeCustomerAction",
     "QuoteRequestChangeQuoteRequestStateAction",
     "QuoteRequestDraft",
     "QuoteRequestPagedQueryResponse",
@@ -68,9 +69,10 @@ class QuoteRequest(BaseResource):
     quote_request_state: "QuoteRequestState"
     #: Message from the Buyer included in the Quote Request.
     comment: typing.Optional[str]
-    #: The [Buyer](/../api/quotes-overview#buyer) who raised the request.
+    #: The [Buyer](/../api/quotes-overview#buyer) who owns the request.
     customer: "CustomerReference"
     #: Set automatically when `customer` is set and the Customer is a member of a Customer Group.
+    #: Not updated if Customer is changed after Quote Request creation.
     #: Used for Product Variant price selection.
     customer_group: typing.Optional["CustomerGroupReference"]
     #: The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
@@ -119,6 +121,9 @@ class QuoteRequest(BaseResource):
     #: [State](ctp:api:type:State) of the Quote Request.
     #: This reference can point to a State in a custom workflow.
     state: typing.Optional["StateReference"]
+    #: Identifier for a purchase order, usually in a B2B context.
+    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
+    purchase_order_number: typing.Optional[str]
     #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
     business_unit: typing.Optional["BusinessUnitKeyReference"]
 
@@ -155,6 +160,7 @@ class QuoteRequest(BaseResource):
         direct_discounts: typing.Optional[typing.List["DirectDiscount"]] = None,
         custom: typing.Optional["CustomFields"] = None,
         state: typing.Optional["StateReference"] = None,
+        purchase_order_number: typing.Optional[str] = None,
         business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
@@ -183,6 +189,7 @@ class QuoteRequest(BaseResource):
         self.direct_discounts = direct_discounts
         self.custom = custom
         self.state = state
+        self.purchase_order_number = purchase_order_number
         self.business_unit = business_unit
 
         super().__init__(
@@ -216,9 +223,12 @@ class QuoteRequestDraft(_BaseType):
     comment: str
     #: Custom Fields to be added to the Quote Request.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: [State](ctp:api:type:State) of this Quote Request.
+    #: [State](ctp:api:type:State) of the Quote Request.
     #: This reference can point to a State in a custom workflow.
     state: typing.Optional["StateReference"]
+    #: Identifier for a purchase order, usually in a B2B context.
+    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
+    purchase_order_number: typing.Optional[str]
 
     def __init__(
         self,
@@ -228,7 +238,8 @@ class QuoteRequestDraft(_BaseType):
         key: typing.Optional[str] = None,
         comment: str,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        state: typing.Optional["StateReference"] = None
+        state: typing.Optional["StateReference"] = None,
+        purchase_order_number: typing.Optional[str] = None
     ):
         self.cart = cart
         self.cart_version = cart_version
@@ -236,6 +247,7 @@ class QuoteRequestDraft(_BaseType):
         self.comment = comment
         self.custom = custom
         self.state = state
+        self.purchase_order_number = purchase_order_number
 
         super().__init__()
 
@@ -330,7 +342,6 @@ class QuoteRequestResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.QUOTE_REQUEST)
 
     @classmethod
@@ -396,6 +407,10 @@ class QuoteRequestUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "QuoteRequestUpdateAction":
+        if data["action"] == "changeCustomer":
+            from ._schemas.quote_request import QuoteRequestChangeCustomerActionSchema
+
+            return QuoteRequestChangeCustomerActionSchema().load(data)
         if data["action"] == "changeQuoteRequestState":
             from ._schemas.quote_request import (
                 QuoteRequestChangeQuoteRequestStateActionSchema,
@@ -419,6 +434,35 @@ class QuoteRequestUpdateAction(_BaseType):
         from ._schemas.quote_request import QuoteRequestUpdateActionSchema
 
         return QuoteRequestUpdateActionSchema().dump(self)
+
+
+class QuoteRequestChangeCustomerAction(QuoteRequestUpdateAction):
+    """Changes the owner of a Quote Request to a different Customer.
+    Customer Group is not updated.
+    This update action produces the [Quote Request Customer Changed](ctp:api:type:QuoteRequestCustomerChangedMessage) Message.
+
+    """
+
+    #: New Customer to own the Quote Request.
+    customer: "CustomerResourceIdentifier"
+
+    def __init__(self, *, customer: "CustomerResourceIdentifier"):
+        self.customer = customer
+
+        super().__init__(action="changeCustomer")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "QuoteRequestChangeCustomerAction":
+        from ._schemas.quote_request import QuoteRequestChangeCustomerActionSchema
+
+        return QuoteRequestChangeCustomerActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.quote_request import QuoteRequestChangeCustomerActionSchema
+
+        return QuoteRequestChangeCustomerActionSchema().dump(self)
 
 
 class QuoteRequestChangeQuoteRequestStateAction(QuoteRequestUpdateAction):
@@ -457,7 +501,7 @@ class QuoteRequestSetCustomFieldAction(QuoteRequestUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 

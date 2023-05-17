@@ -192,7 +192,6 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
-
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.INVENTORY_ENTRY)
 
     @classmethod
@@ -210,7 +209,7 @@ class InventoryEntryResourceIdentifier(ResourceIdentifier):
 
 
 class InventoryEntryUpdate(_BaseType):
-    #: Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
     version: int
     #: Update actions to be performed on the InventoryEntry.
     actions: typing.List["InventoryEntryUpdateAction"]
@@ -420,7 +419,7 @@ class InventoryEntrySetCustomFieldAction(InventoryEntryUpdateAction):
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
-    #: Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+    #: Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
     #: If `value` is provided, it is set for the field defined by `name`.
     value: typing.Optional[typing.Any]
 
@@ -546,7 +545,7 @@ class InventoryEntrySetRestockableInDaysAction(InventoryEntryUpdateAction):
 
 
 class InventoryEntrySetSupplyChannelAction(InventoryEntryUpdateAction):
-    """If an entry with the same `sku` and `supplyChannel` already exists, this action will fail and a [400 Bad Request](/../api/errors#400-bad-request-1) `DuplicateField` error will be returned."""
+    """If an entry with the same `sku` and `supplyChannel` already exists, an [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned."""
 
     #: Value to set. If empty, any existing value will be removed.
     supply_channel: typing.Optional["ChannelResourceIdentifier"]

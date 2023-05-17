@@ -33,13 +33,14 @@ class StagedStandalonePriceSchema(helpers.BaseSchema):
                 __name__, ".common.HighPrecisionMoneySchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        metadata={"omit_empty": True},
+        load_default=None,
     )
 
     class Meta:
@@ -47,7 +48,6 @@ class StagedStandalonePriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StagedStandalonePrice(**data)
 
 
@@ -57,7 +57,7 @@ class StandalonePriceSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -65,13 +65,13 @@ class StandalonePriceSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     value = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -83,17 +83,17 @@ class StandalonePriceSchema(BaseResourceSchema):
                 __name__, ".common.HighPrecisionMoneySchema"
             ),
         },
-        missing=None,
+        load_default=None,
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -101,18 +101,18 @@ class StandalonePriceSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     tiers = helpers.LazyNestedField(
@@ -121,53 +121,52 @@ class StandalonePriceSchema(BaseResourceSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     staged = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StagedStandalonePriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
-    active = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    active = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StandalonePrice(**data)
 
 
 class StandalonePriceDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    sku = marshmallow.fields.String(allow_none=True, missing=None)
+    sku = marshmallow.fields.String(allow_none=True, load_default=None)
     value = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     customer_group = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -176,7 +175,7 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="customerGroup",
     )
     channel = helpers.LazyNestedField(
@@ -184,18 +183,18 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     valid_from = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validFrom",
     )
     valid_until = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="validUntil",
     )
     tiers = helpers.LazyNestedField(
@@ -204,24 +203,24 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
         many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     discounted = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.DiscountedPriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     active = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -229,23 +228,22 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StandalonePriceDraft(**data)
 
 
 class StandalonePricePagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StandalonePriceSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -253,7 +251,6 @@ class StandalonePricePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StandalonePricePagedQueryResponse(**data)
 
 
@@ -263,7 +260,7 @@ class StandalonePriceReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -286,12 +283,15 @@ class StandalonePriceResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class StandalonePriceUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
             discriminator_field=("action", "action"),
             discriminator_schemas={
+                "addPriceTier": helpers.absmod(
+                    __name__, ".StandalonePriceAddPriceTierActionSchema"
+                ),
                 "applyStagedChanges": helpers.absmod(
                     __name__, ".StandalonePriceApplyStagedChangesActionSchema"
                 ),
@@ -300,6 +300,9 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
                 ),
                 "changeValue": helpers.absmod(
                     __name__, ".StandalonePriceChangeValueActionSchema"
+                ),
+                "removePriceTier": helpers.absmod(
+                    __name__, ".StandalonePriceRemovePriceTierActionSchema"
                 ),
                 "setCustomField": helpers.absmod(
                     __name__, ".StandalonePriceSetCustomFieldActionSchema"
@@ -310,10 +313,25 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
                 "setDiscountedPrice": helpers.absmod(
                     __name__, ".StandalonePriceSetDiscountedPriceActionSchema"
                 ),
+                "setKey": helpers.absmod(
+                    __name__, ".StandalonePriceSetKeyActionSchema"
+                ),
+                "setPriceTier": helpers.absmod(
+                    __name__, ".StandalonePriceSetPriceTiersActionSchema"
+                ),
+                "setValidFrom": helpers.absmod(
+                    __name__, ".StandalonePriceSetValidFromActionSchema"
+                ),
+                "setValidFromAndUntil": helpers.absmod(
+                    __name__, ".StandalonePriceSetValidFromAndUntilActionSchema"
+                ),
+                "setValidUntil": helpers.absmod(
+                    __name__, ".StandalonePriceSetValidUntilActionSchema"
+                ),
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -321,12 +339,11 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StandalonePriceUpdate(**data)
 
 
 class StandalonePriceUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -335,6 +352,23 @@ class StandalonePriceUpdateActionSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StandalonePriceUpdateAction(**data)
+
+
+class StandalonePriceAddPriceTierActionSchema(StandalonePriceUpdateActionSchema):
+    tier = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceTierDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceAddPriceTierAction(**data)
 
 
 class StandalonePriceApplyStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
@@ -348,7 +382,7 @@ class StandalonePriceApplyStagedChangesActionSchema(StandalonePriceUpdateActionS
 
 
 class StandalonePriceChangeActiveActionSchema(StandalonePriceUpdateActionSchema):
-    active = marshmallow.fields.Boolean(allow_none=True, missing=None)
+    active = marshmallow.fields.Boolean(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -364,10 +398,10 @@ class StandalonePriceChangeValueActionSchema(StandalonePriceUpdateActionSchema):
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     staged = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -379,10 +413,24 @@ class StandalonePriceChangeValueActionSchema(StandalonePriceUpdateActionSchema):
         return models.StandalonePriceChangeValueAction(**data)
 
 
+class StandalonePriceRemovePriceTierActionSchema(StandalonePriceUpdateActionSchema):
+    tier_minimum_quantity = marshmallow.fields.Integer(
+        allow_none=True, load_default=None, data_key="tierMinimumQuantity"
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceRemovePriceTierAction(**data)
+
+
 class StandalonePriceSetCustomFieldActionSchema(StandalonePriceUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -400,13 +448,13 @@ class StandalonePriceSetCustomTypeActionSchema(StandalonePriceUpdateActionSchema
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -424,7 +472,7 @@ class StandalonePriceSetDiscountedPriceActionSchema(StandalonePriceUpdateActionS
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -434,3 +482,94 @@ class StandalonePriceSetDiscountedPriceActionSchema(StandalonePriceUpdateActionS
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StandalonePriceSetDiscountedPriceAction(**data)
+
+
+class StandalonePriceSetKeyActionSchema(StandalonePriceUpdateActionSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceSetKeyAction(**data)
+
+
+class StandalonePriceSetPriceTiersActionSchema(StandalonePriceUpdateActionSchema):
+    tiers = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.PriceTierDraftSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceSetPriceTiersAction(**data)
+
+
+class StandalonePriceSetValidFromActionSchema(StandalonePriceUpdateActionSchema):
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validFrom",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceSetValidFromAction(**data)
+
+
+class StandalonePriceSetValidFromAndUntilActionSchema(
+    StandalonePriceUpdateActionSchema
+):
+    valid_from = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validFrom",
+    )
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceSetValidFromAndUntilAction(**data)
+
+
+class StandalonePriceSetValidUntilActionSchema(StandalonePriceUpdateActionSchema):
+    valid_until = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validUntil",
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceSetValidUntilAction(**data)

@@ -24,14 +24,14 @@ from .type import FieldContainerField
 # Marshmallow Schemas
 class StagedQuoteSchema(BaseResourceSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -39,14 +39,14 @@ class StagedQuoteSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     staged_quote_state = marshmallow_enum.EnumField(
         StagedQuoteState,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="stagedQuoteState",
     )
     customer = helpers.LazyNestedField(
@@ -54,29 +54,32 @@ class StagedQuoteSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     quote_request = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".quote_request.QuoteRequestReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="quoteRequest",
     )
     quotation_cart = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.CartReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="quotationCart",
     )
     valid_to = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="validTo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validTo",
     )
     seller_comment = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="sellerComment",
     )
     custom = helpers.LazyNestedField(
@@ -84,14 +87,20 @@ class StagedQuoteSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
+    )
+    purchase_order_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="purchaseOrderNumber",
     )
     business_unit = helpers.LazyNestedField(
         nested=helpers.absmod(
@@ -100,7 +109,7 @@ class StagedQuoteSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="businessUnit",
     )
 
@@ -109,7 +118,6 @@ class StagedQuoteSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StagedQuote(**data)
 
 
@@ -120,34 +128,34 @@ class StagedQuoteDraftSchema(helpers.BaseSchema):
         ),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
         data_key="quoteRequest",
     )
     quote_request_version = marshmallow.fields.Integer(
-        allow_none=True, missing=None, data_key="quoteRequestVersion"
+        allow_none=True, load_default=None, data_key="quoteRequestVersion"
     )
     quote_request_state_to_accepted = marshmallow.fields.Boolean(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="quoteRequestStateToAccepted",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -155,23 +163,22 @@ class StagedQuoteDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StagedQuoteDraft(**data)
 
 
 class StagedQuotePagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".StagedQuoteSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -179,7 +186,6 @@ class StagedQuotePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StagedQuotePagedQueryResponse(**data)
 
 
@@ -189,7 +195,7 @@ class StagedQuoteReferenceSchema(ReferenceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -212,7 +218,7 @@ class StagedQuoteResourceIdentifierSchema(ResourceIdentifierSchema):
 
 
 class StagedQuoteUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -239,7 +245,7 @@ class StagedQuoteUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -247,12 +253,11 @@ class StagedQuoteUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.StagedQuoteUpdate(**data)
 
 
 class StagedQuoteUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -268,7 +273,7 @@ class StagedQuoteChangeStagedQuoteStateActionSchema(StagedQuoteUpdateActionSchem
         StagedQuoteState,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="stagedQuoteState",
     )
 
@@ -282,9 +287,9 @@ class StagedQuoteChangeStagedQuoteStateActionSchema(StagedQuoteUpdateActionSchem
 
 
 class StagedQuoteSetCustomFieldActionSchema(StagedQuoteUpdateActionSchema):
-    name = marshmallow.fields.String(allow_none=True, missing=None)
+    name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -302,13 +307,13 @@ class StagedQuoteSetCustomTypeActionSchema(StagedQuoteUpdateActionSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
     fields = FieldContainerField(
         allow_none=True,
         values=marshmallow.fields.Raw(allow_none=True),
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -324,7 +329,7 @@ class StagedQuoteSetSellerCommentActionSchema(StagedQuoteUpdateActionSchema):
     seller_comment = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="sellerComment",
     )
 
@@ -339,7 +344,10 @@ class StagedQuoteSetSellerCommentActionSchema(StagedQuoteUpdateActionSchema):
 
 class StagedQuoteSetValidToActionSchema(StagedQuoteUpdateActionSchema):
     valid_to = marshmallow.fields.DateTime(
-        allow_none=True, metadata={"omit_empty": True}, missing=None, data_key="validTo"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="validTo",
     )
 
     class Meta:
@@ -356,10 +364,10 @@ class StagedQuoteTransitionStateActionSchema(StagedQuoteUpdateActionSchema):
         nested=helpers.absmod(__name__, ".state.StateResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     force = marshmallow.fields.Boolean(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:

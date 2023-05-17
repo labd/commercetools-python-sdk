@@ -26,7 +26,7 @@ class ExtensionSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="lastModifiedBy",
     )
     created_by = helpers.LazyNestedField(
@@ -34,32 +34,35 @@ class ExtensionSchema(BaseResourceSchema):
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="createdBy",
     )
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     destination = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
             "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "GoogleCloudFunction": helpers.absmod(
+                __name__, ".GoogleCloudFunctionDestinationSchema"
+            ),
             "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     triggers = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExtensionTriggerSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     timeout_in_ms = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="timeoutInMs",
     )
 
@@ -68,12 +71,11 @@ class ExtensionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.Extension(**data)
 
 
 class ExtensionDestinationSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -85,12 +87,12 @@ class ExtensionDestinationSchema(helpers.BaseSchema):
 
 
 class AWSLambdaDestinationSchema(ExtensionDestinationSchema):
-    arn = marshmallow.fields.String(allow_none=True, missing=None)
+    arn = marshmallow.fields.String(allow_none=True, load_default=None)
     access_key = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessKey"
+        allow_none=True, load_default=None, data_key="accessKey"
     )
     access_secret = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="accessSecret"
+        allow_none=True, load_default=None, data_key="accessSecret"
     )
 
     class Meta:
@@ -104,28 +106,31 @@ class AWSLambdaDestinationSchema(ExtensionDestinationSchema):
 
 class ExtensionDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     destination = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
         discriminator_schemas={
             "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "GoogleCloudFunction": helpers.absmod(
+                __name__, ".GoogleCloudFunctionDestinationSchema"
+            ),
             "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
     triggers = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExtensionTriggerSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
     timeout_in_ms = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="timeoutInMs",
     )
 
@@ -134,18 +139,23 @@ class ExtensionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ExtensionDraft(**data)
 
 
 class ExtensionInputSchema(helpers.BaseSchema):
     action = marshmallow_enum.EnumField(
-        ExtensionAction, by_value=True, allow_none=True, missing=None
+        ExtensionAction, by_value=True, allow_none=True, load_default=None
     )
     resource = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("typeId", "type_id"),
         discriminator_schemas={
+            "associate-role": helpers.absmod(
+                __name__, ".associate_role.AssociateRoleReferenceSchema"
+            ),
+            "attribute-group": helpers.absmod(
+                __name__, ".attribute_group.AttributeGroupReferenceSchema"
+            ),
             "business-unit": helpers.absmod(
                 __name__, ".business_unit.BusinessUnitReferenceSchema"
             ),
@@ -153,6 +163,9 @@ class ExtensionInputSchema(helpers.BaseSchema):
                 __name__, ".cart_discount.CartDiscountReferenceSchema"
             ),
             "cart": helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+            "direct-discount": helpers.absmod(
+                __name__, ".cart.DirectDiscountReferenceSchema"
+            ),
             "category": helpers.absmod(__name__, ".category.CategoryReferenceSchema"),
             "channel": helpers.absmod(__name__, ".channel.ChannelReferenceSchema"),
             "key-value-document": helpers.absmod(
@@ -208,7 +221,7 @@ class ExtensionInputSchema(helpers.BaseSchema):
             "type": helpers.absmod(__name__, ".type.TypeReferenceSchema"),
             "zone": helpers.absmod(__name__, ".zone.ZoneReferenceSchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -216,23 +229,22 @@ class ExtensionInputSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ExtensionInput(**data)
 
 
 class ExtensionPagedQueryResponseSchema(helpers.BaseSchema):
-    limit = marshmallow.fields.Integer(allow_none=True, missing=None)
-    offset = marshmallow.fields.Integer(allow_none=True, missing=None)
-    count = marshmallow.fields.Integer(allow_none=True, missing=None)
+    limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ExtensionSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -240,7 +252,6 @@ class ExtensionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ExtensionPagedQueryResponse(**data)
 
 
@@ -249,16 +260,16 @@ class ExtensionTriggerSchema(helpers.BaseSchema):
         ExtensionResourceTypeId,
         by_value=True,
         allow_none=True,
-        missing=None,
+        load_default=None,
         data_key="resourceTypeId",
     )
     actions = marshmallow.fields.List(
         marshmallow_enum.EnumField(ExtensionAction, by_value=True, allow_none=True),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
     condition = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -266,12 +277,11 @@ class ExtensionTriggerSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ExtensionTrigger(**data)
 
 
 class ExtensionUpdateSchema(helpers.BaseSchema):
-    version = marshmallow.fields.Integer(allow_none=True, missing=None)
+    version = marshmallow.fields.Integer(allow_none=True, load_default=None)
     actions = marshmallow.fields.List(
         helpers.Discriminator(
             allow_none=True,
@@ -290,7 +300,7 @@ class ExtensionUpdateSchema(helpers.BaseSchema):
             },
         ),
         allow_none=True,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -298,12 +308,11 @@ class ExtensionUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
-
         return models.ExtensionUpdate(**data)
 
 
 class ExtensionUpdateActionSchema(helpers.BaseSchema):
-    action = marshmallow.fields.String(allow_none=True, missing=None)
+    action = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -314,8 +323,20 @@ class ExtensionUpdateActionSchema(helpers.BaseSchema):
         return models.ExtensionUpdateAction(**data)
 
 
+class GoogleCloudFunctionDestinationSchema(ExtensionDestinationSchema):
+    url = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.GoogleCloudFunctionDestination(**data)
+
+
 class HttpDestinationSchema(ExtensionDestinationSchema):
-    url = marshmallow.fields.String(allow_none=True, missing=None)
+    url = marshmallow.fields.String(allow_none=True, load_default=None)
     authentication = helpers.Discriminator(
         allow_none=True,
         discriminator_field=("type", "type"),
@@ -328,7 +349,7 @@ class HttpDestinationSchema(ExtensionDestinationSchema):
             ),
         },
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -341,7 +362,7 @@ class HttpDestinationSchema(ExtensionDestinationSchema):
 
 
 class HttpDestinationAuthenticationSchema(helpers.BaseSchema):
-    type = marshmallow.fields.String(allow_none=True, missing=None)
+    type = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -354,7 +375,7 @@ class HttpDestinationAuthenticationSchema(helpers.BaseSchema):
 
 class AuthorizationHeaderAuthenticationSchema(HttpDestinationAuthenticationSchema):
     header_value = marshmallow.fields.String(
-        allow_none=True, missing=None, data_key="headerValue"
+        allow_none=True, load_default=None, data_key="headerValue"
     )
 
     class Meta:
@@ -367,7 +388,7 @@ class AuthorizationHeaderAuthenticationSchema(HttpDestinationAuthenticationSchem
 
 
 class AzureFunctionsAuthenticationSchema(HttpDestinationAuthenticationSchema):
-    key = marshmallow.fields.String(allow_none=True, missing=None)
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -384,9 +405,12 @@ class ExtensionChangeDestinationActionSchema(ExtensionUpdateActionSchema):
         discriminator_field=("type", "type"),
         discriminator_schemas={
             "AWSLambda": helpers.absmod(__name__, ".AWSLambdaDestinationSchema"),
+            "GoogleCloudFunction": helpers.absmod(
+                __name__, ".GoogleCloudFunctionDestinationSchema"
+            ),
             "HTTP": helpers.absmod(__name__, ".HttpDestinationSchema"),
         },
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -404,7 +428,7 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        missing=None,
+        load_default=None,
     )
 
     class Meta:
@@ -418,7 +442,7 @@ class ExtensionChangeTriggersActionSchema(ExtensionUpdateActionSchema):
 
 class ExtensionSetKeyActionSchema(ExtensionUpdateActionSchema):
     key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, missing=None
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
 
     class Meta:
@@ -434,7 +458,7 @@ class ExtensionSetTimeoutInMsActionSchema(ExtensionUpdateActionSchema):
     timeout_in_ms = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
-        missing=None,
+        load_default=None,
         data_key="timeoutInMs",
     )
 

@@ -24,8 +24,7 @@ def test_store_flow(ct_platform_client: PlatformClient, store_draft):
 @pytest.fixture
 def store_draft():
     return models.StoreDraft(
-        key="test store",
-        name=models.LocalizedString({"en": "test store"})
+        key="test store", name=models.LocalizedString({"en": "test store"})
     )
 
 

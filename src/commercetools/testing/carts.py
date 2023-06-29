@@ -152,7 +152,8 @@ class CartsModel(BaseModel):
             direct_discounts=[],
             tax_mode=draft.tax_mode or models.TaxMode.PLATFORM,
             tax_rounding_mode=draft.tax_rounding_mode or models.RoundingMode.HALF_EVEN,
-            tax_calculation_mode=draft.tax_calculation_mode or models.TaxCalculationMode.LINE_ITEM_LEVEL,
+            tax_calculation_mode=draft.tax_calculation_mode
+            or models.TaxCalculationMode.LINE_ITEM_LEVEL,
             item_shipping_addresses=[],
             line_items=line_items,
             custom_line_items=[],

@@ -345,7 +345,6 @@ def test_product_update_add_price_current(old_client):
 
 def test_predicate_var(old_client):
     with requests_mock.Mocker(real_http=True, case_sensitive=True) as m:
-
         result = old_client.products.query(
             where="masterData(staged(masterVariant(prices(country='NL'))))",
             predicate_var={"foo": "bar"},

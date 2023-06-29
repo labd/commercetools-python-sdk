@@ -32,8 +32,8 @@ def test_update_actions(
     commercetools_api, ct_platform_client: PlatformClient, store_draft
 ):
     store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
-
-    assert store.languages is None
+    assert store is not None
+    assert store.languages == []
 
     store = (
         ct_platform_client.with_project_key("foo")
@@ -49,6 +49,7 @@ def test_update_actions(
         )
     )
 
+    assert store is not None
     assert store.languages == ["en-US"]
 
 

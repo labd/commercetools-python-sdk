@@ -1,4 +1,4 @@
-23.06.29
+23.6.29
 --------
 - Regenerate code with latest RAML specifications, bringing the SDK up to date
   again with new features released by commercetools.

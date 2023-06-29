@@ -7,6 +7,7 @@ from commercetools.platform.client import Client as PlatformClient
 
 def test_store_flow(ct_platform_client: PlatformClient, store_draft):
     store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
+    assert store is not None
 
     assert store.id
 
@@ -16,14 +17,15 @@ def test_store_flow(ct_platform_client: PlatformClient, store_draft):
         .with_id(store.id)
         .delete(version=store.version)
     )
-
+    assert deleted_store is not None
     assert store.id == deleted_store.id
 
 
 @pytest.fixture
 def store_draft():
     return models.StoreDraft(
-        key="test store", name=models.LocalizedString({"en": "test store"})
+        key="test store",
+        name=models.LocalizedString({"en": "test store"})
     )
 
 
@@ -135,5 +137,6 @@ def test_store_channel_create(
     store_draft.distribution_channels = [models.ChannelResourceIdentifier(key="FOO")]
 
     store = ct_platform_client.with_project_key("foo").stores().post(store_draft)
-
+    assert store is not None
+    assert channel is not None
     assert store.distribution_channels[0].id == channel.id

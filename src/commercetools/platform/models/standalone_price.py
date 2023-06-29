@@ -59,7 +59,7 @@ __all__ = [
 
 
 class StagedStandalonePrice(_BaseType):
-    """Staged changes on a Standalone Price. To update the `value` property of a Staged Standalone Price, use the corresponding [update action](ctp:api:type:StandalonePriceChangeValueAction). To apply all staged changes to the Standalone Price, use the `applyStagedChanges` update action."""
+    """Staged changes on a Standalone Price. To update the `value` property of a Staged Standalone Price, use the corresponding [update action](ctp:api:type:StandalonePriceChangeValueAction). To apply all staged changes to the Standalone Price, use the [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action."""
 
     #: Money value of the StagedStandalonePrice.
     value: "TypedMoney"
@@ -117,7 +117,7 @@ class StandalonePrice(BaseResource):
     discounted: typing.Optional["DiscountedPrice"]
     #: Custom Fields for the StandalonePrice.
     custom: typing.Optional["CustomFields"]
-    #: Staged changes of the StandalonePrice. Only present if the StandalonePrice has staged changes.
+    #: Staged changes of the StandalonePrice. Only present if the StandalonePrice has some changes staged.
     staged: typing.Optional["StagedStandalonePrice"]
     #: If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
     #: If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
@@ -210,8 +210,7 @@ class StandalonePriceDraft(_BaseType):
     discounted: typing.Optional["DiscountedPriceDraft"]
     #: Custom Fields for the StandalonePrice.
     custom: typing.Optional["CustomFieldsDraft"]
-    #: If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
-    #: If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+    #: Set to `false`, if the StandalonePrice should not be considered during [price selection](ctp:api:type:ProductPriceSelection).
     active: typing.Optional[bool]
 
     def __init__(

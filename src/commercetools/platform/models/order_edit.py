@@ -1329,7 +1329,10 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
 
 
 class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     quantity: int
     #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
@@ -1338,12 +1341,14 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
@@ -1654,7 +1659,10 @@ class StagedOrderRemoveItemShippingAddressAction(StagedOrderUpdateAction):
 
 
 class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     quantity: typing.Optional[int]
     #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
@@ -1665,13 +1673,15 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
@@ -2529,7 +2539,10 @@ class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction)
 
 
 class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -2538,9 +2551,15 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.name = name
         self.value = value
 
@@ -2561,7 +2580,10 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2571,11 +2593,13 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.type = type
         self.fields = fields
 
@@ -2596,17 +2620,22 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
     distribution_channel: typing.Optional["ChannelResourceIdentifier"]
 
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.distribution_channel = distribution_channel
 
         super().__init__(action="setLineItemDistributionChannel")
@@ -2630,14 +2659,22 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Draft type that stores amounts only in cent precision for the specified currency.
     external_price: typing.Optional["Money"]
 
     def __init__(
-        self, *, line_item_id: str, external_price: typing.Optional["Money"] = None
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        external_price: typing.Optional["Money"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.external_price = external_price
 
         super().__init__(action="setLineItemPrice")
@@ -2657,17 +2694,22 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.shipping_details = shipping_details
 
         super().__init__(action="setLineItemShippingDetails")
@@ -2691,7 +2733,10 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Cannot be used in [LineItemDraft](ctp:api:type:LineItemDraft) or [CustomLineItemDraft](ctp:api:type:CustomLineItemDraft).
     #:
     #: Can only be set by these update actions:
@@ -2706,11 +2751,13 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
         shipping_key: typing.Optional[str] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.external_tax_amount = external_tax_amount
         self.shipping_key = shipping_key
 
@@ -2731,7 +2778,10 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Controls calculation of taxed prices for Line Items, Custom Line Items, and Shipping Methods as explained in [Cart tax calculation](ctp:api:type:CartTaxCalculation).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Line Item.
@@ -2741,11 +2791,13 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         shipping_key: typing.Optional[str] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.external_tax_rate = external_tax_rate
         self.shipping_key = shipping_key
 
@@ -2766,16 +2818,21 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
 
 
 class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
 
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.external_total_price = external_total_price
 
         super().__init__(action="setLineItemTotalPrice")

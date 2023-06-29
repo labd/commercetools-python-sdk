@@ -24,7 +24,6 @@ if typing.TYPE_CHECKING:
     )
     from .cart import (
         CartReference,
-        DirectDiscountDraft,
         ExternalLineItemTotalPrice,
         ExternalTaxRateDraft,
         InventoryMode,
@@ -97,7 +96,6 @@ __all__ = [
     "MyCartSetCustomTypeAction",
     "MyCartSetCustomerEmailAction",
     "MyCartSetDeleteDaysAfterLastModificationAction",
-    "MyCartSetDirectDiscountsAction",
     "MyCartSetLineItemCustomFieldAction",
     "MyCartSetLineItemCustomTypeAction",
     "MyCartSetLineItemDistributionChannelAction",
@@ -623,10 +621,6 @@ class MyCartUpdateAction(_BaseType):
             )
 
             return MyCartSetDeleteDaysAfterLastModificationActionSchema().load(data)
-        if data["action"] == "setDirectDiscounts":
-            from ._schemas.me import MyCartSetDirectDiscountsActionSchema
-
-            return MyCartSetDirectDiscountsActionSchema().load(data)
         if data["action"] == "setLineItemCustomField":
             from ._schemas.me import MyCartSetLineItemCustomFieldActionSchema
 
@@ -1881,7 +1875,7 @@ class MyBusinessUnitChangeNameAction(MyBusinessUnitUpdateAction):
 class MyBusinessUnitChangeParentUnitAction(MyBusinessUnitUpdateAction):
     """Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message."""
 
-    #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+    #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
     parent_unit: "BusinessUnitResourceIdentifier"
 
     def __init__(self, *, parent_unit: "BusinessUnitResourceIdentifier"):
@@ -2423,15 +2417,22 @@ class MyCartAddPaymentAction(MyCartUpdateAction):
 class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction):
     """To override the shipping details, see [Set LineItemShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction)."""
 
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Using positive or negative quantities increases or decreases the number of items shipped to an address.
     targets_delta: typing.List["ItemShippingTarget"]
 
     def __init__(
-        self, *, line_item_id: str, targets_delta: typing.List["ItemShippingTarget"]
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        targets_delta: typing.List["ItemShippingTarget"]
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.targets_delta = targets_delta
 
         super().__init__(action="applyDeltaToLineItemShippingDetailsTargets")
@@ -2471,8 +2472,10 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
 
     """
 
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: New value to set.
     #:
     #: If `0`, the Line Item is removed from the Cart.
@@ -2485,12 +2488,14 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         quantity: int,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
@@ -2623,8 +2628,10 @@ class MyCartRemoveItemShippingAddressAction(MyCartUpdateAction):
 class MyCartRemoveLineItemAction(MyCartUpdateAction):
     """The [LineItem](ctp:api:type:LineItem) price is updated as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection)."""
 
-    #: `id` of the Line Item to remove.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: New value to set.
     #:
     #: If `0`, the Line Item is removed from the Cart.
@@ -2639,13 +2646,15 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
         shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
         self.external_price = external_price
         self.external_total_price = external_total_price
@@ -2885,39 +2894,11 @@ class MyCartSetDeleteDaysAfterLastModificationAction(MyCartUpdateAction):
         return MyCartSetDeleteDaysAfterLastModificationActionSchema().dump(self)
 
 
-class MyCartSetDirectDiscountsAction(MyCartUpdateAction):
-    """Adds a [DirectDiscount](ctp:api:type:DirectDiscount), but only if no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Cart.
-    Either a Discount Code or a Direct Discount can exist on a Cart at the same time.
-
-    """
-
-    #: - If set, all existing Direct Discounts are replaced.
-    #:   The discounts apply in the order they are added to the list.
-    #: - If empty, all existing Direct Discounts are removed and all affected prices on the Cart or Order are recalculated.
-    discounts: typing.List["DirectDiscountDraft"]
-
-    def __init__(self, *, discounts: typing.List["DirectDiscountDraft"]):
-        self.discounts = discounts
-
-        super().__init__(action="setDirectDiscounts")
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "MyCartSetDirectDiscountsAction":
-        from ._schemas.me import MyCartSetDirectDiscountsActionSchema
-
-        return MyCartSetDirectDiscountsActionSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.me import MyCartSetDirectDiscountsActionSchema
-
-        return MyCartSetDirectDiscountsActionSchema().dump(self)
-
-
 class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -2926,9 +2907,15 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.name = name
         self.value = value
 
@@ -2949,8 +2936,10 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
 
 
 class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Line Item.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2960,11 +2949,13 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.type = type
         self.fields = fields
 
@@ -2987,8 +2978,10 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
 class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
     """Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection)."""
 
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
     #: - If not present, the current [Reference](ctp:api:type:Reference) to a distribution channel is removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
     #:   The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -2997,10 +2990,12 @@ class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.distribution_channel = distribution_channel
 
         super().__init__(action="setLineItemDistributionChannel")
@@ -3020,8 +3015,10 @@ class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
 
 
 class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Value to set.
     #: If empty, the existing value is removed.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
@@ -3029,10 +3026,12 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.shipping_details = shipping_details
 
         super().__init__(action="setLineItemShippingDetails")
@@ -3054,8 +3053,10 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
 class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
     """Performing this action has no impact on inventory that should be reserved."""
 
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
     #: - If not present, the current [Reference](ctp:api:type:Reference) to a supply channel will be removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
     #:   The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -3064,10 +3065,12 @@ class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.supply_channel = supply_channel
 
         super().__init__(action="setLineItemSupplyChannel")
@@ -4146,13 +4149,22 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
-    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
     quantity: int
 
-    def __init__(self, *, line_item_id: str, quantity: int):
+    def __init__(
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        quantity: int
+    ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
 
         super().__init__(action="changeLineItemQuantity")

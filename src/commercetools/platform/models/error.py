@@ -1161,7 +1161,7 @@ class DuplicateVariantValuesError(ErrorObject):
 class EditPreviewFailedError(ErrorObject):
     """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 
-    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
 
     """
 
@@ -3822,7 +3822,7 @@ class GraphQLDuplicateVariantValuesError(GraphQLErrorObject):
 class GraphQLEditPreviewFailedError(GraphQLErrorObject):
     """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 
-    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
 
     """
 

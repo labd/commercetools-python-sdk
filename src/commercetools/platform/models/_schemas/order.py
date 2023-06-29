@@ -2966,7 +2966,16 @@ class OrderSetItemShippingAddressCustomTypeActionSchema(OrderUpdateActionSchema)
 
 class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -2984,7 +2993,16 @@ class OrderSetLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -3011,7 +3029,16 @@ class OrderSetLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 class OrderSetLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),

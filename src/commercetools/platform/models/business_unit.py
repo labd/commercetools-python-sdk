@@ -1338,7 +1338,7 @@ class BusinessUnitChangeNameAction(BusinessUnitUpdateAction):
 class BusinessUnitChangeParentUnitAction(BusinessUnitUpdateAction):
     """Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message."""
 
-    #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+    #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
     parent_unit: "BusinessUnitResourceIdentifier"
 
     def __init__(self, *, parent_unit: "BusinessUnitResourceIdentifier"):

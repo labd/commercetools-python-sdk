@@ -416,7 +416,7 @@ class ConfluentCloudDestination(Destination):
     api_key: str
     #: Partially hidden on retrieval for security reasons.
     api_secret: str
-    #: The Kafka `acks` value. Can be `"0"`, `"1"`, or `"all"`.
+    #: The Kafka `acks` value.
     acks: str
     #: The name of the topic.
     topic: str

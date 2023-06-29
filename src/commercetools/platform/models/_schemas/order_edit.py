@@ -2592,7 +2592,16 @@ class StagedOrderChangeCustomLineItemQuantityActionSchema(
 
 class StagedOrderChangeLineItemQuantityActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     external_price = helpers.LazyNestedField(
@@ -2840,7 +2849,16 @@ class StagedOrderRemoveItemShippingAddressActionSchema(StagedOrderUpdateActionSc
 
 class StagedOrderRemoveLineItemActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
@@ -3478,7 +3496,16 @@ class StagedOrderSetItemShippingAddressCustomTypeActionSchema(
 
 class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -3496,7 +3523,16 @@ class StagedOrderSetLineItemCustomFieldActionSchema(StagedOrderUpdateActionSchem
 
 class StagedOrderSetLineItemCustomTypeActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -3525,7 +3561,16 @@ class StagedOrderSetLineItemDistributionChannelActionSchema(
     StagedOrderUpdateActionSchema
 ):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     distribution_channel = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
@@ -3547,7 +3592,16 @@ class StagedOrderSetLineItemDistributionChannelActionSchema(
 
 class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     external_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.MoneySchema"),
@@ -3569,7 +3623,16 @@ class StagedOrderSetLineItemPriceActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetLineItemShippingDetailsActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
@@ -3591,7 +3654,16 @@ class StagedOrderSetLineItemShippingDetailsActionSchema(StagedOrderUpdateActionS
 
 class StagedOrderSetLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     external_tax_amount = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ExternalTaxAmountDraftSchema"),
@@ -3619,7 +3691,16 @@ class StagedOrderSetLineItemTaxAmountActionSchema(StagedOrderUpdateActionSchema)
 
 class StagedOrderSetLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     external_tax_rate = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ExternalTaxRateDraftSchema"),
@@ -3647,7 +3728,16 @@ class StagedOrderSetLineItemTaxRateActionSchema(StagedOrderUpdateActionSchema):
 
 class StagedOrderSetLineItemTotalPriceActionSchema(StagedOrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     external_total_price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ExternalLineItemTotalPriceSchema"),

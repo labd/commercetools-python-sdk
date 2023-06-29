@@ -9589,11 +9589,11 @@ class StagedQuoteValidToSetMessage(Message):
 
 
 class StandalonePriceActiveChangedMessage(Message):
-    """Generated after a successful [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action."""
+    """Generated after a successful [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action."""
 
-    #: Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+    #: Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action.
     active: bool
-    #: Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+    #: Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action.
     old_active: bool
 
     def __init__(
@@ -9915,9 +9915,9 @@ class StandalonePriceKeySetMessage(Message):
 
 
 class StandalonePriceStagedChangesAppliedMessage(Message):
-    """Generated after a successful [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action."""
+    """Generated after a successful [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action."""
 
-    #: Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+    #: Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action.
     staged_changes: "StagedStandalonePrice"
 
     def __init__(
@@ -16102,11 +16102,11 @@ class StagedQuoteValidToSetMessagePayload(MessagePayload):
 
 
 class StandalonePriceActiveChangedMessagePayload(MessagePayload):
-    """Generated after a successful [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action."""
+    """Generated after a successful [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action."""
 
-    #: Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+    #: Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action.
     active: bool
-    #: Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+    #: Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:type:StandalonePriceChangeActiveAction) update action.
     old_active: bool
 
     def __init__(self, *, active: bool, old_active: bool):
@@ -16264,9 +16264,9 @@ class StandalonePriceKeySetMessagePayload(MessagePayload):
 
 
 class StandalonePriceStagedChangesAppliedMessagePayload(MessagePayload):
-    """Generated after a successful [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action."""
+    """Generated after a successful [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action."""
 
-    #: Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+    #: Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action.
     staged_changes: "StagedStandalonePrice"
 
     def __init__(self, *, staged_changes: "StagedStandalonePrice"):

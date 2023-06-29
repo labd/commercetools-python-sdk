@@ -237,7 +237,7 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributePlainEnumValue(_BaseType):
-    """A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:types:DuplicateEnumValuesError) error is returned."""
+    """A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned."""
 
     #: Key of the value used as a programmatic identifier, for example in facets & filters.
     key: str

@@ -3964,7 +3964,10 @@ class OrderSetItemShippingAddressCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -3973,9 +3976,15 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.name = name
         self.value = value
 
@@ -3996,7 +4005,10 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the LineItem.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -4006,11 +4018,13 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.type = type
         self.fields = fields
 
@@ -4031,17 +4045,22 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
-    line_item_id: str
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.shipping_details = shipping_details
 
         super().__init__(action="setLineItemShippingDetails")

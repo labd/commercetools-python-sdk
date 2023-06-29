@@ -1,3 +1,10 @@
+23.06.29
+--------
+- Regenerate code with latest RAML specifications, bringing the SDK up to date
+  again with new features released by commercetools.
+- Add new SDK for the new frontend and checkout api
+- Fix marshmallow deprecation warnings
+
 22.10.25
 --------
 - Regenerate code with latest RAML specifications, bringing the SDK up to date

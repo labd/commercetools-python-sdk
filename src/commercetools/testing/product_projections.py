@@ -6,7 +6,10 @@ from commercetools.platform.models._schemas.product import (
     ProductProjectionSchema,
     ProductSchema,
 )
-from commercetools.services.product_projections import _ProductProjectionQuerySchema
+from commercetools.services.product_projections import (
+    _ProductProjectionQuerySchema,
+    _ProductProjectionSearchSchema,
+)
 from commercetools.testing import utils
 from commercetools.testing.abstract import ServiceBackend
 from commercetools.testing.utils import create_commercetools_response
@@ -54,7 +57,7 @@ class ProductProjectionsBackend(ServiceBackend):
         return create_commercetools_response(request, text=content)
 
     def search(self, request):
-        params = utils.parse_request_params(_ProductProjectionQuerySchema, request)
+        params = utils.parse_request_params(_ProductProjectionSearchSchema, request)
 
         limit = params.get("limit")
 

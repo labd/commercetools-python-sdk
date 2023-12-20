@@ -19,6 +19,7 @@ class ProductProjectionsBackend(ServiceBackend):
     def urls(self):
         return [
             ("^$", "GET", self.query),
+            ("^search", "GET", self.search),
             ("^search", "POST", self.search),
             ("^key=(?P<key>[^/]+)$", "GET", self.get_by_key),
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),

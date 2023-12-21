@@ -4,7 +4,7 @@ requires = ["setuptools>=40.6.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.coverage.paths]
-source = ["src", ".tox/*/site-packages"]
+source = ["src", ".tox/**/site-packages"]
 
 [tool.isort]
 line_length = 88

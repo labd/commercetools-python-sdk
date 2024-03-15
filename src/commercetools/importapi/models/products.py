@@ -112,7 +112,9 @@ class CustomTokenizer(SuggestTokenizer):
 
 
 class WhitespaceTokenizer(SuggestTokenizer):
+
     def __init__(self):
+
         super().__init__(type="whitespace")
 
     @classmethod

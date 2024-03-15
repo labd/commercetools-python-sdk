@@ -90,6 +90,12 @@ class ReviewSchema(BaseResourceSchema):
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -107,6 +113,9 @@ class ReviewSchema(BaseResourceSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -173,6 +182,7 @@ class ReviewSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Review(**data)
 
 
@@ -239,7 +249,6 @@ class ReviewDraftSchema(helpers.BaseSchema):
             "order-edit": helpers.absmod(
                 __name__, ".order_edit.OrderEditResourceIdentifierSchema"
             ),
-            "order": helpers.absmod(__name__, ".order.OrderResourceIdentifierSchema"),
             "payment": helpers.absmod(
                 __name__, ".payment.PaymentResourceIdentifierSchema"
             ),
@@ -248,6 +257,9 @@ class ReviewDraftSchema(helpers.BaseSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringResourceIdentifierSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeResourceIdentifierSchema"
@@ -313,6 +325,7 @@ class ReviewDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReviewDraft(**data)
 
 
@@ -336,6 +349,7 @@ class ReviewPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReviewPagedQueryResponse(**data)
 
 
@@ -359,6 +373,7 @@ class ReviewRatingStatisticsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReviewRatingStatistics(**data)
 
 
@@ -381,6 +396,7 @@ class ReviewReferenceSchema(ReferenceSchema):
 
 
 class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -429,6 +445,7 @@ class ReviewUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReviewUpdate(**data)
 
 
@@ -599,7 +616,6 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
             "order-edit": helpers.absmod(
                 __name__, ".order_edit.OrderEditResourceIdentifierSchema"
             ),
-            "order": helpers.absmod(__name__, ".order.OrderResourceIdentifierSchema"),
             "payment": helpers.absmod(
                 __name__, ".payment.PaymentResourceIdentifierSchema"
             ),
@@ -608,6 +624,9 @@ class ReviewSetTargetActionSchema(ReviewUpdateActionSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionResourceIdentifierSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringResourceIdentifierSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeResourceIdentifierSchema"

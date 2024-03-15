@@ -6,15 +6,22 @@
 # https://github.com/labd/rmf-codegen
 from commercetools.client import BaseClient
 
+from .api.api_request_builder import ApiRequestBuilder
 from .frontastic.frontastic_request_builder import FrontasticRequestBuilder
 
 
 class Client(BaseClient):
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("url", "https://{project}-{customer}.frontastic.io")
         super().__init__(self, **kwargs)
 
     def frontastic(self) -> FrontasticRequestBuilder:
         return FrontasticRequestBuilder(
+            client=self,
+        )
+
+    def api(self) -> ApiRequestBuilder:
+        return ApiRequestBuilder(
             client=self,
         )

@@ -25,6 +25,7 @@ if typing.TYPE_CHECKING:
     from .product import Attribute, ProductReference
     from .product_selection import ProductVariantSelection
     from .standalone_price import StandalonePriceReference
+    from .store import StoreKeyReference
 
 __all__ = [
     "AnonymousIdAlreadyInUseError",
@@ -35,6 +36,7 @@ __all__ = [
     "AuthErrorResponse",
     "BadGatewayError",
     "ConcurrentModificationError",
+    "ContentTooLargeError",
     "CountryNotConfiguredInStoreError",
     "DiscountCodeNonApplicableError",
     "DuplicateAttributeValueError",
@@ -69,6 +71,7 @@ __all__ = [
     "GraphQLAttributeNameDoesNotExistError",
     "GraphQLBadGatewayError",
     "GraphQLConcurrentModificationError",
+    "GraphQLContentTooLargeError",
     "GraphQLCountryNotConfiguredInStoreError",
     "GraphQLDiscountCodeNonApplicableError",
     "GraphQLDuplicateAttributeValueError",
@@ -106,12 +109,13 @@ __all__ = [
     "GraphQLInvalidTokenError",
     "GraphQLLanguageUsedInStoresError",
     "GraphQLMatchingPriceNotFoundError",
+    "GraphQLMaxCartDiscountsReachedError",
     "GraphQLMaxResourceLimitExceededError",
+    "GraphQLMaxStoreReferencesReachedError",
     "GraphQLMissingRoleOnChannelError",
     "GraphQLMissingTaxRateForCountryError",
     "GraphQLMoneyOverflowError",
     "GraphQLNoMatchingProductDiscountFoundError",
-    "GraphQLNotEnabledError",
     "GraphQLObjectNotFoundError",
     "GraphQLOutOfStockError",
     "GraphQLOverCapacityError",
@@ -134,6 +138,7 @@ __all__ = [
     "GraphQLSearchIndexingInProgressError",
     "GraphQLSemanticErrorError",
     "GraphQLShippingMethodDoesNotMatchCartError",
+    "GraphQLStoreCartDiscountsLimitReachedError",
     "GraphQLSyntaxErrorError",
     "InsufficientScopeError",
     "InternalConstraintViolatedError",
@@ -148,12 +153,13 @@ __all__ = [
     "InvalidTokenError",
     "LanguageUsedInStoresError",
     "MatchingPriceNotFoundError",
+    "MaxCartDiscountsReachedError",
     "MaxResourceLimitExceededError",
+    "MaxStoreReferencesReachedError",
     "MissingRoleOnChannelError",
     "MissingTaxRateForCountryError",
     "MoneyOverflowError",
     "NoMatchingProductDiscountFoundError",
-    "NotEnabledError",
     "ObjectNotFoundError",
     "OutOfStockError",
     "OverCapacityError",
@@ -176,6 +182,7 @@ __all__ = [
     "SearchIndexingInProgressError",
     "SemanticErrorError",
     "ShippingMethodDoesNotMatchCartError",
+    "StoreCartDiscountsLimitReachedError",
     "SyntaxErrorError",
     "VariantValues",
 ]
@@ -250,6 +257,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import ConcurrentModificationErrorSchema
 
             return ConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "ContentTooLarge":
+            from ._schemas.error import ContentTooLargeErrorSchema
+
+            return ContentTooLargeErrorSchema().load(data)
         if data["code"] == "CountryNotConfiguredInStore":
             from ._schemas.error import CountryNotConfiguredInStoreErrorSchema
 
@@ -394,10 +405,18 @@ class ErrorObject(_BaseType):
             from ._schemas.error import MatchingPriceNotFoundErrorSchema
 
             return MatchingPriceNotFoundErrorSchema().load(data)
+        if data["code"] == "MaxCartDiscountsReached":
+            from ._schemas.error import MaxCartDiscountsReachedErrorSchema
+
+            return MaxCartDiscountsReachedErrorSchema().load(data)
         if data["code"] == "MaxResourceLimitExceeded":
             from ._schemas.error import MaxResourceLimitExceededErrorSchema
 
             return MaxResourceLimitExceededErrorSchema().load(data)
+        if data["code"] == "MaxStoreReferencesReached":
+            from ._schemas.error import MaxStoreReferencesReachedErrorSchema
+
+            return MaxStoreReferencesReachedErrorSchema().load(data)
         if data["code"] == "MissingRoleOnChannel":
             from ._schemas.error import MissingRoleOnChannelErrorSchema
 
@@ -414,10 +433,6 @@ class ErrorObject(_BaseType):
             from ._schemas.error import NoMatchingProductDiscountFoundErrorSchema
 
             return NoMatchingProductDiscountFoundErrorSchema().load(data)
-        if data["code"] == "NotEnabled":
-            from ._schemas.error import NotEnabledErrorSchema
-
-            return NotEnabledErrorSchema().load(data)
         if data["code"] == "ObjectNotFound":
             from ._schemas.error import ObjectNotFoundErrorSchema
 
@@ -508,6 +523,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import ShippingMethodDoesNotMatchCartErrorSchema
 
             return ShippingMethodDoesNotMatchCartErrorSchema().load(data)
+        if data["code"] == "StoreCartDiscountsLimitReached":
+            from ._schemas.error import StoreCartDiscountsLimitReachedErrorSchema
+
+            return StoreCartDiscountsLimitReachedErrorSchema().load(data)
         if data["code"] == "SyntaxError":
             from ._schemas.error import SyntaxErrorErrorSchema
 
@@ -527,6 +546,7 @@ class AnonymousIdAlreadyInUseError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="AnonymousIdAlreadyInUse", **kwargs)
 
@@ -590,7 +610,7 @@ class AssociateMissingPermissionError(ErrorObject):
 class AttributeDefinitionAlreadyExistsError(ErrorObject):
     """Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
 
-    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+    The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
 
     """
 
@@ -635,7 +655,7 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
 class AttributeDefinitionTypeConflictError(ErrorObject):
     """Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
 
-    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+    The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request.
 
     """
 
@@ -714,6 +734,7 @@ class BadGatewayError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="BadGateway", **kwargs)
 
@@ -759,6 +780,26 @@ class ConcurrentModificationError(ErrorObject):
         return ConcurrentModificationErrorSchema().dump(self)
 
 
+class ContentTooLargeError(ErrorObject):
+    """Returned when the request results in too much data being returned from the API. Adjust the request query to reduce the size of the data returned."""
+
+    def __init__(self, *, message: str, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="ContentTooLarge", **kwargs)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ContentTooLargeError":
+        from ._schemas.error import ContentTooLargeErrorSchema
+
+        return ContentTooLargeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import ContentTooLargeErrorSchema
+
+        return ContentTooLargeErrorSchema().dump(self)
+
+
 class CountryNotConfiguredInStoreError(ErrorObject):
     """Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
 
@@ -767,7 +808,7 @@ class CountryNotConfiguredInStoreError(ErrorObject):
     - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
     - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
     - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-    - [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+    - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
     - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
     - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
     - [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
@@ -1071,7 +1112,7 @@ class DuplicateStandalonePriceScopeError(ErrorObject):
     """Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
     Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
 
-    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+    The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -1161,7 +1202,7 @@ class DuplicateVariantValuesError(ErrorObject):
 class EditPreviewFailedError(ErrorObject):
     """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 
-    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-orderedit:GET) request.
 
     """
 
@@ -1269,6 +1310,7 @@ class EnumValueIsUsedError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValueIsUsed", **kwargs)
 
@@ -1292,6 +1334,7 @@ class EnumValuesMustMatchError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="EnumValuesMustMatch", **kwargs)
 
@@ -1584,6 +1627,7 @@ class ExternalOAuthFailedError(ErrorObject):
     """Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`)."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="ExternalOAuthFailed", **kwargs)
 
@@ -1605,6 +1649,7 @@ class FeatureRemovedError(ErrorObject):
     """Returned when the requested feature was removed."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="FeatureRemoved", **kwargs)
 
@@ -1621,13 +1666,14 @@ class FeatureRemovedError(ErrorObject):
 
 
 class GeneralError(ErrorObject):
-    """Returned when a server-side problem occurs.
+    """Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 
     If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
 
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="General", **kwargs)
 
@@ -1644,7 +1690,9 @@ class GeneralError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
+
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="insufficient_scope", **kwargs)
 
@@ -1666,6 +1714,7 @@ class InternalConstraintViolatedError(ErrorObject):
     """Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InternalConstraintViolated", **kwargs)
 
@@ -1688,12 +1737,13 @@ class InvalidCredentialsError(ErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
-    - [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+    - [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+    - [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCredentials", **kwargs)
 
@@ -1716,12 +1766,13 @@ class InvalidCurrentPasswordError(ErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
-    - [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+    - [Change Customer Password](ctp:api:endpoint:/{projectKey}/customers/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password:POST) requests on Customers.
+    - [Change Customer Password](ctp:api:endpoint:/{projectKey}/me/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/password:POST) requests on My Customer Profile.
 
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidCurrentPassword", **kwargs)
 
@@ -1780,6 +1831,7 @@ class InvalidInputError(ErrorObject):
     """Returned when an invalid input has been sent."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidInput", **kwargs)
 
@@ -1863,6 +1915,7 @@ class InvalidOperationError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidOperation", **kwargs)
 
@@ -1879,7 +1932,9 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
+
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="InvalidSubject", **kwargs)
 
@@ -1896,7 +1951,9 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
+
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="invalid_token", **kwargs)
 
@@ -1920,6 +1977,7 @@ class LanguageUsedInStoresError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="LanguageUsedInStores", **kwargs)
 
@@ -1997,6 +2055,35 @@ class MatchingPriceNotFoundError(ErrorObject):
         return MatchingPriceNotFoundErrorSchema().dump(self)
 
 
+class MaxCartDiscountsReachedError(ErrorObject):
+    """Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="MaxCartDiscountsReached", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MaxCartDiscountsReachedError":
+        from ._schemas.error import MaxCartDiscountsReachedErrorSchema
+
+        return MaxCartDiscountsReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import MaxCartDiscountsReachedErrorSchema
+
+        return MaxCartDiscountsReachedErrorSchema().dump(self)
+
+
 class MaxResourceLimitExceededError(ErrorObject):
     """Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 
@@ -2026,16 +2113,45 @@ class MaxResourceLimitExceededError(ErrorObject):
         return MaxResourceLimitExceededErrorSchema().dump(self)
 
 
+class MaxStoreReferencesReachedError(ErrorObject):
+    """Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+
+    """
+
+    def __init__(self, *, message: str, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="MaxStoreReferencesReached", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "MaxStoreReferencesReachedError":
+        from ._schemas.error import MaxStoreReferencesReachedErrorSchema
+
+        return MaxStoreReferencesReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import MaxStoreReferencesReachedErrorSchema
+
+        return MaxStoreReferencesReachedErrorSchema().dump(self)
+
+
 class MissingRoleOnChannelError(ErrorObject):
     """Returned when one of the following states occur:
 
     - [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
-    - [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+    - [Standalone Price](ctp:api:type:StandalonePrice) references a Channel that does not contain the `ProductDistribution` role.
 
     The error is returned as a failed response to:
 
     - [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
-    - [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+    - [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -2125,6 +2241,7 @@ class MoneyOverflowError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="MoneyOverflow", **kwargs)
 
@@ -2143,11 +2260,12 @@ class MoneyOverflowError(ErrorObject):
 class NoMatchingProductDiscountFoundError(ErrorObject):
     """Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
 
-    The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+    The error is returned as a failed response to the [Get Matching ProductDiscount](ctp:api:endpoint:/{projectKey}/product-discounts/matching:POST) request.
 
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(
             message=message, code="NoMatchingProductDiscountFound", **kwargs
@@ -2167,29 +2285,11 @@ class NoMatchingProductDiscountFoundError(ErrorObject):
         return NoMatchingProductDiscountFoundErrorSchema().dump(self)
 
 
-class NotEnabledError(ErrorObject):
-    """Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project."""
-
-    def __init__(self, *, message: str, **kwargs):
-        kwargs.pop("code", None)
-        super().__init__(message=message, code="NotEnabled", **kwargs)
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "NotEnabledError":
-        from ._schemas.error import NotEnabledErrorSchema
-
-        return NotEnabledErrorSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.error import NotEnabledErrorSchema
-
-        return NotEnabledErrorSchema().dump(self)
-
-
 class ObjectNotFoundError(ErrorObject):
     """Returned when the requested resource was not found."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="ObjectNotFound", **kwargs)
 
@@ -2210,7 +2310,7 @@ class OutOfStockError(ErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
     - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 
     """
@@ -2253,6 +2353,7 @@ class OverCapacityError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="OverCapacity", **kwargs)
 
@@ -2272,7 +2373,7 @@ class OverlappingStandalonePriceValidityError(ErrorObject):
     """Returned when a given Price validity period conflicts with an existing one.
     Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 
-    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+    The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -2351,6 +2452,7 @@ class PendingOperationError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="PendingOperation", **kwargs)
 
@@ -2514,7 +2616,9 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 
 
 class QueryComplexityLimitExceededError(ErrorObject):
+
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="QueryComplexityLimitExceeded", **kwargs)
 
@@ -2540,6 +2644,7 @@ class QueryTimedOutError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="QueryTimedOut", **kwargs)
 
@@ -2650,6 +2755,7 @@ class ResourceNotFoundError(ErrorObject):
     """Returned when the resource addressed by the request URL does not exist."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceNotFound", **kwargs)
 
@@ -2669,6 +2775,7 @@ class ResourceSizeLimitExceededError(ErrorObject):
     """Returned when the resource exceeds the maximum allowed size of 16 MB."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="ResourceSizeLimitExceeded", **kwargs)
 
@@ -2694,6 +2801,7 @@ class SearchDeactivatedError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchDeactivated", **kwargs)
 
@@ -2715,6 +2823,7 @@ class SearchExecutionFailureError(ErrorObject):
     """Returned when a search query could not be completed due to an unexpected failure."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchExecutionFailure", **kwargs)
 
@@ -2736,6 +2845,7 @@ class SearchFacetPathNotFoundError(ErrorObject):
     """Returned when a search facet path could not be found."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchFacetPathNotFound", **kwargs)
 
@@ -2757,6 +2867,7 @@ class SearchIndexingInProgressError(ErrorObject):
     """Returned when the indexing of Product information is still in progress for Projects that have indexing activated."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SearchIndexingInProgress", **kwargs)
 
@@ -2778,6 +2889,7 @@ class SemanticErrorError(ErrorObject):
     """Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SemanticError", **kwargs)
 
@@ -2801,6 +2913,7 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
     """
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(
             message=message, code="ShippingMethodDoesNotMatchCart", **kwargs
@@ -2820,10 +2933,47 @@ class ShippingMethodDoesNotMatchCartError(ErrorObject):
         return ShippingMethodDoesNotMatchCartErrorSchema().dump(self)
 
 
+class StoreCartDiscountsLimitReachedError(ErrorObject):
+    """Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+
+    """
+
+    #: Stores for which the limit for active Cart Discounts that can exist has been reached.
+    stores: typing.List["StoreKeyReference"]
+
+    def __init__(
+        self, *, message: str, stores: typing.List["StoreKeyReference"], **kwargs
+    ):
+        self.stores = stores
+        kwargs.pop("code", None)
+        super().__init__(
+            message=message, code="StoreCartDiscountsLimitReached", **kwargs
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "StoreCartDiscountsLimitReachedError":
+        from ._schemas.error import StoreCartDiscountsLimitReachedErrorSchema
+
+        return StoreCartDiscountsLimitReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import StoreCartDiscountsLimitReachedErrorSchema
+
+        return StoreCartDiscountsLimitReachedErrorSchema().dump(self)
+
+
 class SyntaxErrorError(ErrorObject):
     """Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax."""
 
     def __init__(self, *, message: str, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(message=message, code="SyntaxError", **kwargs)
 
@@ -2918,6 +3068,10 @@ class GraphQLErrorObject(_BaseType):
             from ._schemas.error import GraphQLConcurrentModificationErrorSchema
 
             return GraphQLConcurrentModificationErrorSchema().load(data)
+        if data["code"] == "ContentTooLarge":
+            from ._schemas.error import GraphQLContentTooLargeErrorSchema
+
+            return GraphQLContentTooLargeErrorSchema().load(data)
         if data["code"] == "CountryNotConfiguredInStore":
             from ._schemas.error import GraphQLCountryNotConfiguredInStoreErrorSchema
 
@@ -3066,10 +3220,18 @@ class GraphQLErrorObject(_BaseType):
             from ._schemas.error import GraphQLMatchingPriceNotFoundErrorSchema
 
             return GraphQLMatchingPriceNotFoundErrorSchema().load(data)
+        if data["code"] == "MaxCartDiscountsReached":
+            from ._schemas.error import GraphQLMaxCartDiscountsReachedErrorSchema
+
+            return GraphQLMaxCartDiscountsReachedErrorSchema().load(data)
         if data["code"] == "MaxResourceLimitExceeded":
             from ._schemas.error import GraphQLMaxResourceLimitExceededErrorSchema
 
             return GraphQLMaxResourceLimitExceededErrorSchema().load(data)
+        if data["code"] == "MaxStoreReferencesReached":
+            from ._schemas.error import GraphQLMaxStoreReferencesReachedErrorSchema
+
+            return GraphQLMaxStoreReferencesReachedErrorSchema().load(data)
         if data["code"] == "MissingRoleOnChannel":
             from ._schemas.error import GraphQLMissingRoleOnChannelErrorSchema
 
@@ -3086,10 +3248,6 @@ class GraphQLErrorObject(_BaseType):
             from ._schemas.error import GraphQLNoMatchingProductDiscountFoundErrorSchema
 
             return GraphQLNoMatchingProductDiscountFoundErrorSchema().load(data)
-        if data["code"] == "NotEnabled":
-            from ._schemas.error import GraphQLNotEnabledErrorSchema
-
-            return GraphQLNotEnabledErrorSchema().load(data)
         if data["code"] == "ObjectNotFound":
             from ._schemas.error import GraphQLObjectNotFoundErrorSchema
 
@@ -3186,6 +3344,10 @@ class GraphQLErrorObject(_BaseType):
             from ._schemas.error import GraphQLShippingMethodDoesNotMatchCartErrorSchema
 
             return GraphQLShippingMethodDoesNotMatchCartErrorSchema().load(data)
+        if data["code"] == "StoreCartDiscountsLimitReached":
+            from ._schemas.error import GraphQLStoreCartDiscountsLimitReachedErrorSchema
+
+            return GraphQLStoreCartDiscountsLimitReachedErrorSchema().load(data)
         if data["code"] == "SyntaxError":
             from ._schemas.error import GraphQLSyntaxErrorErrorSchema
 
@@ -3205,6 +3367,7 @@ class GraphQLAnonymousIdAlreadyInUseError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="AnonymousIdAlreadyInUse", **kwargs)
 
@@ -3267,7 +3430,7 @@ class GraphQLAssociateMissingPermissionError(GraphQLErrorObject):
 class GraphQLAttributeDefinitionAlreadyExistsError(GraphQLErrorObject):
     """Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
 
-    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+    The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
 
     """
 
@@ -3309,7 +3472,7 @@ class GraphQLAttributeDefinitionAlreadyExistsError(GraphQLErrorObject):
 class GraphQLAttributeDefinitionTypeConflictError(GraphQLErrorObject):
     """Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
 
-    The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+    The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request.
 
     """
 
@@ -3385,6 +3548,7 @@ class GraphQLBadGatewayError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="BadGateway", **kwargs)
 
@@ -3430,6 +3594,28 @@ class GraphQLConcurrentModificationError(GraphQLErrorObject):
         return GraphQLConcurrentModificationErrorSchema().dump(self)
 
 
+class GraphQLContentTooLargeError(GraphQLErrorObject):
+    """Returned when the request results in too much data being returned from the API. Adjust the request query to reduce the size of the data returned."""
+
+    def __init__(self, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(code="ContentTooLarge", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLContentTooLargeError":
+        from ._schemas.error import GraphQLContentTooLargeErrorSchema
+
+        return GraphQLContentTooLargeErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLContentTooLargeErrorSchema
+
+        return GraphQLContentTooLargeErrorSchema().dump(self)
+
+
 class GraphQLCountryNotConfiguredInStoreError(GraphQLErrorObject):
     """Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
 
@@ -3438,7 +3624,7 @@ class GraphQLCountryNotConfiguredInStoreError(GraphQLErrorObject):
     - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
     - [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
     - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-    - [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+    - [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
     - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
     - [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
     - [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
@@ -3735,7 +3921,7 @@ class GraphQLDuplicateStandalonePriceScopeError(GraphQLErrorObject):
     """Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
     Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
 
-    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+    The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -3822,7 +4008,7 @@ class GraphQLDuplicateVariantValuesError(GraphQLErrorObject):
 class GraphQLEditPreviewFailedError(GraphQLErrorObject):
     """Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 
-    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
+    The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-orderedit:GET) request.
 
     """
 
@@ -3920,6 +4106,7 @@ class GraphQLEnumValueIsUsedError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="EnumValueIsUsed", **kwargs)
 
@@ -3945,6 +4132,7 @@ class GraphQLEnumValuesMustMatchError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="EnumValuesMustMatch", **kwargs)
 
@@ -4116,6 +4304,7 @@ class GraphQLExternalOAuthFailedError(GraphQLErrorObject):
     """Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`)."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="ExternalOAuthFailed", **kwargs)
 
@@ -4137,6 +4326,7 @@ class GraphQLFeatureRemovedError(GraphQLErrorObject):
     """Returned when the requested feature was removed."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="FeatureRemoved", **kwargs)
 
@@ -4155,13 +4345,14 @@ class GraphQLFeatureRemovedError(GraphQLErrorObject):
 
 
 class GraphQLGeneralError(GraphQLErrorObject):
-    """Returned when a server-side problem occurs.
+    """Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 
     If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
 
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="General", **kwargs)
 
@@ -4178,7 +4369,9 @@ class GraphQLGeneralError(GraphQLErrorObject):
 
 
 class GraphQLInsufficientScopeError(GraphQLErrorObject):
+
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="insufficient_scope", **kwargs)
 
@@ -4200,6 +4393,7 @@ class GraphQLInternalConstraintViolatedError(GraphQLErrorObject):
     """Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InternalConstraintViolated", **kwargs)
 
@@ -4222,12 +4416,13 @@ class GraphQLInvalidCredentialsError(GraphQLErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
-    - [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+    - [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+    - [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InvalidCredentials", **kwargs)
 
@@ -4250,12 +4445,13 @@ class GraphQLInvalidCurrentPasswordError(GraphQLErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
-    - [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+    - [Change Customer Password](ctp:api:endpoint:/{projectKey}/customers/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password:POST) requests on Customers.
+    - [Change Customer Password](ctp:api:endpoint:/{projectKey}/me/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/password:POST) requests on My Customer Profile.
 
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InvalidCurrentPassword", **kwargs)
 
@@ -4315,6 +4511,7 @@ class GraphQLInvalidInputError(GraphQLErrorObject):
     """Returned when an invalid input has been sent."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InvalidInput", **kwargs)
 
@@ -4402,6 +4599,7 @@ class GraphQLInvalidOperationError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InvalidOperation", **kwargs)
 
@@ -4420,7 +4618,9 @@ class GraphQLInvalidOperationError(GraphQLErrorObject):
 
 
 class GraphQLInvalidSubjectError(GraphQLErrorObject):
+
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="InvalidSubject", **kwargs)
 
@@ -4439,7 +4639,9 @@ class GraphQLInvalidSubjectError(GraphQLErrorObject):
 
 
 class GraphQLInvalidTokenError(GraphQLErrorObject):
+
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="invalid_token", **kwargs)
 
@@ -4465,6 +4667,7 @@ class GraphQLLanguageUsedInStoresError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="LanguageUsedInStores", **kwargs)
 
@@ -4541,6 +4744,35 @@ class GraphQLMatchingPriceNotFoundError(GraphQLErrorObject):
         return GraphQLMatchingPriceNotFoundErrorSchema().dump(self)
 
 
+class GraphQLMaxCartDiscountsReachedError(GraphQLErrorObject):
+    """Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+
+    """
+
+    def __init__(self, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(code="MaxCartDiscountsReached", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMaxCartDiscountsReachedError":
+        from ._schemas.error import GraphQLMaxCartDiscountsReachedErrorSchema
+
+        return GraphQLMaxCartDiscountsReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMaxCartDiscountsReachedErrorSchema
+
+        return GraphQLMaxCartDiscountsReachedErrorSchema().dump(self)
+
+
 class GraphQLMaxResourceLimitExceededError(GraphQLErrorObject):
     """Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 
@@ -4570,16 +4802,45 @@ class GraphQLMaxResourceLimitExceededError(GraphQLErrorObject):
         return GraphQLMaxResourceLimitExceededErrorSchema().dump(self)
 
 
+class GraphQLMaxStoreReferencesReachedError(GraphQLErrorObject):
+    """Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+
+    """
+
+    def __init__(self, **kwargs):
+
+        kwargs.pop("code", None)
+        super().__init__(code="MaxStoreReferencesReached", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLMaxStoreReferencesReachedError":
+        from ._schemas.error import GraphQLMaxStoreReferencesReachedErrorSchema
+
+        return GraphQLMaxStoreReferencesReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLMaxStoreReferencesReachedErrorSchema
+
+        return GraphQLMaxStoreReferencesReachedErrorSchema().dump(self)
+
+
 class GraphQLMissingRoleOnChannelError(GraphQLErrorObject):
     """Returned when one of the following states occur:
 
     - [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
-    - [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+    - [Standalone Price](ctp:api:type:StandalonePrice) references a Channel that does not contain the `ProductDistribution` role.
 
     The error is returned as a failed response to:
 
     - [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
-    - [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+    - [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -4667,6 +4928,7 @@ class GraphQLMoneyOverflowError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="MoneyOverflow", **kwargs)
 
@@ -4687,11 +4949,12 @@ class GraphQLMoneyOverflowError(GraphQLErrorObject):
 class GraphQLNoMatchingProductDiscountFoundError(GraphQLErrorObject):
     """Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
 
-    The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+    The error is returned as a failed response to the [Get Matching ProductDiscount](ctp:api:endpoint:/{projectKey}/product-discounts/matching:POST) request.
 
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="NoMatchingProductDiscountFound", **kwargs)
 
@@ -4709,31 +4972,11 @@ class GraphQLNoMatchingProductDiscountFoundError(GraphQLErrorObject):
         return GraphQLNoMatchingProductDiscountFoundErrorSchema().dump(self)
 
 
-class GraphQLNotEnabledError(GraphQLErrorObject):
-    """Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project."""
-
-    def __init__(self, **kwargs):
-        kwargs.pop("code", None)
-        super().__init__(code="NotEnabled", **kwargs)
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "GraphQLNotEnabledError":
-        from ._schemas.error import GraphQLNotEnabledErrorSchema
-
-        return GraphQLNotEnabledErrorSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.error import GraphQLNotEnabledErrorSchema
-
-        return GraphQLNotEnabledErrorSchema().dump(self)
-
-
 class GraphQLObjectNotFoundError(GraphQLErrorObject):
     """Returned when the requested resource was not found."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="ObjectNotFound", **kwargs)
 
@@ -4756,7 +4999,7 @@ class GraphQLOutOfStockError(GraphQLErrorObject):
 
     The error is returned as a failed response to:
 
-    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+    - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
     - [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 
     """
@@ -4796,6 +5039,7 @@ class GraphQLOverCapacityError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="OverCapacity", **kwargs)
 
@@ -4817,7 +5061,7 @@ class GraphQLOverlappingStandalonePriceValidityError(GraphQLErrorObject):
     """Returned when a given Price validity period conflicts with an existing one.
     Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 
-    The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+    The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 
     """
 
@@ -4893,6 +5137,7 @@ class GraphQLPendingOperationError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="PendingOperation", **kwargs)
 
@@ -5051,7 +5296,9 @@ class GraphQLProjectNotConfiguredForLanguagesError(GraphQLErrorObject):
 
 
 class GraphQLQueryComplexityLimitExceededError(GraphQLErrorObject):
+
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="QueryComplexityLimitExceeded", **kwargs)
 
@@ -5077,6 +5324,7 @@ class GraphQLQueryTimedOutError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="QueryTimedOut", **kwargs)
 
@@ -5188,6 +5436,7 @@ class GraphQLResourceNotFoundError(GraphQLErrorObject):
     """Returned when the resource addressed by the request URL does not exist."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="ResourceNotFound", **kwargs)
 
@@ -5209,6 +5458,7 @@ class GraphQLResourceSizeLimitExceededError(GraphQLErrorObject):
     """Returned when the resource exceeds the maximum allowed size of 16 MB."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="ResourceSizeLimitExceeded", **kwargs)
 
@@ -5234,6 +5484,7 @@ class GraphQLSearchDeactivatedError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SearchDeactivated", **kwargs)
 
@@ -5255,6 +5506,7 @@ class GraphQLSearchExecutionFailureError(GraphQLErrorObject):
     """Returned when a search query could not be completed due to an unexpected failure."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SearchExecutionFailure", **kwargs)
 
@@ -5276,6 +5528,7 @@ class GraphQLSearchFacetPathNotFoundError(GraphQLErrorObject):
     """Returned when a search facet path could not be found."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SearchFacetPathNotFound", **kwargs)
 
@@ -5297,6 +5550,7 @@ class GraphQLSearchIndexingInProgressError(GraphQLErrorObject):
     """Returned when the indexing of Product information is still in progress for Projects that have indexing activated."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SearchIndexingInProgress", **kwargs)
 
@@ -5318,6 +5572,7 @@ class GraphQLSemanticErrorError(GraphQLErrorObject):
     """Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SemanticError", **kwargs)
 
@@ -5343,6 +5598,7 @@ class GraphQLShippingMethodDoesNotMatchCartError(GraphQLErrorObject):
     """
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="ShippingMethodDoesNotMatchCart", **kwargs)
 
@@ -5360,10 +5616,43 @@ class GraphQLShippingMethodDoesNotMatchCartError(GraphQLErrorObject):
         return GraphQLShippingMethodDoesNotMatchCartErrorSchema().dump(self)
 
 
+class GraphQLStoreCartDiscountsLimitReachedError(GraphQLErrorObject):
+    """Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+
+    The error is returned as a failed response to:
+
+    - [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+    - [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+
+    """
+
+    #: Stores for which the limit for active Cart Discounts that can exist has been reached.
+    stores: typing.List["StoreKeyReference"]
+
+    def __init__(self, *, stores: typing.List["StoreKeyReference"], **kwargs):
+        self.stores = stores
+        kwargs.pop("code", None)
+        super().__init__(code="StoreCartDiscountsLimitReached", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLStoreCartDiscountsLimitReachedError":
+        from ._schemas.error import GraphQLStoreCartDiscountsLimitReachedErrorSchema
+
+        return GraphQLStoreCartDiscountsLimitReachedErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLStoreCartDiscountsLimitReachedErrorSchema
+
+        return GraphQLStoreCartDiscountsLimitReachedErrorSchema().dump(self)
+
+
 class GraphQLSyntaxErrorError(GraphQLErrorObject):
     """Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax."""
 
     def __init__(self, **kwargs):
+
         kwargs.pop("code", None)
         super().__init__(code="SyntaxError", **kwargs)
 

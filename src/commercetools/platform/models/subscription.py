@@ -91,6 +91,9 @@ class ChangeSubscription(_BaseType):
 class ChangeSubscriptionResourceTypeId(enum.Enum):
     """Resource types supported by [ChangeSubscriptions](ctp:api:type:ChangeSubscription):"""
 
+    APPROVAL_FLOW = "approval-flow"
+    APPROVAL_RULE = "approval-rule"
+    ASSOCIATE_ROLE = "associate-role"
     BUSINESS_UNIT = "business-unit"
     CART = "cart"
     CART_DISCOUNT = "cart-discount"
@@ -643,10 +646,15 @@ class MessageSubscription(_BaseType):
 class MessageSubscriptionResourceTypeId(enum.Enum):
     """Resource types supported by [MessageSubscriptions](ctp:api:type:MessageSubscription):"""
 
+    APPROVAL_FLOW = "approval-flow"
+    APPROVAL_RULE = "approval-rule"
     ASSOCIATE_ROLE = "associate-role"
     BUSINESS_UNIT = "business-unit"
     CATEGORY = "category"
     CUSTOMER = "customer"
+    CUSTOMER_EMAIL_TOKEN = "customer-email-token"
+    CUSTOMER_GROUP = "customer-group"
+    CUSTOMER_PASSWORD_TOKEN = "customer-password-token"
     INVENTORY_ENTRY = "inventory-entry"
     ORDER = "order"
     PAYMENT = "payment"
@@ -688,6 +696,7 @@ class PlatformFormat(DeliveryFormat):
     """The PlatformFormat uses constructs that are similar to the ones used in the REST API, for example, on the [Messages Query HTTP API](/../api/projects/messages)."""
 
     def __init__(self):
+
         super().__init__(type="Platform")
 
     @classmethod
@@ -752,7 +761,7 @@ class ResourceDeletedDeliveryPayload(DeliveryPayload):
     version: int
     #: Date and time (UTC) the resource was last deleted.
     modified_at: datetime.datetime
-    #: `true` if the `dataErasure` [parameter](/../api/general-concepts#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
+    #: `true` if the `dataErasure` [parameter](/../api/gdpr#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
     data_erasure: typing.Optional[bool]
 
     def __init__(
@@ -939,9 +948,9 @@ class SqsDestination(Destination):
 
 
 class Subscription(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Change notifications subscribed to.
     changes: typing.List["ChangeSubscription"]
@@ -1102,7 +1111,8 @@ class SubscriptionPagedQueryResponse(_BaseType):
 
 
 class SubscriptionUpdate(_BaseType):
-    #: Expected version of the Subscription on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Subscription on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Subscription.
     actions: typing.List["SubscriptionUpdateAction"]

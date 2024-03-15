@@ -5,4 +5,5 @@
 # but send a pull request to the Lab Digital fork of rmf-codegen at
 # https://github.com/labd/rmf-codegen
 
+from . import *  # noqa
 from .common import *  # noqa

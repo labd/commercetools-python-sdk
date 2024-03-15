@@ -21,19 +21,20 @@ __all__ = [
     "CartEmptiedDuringCheckout",
     "CartEmpty",
     "CartNotFound",
+    "CartWithExistingPayment",
     "CheckoutCancelled",
     "CheckoutCompleted",
     "CheckoutLoaded",
     "CheckoutStarted",
+    "DeprecatedFields",
     "InitTimeout",
     "InvalidToken",
-    "NoAllowedOrigins",
     "NoPaymentMethods",
     "NoShippingMethods",
     "OrderCreated",
+    "OrderCreationError",
+    "ProjectIsDeactivated",
     "ResponseMessage",
-    "SellerIsDeactivated",
-    "SellerNotFound",
     "ShippingAddressMissing",
     "UnallowedOrigin",
     "UnavailableLocale",
@@ -128,10 +129,6 @@ class ResponseMessage(_BaseType):
             from ._schemas.responses import InvalidTokenSchema
 
             return InvalidTokenSchema().load(data)
-        if data["code"] == "no_allowed_origins":
-            from ._schemas.responses import NoAllowedOriginsSchema
-
-            return NoAllowedOriginsSchema().load(data)
         if data["code"] == "no_payment_methods":
             from ._schemas.responses import NoPaymentMethodsSchema
 
@@ -144,14 +141,10 @@ class ResponseMessage(_BaseType):
             from ._schemas.responses import OrderCreatedSchema
 
             return OrderCreatedSchema().load(data)
-        if data["code"] == "seller_deactivated":
-            from ._schemas.responses import SellerIsDeactivatedSchema
+        if data["code"] == "project_deactivated":
+            from ._schemas.responses import ProjectIsDeactivatedSchema
 
-            return SellerIsDeactivatedSchema().load(data)
-        if data["code"] == "seller_not_found":
-            from ._schemas.responses import SellerNotFoundSchema
-
-            return SellerNotFoundSchema().load(data)
+            return ProjectIsDeactivatedSchema().load(data)
         if data["code"] == "shipping_address_missing":
             from ._schemas.responses import ShippingAddressMissingSchema
 
@@ -164,6 +157,18 @@ class ResponseMessage(_BaseType):
             from ._schemas.responses import UnavailableLocaleSchema
 
             return UnavailableLocaleSchema().load(data)
+        if data["code"] == "deprecated_fields":
+            from ._schemas.responses import DeprecatedFieldsSchema
+
+            return DeprecatedFieldsSchema().load(data)
+        if data["code"] == "order_creation_error":
+            from ._schemas.responses import OrderCreationErrorSchema
+
+            return OrderCreationErrorSchema().load(data)
+        if data["code"] == "cart_with_exisiting_payment":
+            from ._schemas.responses import CartWithExistingPaymentSchema
+
+            return CartWithExistingPaymentSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.responses import ResponseMessageSchema
@@ -172,11 +177,12 @@ class ResponseMessage(_BaseType):
 
 
 class AdyenBadConfig(ResponseMessage):
-    """Generated when the configuration used to initialize Adyen contains at least one invalid field."""
+    """Generated when the configuration to initialize the [Adyen payment connector](/configuring-adyen) contains at least one invalid field."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="adyen_bad_config"
         )
@@ -194,11 +200,12 @@ class AdyenBadConfig(ResponseMessage):
 
 
 class AdyenInitError(ResponseMessage):
-    """Generated when Adyen cannot be initialized."""
+    """Generated when the [Adyen payment connector](/configuring-adyen) cannot be initialized."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="adyen_init_error"
         )
@@ -216,11 +223,12 @@ class AdyenInitError(ResponseMessage):
 
 
 class AdyenTimeout(ResponseMessage):
-    """Generated when a timeout error occurs while initializing Adyen."""
+    """Generated when a timeout error occurs while initializing the [Adyen payment connector](/configuring-adyen)."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="adyen_timeout"
         )
@@ -238,11 +246,12 @@ class AdyenTimeout(ResponseMessage):
 
 
 class ApplicationDeactivated(ResponseMessage):
-    """Generated when the requested application is deactivated. Activate the application in the Merchant Center to continue."""
+    """Generated when the requested [application](/configuring-checkout#applications) is deactivated. Activate the application in the Merchant Center to continue."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="application_disabled"
         )
@@ -262,11 +271,12 @@ class ApplicationDeactivated(ResponseMessage):
 
 
 class ApplicationNotFound(ResponseMessage):
-    """Generated when the requested application is not found. The application may have been deleted or its configuration is incorrect."""
+    """Generated when the requested [application](/configuring-checkout#applications) is not found. The application may have been deleted or its configuration is incorrect."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="application_not_found"
         )
@@ -284,11 +294,12 @@ class ApplicationNotFound(ResponseMessage):
 
 
 class CartEmptiedDuringCheckout(ResponseMessage):
-    """Generated when the Cart was emptied during the checkout. It is not possible to recover from this, the customer must restart the checkout process."""
+    """Generated when the [Cart](/../api/projects/carts) was emptied during the checkout process. It is not possible to recover from this, the customer must restart the checkout process."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type,
             message=message,
@@ -311,11 +322,12 @@ class CartEmptiedDuringCheckout(ResponseMessage):
 
 
 class CartEmpty(ResponseMessage):
-    """Generated when the Cart for the current checkout is empty. The Cart must contain at least one Line Item."""
+    """Generated when the [Cart](/../api/projects/carts) for the current checkout is empty. The Cart must contain at least one [Line Item](/../api/carts-orders-overview#line-items)."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(type=type, message=message, payload=payload, code="cart_empty")
 
     @classmethod
@@ -331,11 +343,12 @@ class CartEmpty(ResponseMessage):
 
 
 class CartNotFound(ResponseMessage):
-    """Generated when the Cart is not found. A valid Cart with at least one Line Item is required to start the checkout."""
+    """Generated when the [Cart](/../api/projects/carts) is not found. To start the checkout process, a valid Cart with at least one [Line Item](/../api/carts-orders-overview#line-items) is required."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="cart_not_found"
         )
@@ -353,11 +366,12 @@ class CartNotFound(ResponseMessage):
 
 
 class CheckoutCancelled(ResponseMessage):
-    """Generated when the customer cancels the checkout."""
+    """Generated when the customer cancels the checkout process."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="checkout_cancelled"
         )
@@ -375,11 +389,12 @@ class CheckoutCancelled(ResponseMessage):
 
 
 class CheckoutCompleted(ResponseMessage):
-    """Generated when the customer completes the checkout."""
+    """Generated when the customer completes the checkout process."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="checkout_completed"
         )
@@ -397,11 +412,12 @@ class CheckoutCompleted(ResponseMessage):
 
 
 class CheckoutLoaded(ResponseMessage):
-    """Generated when the checkout was loaded successfully and it is waiting for the configuration parameters passed through the `checkoutConfig` object."""
+    """Generated when Checkout has been loaded successfully and is waiting for the configuration parameters passed in the `checkoutConfig` [object](/sdk)."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="checkout_loaded"
         )
@@ -419,11 +435,12 @@ class CheckoutLoaded(ResponseMessage):
 
 
 class CheckoutStarted(ResponseMessage):
-    """Generated when the checkout receives the configuration parameters passed through the `checkoutConfig` object and starts successfully."""
+    """Generated when the configuration parameters are passed successfully through the `checkoutConfig` [object](/sdk) and the checkout process starts."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="checkout_started"
         )
@@ -441,11 +458,12 @@ class CheckoutStarted(ResponseMessage):
 
 
 class InitTimeout(ResponseMessage):
-    """Generated when the checkout has not received the configuration parameters passed through the `checkoutConfig` object on time."""
+    """Generated when Checkout has not received the configuration parameters passed through the `checkoutConfig` [object](/sdk) on time."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="init_timeout"
         )
@@ -463,11 +481,12 @@ class InitTimeout(ResponseMessage):
 
 
 class BadInputData(ResponseMessage):
-    """Generated when the `checkoutConfig` object contains one or more invalid fields."""
+    """Generated when the `checkoutConfig` [object](/sdk) contains one or more invalid fields."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="invalid_fields"
         )
@@ -490,6 +509,7 @@ class InvalidToken(ResponseMessage):
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="invalid_token"
         )
@@ -506,34 +526,13 @@ class InvalidToken(ResponseMessage):
         return InvalidTokenSchema().dump(self)
 
 
-class NoAllowedOrigins(ResponseMessage):
-    """Generated when there are no allowed origins configured for the current application. Add at least one **Origin URL** in your [application settings in the Merchant Center](/configuring-checkout#applications)."""
-
-    def __init__(
-        self, *, type: str, message: str, payload: typing.Optional[object] = None
-    ):
-        super().__init__(
-            type=type, message=message, payload=payload, code="no_allowed_origins"
-        )
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "NoAllowedOrigins":
-        from ._schemas.responses import NoAllowedOriginsSchema
-
-        return NoAllowedOriginsSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.responses import NoAllowedOriginsSchema
-
-        return NoAllowedOriginsSchema().dump(self)
-
-
 class NoPaymentMethods(ResponseMessage):
-    """Generated when there are no payment methods available. Add at least one **Payment method** in your [application settings in the Merchant Center](/configuring-checkout#payment-connector)."""
+    """Generated when no payment method is set up for an [application](/configuring-checkout#applications). Add at least one **Payment method** to the application in the Merchant Center."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="no_payment_methods"
         )
@@ -551,11 +550,12 @@ class NoPaymentMethods(ResponseMessage):
 
 
 class NoShippingMethods(ResponseMessage):
-    """Generated when no Shipping Method is available for the shipping address of the Cart. This may indicate an incomplete configuration."""
+    """Generated when no [Shipping Method](/../api/projects/shippingMethods) is available for the shipping address of the [Cart](/../api/projects/carts). This may indicate an incomplete configuration."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="no_shipping_methods"
         )
@@ -573,11 +573,12 @@ class NoShippingMethods(ResponseMessage):
 
 
 class OrderCreated(ResponseMessage):
-    """Generated when the checkout successfully creates an Order."""
+    """Generated when an [Order](/../api/projects/orders) is created after a successful checkout process."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="order_created"
         )
@@ -594,48 +595,27 @@ class OrderCreated(ResponseMessage):
         return OrderCreatedSchema().dump(self)
 
 
-class SellerIsDeactivated(ResponseMessage):
-    """Generated when the seller is deactivated and the checkout cannot be initialized. Contact commercetools support."""
+class ProjectIsDeactivated(ResponseMessage):
+    """Generated when the commercetools Checkout [`projectKey`](/sdk) is deactivated and cannot be initialized. Contact support via the [Support Portal](https://commercetools.atlassian.net/servicedesk/customer/portal/30)."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
-            type=type, message=message, payload=payload, code="seller_deactivated"
+            type=type, message=message, payload=payload, code="project_deactivated"
         )
 
     @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SellerIsDeactivated":
-        from ._schemas.responses import SellerIsDeactivatedSchema
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "ProjectIsDeactivated":
+        from ._schemas.responses import ProjectIsDeactivatedSchema
 
-        return SellerIsDeactivatedSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.responses import SellerIsDeactivatedSchema
-
-        return SellerIsDeactivatedSchema().dump(self)
-
-
-class SellerNotFound(ResponseMessage):
-    """Generated when the seller is not found. The seller may have been deleted or the configuration may not be correct. Contact commercetools support."""
-
-    def __init__(
-        self, *, type: str, message: str, payload: typing.Optional[object] = None
-    ):
-        super().__init__(
-            type=type, message=message, payload=payload, code="seller_not_found"
-        )
-
-    @classmethod
-    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "SellerNotFound":
-        from ._schemas.responses import SellerNotFoundSchema
-
-        return SellerNotFoundSchema().load(data)
+        return ProjectIsDeactivatedSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.responses import SellerNotFoundSchema
+        from ._schemas.responses import ProjectIsDeactivatedSchema
 
-        return SellerNotFoundSchema().dump(self)
+        return ProjectIsDeactivatedSchema().dump(self)
 
 
 class ShippingAddressMissing(ResponseMessage):
@@ -644,6 +624,7 @@ class ShippingAddressMissing(ResponseMessage):
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="shipping_address_missing"
         )
@@ -663,11 +644,12 @@ class ShippingAddressMissing(ResponseMessage):
 
 
 class UnallowedOrigin(ResponseMessage):
-    """Generated when the currently used origin URL is not in the list of the [**Origin URLs** configured in the Merchant Centre](/configuring-checkout#create-an-application) and the checkout cannot be initialized. Add the **Origin URL** in your application settings in the Merchant Center."""
+    """Generated when Checkout cannot be initialized because the URL that is trying to initialize it is not in the list of the allowed URLs for the [application](/configuring-checkout#applications). Add the URL to the **Origin URLs** list in your application settings in the Merchant Center."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="unallowed_origin"
         )
@@ -685,11 +667,12 @@ class UnallowedOrigin(ResponseMessage):
 
 
 class UnavailableLocale(ResponseMessage):
-    """Generated when the provided locale is not [available for localization](/installing-checkout#locales). The checkout falls back to English."""
+    """Generated when the provided `locale` is not [available for localization](/installing-checkout#locales). The localization falls back to English."""
 
     def __init__(
         self, *, type: str, message: str, payload: typing.Optional[object] = None
     ):
+
         super().__init__(
             type=type, message=message, payload=payload, code="unavailable_locale"
         )
@@ -704,3 +687,77 @@ class UnavailableLocale(ResponseMessage):
         from ._schemas.responses import UnavailableLocaleSchema
 
         return UnavailableLocaleSchema().dump(self)
+
+
+class DeprecatedFields(ResponseMessage):
+    """Generated when the `checkoutConfig` [object](/sdk) contains one or more deprecated fields."""
+
+    def __init__(
+        self, *, type: str, message: str, payload: typing.Optional[object] = None
+    ):
+
+        super().__init__(
+            type=type, message=message, payload=payload, code="deprecated_fields"
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "DeprecatedFields":
+        from ._schemas.responses import DeprecatedFieldsSchema
+
+        return DeprecatedFieldsSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.responses import DeprecatedFieldsSchema
+
+        return DeprecatedFieldsSchema().dump(self)
+
+
+class OrderCreationError(ResponseMessage):
+    """Generated when an [Order](/../api/projects/orders) that references an approved [Payment](/../api/projects/payments) cannot be created."""
+
+    def __init__(
+        self, *, type: str, message: str, payload: typing.Optional[object] = None
+    ):
+
+        super().__init__(
+            type=type, message=message, payload=payload, code="order_creation_error"
+        )
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "OrderCreationError":
+        from ._schemas.responses import OrderCreationErrorSchema
+
+        return OrderCreationErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.responses import OrderCreationErrorSchema
+
+        return OrderCreationErrorSchema().dump(self)
+
+
+class CartWithExistingPayment(ResponseMessage):
+    """Generated when trying to add a [Payment](/../api/projects/payments) to a [Cart](/../api/projects/carts) that already references an approved Payment."""
+
+    def __init__(
+        self, *, type: str, message: str, payload: typing.Optional[object] = None
+    ):
+
+        super().__init__(
+            type=type,
+            message=message,
+            payload=payload,
+            code="cart_with_exisiting_payment",
+        )
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartWithExistingPayment":
+        from ._schemas.responses import CartWithExistingPaymentSchema
+
+        return CartWithExistingPaymentSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.responses import CartWithExistingPaymentSchema
+
+        return CartWithExistingPaymentSchema().dump(self)

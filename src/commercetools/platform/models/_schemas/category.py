@@ -127,6 +127,7 @@ class CategorySchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Category(**data)
 
 
@@ -211,6 +212,7 @@ class CategoryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CategoryDraft(**data)
 
 
@@ -234,6 +236,7 @@ class CategoryPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CategoryPagedQueryResponse(**data)
 
 
@@ -256,6 +259,7 @@ class CategoryReferenceSchema(ReferenceSchema):
 
 
 class CategoryResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -345,6 +349,7 @@ class CategoryUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CategoryUpdate(**data)
 
 

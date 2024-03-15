@@ -187,6 +187,7 @@ def get_test_order():
                 total_gross=models.CentPrecisionMoney(
                     cent_amount=1000, currency_code="GBP", fraction_digits=2
                 ),
+                tax_portions=[]
             ),
             shipping_method_state=models.ShippingMethodState.MATCHES_CART,
         ),
@@ -251,6 +252,7 @@ def get_test_order():
                     total_gross=models.CentPrecisionMoney(
                         cent_amount=1190, currency_code="GBP", fraction_digits=2
                     ),
+                    tax_portions=[]
                 ),
                 line_item_mode=models.LineItemMode.STANDARD,
             )

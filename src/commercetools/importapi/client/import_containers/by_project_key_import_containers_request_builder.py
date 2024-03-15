@@ -22,6 +22,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyImportContainersRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -68,8 +69,8 @@ class ByProjectKeyImportContainersRequestBuilder:
     def get(
         self,
         *,
-        limit: float = None,
-        offset: float = None,
+        limit: int = None,
+        offset: int = None,
         sort: typing.List["str"] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,

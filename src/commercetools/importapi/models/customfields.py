@@ -50,11 +50,11 @@ __all__ = [
 
 
 class Custom(_BaseType):
-    """The representation to be sent to the server when creating a resource with custom fields."""
+    """The representation to be sent to the server when creating a resource with Custom Fields."""
 
     #: The type that provides the field definitions for this object.
     type: "TypeKeyReference"
-    #: The custom fields of this object.
+    #: The Custom Fields of this object.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -85,7 +85,7 @@ class FieldContainer(typing.Dict[str, "CustomField"]):
 
 
 class CustomField(_BaseType):
-    """Provides the value for a custom field of a specific type."""
+    """Provides the value for a Custom Field of a specific type."""
 
     #: The type of this field.
     type: str

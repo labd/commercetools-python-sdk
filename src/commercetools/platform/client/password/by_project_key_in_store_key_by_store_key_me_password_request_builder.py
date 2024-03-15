@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str

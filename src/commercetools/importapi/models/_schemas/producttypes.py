@@ -86,6 +86,7 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeDefinition(**data)
 
 
@@ -102,6 +103,7 @@ class AttributeTypeSchema(helpers.BaseSchema):
 
 
 class AttributeBooleanTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -112,6 +114,7 @@ class AttributeBooleanTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTimeTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -122,6 +125,7 @@ class AttributeDateTimeTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -158,10 +162,12 @@ class AttributePlainEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributePlainEnumValue(**data)
 
 
 class AttributeLocalizableTextTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -202,10 +208,12 @@ class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeLocalizedEnumValue(**data)
 
 
 class AttributeMoneyTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -234,6 +242,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
 
 
 class AttributeNumberTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -294,6 +303,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTextTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -304,6 +314,7 @@ class AttributeTextTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTimeTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -330,4 +341,5 @@ class ProductTypeImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductTypeImport(**data)

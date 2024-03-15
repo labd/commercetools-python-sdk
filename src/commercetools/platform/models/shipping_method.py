@@ -92,13 +92,13 @@ class PriceFunction(_BaseType):
 
 
 class ShippingMethod(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the ShippingMethod.
     key: typing.Optional[str]
-    #: Name of the ShippingMethod.
+    #: Unique name of the ShippingMethod within a [Project](ctp:api:type:Project).
     name: str
     #: Localized name of the ShippingMethod.
     localized_name: typing.Optional["LocalizedString"]
@@ -172,7 +172,7 @@ class ShippingMethod(BaseResource):
 class ShippingMethodDraft(_BaseType):
     #: User-defined unique identifier for the ShippingMethod.
     key: typing.Optional[str]
-    #: Name of the ShippingMethod.
+    #: Unique name for the ShippingMethod within a [Project](ctp:api:type:Project).
     name: str
     #: Localized name of the ShippingMethod.
     localized_name: typing.Optional["LocalizedString"]
@@ -305,11 +305,12 @@ class ShippingMethodReference(Reference):
 
 
 class ShippingMethodResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.SHIPPING_METHOD)
 
     @classmethod
@@ -448,7 +449,7 @@ class ShippingMethodUpdateAction(_BaseType):
 class ShippingRate(_BaseType):
     #: Currency amount of the ShippingRate.
     price: "TypedMoney"
-    #: Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
+    #: [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
     free_above: typing.Optional["TypedMoney"]
     #: `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
     #: Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
@@ -487,7 +488,7 @@ class ShippingRate(_BaseType):
 class ShippingRateDraft(_BaseType):
     #: Money value of the ShippingRate.
     price: "Money"
-    #: Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
+    #: [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
     free_above: typing.Optional["Money"]
     #: Price tiers for the ShippingRate.
     tiers: typing.Optional[typing.List["ShippingRatePriceTier"]]
@@ -585,7 +586,7 @@ class CartScoreTier(ShippingRatePriceTier):
 
     """
 
-    #: Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Using Tiered Shipping Rates](/../tutorials/shipping-rate) for details and examples.
+    #: Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Tiered shipping rates](/../api/shipping-delivery-overview#tiered-shipping-rates) for details and examples.
     score: int
     #: Defines a fixed price for the `score`.
     price: typing.Optional["Money"]
@@ -799,7 +800,7 @@ class ShippingMethodChangeIsDefaultAction(ShippingMethodUpdateAction):
 
 
 class ShippingMethodChangeNameAction(ShippingMethodUpdateAction):
-    #: Value to set. Must not be empty.
+    #: Unique value to set within a [Project](ctp:api:type:Project). Must not be empty.
     name: str
 
     def __init__(self, *, name: str):

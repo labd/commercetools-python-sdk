@@ -55,6 +55,7 @@ class CustomerGroupSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerGroup(**data)
 
 
@@ -78,6 +79,7 @@ class CustomerGroupDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerGroupDraft(**data)
 
 
@@ -101,6 +103,7 @@ class CustomerGroupPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerGroupPagedQueryResponse(**data)
 
 
@@ -123,6 +126,7 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
 
 
 class CustomerGroupResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -160,6 +164,7 @@ class CustomerGroupUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerGroupUpdate(**data)
 
 

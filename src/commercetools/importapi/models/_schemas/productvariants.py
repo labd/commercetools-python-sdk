@@ -525,6 +525,7 @@ class ProductVariantImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantImport(**data)
 
 
@@ -546,12 +547,20 @@ class ProductVariantPatchSchema(helpers.BaseSchema):
     staged = marshmallow.fields.Boolean(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
+    product = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.ProductKeyReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantPatch(**data)
 
 

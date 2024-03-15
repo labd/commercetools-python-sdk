@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticActionRequestBuilder:
+
     _client: "BaseClient"
 
     def __init__(

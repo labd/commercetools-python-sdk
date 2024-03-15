@@ -74,15 +74,15 @@ __all__ = [
 
 
 class Payment(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
     customer: typing.Optional["CustomerReference"]
     #: [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
     anonymous_id: typing.Optional[str]
-    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
     #: Identifier used by the payment service that processes the Payment (for example, a PSP).
     #: The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
@@ -178,7 +178,7 @@ class PaymentDraft(_BaseType):
     customer: typing.Optional["CustomerResourceIdentifier"]
     #: [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
     anonymous_id: typing.Optional[str]
-    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
     #: Identifier used by the payment service that processes the Payment (for example, a PSP).
     #: The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
@@ -367,11 +367,12 @@ class PaymentReference(Reference):
 
 
 class PaymentResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PAYMENT)
 
     @classmethod
@@ -455,7 +456,8 @@ class PaymentStatusDraft(_BaseType):
 
 
 class PaymentUpdate(_BaseType):
-    #: Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the Payment on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Payment.
     actions: typing.List["PaymentUpdateAction"]

@@ -71,6 +71,7 @@ class ExtensionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Extension(**data)
 
 
@@ -139,6 +140,7 @@ class ExtensionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExtensionDraft(**data)
 
 
@@ -174,6 +176,12 @@ class ExtensionInputSchema(helpers.BaseSchema):
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -191,6 +199,9 @@ class ExtensionInputSchema(helpers.BaseSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -229,6 +240,7 @@ class ExtensionInputSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExtensionInput(**data)
 
 
@@ -252,6 +264,7 @@ class ExtensionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExtensionPagedQueryResponse(**data)
 
 
@@ -277,6 +290,7 @@ class ExtensionTriggerSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExtensionTrigger(**data)
 
 
@@ -308,6 +322,7 @@ class ExtensionUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExtensionUpdate(**data)
 
 

@@ -311,9 +311,9 @@ class Product(BaseResource):
 
     """
 
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Product.
     #:
@@ -856,11 +856,12 @@ class ProductReference(Reference):
 
 
 class ProductResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT)
 
     @classmethod
@@ -878,7 +879,8 @@ class ProductResourceIdentifier(ResourceIdentifier):
 
 
 class ProductUpdate(_BaseType):
-    #: Expected version of the Product on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Product on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Product.
     actions: typing.List["ProductUpdateAction"]
@@ -1197,24 +1199,32 @@ class ProductVariantAvailability(_BaseType):
     #: For each [InventoryEntry](ctp:api:type:InventoryEntry) with a supply Channel, an entry is added to `channels`.
     channels: typing.Optional["ProductVariantChannelAvailabilityMap"]
     #: Indicates whether a Product Variant is in stock.
-    is_on_stock: typing.Optional[bool]
+    is_on_stock: bool
     #: Number of days to restock a Product Variant once it is out of stock.
     restockable_in_days: typing.Optional[int]
     #: Number of items of the Product Variant that are in stock.
     available_quantity: typing.Optional[int]
+    #: Unique identifier of the [InventoryEntry](ctp:api:type:InventoryEntry).
+    id: typing.Optional[str]
+    #: Current version of the [InventoryEntry](ctp:api:type:InventoryEntry).
+    version: typing.Optional[int]
 
     def __init__(
         self,
         *,
         channels: typing.Optional["ProductVariantChannelAvailabilityMap"] = None,
-        is_on_stock: typing.Optional[bool] = None,
+        is_on_stock: bool,
         restockable_in_days: typing.Optional[int] = None,
-        available_quantity: typing.Optional[int] = None
+        available_quantity: typing.Optional[int] = None,
+        id: typing.Optional[str] = None,
+        version: typing.Optional[int] = None
     ):
         self.channels = channels
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
         self.available_quantity = available_quantity
+        self.id = id
+        self.version = version
 
         super().__init__()
 
@@ -1504,6 +1514,7 @@ class WhitespaceTokenizer(SuggestTokenizer):
     """Creates tokens by splitting the `text` field in [SearchKeyword](ctp:api:type:SearchKeyword) by whitespaces."""
 
     def __init__(self):
+
         super().__init__(type="whitespace")
 
     @classmethod
@@ -2262,6 +2273,7 @@ class ProductRevertStagedChangesAction(ProductUpdateAction):
     """Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChanges](ctp:api:type:ProductRevertedStagedChangesMessage) Message."""
 
     def __init__(self):
+
         super().__init__(action="revertStagedChanges")
 
     @classmethod
@@ -3327,13 +3339,14 @@ class ProductTransitionStateAction(ProductUpdateAction):
 
 
 class ProductUnpublishAction(ProductUpdateAction):
-    """Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](/projects/productProjections#query-productprojections)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
+    """Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 
     Unpublished Products cannot be added to a Cart. However, if a Cart contains Line Items for Products that were added before the Product was unpublished, the Cart is unaffected and can still be used to create an Order. To prevent this, in addition to unpublishing the Product you should remove the Prices from the Product using [Remove Price](ctp:api:type:ProductRemovePriceAction) for Embedded Prices or [Delete StandalonePrice](/projects/standalone-prices#delete-standaloneprice) for Standalone Prices.
 
     """
 
     def __init__(self):
+
         super().__init__(action="unpublish")
 
     @classmethod

@@ -15,6 +15,7 @@ from commercetools import helpers
 from ... import models
 from ..cart import (
     CartOrigin,
+    CustomLineItemPriceMode,
     InventoryMode,
     RoundingMode,
     ShippingMethodState,
@@ -33,12 +34,7 @@ from ..order import (
     ReturnShipmentState,
     ShipmentState,
 )
-from .common import (
-    BaseResourceSchema,
-    LocalizedStringField,
-    ReferenceSchema,
-    ResourceIdentifierSchema,
-)
+from .common import BaseResourceSchema, LocalizedStringField, ReferenceSchema
 from .type import FieldContainerField
 
 # Fields
@@ -69,6 +65,7 @@ class HitSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Hit(**data)
 
 
@@ -93,6 +90,7 @@ class OrderPagedSearchResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderPagedSearchResponse(**data)
 
 
@@ -113,6 +111,7 @@ class OrderSearchQueryExpressionValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchQueryExpressionValue(**data)
 
 
@@ -133,6 +132,7 @@ class OrderSearchAnyValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchAnyValue(**data)
 
 
@@ -149,6 +149,7 @@ class OrderSearchDateRangeValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchDateRangeValue(**data)
 
 
@@ -171,6 +172,7 @@ class OrderSearchFullTextValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchFullTextValue(**data)
 
 
@@ -187,6 +189,7 @@ class OrderSearchLongRangeValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchLongRangeValue(**data)
 
 
@@ -203,6 +206,7 @@ class OrderSearchNumberRangeValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchNumberRangeValue(**data)
 
 
@@ -223,7 +227,84 @@ class OrderSearchStringValueSchema(OrderSearchQueryExpressionValueSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchStringValue(**data)
+
+
+class CustomLineItemImportDraftSchema(helpers.BaseSchema):
+    name = LocalizedStringField(
+        allow_none=True,
+        values=marshmallow.fields.String(allow_none=True),
+        load_default=None,
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    slug = marshmallow.fields.String(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    money = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.MoneySchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    tax_rate = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="taxRate",
+    )
+    tax_category = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".tax_category.TaxCategoryResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="taxCategory",
+    )
+    price_mode = marshmallow_enum.EnumField(
+        CustomLineItemPriceMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="priceMode",
+    )
+    shipping_details = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingDetails",
+    )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ItemStateSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.CustomLineItemImportDraft(**data)
 
 
 class DeliverySchema(helpers.BaseSchema):
@@ -268,6 +349,7 @@ class DeliverySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Delivery(**data)
 
 
@@ -311,6 +393,7 @@ class DeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryDraft(**data)
 
 
@@ -323,6 +406,7 @@ class DeliveryItemSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryItem(**data)
 
 
@@ -334,7 +418,7 @@ class DiscountedLineItemPriceDraftSchema(helpers.BaseSchema):
         load_default=None,
     )
     included_discounts = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.DiscountedLineItemPortionSchema"),
+        nested=helpers.absmod(__name__, ".cart.DiscountedLineItemPortionDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -347,6 +431,7 @@ class DiscountedLineItemPriceDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountedLineItemPriceDraft(**data)
 
 
@@ -364,20 +449,18 @@ class ItemStateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ItemState(**data)
 
 
 class LineItemImportDraftSchema(helpers.BaseSchema):
-    product_id = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="productId",
-    )
     name = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         load_default=None,
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     variant = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ProductVariantImportDraftSchema"),
@@ -385,36 +468,18 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         load_default=None,
     )
+    product_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="productId",
+    )
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     price = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.PriceDraftSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         load_default=None,
-    )
-    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
-    state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".ItemStateSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-    )
-    supply_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="supplyChannel",
-    )
-    distribution_channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="distributionChannel",
     )
     tax_rate = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".tax_category.TaxRateSchema"),
@@ -424,12 +489,21 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="taxRate",
     )
-    custom = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+    distribution_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
+        data_key="distributionChannel",
+    )
+    supply_channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="supplyChannel",
     )
     inventory_mode = marshmallow_enum.EnumField(
         InventoryMode,
@@ -447,43 +521,43 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="shippingDetails",
     )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".ItemStateSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LineItemImportDraft(**data)
 
 
 class OrderSchema(BaseResourceSchema):
-    last_modified_by = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="lastModifiedBy",
-    )
-    created_by = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="createdBy",
-    )
-    completed_at = marshmallow.fields.DateTime(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="completedAt",
-    )
     order_number = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="orderNumber",
+    )
+    purchase_order_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="purchaseOrderNumber",
     )
     customer_id = marshmallow.fields.String(
         allow_none=True,
@@ -496,6 +570,14 @@ class OrderSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         load_default=None,
         data_key="customerEmail",
+    )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customerGroup",
     )
     anonymous_id = marshmallow.fields.String(
         allow_none=True,
@@ -566,49 +648,13 @@ class OrderSchema(BaseResourceSchema):
         load_default=None,
         data_key="taxedShippingPrice",
     )
-    shipping_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+    discount_on_total_price = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.DiscountOnTotalPriceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="shippingAddress",
-    )
-    billing_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="billingAddress",
-    )
-    shipping_mode = marshmallow_enum.EnumField(
-        ShippingMode,
-        by_value=True,
-        allow_none=True,
-        load_default=None,
-        data_key="shippingMode",
-    )
-    shipping_key = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="shippingKey",
-    )
-    shipping_custom_fields = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="shippingCustomFields",
-    )
-    shipping = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.ShippingSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        load_default=None,
+        data_key="discountOnTotalPrice",
     )
     tax_mode = marshmallow_enum.EnumField(
         TaxMode,
@@ -626,16 +672,152 @@ class OrderSchema(BaseResourceSchema):
         load_default=None,
         data_key="taxRoundingMode",
     )
-    customer_group = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".customer_group.CustomerGroupReferenceSchema"),
+    tax_calculation_mode = marshmallow_enum.EnumField(
+        TaxCalculationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="taxCalculationMode",
+    )
+    inventory_mode = marshmallow_enum.EnumField(
+        InventoryMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="inventoryMode",
+    )
+    billing_address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="customerGroup",
+        data_key="billingAddress",
+    )
+    shipping_address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingAddress",
+    )
+    shipping_mode = marshmallow_enum.EnumField(
+        ShippingMode,
+        by_value=True,
+        allow_none=True,
+        load_default=None,
+        data_key="shippingMode",
+    )
+    shipping_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingKey",
+    )
+    shipping_info = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingInfo",
+    )
+    shipping_rate_input = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "Classification": helpers.absmod(
+                __name__, ".cart.ClassificationShippingRateInputSchema"
+            ),
+            "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
+        },
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingRateInput",
+    )
+    shipping_custom_fields = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingCustomFields",
+    )
+    shipping = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.ShippingSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    item_shipping_addresses = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.AddressSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="itemShippingAddresses",
+    )
+    discount_codes = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.DiscountCodeInfoSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="discountCodes",
+    )
+    direct_discounts = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.DirectDiscountSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="directDiscounts",
+    )
+    refused_gifts = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart_discount.CartDiscountReferenceSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+        data_key="refusedGifts",
+    )
+    payment_info = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".PaymentInfoSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="paymentInfo",
     )
     country = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    locale = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    origin = marshmallow_enum.EnumField(
+        CartOrigin, by_value=True, allow_none=True, load_default=None
+    )
+    cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    quote = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
     )
     order_state = marshmallow_enum.EnumField(
         OrderState,
@@ -643,13 +825,6 @@ class OrderSchema(BaseResourceSchema):
         allow_none=True,
         load_default=None,
         data_key="orderState",
-    )
-    state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
     )
     shipment_state = marshmallow_enum.EnumField(
         ShipmentState,
@@ -667,13 +842,12 @@ class OrderSchema(BaseResourceSchema):
         load_default=None,
         data_key="paymentState",
     )
-    shipping_info = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.ShippingInfoSchema"),
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="shippingInfo",
     )
     sync_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SyncInfoSchema"),
@@ -692,40 +866,11 @@ class OrderSchema(BaseResourceSchema):
         load_default=None,
         data_key="returnInfo",
     )
-    purchase_order_number = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="purchaseOrderNumber",
-    )
-    discount_codes = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.DiscountCodeInfoSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="discountCodes",
-    )
     last_message_sequence_number = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="lastMessageSequenceNumber",
-    )
-    cart = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.CartReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-    )
-    quote = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".quote.QuoteReferenceSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
     )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsSchema"),
@@ -734,65 +879,27 @@ class OrderSchema(BaseResourceSchema):
         metadata={"omit_empty": True},
         load_default=None,
     )
-    payment_info = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".PaymentInfoSchema"),
+    completed_at = marshmallow.fields.DateTime(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="completedAt",
+    )
+    last_modified_by = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="paymentInfo",
+        data_key="lastModifiedBy",
     )
-    locale = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, load_default=None
-    )
-    inventory_mode = marshmallow_enum.EnumField(
-        InventoryMode,
-        by_value=True,
+    created_by = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.CreatedBySchema"),
         allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="inventoryMode",
-    )
-    origin = marshmallow_enum.EnumField(
-        CartOrigin, by_value=True, allow_none=True, load_default=None
-    )
-    tax_calculation_mode = marshmallow_enum.EnumField(
-        TaxCalculationMode,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="taxCalculationMode",
-    )
-    shipping_rate_input = helpers.Discriminator(
-        allow_none=True,
-        discriminator_field=("type", "type"),
-        discriminator_schemas={
-            "Classification": helpers.absmod(
-                __name__, ".cart.ClassificationShippingRateInputSchema"
-            ),
-            "Score": helpers.absmod(__name__, ".cart.ScoreShippingRateInputSchema"),
-        },
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="shippingRateInput",
-    )
-    item_shipping_addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.AddressSchema"),
-        allow_none=True,
-        many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="itemShippingAddresses",
-    )
-    refused_gifts = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart_discount.CartDiscountReferenceSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        load_default=None,
-        data_key="refusedGifts",
+        data_key="createdBy",
     )
 
     class Meta:
@@ -800,6 +907,7 @@ class OrderSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Order(**data)
 
 
@@ -871,6 +979,7 @@ class OrderFromCartDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderFromCartDraft(**data)
 
 
@@ -931,6 +1040,7 @@ class OrderFromQuoteDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderFromQuoteDraft(**data)
 
 
@@ -940,6 +1050,12 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         load_default=None,
         data_key="orderNumber",
+    )
+    purchase_order_number = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="purchaseOrderNumber",
     )
     customer_id = marshmallow.fields.String(
         allow_none=True,
@@ -953,6 +1069,33 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="customerEmail",
     )
+    customer_group = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customerGroup",
+    )
+    business_unit = helpers.LazyNestedField(
+        nested=helpers.absmod(
+            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
+        ),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="businessUnit",
+    )
+    store = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
     line_items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".LineItemImportDraftSchema"),
         allow_none=True,
@@ -963,7 +1106,7 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         data_key="lineItems",
     )
     custom_line_items = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".cart.CustomLineItemImportDraftSchema"),
+        nested=helpers.absmod(__name__, ".CustomLineItemImportDraftSchema"),
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
@@ -986,13 +1129,29 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="taxedPrice",
     )
-    shipping_address = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
+    tax_rounding_mode = marshmallow_enum.EnumField(
+        RoundingMode,
+        by_value=True,
         allow_none=True,
-        unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="shippingAddress",
+        data_key="taxRoundingMode",
+    )
+    tax_calculation_mode = marshmallow_enum.EnumField(
+        TaxCalculationMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="taxCalculationMode",
+    )
+    inventory_mode = marshmallow_enum.EnumField(
+        InventoryMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="inventoryMode",
     )
     billing_address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
@@ -1002,49 +1161,22 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="billingAddress",
     )
-    customer_group = helpers.LazyNestedField(
-        nested=helpers.absmod(
-            __name__, ".customer_group.CustomerGroupResourceIdentifierSchema"
-        ),
+    shipping_address = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-        data_key="customerGroup",
+        data_key="shippingAddress",
     )
-    country = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, load_default=None
-    )
-    order_state = marshmallow_enum.EnumField(
-        OrderState,
-        by_value=True,
+    item_shipping_addresses = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
         allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="orderState",
-    )
-    state = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
-        allow_none=True,
+        many=True,
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-    )
-    shipment_state = marshmallow_enum.EnumField(
-        ShipmentState,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="shipmentState",
-    )
-    payment_state = marshmallow_enum.EnumField(
-        PaymentState,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="paymentState",
+        data_key="itemShippingAddresses",
     )
     shipping_info = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ShippingInfoImportDraftSchema"),
@@ -1062,6 +1194,47 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="paymentInfo",
     )
+    payment_state = marshmallow_enum.EnumField(
+        PaymentState,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="paymentState",
+    )
+    shipment_state = marshmallow_enum.EnumField(
+        ShipmentState,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shipmentState",
+    )
+    order_state = marshmallow_enum.EnumField(
+        OrderState,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="orderState",
+    )
+    state = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".state.StateReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
+    country = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    origin = marshmallow_enum.EnumField(
+        CartOrigin,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
     completed_at = marshmallow.fields.DateTime(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -1075,71 +1248,23 @@ class OrderImportDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         load_default=None,
     )
-    inventory_mode = marshmallow_enum.EnumField(
-        InventoryMode,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="inventoryMode",
-    )
-    tax_rounding_mode = marshmallow_enum.EnumField(
-        RoundingMode,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="taxRoundingMode",
-    )
-    item_shipping_addresses = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
-        allow_none=True,
-        many=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="itemShippingAddresses",
-    )
-    business_unit = helpers.LazyNestedField(
-        nested=helpers.absmod(
-            __name__, ".business_unit.BusinessUnitResourceIdentifierSchema"
-        ),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="businessUnit",
-    )
-    store = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".store.StoreResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
-        load_default=None,
-    )
-    origin = marshmallow_enum.EnumField(
-        CartOrigin,
-        by_value=True,
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderImportDraft(**data)
 
 
 class OrderPagedQueryResponseSchema(helpers.BaseSchema):
     limit = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     count = marshmallow.fields.Integer(allow_none=True, load_default=None)
     total = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    offset = marshmallow.fields.Integer(allow_none=True, load_default=None)
     results = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".OrderSchema"),
         allow_none=True,
@@ -1153,6 +1278,7 @@ class OrderPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderPagedQueryResponse(**data)
 
 
@@ -1174,31 +1300,25 @@ class OrderReferenceSchema(ReferenceSchema):
         return models.OrderReference(**data)
 
 
-class OrderResourceIdentifierSchema(ResourceIdentifierSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.post_load
-    def post_load(self, data, **kwargs):
-        del data["type_id"]
-        return models.OrderResourceIdentifier(**data)
-
-
 class OrderSearchQuerySchema(helpers.BaseSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchQuery(**data)
 
 
 class OrderSearchCompoundExpressionSchema(OrderSearchQuerySchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchCompoundExpression(**data)
 
 
@@ -1217,6 +1337,7 @@ class OrderSearchAndExpressionSchema(OrderSearchCompoundExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchAndExpression(**data)
 
 
@@ -1234,6 +1355,7 @@ class OrderSearchFilterExpressionSchema(OrderSearchCompoundExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchFilterExpression(**data)
 
 
@@ -1252,6 +1374,7 @@ class OrderSearchNotExpressionSchema(OrderSearchCompoundExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchNotExpression(**data)
 
 
@@ -1270,15 +1393,18 @@ class OrderSearchOrExpressionSchema(OrderSearchCompoundExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchOrExpression(**data)
 
 
 class OrderSearchQueryExpressionSchema(OrderSearchQuerySchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchQueryExpression(**data)
 
 
@@ -1295,6 +1421,7 @@ class OrderSearchDateRangeExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchDateRangeExpression(**data)
 
 
@@ -1311,6 +1438,7 @@ class OrderSearchExactExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchExactExpression(**data)
 
 
@@ -1327,6 +1455,7 @@ class OrderSearchExistsExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchExistsExpression(**data)
 
 
@@ -1344,6 +1473,7 @@ class OrderSearchFullTextExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchFullTextExpression(**data)
 
 
@@ -1360,6 +1490,7 @@ class OrderSearchLongRangeExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchLongRangeExpression(**data)
 
 
@@ -1376,6 +1507,7 @@ class OrderSearchNumberRangeExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchNumberRangeExpression(**data)
 
 
@@ -1392,6 +1524,7 @@ class OrderSearchPrefixExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchPrefixExpression(**data)
 
 
@@ -1408,6 +1541,7 @@ class OrderSearchWildCardExpressionSchema(OrderSearchQueryExpressionSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchWildCardExpression(**data)
 
 
@@ -1438,6 +1572,7 @@ class OrderSearchRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchRequest(**data)
 
 
@@ -1473,6 +1608,7 @@ class OrderSearchSortingSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderSearchSorting(**data)
 
 
@@ -1659,6 +1795,7 @@ class OrderUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderUpdate(**data)
 
 
@@ -1718,6 +1855,7 @@ class ParcelSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Parcel(**data)
 
 
@@ -1761,6 +1899,7 @@ class ParcelDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelDraft(**data)
 
 
@@ -1795,6 +1934,7 @@ class ParcelMeasurementsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelMeasurements(**data)
 
 
@@ -1812,6 +1952,7 @@ class PaymentInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentInfo(**data)
 
 
@@ -1852,6 +1993,7 @@ class ProductVariantImportDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantImportDraft(**data)
 
 
@@ -1890,6 +2032,7 @@ class ReturnInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReturnInfo(**data)
 
 
@@ -1919,11 +2062,15 @@ class ReturnInfoDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReturnInfoDraft(**data)
 
 
 class ReturnItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, load_default=None)
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     type = marshmallow.fields.String(allow_none=True, load_default=None)
     comment = marshmallow.fields.String(
@@ -1995,6 +2142,9 @@ class LineItemReturnItemSchema(ReturnItemSchema):
 
 
 class ReturnItemDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     line_item_id = marshmallow.fields.String(
         allow_none=True,
@@ -2031,6 +2181,7 @@ class ReturnItemDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReturnItemDraft(**data)
 
 
@@ -2109,6 +2260,7 @@ class ShippingInfoImportDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingInfoImportDraft(**data)
 
 
@@ -2134,6 +2286,7 @@ class SyncInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SyncInfo(**data)
 
 
@@ -2158,6 +2311,7 @@ class TaxedItemPriceDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxedItemPriceDraft(**data)
 
 
@@ -2192,6 +2346,7 @@ class TrackingDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TrackingData(**data)
 
 
@@ -2202,6 +2357,12 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
         load_default=None,
         data_key="deliveryKey",
     )
+    shipping_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingKey",
+    )
     items = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".DeliveryItemSchema"),
         allow_none=True,
@@ -2209,12 +2370,6 @@ class OrderAddDeliveryActionSchema(OrderUpdateActionSchema):
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
-    )
-    shipping_key = marshmallow.fields.String(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="shippingKey",
     )
     address = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.BaseAddressSchema"),
@@ -2307,6 +2462,13 @@ class OrderAddParcelToDeliveryActionSchema(OrderUpdateActionSchema):
         metadata={"omit_empty": True},
         load_default=None,
     )
+    custom = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -2387,7 +2549,6 @@ class OrderChangePaymentStateActionSchema(OrderUpdateActionSchema):
         PaymentState,
         by_value=True,
         allow_none=True,
-        metadata={"omit_empty": True},
         load_default=None,
         data_key="paymentState",
     )
@@ -2406,7 +2567,6 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
         ShipmentState,
         by_value=True,
         allow_none=True,
-        metadata={"omit_empty": True},
         load_default=None,
         data_key="shipmentState",
     )
@@ -2422,7 +2582,16 @@ class OrderChangeShipmentStateActionSchema(OrderUpdateActionSchema):
 
 class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemId",
+    )
+    custom_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemKey",
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
@@ -2443,7 +2612,16 @@ class OrderImportCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderImportLineItemStateActionSchema(OrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
@@ -2613,7 +2791,16 @@ class OrderSetCustomFieldActionSchema(OrderUpdateActionSchema):
 
 class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemId",
+    )
+    custom_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -2631,7 +2818,16 @@ class OrderSetCustomLineItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemId",
+    )
+    custom_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemKey",
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -2658,7 +2854,16 @@ class OrderSetCustomLineItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 class OrderSetCustomLineItemShippingDetailsActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemId",
+    )
+    custom_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemKey",
     )
     shipping_details = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".cart.ItemShippingDetailsDraftSchema"),
@@ -3281,7 +3486,16 @@ class OrderSetReturnInfoActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnItemCustomFieldActionSchema(OrderUpdateActionSchema):
     return_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="returnItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemId",
+    )
+    return_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -3299,7 +3513,16 @@ class OrderSetReturnItemCustomFieldActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnItemCustomTypeActionSchema(OrderUpdateActionSchema):
     return_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="returnItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemId",
+    )
+    return_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemKey",
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -3326,7 +3549,16 @@ class OrderSetReturnItemCustomTypeActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
     return_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="returnItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemId",
+    )
+    return_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemKey",
     )
     payment_state = marshmallow_enum.EnumField(
         ReturnPaymentState,
@@ -3347,7 +3579,16 @@ class OrderSetReturnPaymentStateActionSchema(OrderUpdateActionSchema):
 
 class OrderSetReturnShipmentStateActionSchema(OrderUpdateActionSchema):
     return_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="returnItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemId",
+    )
+    return_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="returnItemKey",
     )
     shipment_state = marshmallow_enum.EnumField(
         ReturnShipmentState,
@@ -3443,7 +3684,16 @@ class OrderSetStoreActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
     custom_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemId",
+    )
+    custom_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="customLineItemKey",
     )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     from_state = helpers.LazyNestedField(
@@ -3478,7 +3728,16 @@ class OrderTransitionCustomLineItemStateActionSchema(OrderUpdateActionSchema):
 
 class OrderTransitionLineItemStateActionSchema(OrderUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     from_state = helpers.LazyNestedField(
@@ -3549,17 +3808,17 @@ class OrderUpdateItemShippingAddressActionSchema(OrderUpdateActionSchema):
 
 
 class OrderUpdateSyncInfoActionSchema(OrderUpdateActionSchema):
-    channel = helpers.LazyNestedField(
-        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
-        allow_none=True,
-        unknown=marshmallow.EXCLUDE,
-        load_default=None,
-    )
     external_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="externalId",
+    )
+    channel = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".channel.ChannelResourceIdentifierSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
     )
     synced_at = marshmallow.fields.DateTime(
         allow_none=True,

@@ -108,9 +108,11 @@ def create_from_draft(draft: typing.Optional[_BaseType]):
             valid_until=draft.valid_until,
             discounted=draft.discounted,
             custom=create_from_draft(draft.custom),
-            tiers=None
-            if draft.tiers is None
-            else [create_from_draft(t) for t in draft.tiers],
+            tiers=(
+                None
+                if draft.tiers is None
+                else [create_from_draft(t) for t in draft.tiers]
+            ),
         )
 
     raise ValueError(f"Unsupported type {draft.__class__}")

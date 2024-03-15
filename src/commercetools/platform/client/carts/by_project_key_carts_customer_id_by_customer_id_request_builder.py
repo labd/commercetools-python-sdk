@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _customer_id: str
@@ -36,7 +37,7 @@ class ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Cart"]:
-        """Retrieves the recently modified active Cart of a Customer with [CartOrigin](ctp:api:type:CartOrigin) `Customer`. If no active Cart exists, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+        """Retrieves the recently modified active Cart of a Customer with [CartOrigin](ctp:api:type:CartOrigin) `Customer`. If no active Cart exists, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 
@@ -55,4 +56,27 @@ class ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def head(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a Cart of a Customer exists. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/carts/customer-id={self._customer_id}",
+            params={},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
         warnings.warn("Unhandled status code %d" % response.status_code)

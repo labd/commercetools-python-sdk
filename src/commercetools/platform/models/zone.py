@@ -59,9 +59,9 @@ class Location(_BaseType):
 
 
 class Zone(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Zone.
     key: typing.Optional[str]
@@ -222,11 +222,12 @@ class ZoneReference(Reference):
 
 
 class ZoneResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ZONE)
 
     @classmethod
@@ -244,7 +245,8 @@ class ZoneResourceIdentifier(ResourceIdentifier):
 
 
 class ZoneUpdate(_BaseType):
-    #: Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: Expected version of the Zone on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Zone.
     actions: typing.List["ZoneUpdateAction"]

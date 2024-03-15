@@ -63,9 +63,9 @@ __all__ = [
 
 
 class Category(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Name of the Category.
     name: "LocalizedString"
@@ -80,9 +80,9 @@ class Category(BaseResource):
     ancestors: typing.List["CategoryReference"]
     #: Parent Category of this Category.
     parent: typing.Optional["CategoryReference"]
-    #: Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+    #: Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
     order_hint: str
-    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
     #: Name of the Category used by external search engines for improved search engine performance.
     meta_title: typing.Optional["LocalizedString"]
@@ -167,10 +167,10 @@ class CategoryDraft(_BaseType):
     #: Parent Category of the Category.
     #: The parent can be set by its `id` or `key`.
     parent: typing.Optional["CategoryResourceIdentifier"]
-    #: Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+    #: Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
     #: If not set, a random value will be assigned.
     order_hint: typing.Optional[str]
-    #: Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
     #: Name of the Category used by external search engines for improved search engine performance.
     meta_title: typing.Optional["LocalizedString"]
@@ -301,11 +301,12 @@ class CategoryReference(Reference):
 
 
 class CategoryResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CATEGORY)
 
     @classmethod
@@ -324,7 +325,7 @@ class CategoryResourceIdentifier(ResourceIdentifier):
 
 class CategoryUpdate(_BaseType):
     #: Expected version of the Category on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Category.
     actions: typing.List["CategoryUpdateAction"]
@@ -963,7 +964,7 @@ class CategorySetDescriptionAction(CategoryUpdateAction):
 
 
 class CategorySetExternalIdAction(CategoryUpdateAction):
-    """This update action sets a new ID that can be used as an additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP)."""
+    """This update action sets a new ID that can be used as an additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP)."""
 
     #: Value to set. If empty, any existing value will be removed.
     external_id: typing.Optional[str]

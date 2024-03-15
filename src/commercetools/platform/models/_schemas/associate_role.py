@@ -69,6 +69,7 @@ class AssociateRoleSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRole(**data)
 
 
@@ -102,10 +103,12 @@ class AssociateRoleDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRoleDraft(**data)
 
 
 class AssociateRoleKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -135,6 +138,7 @@ class AssociateRolePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRolePagedQueryResponse(**data)
 
 
@@ -157,6 +161,7 @@ class AssociateRoleReferenceSchema(ReferenceSchema):
 
 
 class AssociateRoleResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -205,6 +210,7 @@ class AssociateRoleUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRoleUpdate(**data)
 
 

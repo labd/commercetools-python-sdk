@@ -41,6 +41,7 @@ class ChangeSubscriptionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ChangeSubscription(**data)
 
 
@@ -83,6 +84,7 @@ class CloudEventsPayloadSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CloudEventsPayload(**data)
 
 
@@ -147,6 +149,12 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -164,6 +172,9 @@ class DeliveryPayloadSchema(helpers.BaseSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -375,6 +386,7 @@ class MessageSubscriptionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MessageSubscription(**data)
 
 
@@ -389,10 +401,12 @@ class PayloadNotIncludedSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PayloadNotIncluded(**data)
 
 
 class PlatformFormatSchema(DeliveryFormatSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -598,6 +612,7 @@ class SubscriptionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Subscription(**data)
 
 
@@ -658,6 +673,7 @@ class SubscriptionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SubscriptionDraft(**data)
 
 
@@ -681,6 +697,7 @@ class SubscriptionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SubscriptionPagedQueryResponse(**data)
 
 
@@ -712,6 +729,7 @@ class SubscriptionUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SubscriptionUpdate(**data)
 
 

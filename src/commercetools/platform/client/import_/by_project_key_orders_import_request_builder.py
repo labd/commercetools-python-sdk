@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyOrdersImportRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -33,7 +34,14 @@ class ByProjectKeyOrdersImportRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Order"]:
-        """Create an Order by Import"""
+        """Importing an Order produces the [Order Imported](ctp:api:type:OrderImportedMessage) Message.
+
+        Specific Error Codes:
+
+        - [OutOfStock](ctp:api:type:OutOfStockError)
+        - [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/orders/import",

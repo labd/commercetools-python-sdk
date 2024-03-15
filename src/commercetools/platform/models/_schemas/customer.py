@@ -177,6 +177,7 @@ class CustomerSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Customer(**data)
 
 
@@ -195,6 +196,7 @@ class CustomerChangePasswordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerChangePassword(**data)
 
 
@@ -212,6 +214,7 @@ class CustomerCreateEmailTokenSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerCreateEmailToken(**data)
 
 
@@ -229,6 +232,7 @@ class CustomerCreatePasswordResetTokenSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerCreatePasswordResetToken(**data)
 
 
@@ -396,7 +400,19 @@ class CustomerDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerDraft(**data)
+
+
+class CustomerEmailTokenReferenceSchema(ReferenceSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.CustomerEmailTokenReference(**data)
 
 
 class CustomerEmailVerifySchema(helpers.BaseSchema):
@@ -412,6 +428,7 @@ class CustomerEmailVerifySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerEmailVerify(**data)
 
 
@@ -435,7 +452,19 @@ class CustomerPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerPagedQueryResponse(**data)
+
+
+class CustomerPasswordTokenReferenceSchema(ReferenceSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type_id"]
+        return models.CustomerPasswordTokenReference(**data)
 
 
 class CustomerReferenceSchema(ReferenceSchema):
@@ -472,10 +501,12 @@ class CustomerResetPasswordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerResetPassword(**data)
 
 
 class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -505,6 +536,7 @@ class CustomerSignInResultSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerSignInResult(**data)
 
 
@@ -551,11 +583,19 @@ class CustomerSigninSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerSignin(**data)
 
 
 class CustomerTokenSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, load_default=None)
+    customer_id = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="customerId"
+    )
+    value = marshmallow.fields.String(allow_none=True, load_default=None)
+    expires_at = marshmallow.fields.DateTime(
+        allow_none=True, load_default=None, data_key="expiresAt"
+    )
     created_at = marshmallow.fields.DateTime(
         allow_none=True, load_default=None, data_key="createdAt"
     )
@@ -565,19 +605,13 @@ class CustomerTokenSchema(helpers.BaseSchema):
         load_default=None,
         data_key="lastModifiedAt",
     )
-    customer_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="customerId"
-    )
-    expires_at = marshmallow.fields.DateTime(
-        allow_none=True, load_default=None, data_key="expiresAt"
-    )
-    value = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerToken(**data)
 
 
@@ -680,6 +714,7 @@ class CustomerUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerUpdate(**data)
 
 
@@ -709,6 +744,7 @@ class MyCustomerChangePasswordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerChangePassword(**data)
 
 
@@ -722,6 +758,7 @@ class MyCustomerEmailVerifySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerEmailVerify(**data)
 
 
@@ -738,6 +775,7 @@ class MyCustomerResetPasswordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerResetPassword(**data)
 
 
@@ -764,6 +802,7 @@ class MyCustomerSigninSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerSignin(**data)
 
 

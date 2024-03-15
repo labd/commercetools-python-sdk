@@ -22,8 +22,11 @@ if typing.TYPE_CHECKING:
         Money,
         Reference,
         ReferenceTypeId,
+        TypedMoney,
+        TypedMoneyDraft,
     )
     from .product import ProductReference, ProductResourceIdentifier
+    from .store import StoreKeyReference, StoreResourceIdentifier
     from .type import (
         CustomFields,
         CustomFieldsDraft,
@@ -33,6 +36,7 @@ if typing.TYPE_CHECKING:
 
 __all__ = [
     "CartDiscount",
+    "CartDiscountAddStoreAction",
     "CartDiscountChangeCartPredicateAction",
     "CartDiscountChangeIsActiveAction",
     "CartDiscountChangeNameAction",
@@ -46,16 +50,19 @@ __all__ = [
     "CartDiscountLineItemsTarget",
     "CartDiscountPagedQueryResponse",
     "CartDiscountReference",
+    "CartDiscountRemoveStoreAction",
     "CartDiscountResourceIdentifier",
     "CartDiscountSetCustomFieldAction",
     "CartDiscountSetCustomTypeAction",
     "CartDiscountSetDescriptionAction",
     "CartDiscountSetKeyAction",
+    "CartDiscountSetStoresAction",
     "CartDiscountSetValidFromAction",
     "CartDiscountSetValidFromAndUntilAction",
     "CartDiscountSetValidUntilAction",
     "CartDiscountShippingCostTarget",
     "CartDiscountTarget",
+    "CartDiscountTotalPriceTarget",
     "CartDiscountUpdate",
     "CartDiscountUpdateAction",
     "CartDiscountValue",
@@ -76,9 +83,9 @@ __all__ = [
 
 
 class CartDiscount(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Name of the CartDiscount.
     name: "LocalizedString"
@@ -86,24 +93,29 @@ class CartDiscount(BaseResource):
     key: typing.Optional[str]
     #: Description of the CartDiscount.
     description: typing.Optional["LocalizedString"]
-    #: Effect of the CartDiscount.
+    #: Effect of the CartDiscount on the `target`.
     value: "CartDiscountValue"
     #: Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
     cart_predicate: str
-    #: Sets a [CartDiscountTarget](ctp:api:type:CartDiscountTarget). Empty if `value` has type `giftLineItem`.
+    #: Segment of the Cart that is discounted.
+    #:
+    #: Empty, if the `value` is `giftLineItem`.
     target: typing.Optional["CartDiscountTarget"]
     #: Value between `0` and `1`.
     #: All matching CartDiscounts are applied to a Cart in the order defined by this field.
     #: A Discount with a higher sortOrder is prioritized.
     #: The sort order is unambiguous among all CartDiscounts.
     sort_order: str
+    #: - If a value exists, the Cart Discount applies on [Carts](ctp:api:type:Cart) having a [Store](ctp:api:type:Store) matching any Store defined for this field.
+    #: - If empty, the Cart Discount applies on all [Carts](ctp:api:type:Cart), irrespective of a Store.
+    stores: typing.List["StoreKeyReference"]
     #: Indicates if the CartDiscount is active and can be applied to the Cart.
     is_active: bool
     #: Date and time (UTC) from which the Discount is effective.
     valid_from: typing.Optional[datetime.datetime]
     #: Date and time (UTC) until which the Discount is effective.
     valid_until: typing.Optional[datetime.datetime]
-    #: Indicates if the Discount can be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
+    #: Indicates if the Discount is used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
     requires_discount_code: bool
     #: References of all resources that are addressed in the predicate.
     #: The API generates this array from the predicate.
@@ -129,6 +141,7 @@ class CartDiscount(BaseResource):
         cart_predicate: str,
         target: typing.Optional["CartDiscountTarget"] = None,
         sort_order: str,
+        stores: typing.List["StoreKeyReference"],
         is_active: bool,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
@@ -146,6 +159,7 @@ class CartDiscount(BaseResource):
         self.cart_predicate = cart_predicate
         self.target = target
         self.sort_order = sort_order
+        self.stores = stores
         self.is_active = is_active
         self.valid_from = valid_from
         self.valid_until = valid_until
@@ -180,18 +194,27 @@ class CartDiscountDraft(_BaseType):
     key: typing.Optional[str]
     #: Description of the CartDiscount.
     description: typing.Optional["LocalizedString"]
-    #: Effect of the CartDiscount.
-    #: For a [target](ctp:api:type:CartDiscountTarget), relative or absolute Discount values or a fixed item Price value can be specified. If no target is specified, a [Gift Line Item](/../api/projects/cartDiscounts#gift-line-item) can be added to the Cart.
+    #: Effect of the CartDiscount on the `target`.
     value: "CartDiscountValueDraft"
     #: Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
     cart_predicate: str
-    #: Must not be set when the `value` has type `giftLineItem`, otherwise a [CartDiscountTarget](ctp:api:type:CartDiscountTarget) must be set.
+    #: Segment of the Cart that will be discounted.
+    #:
+    #: Must not be set if the `value` is `giftLineItem`.
     target: typing.Optional["CartDiscountTarget"]
     #: Value between `0` and `1`.
     #: A Discount with a higher sortOrder is prioritized.
     #: The sort order must be unambiguous among all CartDiscounts.
     sort_order: str
+    #: - If defined, the Cart Discount applies on [Carts](ctp:api:type:Cart) having a [Store](ctp:api:type:Store) matching any Store defined for this field.
+    #: - If not defined, the Cart Discount applies on all Carts, irrespective of a Store.
+    #:
+    #: If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
+    #:
+    #: If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
     #: Only active Discounts can be applied to the Cart.
+    #: If the [limit](/../api/limits#cart-discounts) for active Cart Discounts is reached, a [MaxCartDiscountsReached](ctp:api:type:MaxCartDiscountsReachedError) error is returned.
     is_active: typing.Optional[bool]
     #: Date and time (UTC) from which the Discount is effective.
     valid_from: typing.Optional[datetime.datetime]
@@ -214,6 +237,7 @@ class CartDiscountDraft(_BaseType):
         cart_predicate: str,
         target: typing.Optional["CartDiscountTarget"] = None,
         sort_order: str,
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
         is_active: typing.Optional[bool] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
@@ -228,6 +252,7 @@ class CartDiscountDraft(_BaseType):
         self.cart_predicate = cart_predicate
         self.target = target
         self.sort_order = sort_order
+        self.stores = stores
         self.is_active = is_active
         self.valid_from = valid_from
         self.valid_until = valid_until
@@ -322,11 +347,12 @@ class CartDiscountReference(Reference):
 
 
 class CartDiscountResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CART_DISCOUNT)
 
     @classmethod
@@ -365,6 +391,10 @@ class CartDiscountTarget(_BaseType):
             from ._schemas.cart_discount import CartDiscountShippingCostTargetSchema
 
             return CartDiscountShippingCostTargetSchema().load(data)
+        if data["type"] == "totalPrice":
+            from ._schemas.cart_discount import CartDiscountTotalPriceTargetSchema
+
+            return CartDiscountTotalPriceTargetSchema().load(data)
         if data["type"] == "multiBuyCustomLineItems":
             from ._schemas.cart_discount import MultiBuyCustomLineItemsTargetSchema
 
@@ -434,6 +464,7 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
     """Discount is applied to the shipping costs of the [Cart](ctp:api:type:Cart)."""
 
     def __init__(self):
+
         super().__init__(type="shipping")
 
     @classmethod
@@ -450,8 +481,30 @@ class CartDiscountShippingCostTarget(CartDiscountTarget):
         return CartDiscountShippingCostTargetSchema().dump(self)
 
 
+class CartDiscountTotalPriceTarget(CartDiscountTarget):
+    """Discount is applied to the total price of the [Cart](ctp:api:type:Cart)."""
+
+    def __init__(self):
+
+        super().__init__(type="totalPrice")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountTotalPriceTarget":
+        from ._schemas.cart_discount import CartDiscountTotalPriceTargetSchema
+
+        return CartDiscountTotalPriceTargetSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountTotalPriceTargetSchema
+
+        return CartDiscountTotalPriceTargetSchema().dump(self)
+
+
 class CartDiscountUpdate(_BaseType):
-    #: Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: Expected version of the CartDiscount on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the CartDiscount.
     actions: typing.List["CartDiscountUpdateAction"]
@@ -488,6 +541,10 @@ class CartDiscountUpdateAction(_BaseType):
     def deserialize(
         cls, data: typing.Dict[str, typing.Any]
     ) -> "CartDiscountUpdateAction":
+        if data["action"] == "addStore":
+            from ._schemas.cart_discount import CartDiscountAddStoreActionSchema
+
+            return CartDiscountAddStoreActionSchema().load(data)
         if data["action"] == "changeCartPredicate":
             from ._schemas.cart_discount import (
                 CartDiscountChangeCartPredicateActionSchema,
@@ -526,6 +583,10 @@ class CartDiscountUpdateAction(_BaseType):
             from ._schemas.cart_discount import CartDiscountChangeValueActionSchema
 
             return CartDiscountChangeValueActionSchema().load(data)
+        if data["action"] == "removeStore":
+            from ._schemas.cart_discount import CartDiscountRemoveStoreActionSchema
+
+            return CartDiscountRemoveStoreActionSchema().load(data)
         if data["action"] == "setCustomField":
             from ._schemas.cart_discount import CartDiscountSetCustomFieldActionSchema
 
@@ -542,6 +603,10 @@ class CartDiscountUpdateAction(_BaseType):
             from ._schemas.cart_discount import CartDiscountSetKeyActionSchema
 
             return CartDiscountSetKeyActionSchema().load(data)
+        if data["action"] == "setStores":
+            from ._schemas.cart_discount import CartDiscountSetStoresActionSchema
+
+            return CartDiscountSetStoresActionSchema().load(data)
         if data["action"] == "setValidFrom":
             from ._schemas.cart_discount import CartDiscountSetValidFromActionSchema
 
@@ -658,7 +723,9 @@ class CartDiscountValueDraft(_BaseType):
 
 class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
     #: Money values in different currencies.
-    #: An absolute Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$.
+    #: An absolute Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$. If the array has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+    #:
+    #: If the array is empty, the discount does not apply.
     money: typing.List["Money"]
 
     def __init__(self, *, money: typing.List["Money"]):
@@ -683,10 +750,10 @@ class CartDiscountValueAbsoluteDraft(CartDiscountValueDraft):
 class CartDiscountValueFixed(CartDiscountValue):
     """Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied. If the `quantity` of the Line Item eligible for the Discount is greater than `1`, the fixed price discount is only applied to the Line Item portion for which the `money` value is lesser than their current price."""
 
-    #: Cent precision money values in different currencies.
-    money: typing.List["CentPrecisionMoney"]
+    #: Money values in [cent precision](ctp:api:type:CentPrecisionMoney) or [high precision](ctp:api:type:HighPrecisionMoney) of different currencies.
+    money: typing.List["TypedMoney"]
 
-    def __init__(self, *, money: typing.List["CentPrecisionMoney"]):
+    def __init__(self, *, money: typing.List["TypedMoney"]):
         self.money = money
 
         super().__init__(type="fixed")
@@ -708,11 +775,13 @@ class CartDiscountValueFixed(CartDiscountValue):
 class CartDiscountValueFixedDraft(CartDiscountValueDraft):
     """Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied."""
 
-    #: Money values in different currencies.
-    #: A fixed Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$.
-    money: typing.List["Money"]
+    #: Money values provided either in [cent precision](ctp:api:type:Money) or [high precision](ctp:api:type:HighPrecisionMoneyDraft) for different currencies.
+    #: A fixed Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$. If the array has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+    #:
+    #: If the array is empty, the discount does not apply.
+    money: typing.List["TypedMoneyDraft"]
 
-    def __init__(self, *, money: typing.List["Money"]):
+    def __init__(self, *, money: typing.List["TypedMoneyDraft"]):
         self.money = money
 
         super().__init__(type="fixed")
@@ -771,6 +840,11 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
 
 
 class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
+    """Can only be used in a [CartDiscountDraft](ctp:api:type:CartDiscountDraft) with no `target` specified.
+    Hence, this type can not be used in the [Change Value](ctp:api:type:CartDiscountChangeValueAction) update action.
+
+    """
+
     #: ResourceIdentifier of a Product.
     product: "ProductResourceIdentifier"
     #: [ProductVariant](ctp:api:type:ProductVariant) of the Product.
@@ -865,8 +939,10 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
     #: Number of Custom Line Items to be present in order to trigger an application of this Discount.
     trigger_quantity: int
     #: Number of Custom Line Items that are discounted per application of this Discount.
+    #: It must be less than or equal to the `triggerQuantity`.
     discounted_quantity: int
     #: Maximum number of times this Discount can be applied.
+    #: Do not set if the Discount should be applied an unlimited number of times.
     max_occurrence: typing.Optional[int]
     #: Discounts particular Line Items only according to the SelectionMode.
     selection_mode: "SelectionMode"
@@ -908,8 +984,10 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
     #: Number of Line Items to be present in order to trigger an application of this Discount.
     trigger_quantity: int
     #: Number of Line Items that are discounted per application of this Discount.
+    #: It must be less than or equal to the `triggerQuantity`.
     discounted_quantity: int
     #: Maximum number of times this Discount can be applied.
+    #: Do not set if the Discount should be applied an unlimited number of times.
     max_occurrence: typing.Optional[int]
     #: Discounts particular Line Items only according to the SelectionMode.
     selection_mode: "SelectionMode"
@@ -959,6 +1037,40 @@ class StackingMode(enum.Enum):
     STOP_AFTER_THIS_DISCOUNT = "StopAfterThisDiscount"
 
 
+class CartDiscountAddStoreAction(CartDiscountUpdateAction):
+    """If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+
+    This action generates a [CartDiscountStoreAdded](ctp:api:type:CartDiscountStoreAddedMessage) Message.
+
+    """
+
+    #: [Store](ctp:api:type:Store) to add.
+    #:
+    #: A failed update can return the following errors:
+    #:
+    #: - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
+    #: - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+    store: "StoreResourceIdentifier"
+
+    def __init__(self, *, store: "StoreResourceIdentifier"):
+        self.store = store
+
+        super().__init__(action="addStore")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountAddStoreAction":
+        from ._schemas.cart_discount import CartDiscountAddStoreActionSchema
+
+        return CartDiscountAddStoreActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountAddStoreActionSchema
+
+        return CartDiscountAddStoreActionSchema().dump(self)
+
+
 class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
     #: New value to set.
     cart_predicate: str
@@ -985,6 +1097,8 @@ class CartDiscountChangeCartPredicateAction(CartDiscountUpdateAction):
 class CartDiscountChangeIsActiveAction(CartDiscountUpdateAction):
     #: New value to set.
     #: If set to `true`, the Discount will be applied to the Cart.
+    #:
+    #: If the limit for active Cart Discounts is reached, a [MaxCartDiscountsReached](ctp:api:type:MaxCartDiscountsReachedError) error is returned.
     is_active: bool
 
     def __init__(self, *, is_active: bool):
@@ -1128,7 +1242,13 @@ class CartDiscountChangeTargetAction(CartDiscountUpdateAction):
 
 
 class CartDiscountChangeValueAction(CartDiscountUpdateAction):
+    """Changes the [CartDiscountValue](ctp:api:type:CartDiscountValue) for [relative](ctp:api:type:CartDiscountValueRelative), [absolute](ctp:api:type:CartDiscountValueAbsolute) and [fixed price](ctp:api:type:CartDiscountValueFixed) CartDiscounts.
+    Changing to [Gift Line Item](ctp:api:type:CartDiscountValueGiftLineItem) is not supported.
+
+    """
+
     #: New value to set.
+    #: When trying to set a [CartDiscountValueGiftLineItemDraft](ctp:api:type:CartDiscountValueGiftLineItemDraft) an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
     value: "CartDiscountValueDraft"
 
     def __init__(self, *, value: "CartDiscountValueDraft"):
@@ -1148,6 +1268,35 @@ class CartDiscountChangeValueAction(CartDiscountUpdateAction):
         from ._schemas.cart_discount import CartDiscountChangeValueActionSchema
 
         return CartDiscountChangeValueActionSchema().dump(self)
+
+
+class CartDiscountRemoveStoreAction(CartDiscountUpdateAction):
+    """If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+
+    This action generates a [CartDiscountStoreRemoved](ctp:api:type:CartDiscountStoreRemovedMessage) Message.
+
+    """
+
+    #: [Store](ctp:api:type:Store) to remove.
+    store: "StoreResourceIdentifier"
+
+    def __init__(self, *, store: "StoreResourceIdentifier"):
+        self.store = store
+
+        super().__init__(action="removeStore")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountRemoveStoreAction":
+        from ._schemas.cart_discount import CartDiscountRemoveStoreActionSchema
+
+        return CartDiscountRemoveStoreActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountRemoveStoreActionSchema
+
+        return CartDiscountRemoveStoreActionSchema().dump(self)
 
 
 class CartDiscountSetCustomFieldAction(CartDiscountUpdateAction):
@@ -1254,6 +1403,44 @@ class CartDiscountSetKeyAction(CartDiscountUpdateAction):
         from ._schemas.cart_discount import CartDiscountSetKeyActionSchema
 
         return CartDiscountSetKeyActionSchema().dump(self)
+
+
+class CartDiscountSetStoresAction(CartDiscountUpdateAction):
+    """If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+
+    This action generates a [CartDiscountStoresSet](ctp:api:type:CartDiscountStoresSetMessage) Message.
+
+    """
+
+    #: [Stores](ctp:api:type:Store) to set.
+    #: Overrides the current list of Stores.
+    #: If empty, any existing values will be removed.
+    #:
+    #: A failed update can return the following errors:
+    #:
+    #: - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
+    #: - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+    stores: typing.Optional[typing.List["StoreResourceIdentifier"]]
+
+    def __init__(
+        self, *, stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+    ):
+        self.stores = stores
+
+        super().__init__(action="setStores")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CartDiscountSetStoresAction":
+        from ._schemas.cart_discount import CartDiscountSetStoresActionSchema
+
+        return CartDiscountSetStoresActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.cart_discount import CartDiscountSetStoresActionSchema
+
+        return CartDiscountSetStoresActionSchema().dump(self)
 
 
 class CartDiscountSetValidFromAction(CartDiscountUpdateAction):

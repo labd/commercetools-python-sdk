@@ -7,6 +7,8 @@
 
 from . import *  # noqa
 from .api_client import *  # noqa
+from .approval_flow import *  # noqa
+from .approval_rule import *  # noqa
 from .associate_role import *  # noqa
 from .attribute_group import *  # noqa
 from .business_unit import *  # noqa
@@ -31,6 +33,7 @@ from .payment import *  # noqa
 from .product import *  # noqa
 from .product_discount import *  # noqa
 from .product_selection import *  # noqa
+from .product_tailoring import *  # noqa
 from .product_type import *  # noqa
 from .project import *  # noqa
 from .quote import *  # noqa

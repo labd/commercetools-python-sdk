@@ -43,7 +43,7 @@ class ReturnShipmentState(enum.Enum):
 
 
 class ReturnItemDraft(_BaseType):
-    quantity: float
+    quantity: int
     line_item_id: typing.Optional[str]
     custom_line_item_id: typing.Optional[str]
     comment: typing.Optional[str]
@@ -53,7 +53,7 @@ class ReturnItemDraft(_BaseType):
     def __init__(
         self,
         *,
-        quantity: float,
+        quantity: int,
         line_item_id: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,

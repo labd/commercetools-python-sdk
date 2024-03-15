@@ -48,6 +48,7 @@ class AssociateSchema(helpers.BaseSchema):
             AssociateRoleDeprecated, by_value=True, allow_none=True
         ),
         allow_none=True,
+        metadata={"omit_empty": True},
         load_default=None,
     )
     customer = helpers.LazyNestedField(
@@ -62,6 +63,7 @@ class AssociateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Associate(**data)
 
 
@@ -71,7 +73,6 @@ class AssociateDraftSchema(helpers.BaseSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
-        metadata={"omit_empty": True},
         load_default=None,
         data_key="associateRoleAssignments",
     )
@@ -95,6 +96,7 @@ class AssociateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateDraft(**data)
 
 
@@ -117,6 +119,7 @@ class AssociateRoleAssignmentSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRoleAssignment(**data)
 
 
@@ -143,6 +146,7 @@ class AssociateRoleAssignmentDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssociateRoleAssignmentDraft(**data)
 
 
@@ -391,6 +395,7 @@ class BusinessUnitDraftSchema(helpers.BaseSchema):
 
 
 class BusinessUnitKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -425,6 +430,7 @@ class BusinessUnitPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.BusinessUnitPagedQueryResponse(**data)
 
 
@@ -450,6 +456,7 @@ class BusinessUnitReferenceSchema(ReferenceSchema):
 
 
 class BusinessUnitResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -555,6 +562,7 @@ class BusinessUnitUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.BusinessUnitUpdate(**data)
 
 
@@ -571,6 +579,7 @@ class BusinessUnitUpdateActionSchema(helpers.BaseSchema):
 
 
 class CompanySchema(BusinessUnitSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -581,6 +590,7 @@ class CompanySchema(BusinessUnitSchema):
 
 
 class CompanyDraftSchema(BusinessUnitDraftSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -591,6 +601,7 @@ class CompanyDraftSchema(BusinessUnitDraftSchema):
 
 
 class DivisionSchema(BusinessUnitSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -639,6 +650,7 @@ class InheritedAssociateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InheritedAssociate(**data)
 
 
@@ -664,6 +676,7 @@ class InheritedAssociateRoleAssignmentSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InheritedAssociateRoleAssignment(**data)
 
 

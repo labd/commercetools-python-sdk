@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductDraftsRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 

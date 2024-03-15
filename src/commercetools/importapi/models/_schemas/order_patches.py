@@ -22,7 +22,7 @@ from ..order_patches import ReturnShipmentState
 
 
 class ReturnItemDraftSchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     line_item_id = marshmallow.fields.String(
         allow_none=True,
         metadata={"omit_empty": True},
@@ -51,6 +51,7 @@ class ReturnItemDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReturnItemDraft(**data)
 
 
@@ -80,6 +81,7 @@ class ReturnInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReturnInfo(**data)
 
 
@@ -116,6 +118,7 @@ class DeliveryParcelSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryParcel(**data)
 
 
@@ -149,6 +152,7 @@ class DeliveryParcelDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryParcelDraft(**data)
 
 
@@ -180,6 +184,7 @@ class DeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryDraft(**data)
 
 
@@ -200,6 +205,7 @@ class DeliveryAddressDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryAddressDraft(**data)
 
 
@@ -220,6 +226,7 @@ class ParcelMeasurementDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelMeasurementDraft(**data)
 
 
@@ -241,6 +248,7 @@ class ParcelTrackingDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelTrackingData(**data)
 
 
@@ -262,6 +270,7 @@ class ParcelItemsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelItems(**data)
 
 
@@ -273,6 +282,7 @@ class RemoveDeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.RemoveDeliveryDraft(**data)
 
 
@@ -286,6 +296,7 @@ class RemoveParcelFromDeliveryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.RemoveParcelFromDeliveryDraft(**data)
 
 
@@ -370,6 +381,7 @@ class OrderFieldSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderField(**data)
 
 
@@ -389,4 +401,5 @@ class OrderPatchImportSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderPatchImport(**data)

@@ -47,6 +47,7 @@ class CartDiscountsModel(BaseModel):
             created_at=datetime.datetime.now(datetime.timezone.utc),
             last_modified_at=datetime.datetime.now(datetime.timezone.utc),
             custom=utils.create_from_draft(draft.custom),
+            stores=[],
         )
 
 

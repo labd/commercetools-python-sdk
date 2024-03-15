@@ -32,6 +32,7 @@ class ImportSummarySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportSummary(**data)
 
 
@@ -46,10 +47,12 @@ class OperationStatesSchema(helpers.BaseSchema):
     )
     imported = marshmallow.fields.Integer(allow_none=True, load_default=None)
     rejected = marshmallow.fields.Integer(allow_none=True, load_default=None)
+    canceled = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OperationStates(**data)

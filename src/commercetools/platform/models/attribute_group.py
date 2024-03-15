@@ -34,9 +34,9 @@ __all__ = [
 
 
 class AttributeGroup(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Name of the AttributeGroup.
     name: "LocalizedString"
@@ -175,7 +175,7 @@ class AttributeGroupPagedQueryResponse(_BaseType):
 
 
 class AttributeGroupReference(Reference):
-    """[Reference](/../api/types#reference) to an [AttributeGroup](ctp:api:type:AttributeGroup)."""
+    """[Reference](ctp:api:type:Reference) to an [AttributeGroup](ctp:api:type:AttributeGroup)."""
 
     #: Contains the representation of the expanded AttributeGroup. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for AttributeGroup.
     obj: typing.Optional["AttributeGroup"]
@@ -200,11 +200,12 @@ class AttributeGroupReference(Reference):
 
 
 class AttributeGroupResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ATTRIBUTE_GROUP)
 
     @classmethod
@@ -222,7 +223,8 @@ class AttributeGroupResourceIdentifier(ResourceIdentifier):
 
 
 class AttributeGroupUpdate(_BaseType):
-    #: Expected version of the AttributeGroup on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the AttributeGroup on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the AttributeGroup.
     actions: typing.List["AttributeGroupUpdateAction"]

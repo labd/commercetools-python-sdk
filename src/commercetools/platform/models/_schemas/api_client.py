@@ -61,6 +61,7 @@ class ApiClientSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ApiClient(**data)
 
 
@@ -91,6 +92,7 @@ class ApiClientDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ApiClientDraft(**data)
 
 
@@ -114,4 +116,5 @@ class ApiClientPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ApiClientPagedQueryResponse(**data)

@@ -18,7 +18,7 @@ def test_cart_discount_get_by_id(ct_platform_client: PlatformClient):
                 value=models.CartDiscountValueRelative(permyriad=10),
                 cart_predicate="",
                 sort_order="",
-                requires_discount_code=False,
+                requires_discount_code=False
             )
         )
     )

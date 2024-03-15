@@ -81,6 +81,7 @@ class InventoryEntrySchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InventoryEntry(**data)
 
 
@@ -125,6 +126,7 @@ class InventoryEntryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InventoryEntryDraft(**data)
 
 
@@ -147,6 +149,7 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
 
 
 class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -199,6 +202,7 @@ class InventoryEntryUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InventoryEntryUpdate(**data)
 
 
@@ -234,6 +238,7 @@ class InventoryPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InventoryPagedQueryResponse(**data)
 
 

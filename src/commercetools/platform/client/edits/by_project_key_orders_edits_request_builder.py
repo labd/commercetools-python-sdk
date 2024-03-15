@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyOrdersEditsRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -86,6 +87,30 @@ class ByProjectKeyOrdersEditsRequestBuilder:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
+    def head(
+        self,
+        *,
+        where: typing.List["str"] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if an OrderEdit exists for a given Query Predicate. Returns a `200 OK` status if any OrderEdits match the Query Predicate or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/orders/edits",
+            params={"where": where},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
     def post(
         self,
         body: "OrderEditDraft",
@@ -94,6 +119,7 @@ class ByProjectKeyOrdersEditsRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["OrderEdit"]:
+        """You can either create multiple Order Edits for an Order and apply them sequentially to an Order, or create multiple Order Edits parallelly (as alternatives to each other) and apply one of them to the Order."""
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/orders/edits",

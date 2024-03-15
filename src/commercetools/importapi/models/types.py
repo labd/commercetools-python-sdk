@@ -150,6 +150,7 @@ class CustomFieldBooleanType(FieldType):
     """Field type for Boolean values."""
 
     def __init__(self):
+
         super().__init__(name="Boolean")
 
     @classmethod
@@ -170,6 +171,7 @@ class CustomFieldDateTimeType(FieldType):
     """Field type for [DateTime](ctp:import:type:DateTime) values."""
 
     def __init__(self):
+
         super().__init__(name="DateTime")
 
     @classmethod
@@ -190,6 +192,7 @@ class CustomFieldDateType(FieldType):
     """Field type for [Date](ctp:import:type:Date) values."""
 
     def __init__(self):
+
         super().__init__(name="Date")
 
     @classmethod
@@ -310,6 +313,7 @@ class CustomFieldLocalizedStringType(FieldType):
     """Field type for [LocalizedString](ctp:import:type:LocalizedString) values."""
 
     def __init__(self):
+
         super().__init__(name="LocalizedString")
 
     @classmethod
@@ -330,6 +334,7 @@ class CustomFieldMoneyType(FieldType):
     """Field type for [CentPrecisionMoney](ctp:import:type:CentPrecisionMoney) values."""
 
     def __init__(self):
+
         super().__init__(name="Money")
 
     @classmethod
@@ -348,6 +353,7 @@ class CustomFieldNumberType(FieldType):
     """Field type for number values."""
 
     def __init__(self):
+
         super().__init__(name="Number")
 
     @classmethod
@@ -433,6 +439,7 @@ class CustomFieldStringType(FieldType):
     """Field type for string values."""
 
     def __init__(self):
+
         super().__init__(name="String")
 
     @classmethod
@@ -451,6 +458,7 @@ class CustomFieldTimeType(FieldType):
     """Field type for [Time](ctp:import:type:Time) values."""
 
     def __init__(self):
+
         super().__init__(name="Time")
 
     @classmethod

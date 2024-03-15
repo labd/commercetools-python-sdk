@@ -12,6 +12,7 @@ import typing
 from ._abstract import _BaseType
 from .cart import (
     CartOrigin,
+    CustomLineItemPriceMode,
     InventoryMode,
     RoundingMode,
     ShippingMethodState,
@@ -19,7 +20,7 @@ from .cart import (
     TaxCalculationMode,
     TaxMode,
 )
-from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
+from .common import BaseResource, Reference, ReferenceTypeId
 
 if typing.TYPE_CHECKING:
     from .business_unit import BusinessUnitKeyReference, BusinessUnitResourceIdentifier
@@ -28,9 +29,11 @@ if typing.TYPE_CHECKING:
         CartReference,
         CartResourceIdentifier,
         CustomLineItem,
-        CustomLineItemImportDraft,
+        CustomLineItemPriceMode,
+        DirectDiscount,
         DiscountCodeInfo,
-        DiscountedLineItemPortion,
+        DiscountedLineItemPortionDraft,
+        DiscountOnTotalPrice,
         InventoryMode,
         ItemShippingDetailsDraft,
         LineItem,
@@ -76,6 +79,7 @@ if typing.TYPE_CHECKING:
     )
 
 __all__ = [
+    "CustomLineItemImportDraft",
     "CustomLineItemReturnItem",
     "Delivery",
     "DeliveryDraft",
@@ -106,7 +110,6 @@ __all__ = [
     "OrderRemoveItemShippingAddressAction",
     "OrderRemoveParcelFromDeliveryAction",
     "OrderRemovePaymentAction",
-    "OrderResourceIdentifier",
     "OrderSearchAndExpression",
     "OrderSearchAnyValue",
     "OrderSearchCompoundExpression",
@@ -447,6 +450,10 @@ class StagedOrderUpdateAction(_BaseType):
             from ._schemas.order_edit import StagedOrderSetDeliveryItemsActionSchema
 
             return StagedOrderSetDeliveryItemsActionSchema().load(data)
+        if data["action"] == "setDirectDiscounts":
+            from ._schemas.order_edit import StagedOrderSetDirectDiscountsActionSchema
+
+            return StagedOrderSetDirectDiscountsActionSchema().load(data)
         if data["action"] == "setItemShippingAddressCustomField":
             from ._schemas.order_edit import (
                 StagedOrderSetItemShippingAddressCustomFieldActionSchema,
@@ -625,6 +632,10 @@ class StagedOrderUpdateAction(_BaseType):
             from ._schemas.order_edit import StagedOrderSetShippingRateInputActionSchema
 
             return StagedOrderSetShippingRateInputActionSchema().load(data)
+        if data["action"] == "setStore":
+            from ._schemas.order_edit import StagedOrderSetStoreActionSchema
+
+            return StagedOrderSetStoreActionSchema().load(data)
         if data["action"] == "transitionCustomLineItemState":
             from ._schemas.order_edit import (
                 StagedOrderTransitionCustomLineItemStateActionSchema,
@@ -974,18 +985,93 @@ class OrderSearchStringValue(OrderSearchQueryExpressionValue):
         return OrderSearchStringValueSchema().dump(self)
 
 
+class CustomLineItemImportDraft(_BaseType):
+    """Custom Line Items contain generic user-defined items that are not linked to Products."""
+
+    #: Name of the Custom Line Item.
+    name: "LocalizedString"
+    #: User-defined unique identifier of the Custom Line Item.
+    key: typing.Optional[str]
+    #: User-defined identifier used in a deep-link URL for the Custom Line Item. This value should match the pattern `[a-zA-Z0-9_-]{2,256}`.
+    slug: str
+    #: The number of items in the Custom Line Item. Can be a negative value.
+    quantity: int
+    #: The cost of individual items in the Custom Line Item. The amount can be negative.
+    money: "Money"
+    #: The tax rate used to calculate the `taxedPrice` of the Order.
+    tax_rate: typing.Optional["TaxRate"]
+    #: Include a value to associate a Tax Category with the Custom Line Item.
+    tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
+    #: - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+    #: are applied to the Custom Line Item.
+    #: - If `External`, Cart Discounts are not considered on the Custom Line Item.
+    price_mode: typing.Optional["CustomLineItemPriceMode"]
+    #: Container for Custom Line Item-specific addresses.
+    shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: State of the Custom Line Items.
+    state: typing.Optional[typing.List["ItemState"]]
+    #: Custom Fields of the CustomLineItem.
+    custom: typing.Optional["CustomFieldsDraft"]
+
+    def __init__(
+        self,
+        *,
+        name: "LocalizedString",
+        key: typing.Optional[str] = None,
+        slug: str,
+        quantity: int,
+        money: "Money",
+        tax_rate: typing.Optional["TaxRate"] = None,
+        tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
+        price_mode: typing.Optional["CustomLineItemPriceMode"] = None,
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        state: typing.Optional[typing.List["ItemState"]] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
+    ):
+        self.name = name
+        self.key = key
+        self.slug = slug
+        self.quantity = quantity
+        self.money = money
+        self.tax_rate = tax_rate
+        self.tax_category = tax_category
+        self.price_mode = price_mode
+        self.shipping_details = shipping_details
+        self.state = state
+        self.custom = custom
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomLineItemImportDraft":
+        from ._schemas.order import CustomLineItemImportDraftSchema
+
+        return CustomLineItemImportDraftSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.order import CustomLineItemImportDraftSchema
+
+        return CustomLineItemImportDraftSchema().dump(self)
+
+
 class Delivery(_BaseType):
+    """Contains information on how items are shipped to Customers, for example, a delivery note."""
+
     #: Unique identifier of the Delivery.
     id: str
     #: User-defined unique identifier of the Delivery.
     key: typing.Optional[str]
+    #: Date and time (UTC) the Delivery was created.
     created_at: datetime.datetime
-    #: Items which are shipped in this delivery regardless their distribution over several parcels.
-    #: Can also be specified individually for each Parcel.
+    #: Line Items or Custom Line Items that are delivered.
     items: typing.List["DeliveryItem"]
+    #: Information regarding the appearance, content, and shipment of a Parcel.
     parcels: typing.List["Parcel"]
+    #: Address to which Parcels are delivered.
     address: typing.Optional["Address"]
-    #: Custom Fields for the Transaction.
+    #: Custom Fields of the Delivery.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -1024,12 +1110,14 @@ class Delivery(_BaseType):
 class DeliveryDraft(_BaseType):
     #: User-defined unique identifier of the Delivery.
     key: typing.Optional[str]
-    #: Items which are shipped in this delivery regardless their distribution over several parcels.
-    #: Can also be specified individually for each Parcel.
+    #: Line Items or Custom Line Items to deliver.
+    #: It can also be specified individually for each [Parcel](ctp:api:type:Parcel).
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: Information regarding the appearance, content, and shipment of a parcel.
     parcels: typing.Optional[typing.List["ParcelDraft"]]
+    #: Address to which the Parcels are delivered.
     address: typing.Optional["AddressDraft"]
-    #: Custom Fields for the Transaction.
+    #: Custom Fields for the Delivery.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -1062,8 +1150,9 @@ class DeliveryDraft(_BaseType):
 
 
 class DeliveryItem(_BaseType):
-    #: Unique identifier of the DeliveryItem.
+    #: `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
     id: str
+    #: Number of Line Items or Custom Line Items delivered.
     quantity: int
 
     def __init__(self, *, id: str, quantity: int):
@@ -1085,15 +1174,16 @@ class DeliveryItem(_BaseType):
 
 
 class DiscountedLineItemPriceDraft(_BaseType):
-    #: Draft type that stores amounts only in cent precision for the specified currency.
+    #: Discounted money value.
     value: "Money"
-    included_discounts: typing.List["DiscountedLineItemPortion"]
+    #: Discounts to be applied.
+    included_discounts: typing.List["DiscountedLineItemPortionDraft"]
 
     def __init__(
         self,
         *,
         value: "Money",
-        included_discounts: typing.List["DiscountedLineItemPortion"]
+        included_discounts: typing.List["DiscountedLineItemPortionDraft"]
     ):
         self.value = value
         self.included_discounts = included_discounts
@@ -1115,7 +1205,9 @@ class DiscountedLineItemPriceDraft(_BaseType):
 
 
 class ItemState(_BaseType):
+    #: Number of Line Items or Custom Line Items in this State.
     quantity: int
+    #: State of the Line Items or Custom Line Items in a custom workflow.
     state: "StateReference"
 
     def __init__(self, *, quantity: int, state: "StateReference"):
@@ -1137,60 +1229,71 @@ class ItemState(_BaseType):
 
 
 class LineItemImportDraft(_BaseType):
-    #: ID of the existing product.
-    #: You also need to specify the ID of the variant if this property is set or alternatively you can just specify SKU of the product variant.
-    product_id: typing.Optional[str]
-    #: The product name.
+    """Represents a snapshot of a Product Variant at the time it was imported with the Order. The Product Variant can be specified by providing a `productId` and `variant.id`, or by providing a `variant.sku`."""
+
+    #: Name of the Line Item.
     name: "LocalizedString"
+    #: User-defined unique identifier of the Line Item.
+    key: typing.Optional[str]
+    #: The Product Variant to use as a [Line Item](ctp:api:type:LineItem).
     variant: "ProductVariantImportDraft"
-    price: "PriceDraft"
+    #: `id` of the [Product](ctp:api:type:Product) the Product Variant belongs to.
+    #:
+    #: If provided, you must also set `variant.id`.
+    product_id: typing.Optional[str]
+    #: The number of Product Variants in the LineItem. Can be a negative value.
     quantity: int
-    state: typing.Optional[typing.List["ItemState"]]
-    #: Connection to a particular supplier.
-    #: By providing supply channel information, you can uniquely identify
-    #: inventory entries that should be reserved.
-    #: The provided channel should have the
-    #: InventorySupply role.
-    supply_channel: typing.Optional["ChannelResourceIdentifier"]
-    #: The channel is used to select a ProductPrice.
-    #: The provided channel should have the ProductDistribution role.
-    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: The Line Item price for `quantity` = `1`. The amount can be negative.
+    price: "PriceDraft"
+    #: The tax rate used to calculate the `taxedPrice` of the Order.
     tax_rate: typing.Optional["TaxRate"]
-    #: The custom fields.
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
-    #: Set only if inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
+    #: The Channel used to [select a Price](ctp:api:type:LineItemPriceSelection).
+    #: This Channel must have the `ProductDistribution` role.
+    distribution_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: The Channel used to supply Line Items.
+    #: By providing supply Channel information, you can uniquely identify [Inventory entries](ctp:api:type:InventoryEntry) that should be reserved.
+    #: This Channel must have the `InventorySupply` role.
+    supply_channel: typing.Optional["ChannelResourceIdentifier"]
+    #: Inventory mode specific to the LineItem, valid for the entire `quantity` of the LineItem.
+    #: Set only if Inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
     inventory_mode: typing.Optional["InventoryMode"]
+    #: Container for Line Item-specific addresses.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
+    #: States of the Line Item.
+    state: typing.Optional[typing.List["ItemState"]]
+    #: Custom Fields of the LineItem.
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
-        product_id: typing.Optional[str] = None,
         name: "LocalizedString",
+        key: typing.Optional[str] = None,
         variant: "ProductVariantImportDraft",
-        price: "PriceDraft",
+        product_id: typing.Optional[str] = None,
         quantity: int,
-        state: typing.Optional[typing.List["ItemState"]] = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        price: "PriceDraft",
         tax_rate: typing.Optional["TaxRate"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
+        state: typing.Optional[typing.List["ItemState"]] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
-        self.product_id = product_id
         self.name = name
+        self.key = key
         self.variant = variant
-        self.price = price
+        self.product_id = product_id
         self.quantity = quantity
-        self.state = state
-        self.supply_channel = supply_channel
-        self.distribution_channel = distribution_channel
+        self.price = price
         self.tax_rate = tax_rate
-        self.custom = custom
+        self.distribution_channel = distribution_channel
+        self.supply_channel = supply_channel
         self.inventory_mode = inventory_mode
         self.shipping_details = shipping_details
+        self.state = state
+        self.custom = custom
 
         super().__init__()
 
@@ -1207,84 +1310,63 @@ class LineItemImportDraft(_BaseType):
 
 
 class Order(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-    last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-    created_by: typing.Optional["CreatedBy"]
-    #: This field will only be present if it was set for Order Import
-    completed_at: typing.Optional[datetime.datetime]
-    #: String that uniquely identifies an order.
-    #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
-    #: It should be unique across a project.
-    #: Once it's set it cannot be changed.
+    #: User-defined identifier of the Order that is unique across a Project.
     order_number: typing.Optional[str]
-    customer_id: typing.Optional[str]
-    customer_email: typing.Optional[str]
-    #: Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-    anonymous_id: typing.Optional[str]
-    #: The Business Unit the Order belongs to.
-    business_unit: typing.Optional["BusinessUnitKeyReference"]
-    store: typing.Optional["StoreKeyReference"]
-    line_items: typing.List["LineItem"]
-    custom_line_items: typing.List["CustomLineItem"]
-    total_price: "TypedMoney"
-    #: The taxes are calculated based on the shipping address.
-    taxed_price: typing.Optional["TaxedPrice"]
-    #: Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
-    #: For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
-    taxed_shipping_price: typing.Optional["TaxedPrice"]
-    #: Holds all shipping-related information per Shipping Method.
+    #: User-defined identifier of a purchase Order.
     #:
-    #: For `Multi` [ShippingMode](ctp:api:typeShippingMode), it is updated automatically after the Shipping Methods are added.
-    shipping_address: typing.Optional["Address"]
-    billing_address: typing.Optional["Address"]
-    #: Indicates whether one or multiple Shipping Methods are added to the Cart.
-    shipping_mode: "ShippingMode"
-    #: User-defined unique identifier of the Shipping Method with `Single` [ShippingMode](ctp:api:type:ShippingMode).
-    shipping_key: typing.Optional[str]
-    #: Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
-    shipping_custom_fields: typing.Optional["CustomFields"]
-    #: Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
-    #:
-    #: It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
-    shipping: typing.List["Shipping"]
-    tax_mode: typing.Optional["TaxMode"]
-    #: When calculating taxes for `taxedPrice`, the selected mode is used for rouding.
-    tax_rounding_mode: typing.Optional["RoundingMode"]
-    #: Set when the customer is set and the customer is a member of a customer group.
-    #: Used for product variant price selection.
-    customer_group: typing.Optional["CustomerGroupReference"]
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    #: Used for product variant price selection.
-    country: typing.Optional[str]
-    #: One of the four predefined OrderStates.
-    order_state: "OrderState"
-    #: This reference can point to a state in a custom workflow.
-    state: typing.Optional["StateReference"]
-    shipment_state: typing.Optional["ShipmentState"]
-    payment_state: typing.Optional["PaymentState"]
-    #: Set if the ShippingMethod is set.
-    shipping_info: typing.Optional["ShippingInfo"]
-    sync_info: typing.List["SyncInfo"]
-    return_info: typing.Optional[typing.List["ReturnInfo"]]
-    #: The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
-    #: track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+    #: It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
     purchase_order_number: typing.Optional[str]
-    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
-    #: Internal-only field.
-    last_message_sequence_number: typing.Optional[int]
-    #: Set when this order was created from a cart.
-    #: The cart will have the state `Ordered`.
-    cart: typing.Optional["CartReference"]
-    #: Set when this order was created from a quote.
-    quote: typing.Optional["QuoteReference"]
-    custom: typing.Optional["CustomFields"]
-    payment_info: typing.Optional["PaymentInfo"]
-    locale: typing.Optional[str]
-    inventory_mode: typing.Optional["InventoryMode"]
-    origin: "CartOrigin"
-    #: When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
+    #: `id` of the [Customer](ctp:api:type:Customer) that the Order belongs to.
+    customer_id: typing.Optional[str]
+    #: Email address of the Customer that the Order belongs to.
+    customer_email: typing.Optional[str]
+    #: [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
+    #: Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+    customer_group: typing.Optional["CustomerGroupReference"]
+    #: [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
+    anonymous_id: typing.Optional[str]
+    #: [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to.
+    business_unit: typing.Optional["BusinessUnitKeyReference"]
+    #: [Reference](ctp:api:type:Reference) to a Store the Order belongs to.
+    store: typing.Optional["StoreKeyReference"]
+    #: [Line Items](ctp:api:type:LineItems) that are part of the Order.
+    line_items: typing.List["LineItem"]
+    #: [Custom Line Items](ctp:api:type:CustomLineItems) that are part of the Order.
+    custom_line_items: typing.List["CustomLineItem"]
+    #: Sum of the `totalPrice` field of all [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem), and if available, the `price` field of [ShippingInfo](ctp:api:type:ShippingInfo).
+    #: If a discount applies on `totalPrice`, this field holds the discounted value.
+    #:
+    #: Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
+    total_price: "TypedMoney"
+    #: - For `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:OrderSetShippingAddressAction).
+    #: - For `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
+    #:
+    #: If a discount applies on `totalPrice`, this field holds the discounted values.
+    taxed_price: typing.Optional["TaxedPrice"]
+    #: Sum of the `taxedPrice` field of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+    taxed_shipping_price: typing.Optional["TaxedPrice"]
+    #: Discounts that apply on the total price of the Order.
+    discount_on_total_price: typing.Optional["DiscountOnTotalPrice"]
+    #: Indicates how Tax Rates are set.
+    tax_mode: typing.Optional["TaxMode"]
+    #: Indicates how monetary values are rounded when calculating taxes for `taxedPrice`.
+    tax_rounding_mode: typing.Optional["RoundingMode"]
+    #: Indicates how taxes are calculated when calculating taxes for `taxedPrice`.
     tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    #: Indicates how stock quantities are tracked for Line Items in the Order.
+    inventory_mode: typing.Optional["InventoryMode"]
+    #: Billing address associated with the Order.
+    billing_address: typing.Optional["Address"]
+    #: Shipping address associated with the Order.
+    #: Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
+    shipping_address: typing.Optional["Address"]
+    #: Indicates whether there can be one or multiple Shipping Methods.
+    shipping_mode: "ShippingMode"
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_key: typing.Optional[str]
+    #: Shipping-related information for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+    #: Automatically set when a [Shipping Method is set](ctp:api:type:StagedOrderSetShippingMethodAction).
+    shipping_info: typing.Optional["ShippingInfo"]
     #: Input used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
     #: The data type of this field depends on the `shippingRateInputType.type` configured in the [Project](ctp:api:type:Project):
     #:
@@ -1292,10 +1374,61 @@ class Order(BaseResource):
     #: - If `CartScore`, it is [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput).
     #: - If `CartValue`, it cannot be used.
     shipping_rate_input: typing.Optional["ShippingRateInput"]
-    #: Contains addresses for orders with multiple shipping addresses.
+    #: Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+    shipping_custom_fields: typing.Optional["CustomFields"]
+    #: Shipping-related information for `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+    #: Updated automatically each time a new [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+    shipping: typing.List["Shipping"]
+    #: Additional shipping addresses of the Order as specified by [LineItems](ctp:api:type:LineItem) using the `shippingDetails` field.
+    #: Eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
     item_shipping_addresses: typing.Optional[typing.List["Address"]]
-    #: Automatically filled when a line item with LineItemMode `GiftLineItem` is removed from this order.
+    #: Discount Codes added to the Order.
+    #: An Order that has `directDiscounts` cannot have `discountCodes`.
+    discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]]
+    #: Direct Discounts added to the Order.
+    #: An Order that has `discountCodes` cannot have `directDiscounts`.
+    direct_discounts: typing.Optional[typing.List["DirectDiscount"]]
+    #: Automatically set when a Line Item with `GiftLineItem` [LineItemMode](ctp:api:type:LineItemMode) is [removed](ctp:api:type:StagedOrderRemoveLineItemAction) from the Order.
     refused_gifts: typing.List["CartDiscountReference"]
+    #: Payment information related to the Order.
+    payment_info: typing.Optional["PaymentInfo"]
+    #: Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+    country: typing.Optional[str]
+    #: Languages of the Order.
+    #: Can only contain languages supported by the [Project](ctp:api:type:Project).
+    locale: typing.Optional[str]
+    #: Indicates the origin of the Cart from which the Order was created.
+    origin: "CartOrigin"
+    #: [Reference](ctp:api:type:Reference) to the Cart for an [Order created from Cart](ctp:api:endpoint:/{projectKey}/orders:POST).
+    #: The referenced Cart will have the `Ordered` [CartState](ctp:api:type:CartState).
+    cart: typing.Optional["CartReference"]
+    #: [Reference](ctp:api:type:Reference) to the Quote for an [Order created from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST).
+    quote: typing.Optional["QuoteReference"]
+    #: Current status of the Order.
+    order_state: "OrderState"
+    #: Shipment status of the Order.
+    shipment_state: typing.Optional["ShipmentState"]
+    #: Payment status of the Order.
+    payment_state: typing.Optional["PaymentState"]
+    #: [State](ctp:api:type:State) of the Order.
+    #: This reference can point to a State in a custom workflow.
+    state: typing.Optional["StateReference"]
+    #: Contains synchronization activity information of the Order (like export or import).
+    #: Can only be set with [Update SyncInfo](ctp:api:type:OrderUpdateSyncInfoAction) update action.
+    sync_info: typing.List["SyncInfo"]
+    #: Contains information regarding the returns associated with the Order.
+    return_info: typing.Optional[typing.List["ReturnInfo"]]
+    #: Internal-only field.
+    last_message_sequence_number: typing.Optional[int]
+    #: Custom Fields of the Order.
+    custom: typing.Optional["CustomFields"]
+    #: User-defined date and time (UTC) of the Order.
+    #: Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
+    completed_at: typing.Optional[datetime.datetime]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    last_modified_by: typing.Optional["LastModifiedBy"]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    created_by: typing.Optional["CreatedBy"]
 
     def __init__(
         self,
@@ -1304,12 +1437,11 @@ class Order(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None,
-        completed_at: typing.Optional[datetime.datetime] = None,
         order_number: typing.Optional[str] = None,
+        purchase_order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
         store: typing.Optional["StoreKeyReference"] = None,
@@ -1318,44 +1450,46 @@ class Order(BaseResource):
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
         taxed_shipping_price: typing.Optional["TaxedPrice"] = None,
-        shipping_address: typing.Optional["Address"] = None,
-        billing_address: typing.Optional["Address"] = None,
-        shipping_mode: "ShippingMode",
-        shipping_key: typing.Optional[str] = None,
-        shipping_custom_fields: typing.Optional["CustomFields"] = None,
-        shipping: typing.List["Shipping"],
+        discount_on_total_price: typing.Optional["DiscountOnTotalPrice"] = None,
         tax_mode: typing.Optional["TaxMode"] = None,
         tax_rounding_mode: typing.Optional["RoundingMode"] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None,
-        country: typing.Optional[str] = None,
-        order_state: "OrderState",
-        state: typing.Optional["StateReference"] = None,
-        shipment_state: typing.Optional["ShipmentState"] = None,
-        payment_state: typing.Optional["PaymentState"] = None,
+        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
+        billing_address: typing.Optional["Address"] = None,
+        shipping_address: typing.Optional["Address"] = None,
+        shipping_mode: "ShippingMode",
+        shipping_key: typing.Optional[str] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        sync_info: typing.List["SyncInfo"],
-        return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
-        purchase_order_number: typing.Optional[str] = None,
+        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
+        shipping_custom_fields: typing.Optional["CustomFields"] = None,
+        shipping: typing.List["Shipping"],
+        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         discount_codes: typing.Optional[typing.List["DiscountCodeInfo"]] = None,
-        last_message_sequence_number: typing.Optional[int] = None,
+        direct_discounts: typing.Optional[typing.List["DirectDiscount"]] = None,
+        refused_gifts: typing.List["CartDiscountReference"],
+        payment_info: typing.Optional["PaymentInfo"] = None,
+        country: typing.Optional[str] = None,
+        locale: typing.Optional[str] = None,
+        origin: "CartOrigin",
         cart: typing.Optional["CartReference"] = None,
         quote: typing.Optional["QuoteReference"] = None,
+        order_state: "OrderState",
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        state: typing.Optional["StateReference"] = None,
+        sync_info: typing.List["SyncInfo"],
+        return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
+        last_message_sequence_number: typing.Optional[int] = None,
         custom: typing.Optional["CustomFields"] = None,
-        payment_info: typing.Optional["PaymentInfo"] = None,
-        locale: typing.Optional[str] = None,
-        inventory_mode: typing.Optional["InventoryMode"] = None,
-        origin: "CartOrigin",
-        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
-        shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
-        refused_gifts: typing.List["CartDiscountReference"]
+        completed_at: typing.Optional[datetime.datetime] = None,
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
+        created_by: typing.Optional["CreatedBy"] = None
     ):
-        self.last_modified_by = last_modified_by
-        self.created_by = created_by
-        self.completed_at = completed_at
         self.order_number = order_number
+        self.purchase_order_number = purchase_order_number
         self.customer_id = customer_id
         self.customer_email = customer_email
+        self.customer_group = customer_group
         self.anonymous_id = anonymous_id
         self.business_unit = business_unit
         self.store = store
@@ -1364,37 +1498,40 @@ class Order(BaseResource):
         self.total_price = total_price
         self.taxed_price = taxed_price
         self.taxed_shipping_price = taxed_shipping_price
-        self.shipping_address = shipping_address
-        self.billing_address = billing_address
-        self.shipping_mode = shipping_mode
-        self.shipping_key = shipping_key
-        self.shipping_custom_fields = shipping_custom_fields
-        self.shipping = shipping
+        self.discount_on_total_price = discount_on_total_price
         self.tax_mode = tax_mode
         self.tax_rounding_mode = tax_rounding_mode
-        self.customer_group = customer_group
-        self.country = country
-        self.order_state = order_state
-        self.state = state
-        self.shipment_state = shipment_state
-        self.payment_state = payment_state
+        self.tax_calculation_mode = tax_calculation_mode
+        self.inventory_mode = inventory_mode
+        self.billing_address = billing_address
+        self.shipping_address = shipping_address
+        self.shipping_mode = shipping_mode
+        self.shipping_key = shipping_key
         self.shipping_info = shipping_info
-        self.sync_info = sync_info
-        self.return_info = return_info
-        self.purchase_order_number = purchase_order_number
+        self.shipping_rate_input = shipping_rate_input
+        self.shipping_custom_fields = shipping_custom_fields
+        self.shipping = shipping
+        self.item_shipping_addresses = item_shipping_addresses
         self.discount_codes = discount_codes
-        self.last_message_sequence_number = last_message_sequence_number
+        self.direct_discounts = direct_discounts
+        self.refused_gifts = refused_gifts
+        self.payment_info = payment_info
+        self.country = country
+        self.locale = locale
+        self.origin = origin
         self.cart = cart
         self.quote = quote
+        self.order_state = order_state
+        self.shipment_state = shipment_state
+        self.payment_state = payment_state
+        self.state = state
+        self.sync_info = sync_info
+        self.return_info = return_info
+        self.last_message_sequence_number = last_message_sequence_number
         self.custom = custom
-        self.payment_info = payment_info
-        self.locale = locale
-        self.inventory_mode = inventory_mode
-        self.origin = origin
-        self.tax_calculation_mode = tax_calculation_mode
-        self.shipping_rate_input = shipping_rate_input
-        self.item_shipping_addresses = item_shipping_addresses
-        self.refused_gifts = refused_gifts
+        self.completed_at = completed_at
+        self.last_modified_by = last_modified_by
+        self.created_by = created_by
 
         super().__init__(
             id=id,
@@ -1416,33 +1553,34 @@ class Order(BaseResource):
 
 
 class OrderFromCartDraft(_BaseType):
-    #: Unique identifier of the Cart from which you can create an Order.
+    #: `id` of the [Cart](ctp:api:type:Cart) used to create the Order.
     id: typing.Optional[str]
-    #: ResourceIdentifier of the Cart from which the Order is created.
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Cart from which the Order is created.
+    #:
+    #: This field is required, but is marked as optional for backwards compatibility reasons.
     cart: typing.Optional["CartResourceIdentifier"]
-    #: Expected version of the Cart from which the Order is created.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: `version` of the [Cart](ctp:api:type:Cart) from which the Order is created.
     version: int
-    #: String that uniquely identifies an order.
-    #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
-    #: It should be unique across a project.
-    #: Once it's set it cannot be changed.
-    #: For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+    #: User-defined identifier for the Order that is unique across a Project.
+    #: Once set, the value cannot be changed.
     order_number: typing.Optional[str]
-    #: Identifier for a purchase order, usually in a B2B context.
-    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+    #: User-defined identifier for a purchase Order.
+    #:
+    #: It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
     purchase_order_number: typing.Optional[str]
-    #: Payment state for the Order.
+    #: Payment status for the Order.
     payment_state: typing.Optional["PaymentState"]
-    #: Shipment state for the Order.
+    #: Shipment status for the Order.
     shipment_state: typing.Optional["ShipmentState"]
-    #: Order will be created with `Open` status by default.
+    #: Current status for the Order.
     order_state: typing.Optional["OrderState"]
-    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+    #: State for the Order in a custom workflow.
     state: typing.Optional["StateResourceIdentifier"]
-    #: [Custom Fields](/../api/projects/custom-fields) for the Order. The Custom Field type must match the type of the Custom Fields in the referenced [Cart](/../api/projects/carts#cart).
-    #: If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
-    #: If empty, the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) are added to the Order automatically.
+    #: Custom Fields for the Order.
+    #: The Custom Fields' type must match the Custom Fields' type in the referenced [Cart](ctp:api:type:Cart).
+    #:
+    #: - If empty, the Custom Fields on the referenced [Cart](ctp:api:type:Cart) are added to the Order automatically.
+    #: - If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](ctp:api:type:Cart) and added to the Order.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -1485,25 +1623,23 @@ class OrderFromCartDraft(_BaseType):
 
 
 class OrderFromQuoteDraft(_BaseType):
-    #: ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Quote from which the Order is created.
+    #: If the referenced [Quote](ctp:api:type:Quote) has expired (`validTo` check) or its `quoteState` is `Accepted`, `Declined`, or `Withdrawn`, the Order creation will fail.
     quote: "QuoteResourceIdentifier"
-    #: `version` of the [Quote](ctp:api:type:Quote) from which an Order is created.
+    #: `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
     version: int
     #: If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
     quote_state_to_accepted: typing.Optional[bool]
-    #: String that uniquely identifies an order.
-    #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
-    #: It should be unique across a project.
-    #: Once it's set it cannot be changed.
-    #: For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+    #: User-defined identifier for the Order that is unique across a Project.
+    #: Once set, the value cannot be changed.
     order_number: typing.Optional[str]
-    #: Payment state of the Order.
+    #: Payment status for the Order.
     payment_state: typing.Optional["PaymentState"]
-    #: Shipment state of the Order.
+    #: Shipment status for the Order.
     shipment_state: typing.Optional["ShipmentState"]
-    #: Order will be created with `Open` status by default.
+    #: Current status for the Order.
     order_state: typing.Optional["OrderState"]
-    #: [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+    #: State of the Order in a custom workflow.
     state: typing.Optional["StateResourceIdentifier"]
 
     def __init__(
@@ -1542,110 +1678,133 @@ class OrderFromQuoteDraft(_BaseType):
 
 
 class OrderImportDraft(_BaseType):
-    #: String that unique identifies an order.
-    #: It can be used to create more human-readable (in contrast to ID) identifier for the order.
-    #: It should be unique within a project.
+    """A snapshot of an Order at the time it was imported."""
+
+    #: User-defined identifier of the Order. Must be unique across a Project.
+    #: Once set, the value cannot be changed.
     order_number: typing.Optional[str]
-    #: If given the customer with that ID must exist in the project.
+    #: User-defined identifier for a purchase Order.
+    purchase_order_number: typing.Optional[str]
+    #: The `id` of the [Customer](ctp:api:type:Customer) the Order belongs to.
     customer_id: typing.Optional[str]
-    #: The customer email can be used when no check against existing Customers is desired during order import.
+    #: The Email address of the Customer the Order belongs to. Can be used instead of `customerId` when no check against existing [Customers](ctp:api:type:Customer) is required.
     customer_email: typing.Optional[str]
-    #: If not given `customLineItems` must not be empty.
-    line_items: typing.Optional[typing.List["LineItemImportDraft"]]
-    #: If not given `lineItems` must not be empty.
-    custom_line_items: typing.Optional[typing.List["CustomLineItemImportDraft"]]
-    total_price: "Money"
-    #: Order Import does not support calculation of taxes.
-    #: When setting the draft the taxedPrice is to be provided.
-    taxed_price: typing.Optional["TaxedPriceDraft"]
-    shipping_address: typing.Optional["BaseAddress"]
-    billing_address: typing.Optional["BaseAddress"]
-    #: Set when the customer is set and the customer is a member of a customer group.
-    #: Used for product variant price selection.
+    #: The Customer Group of the Customer the Order belongs to.
     customer_group: typing.Optional["CustomerGroupResourceIdentifier"]
-    #: A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-    #: Used for product variant price selection.
-    country: typing.Optional[str]
-    #: If not given the `Open` state will be assigned by default.
-    order_state: typing.Optional["OrderState"]
-    #: This reference can point to a state in a custom workflow.
-    state: typing.Optional["StateReference"]
-    shipment_state: typing.Optional["ShipmentState"]
-    payment_state: typing.Optional["PaymentState"]
-    #: Set if the ShippingMethod is set.
-    shipping_info: typing.Optional["ShippingInfoImportDraft"]
-    payment_info: typing.Optional["PaymentInfo"]
-    completed_at: typing.Optional[datetime.datetime]
-    #: The custom fields.
-    custom: typing.Optional["CustomFieldsDraft"]
-    #: If not given the mode `None` will be assigned by default.
-    inventory_mode: typing.Optional["InventoryMode"]
-    #: If not given the tax rounding mode `HalfEven` will be assigned by default.
-    tax_rounding_mode: typing.Optional["RoundingMode"]
-    #: Contains addresses for orders with multiple shipping addresses.
-    item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
-    #: The Business Unit the Cart belongs to.
+    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Order should belong to.
+    #: When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit.
     business_unit: typing.Optional["BusinessUnitResourceIdentifier"]
+    #: The Store the Order belongs to.
+    #: Used for [filtering](#filtering).
+    #:
+    #: If a [LineItemImportDraft](ctp:api:type:LineItemImportDraft) or a [CustomLineItemImportDraft](ctp:api:type:CustomLineItemImportDraft) specifies a `distributionChannel` or a `supplyChannel` that is not defined for the referenced Store, the Order Import gets rejected.
+    #: The same applies when the provided `country` is not defined for the referenced Store.
     store: typing.Optional["StoreResourceIdentifier"]
-    #: The default origin is `Customer`.
+    #: [Line Items](ctp:api:type:LineItems) to add to the Order.
+    #:
+    #: If not specified, `customLineItems` must not be empty.
+    line_items: typing.Optional[typing.List["LineItemImportDraft"]]
+    #: [Custom Line Items](ctp:api:type:CustomLineItems) to add to the Cart.
+    #:
+    #: If not specified, `lineItems` must not be empty.
+    custom_line_items: typing.Optional[typing.List["CustomLineItemImportDraft"]]
+    #: The total Price of the Order. The amount can be negative.
+    total_price: "Money"
+    #: Include TaxedPrice information for the Order. If not included, and if you have Tax Rates set for Line Items and Custom Line Items, the Order total will not be recalculated.
+    taxed_price: typing.Optional["TaxedPriceDraft"]
+    #: Determines how monetary values are rounded when calculating taxes for `taxedPrice`.
+    tax_rounding_mode: typing.Optional["RoundingMode"]
+    #: Determines how taxes are calculated for `taxedPrice`.
+    tax_calculation_mode: typing.Optional["TaxCalculationMode"]
+    #: Determines how stock quantities are tracked for Line Items in the Cart.
+    inventory_mode: typing.Optional["InventoryMode"]
+    #: Billing address associated with the Order.
+    billing_address: typing.Optional["BaseAddress"]
+    #: Shipping address associated with the Order.
+    shipping_address: typing.Optional["BaseAddress"]
+    #: Addresses for Orders with multiple shipping addresses. Addresses must include a value for `key`.
+    item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: Shipping-related information of the Order.
+    shipping_info: typing.Optional["ShippingInfoImportDraft"]
+    #: Payment information associated with the Order.
+    payment_info: typing.Optional["PaymentInfo"]
+    #: Payment status of the Order.
+    payment_state: typing.Optional["PaymentState"]
+    #: Shipment status of the Order.
+    shipment_state: typing.Optional["ShipmentState"]
+    #: Current status of the Order.
+    order_state: typing.Optional["OrderState"]
+    #: State of the Order in a custom workflow.
+    state: typing.Optional["StateReference"]
+    #: Include a value to associate a country with the Order.
+    country: typing.Optional[str]
+    #: Indicates the origin of the Order.
     origin: typing.Optional["CartOrigin"]
+    #: User-defined date and time for the Order. This value does not influence the `createdAt` or `lastModifiedAt` values of the Order created by the Order Import.
+    completed_at: typing.Optional[datetime.datetime]
+    #: Custom Fields for the Order.
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
         order_number: typing.Optional[str] = None,
+        purchase_order_number: typing.Optional[str] = None,
         customer_id: typing.Optional[str] = None,
         customer_email: typing.Optional[str] = None,
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
+        business_unit: typing.Optional["BusinessUnitResourceIdentifier"] = None,
+        store: typing.Optional["StoreResourceIdentifier"] = None,
         line_items: typing.Optional[typing.List["LineItemImportDraft"]] = None,
         custom_line_items: typing.Optional[
             typing.List["CustomLineItemImportDraft"]
         ] = None,
         total_price: "Money",
         taxed_price: typing.Optional["TaxedPriceDraft"] = None,
-        shipping_address: typing.Optional["BaseAddress"] = None,
+        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
+        tax_calculation_mode: typing.Optional["TaxCalculationMode"] = None,
+        inventory_mode: typing.Optional["InventoryMode"] = None,
         billing_address: typing.Optional["BaseAddress"] = None,
-        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
-        country: typing.Optional[str] = None,
-        order_state: typing.Optional["OrderState"] = None,
-        state: typing.Optional["StateReference"] = None,
-        shipment_state: typing.Optional["ShipmentState"] = None,
-        payment_state: typing.Optional["PaymentState"] = None,
+        shipping_address: typing.Optional["BaseAddress"] = None,
+        item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
         shipping_info: typing.Optional["ShippingInfoImportDraft"] = None,
         payment_info: typing.Optional["PaymentInfo"] = None,
+        payment_state: typing.Optional["PaymentState"] = None,
+        shipment_state: typing.Optional["ShipmentState"] = None,
+        order_state: typing.Optional["OrderState"] = None,
+        state: typing.Optional["StateReference"] = None,
+        country: typing.Optional[str] = None,
+        origin: typing.Optional["CartOrigin"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None,
-        inventory_mode: typing.Optional["InventoryMode"] = None,
-        tax_rounding_mode: typing.Optional["RoundingMode"] = None,
-        item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
-        business_unit: typing.Optional["BusinessUnitResourceIdentifier"] = None,
-        store: typing.Optional["StoreResourceIdentifier"] = None,
-        origin: typing.Optional["CartOrigin"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.order_number = order_number
+        self.purchase_order_number = purchase_order_number
         self.customer_id = customer_id
         self.customer_email = customer_email
+        self.customer_group = customer_group
+        self.business_unit = business_unit
+        self.store = store
         self.line_items = line_items
         self.custom_line_items = custom_line_items
         self.total_price = total_price
         self.taxed_price = taxed_price
-        self.shipping_address = shipping_address
+        self.tax_rounding_mode = tax_rounding_mode
+        self.tax_calculation_mode = tax_calculation_mode
+        self.inventory_mode = inventory_mode
         self.billing_address = billing_address
-        self.customer_group = customer_group
-        self.country = country
-        self.order_state = order_state
-        self.state = state
-        self.shipment_state = shipment_state
-        self.payment_state = payment_state
+        self.shipping_address = shipping_address
+        self.item_shipping_addresses = item_shipping_addresses
         self.shipping_info = shipping_info
         self.payment_info = payment_info
+        self.payment_state = payment_state
+        self.shipment_state = shipment_state
+        self.order_state = order_state
+        self.state = state
+        self.country = country
+        self.origin = origin
         self.completed_at = completed_at
         self.custom = custom
-        self.inventory_mode = inventory_mode
-        self.tax_rounding_mode = tax_rounding_mode
-        self.item_shipping_addresses = item_shipping_addresses
-        self.business_unit = business_unit
-        self.store = store
-        self.origin = origin
 
         super().__init__()
 
@@ -1662,27 +1821,36 @@ class OrderImportDraft(_BaseType):
 
 
 class OrderPagedQueryResponse(_BaseType):
+    """[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Order](ctp:api:type:Order)."""
+
     #: Number of [results requested](/../api/general-concepts#limit).
     limit: int
-    count: int
-    total: typing.Optional[int]
     #: Number of [elements skipped](/../api/general-concepts#offset).
     offset: int
+    #: Actual number of results returned.
+    count: int
+    #: Total number of results matching the query.
+    #: This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+    #: This field is returned by default.
+    #: For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+    #: When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+    total: typing.Optional[int]
+    #: [Orders](ctp:api:type:Order) matching the query.
     results: typing.List["Order"]
 
     def __init__(
         self,
         *,
         limit: int,
+        offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        offset: int,
         results: typing.List["Order"]
     ):
         self.limit = limit
+        self.offset = offset
         self.count = count
         self.total = total
-        self.offset = offset
         self.results = results
 
         super().__init__()
@@ -1702,6 +1870,9 @@ class OrderPagedQueryResponse(_BaseType):
 
 
 class OrderReference(Reference):
+    """[Reference](ctp:api:type:Reference) to an [Order](ctp:api:type:Order)."""
+
+    #: Contains the representation of the expanded Order. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Orders.
     obj: typing.Optional["Order"]
 
     def __init__(self, *, id: str, obj: typing.Optional["Order"] = None):
@@ -1719,26 +1890,6 @@ class OrderReference(Reference):
         from ._schemas.order import OrderReferenceSchema
 
         return OrderReferenceSchema().dump(self)
-
-
-class OrderResourceIdentifier(ResourceIdentifier):
-    def __init__(
-        self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
-    ):
-        super().__init__(id=id, key=key, type_id=ReferenceTypeId.ORDER)
-
-    @classmethod
-    def deserialize(
-        cls, data: typing.Dict[str, typing.Any]
-    ) -> "OrderResourceIdentifier":
-        from ._schemas.order import OrderResourceIdentifierSchema
-
-        return OrderResourceIdentifierSchema().load(data)
-
-    def serialize(self) -> typing.Dict[str, typing.Any]:
-        from ._schemas.order import OrderResourceIdentifierSchema
-
-        return OrderResourceIdentifierSchema().dump(self)
 
 
 class OrderSearchQuery(typing.Dict[str, typing.Any]):
@@ -2091,6 +2242,8 @@ class OrderSearchSorting(_BaseType):
 
 
 class OrderState(enum.Enum):
+    """Indicates the state of the Order."""
+
     OPEN = "Open"
     CONFIRMED = "Confirmed"
     COMPLETE = "Complete"
@@ -2099,7 +2252,7 @@ class OrderState(enum.Enum):
 
 class OrderUpdate(_BaseType):
     #: Expected version of the Order on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Order.
     actions: typing.List["OrderUpdateAction"]
@@ -2374,16 +2527,21 @@ class OrderUpdateAction(_BaseType):
 
 
 class Parcel(_BaseType):
+    """Information regarding the appearance, content, and shipment of a Parcel."""
+
     #: Unique identifier of the Parcel.
     id: str
     #: User-defined unique identifier of the Parcel.
     key: typing.Optional[str]
+    #: Date and time (UTC) the Parcel was created.
     created_at: datetime.datetime
+    #: Information about the dimensions of the Parcel.
     measurements: typing.Optional["ParcelMeasurements"]
+    #: Shipment tracking information of the Parcel.
     tracking_data: typing.Optional["TrackingData"]
-    #: The delivery items contained in this parcel.
+    #: Line Items or Custom Line Items delivered in this Parcel.
     items: typing.Optional[typing.List["DeliveryItem"]]
-    #: Custom Fields of this parcel.
+    #: Custom Fields of the Parcel.
     custom: typing.Optional["CustomFields"]
 
     def __init__(
@@ -2422,11 +2580,13 @@ class Parcel(_BaseType):
 class ParcelDraft(_BaseType):
     #: User-defined unique identifier of the Parcel.
     key: typing.Optional[str]
+    #: Information about the dimensions for the Parcel.
     measurements: typing.Optional["ParcelMeasurements"]
+    #: Shipment tracking information for the Parcel.
     tracking_data: typing.Optional["TrackingData"]
-    #: The delivery items contained in this parcel.
+    #: Line Items or Custom Line Items delivered in this Parcel.
     items: typing.Optional[typing.List["DeliveryItem"]]
-    #: Custom Fields of this parcel.
+    #: Custom Fields for the Parcel.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
@@ -2459,9 +2619,13 @@ class ParcelDraft(_BaseType):
 
 
 class ParcelMeasurements(_BaseType):
+    #: Height of the Parcel.
     height_in_millimeter: typing.Optional[int]
+    #: Length of the Parcel.
     length_in_millimeter: typing.Optional[int]
+    #: Width of the Parcel.
     width_in_millimeter: typing.Optional[int]
+    #: Weight of the Parcel.
     weight_in_gram: typing.Optional[int]
 
     def __init__(
@@ -2492,6 +2656,7 @@ class ParcelMeasurements(_BaseType):
 
 
 class PaymentInfo(_BaseType):
+    #: [References](ctp:api:type:Reference) to the Payments associated with the Order.
     payments: typing.List["PaymentReference"]
 
     def __init__(self, *, payments: typing.List["PaymentReference"]):
@@ -2512,6 +2677,8 @@ class PaymentInfo(_BaseType):
 
 
 class PaymentState(enum.Enum):
+    """Indicates the payment status for the Order."""
+
     BALANCE_DUE = "BalanceDue"
     FAILED = "Failed"
     PENDING = "Pending"
@@ -2520,21 +2687,22 @@ class PaymentState(enum.Enum):
 
 
 class ProductVariantImportDraft(_BaseType):
-    #: The sequential ID of the variant within the product.
-    #: The variant with provided ID should exist in some existing product, so you also need to specify the productId if this property is set,
-    #: or alternatively you can just specify SKU of the product variant.
+    """Contains the Product Variant to be used in the [LineItemImportDraft](ctp:api:type:LineItemImportDraft)."""
+
+    #: The `id` of the [ProductVariant](ctp:api:type:ProductVariant). Required if you do not set a value for `sku`.
+    #: If set, you must specify a `productId` in the [LineItemImportDraft](ctp:api:type:LineItemImportDraft) also.
     id: typing.Optional[int]
-    #: The SKU of the existing variant.
+    #: The `sku` of the [ProductVariant](ctp:api:type:ProductVariant). Required if you do not set a value for `id`.
     sku: typing.Optional[str]
-    #: The [Embedded Prices](ctp:api:type:Price) of the variant.
-    #: The prices should not contain two prices for the same price scope (same currency, country, customer group, channel, valid from and valid until).
-    #: If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
+    #: The [Prices](ctp:api:type:Price) of the Product Variant if you want to override the `prices` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+    #: If not set, the `prices` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are used in the resulting Order.
+    #: If set, each Price must have its unique price scope (same `value.currencyCode`, `country`, `customerGroup`, `channel`, `validFrom` and `validUntil`).
     prices: typing.Optional[typing.List["PriceDraft"]]
-    #: If this property is defined, then it will override the `attributes` property from the original
-    #: product variant, otherwise `attributes` property from the original product variant would be copied in the resulting order.
+    #: The [Attributes](ctp:api:type:Attribute) of the Product Variant if you want to override the `attributes` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+    #: If not set, the `attributes` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are copied to the resulting Order.
     attributes: typing.Optional[typing.List["Attribute"]]
-    #: If this property is defined, then it will override the `images` property from the original
-    #: product variant, otherwise `images` property from the original product variant would be copied in the resulting order.
+    #: The [Images](ctp:api:type:Image) of the Product Variant if you want to override the `images` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+    #: If not set, the `images` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are copied to the resulting Order.
     images: typing.Optional[typing.List["Image"]]
 
     def __init__(
@@ -2569,9 +2737,13 @@ class ProductVariantImportDraft(_BaseType):
 
 
 class ReturnInfo(_BaseType):
+    """Stores information about returns connected to an Order."""
+
+    #: Information on the Line Items or Custom Line Items returned.
     items: typing.List["ReturnItem"]
-    #: Identifies, which return tracking ID is connected to this particular return.
+    #: User-defined identifier to track the return.
     return_tracking_id: typing.Optional[str]
+    #: Date and time (UTC) the return is initiated.
     return_date: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -2600,9 +2772,11 @@ class ReturnInfo(_BaseType):
 
 
 class ReturnInfoDraft(_BaseType):
+    #: Information on the Line Items or Custom Line Items returned.
     items: typing.List["ReturnItemDraft"]
-    #: Identifies, which return tracking ID is connected to this particular return.
+    #: User-defined identifier for tracking the return.
     return_tracking_id: typing.Optional[str]
+    #: Date and time (UTC) the return is initiated.
     return_date: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -2631,22 +2805,34 @@ class ReturnInfoDraft(_BaseType):
 
 
 class ReturnItem(_BaseType):
-    #: Unique identifier of the ReturnItem.
+    #: Unique identifier of the Return Item.
     id: str
+    #: User-defined unique identifier of the Return Item.
+    key: typing.Optional[str]
+    #: Number of Line Items or Custom Line Items returned.
     quantity: int
     type: str
+    #: User-defined description for the return.
     comment: typing.Optional[str]
+    #: Shipment status of the Return Item.
     shipment_state: "ReturnShipmentState"
+    #: Payment status of the Return Item:
+    #:
+    #: - `NonRefundable`, for items in the `Advised` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
+    #: - `Initial`, for items in the `Returned` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
     payment_state: "ReturnPaymentState"
-    #: Custom Fields of this return item.
+    #: Custom Fields of the Return Item.
     custom: typing.Optional["CustomFields"]
+    #: Date and time (UTC) the Return Item was last updated.
     last_modified_at: datetime.datetime
+    #: Date and time (UTC) the Return Item was intitially created.
     created_at: datetime.datetime
 
     def __init__(
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         quantity: int,
         type: str,
         comment: typing.Optional[str] = None,
@@ -2657,6 +2843,7 @@ class ReturnItem(_BaseType):
         created_at: datetime.datetime
     ):
         self.id = id
+        self.key = key
         self.quantity = quantity
         self.type = type
         self.comment = comment
@@ -2686,12 +2873,14 @@ class ReturnItem(_BaseType):
 
 
 class CustomLineItemReturnItem(ReturnItem):
+    #: `id` of the returned [CustomLineItem](ctp:api:type:CustomLineItem).
     custom_line_item_id: str
 
     def __init__(
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         quantity: int,
         comment: typing.Optional[str] = None,
         shipment_state: "ReturnShipmentState",
@@ -2705,6 +2894,7 @@ class CustomLineItemReturnItem(ReturnItem):
 
         super().__init__(
             id=id,
+            key=key,
             quantity=quantity,
             comment=comment,
             shipment_state=shipment_state,
@@ -2730,12 +2920,14 @@ class CustomLineItemReturnItem(ReturnItem):
 
 
 class LineItemReturnItem(ReturnItem):
+    #: `id` of the returned [LineItem](ctp:api:type:LineItem).
     line_item_id: str
 
     def __init__(
         self,
         *,
         id: str,
+        key: typing.Optional[str] = None,
         quantity: int,
         comment: typing.Optional[str] = None,
         shipment_state: "ReturnShipmentState",
@@ -2749,6 +2941,7 @@ class LineItemReturnItem(ReturnItem):
 
         super().__init__(
             id=id,
+            key=key,
             quantity=quantity,
             comment=comment,
             shipment_state=shipment_state,
@@ -2772,17 +2965,30 @@ class LineItemReturnItem(ReturnItem):
 
 
 class ReturnItemDraft(_BaseType):
+    #: User-defined unique identifier of the Return Item.
+    key: typing.Optional[str]
+    #: Number of Line Items or Custom Line Items to return.
     quantity: int
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to return.
+    #:
+    #:  Required if Line Items are returned, to create a [LineItemReturnItem](ctp:api:type:LineItemReturnItem).
     line_item_id: typing.Optional[str]
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to return.
+    #:
+    #:  Required if Custom Line Items are returned, to create a [CustomLineItemReturnItem](ctp:api:type:CustomLineItemReturnItem).
     custom_line_item_id: typing.Optional[str]
+    #: User-defined description for the return.
     comment: typing.Optional[str]
+    #: Shipment status of the item to be returned.
+    #: Can either be `Advised` or `Returned` only.
     shipment_state: "ReturnShipmentState"
-    #: Custom Fields of this return item.
+    #: Custom Fields for the Return Item.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         quantity: int,
         line_item_id: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
@@ -2790,6 +2996,7 @@ class ReturnItemDraft(_BaseType):
         shipment_state: "ReturnShipmentState",
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.quantity = quantity
         self.line_item_id = line_item_id
         self.custom_line_item_id = custom_line_item_id
@@ -2826,6 +3033,8 @@ class ReturnShipmentState(enum.Enum):
 
 
 class ShipmentState(enum.Enum):
+    """Indicates the shipment status of the Order."""
+
     SHIPPED = "Shipped"
     DELIVERED = "Delivered"
     READY = "Ready"
@@ -2836,18 +3045,25 @@ class ShipmentState(enum.Enum):
 
 
 class ShippingInfoImportDraft(_BaseType):
+    """Becomes the `shippingInfo` of the imported Order."""
+
+    #: Name of the Shipping Method.
     shipping_method_name: str
+    #: The base price for the Shipping Method.
     price: "Money"
-    #: The shipping rate used to determine the price.
+    #: Shipping rate information for the Order.
     shipping_rate: "ShippingRateDraft"
+    #: Include a Tax Rate for the Shipping Method.
     tax_rate: typing.Optional["TaxRate"]
+    #: Include a value to associate a Tax Category with the shipping information.
     tax_category: typing.Optional["TaxCategoryResourceIdentifier"]
-    #: Not set if custom shipping method is used.
+    #: Include a value to associate a Shipping Method with the Order.
     shipping_method: typing.Optional["ShippingMethodResourceIdentifier"]
-    #: Deliveries are compilations of information on how the articles are being delivered to the customers.
+    #: Information on how items are to be delivered to customers.
     deliveries: typing.Optional[typing.List["DeliveryDraft"]]
+    #: Discounted Price of the Shipping Method.
     discounted_price: typing.Optional["DiscountedLineItemPriceDraft"]
-    #: Indicates whether the ShippingMethod referenced is allowed for the cart or not.
+    #: Indicates if the [ShippingMethod](ctp:api:type:ShippingMethod) referenced is allowed for the Order or not.
     shipping_method_state: typing.Optional["ShippingMethodState"]
 
     def __init__(
@@ -2890,10 +3106,13 @@ class ShippingInfoImportDraft(_BaseType):
 
 
 class SyncInfo(_BaseType):
-    #: Connection to a particular synchronization destination.
+    """Contains synchronization activity information of the Order (like export or import)."""
+
+    #: Connection to a synchronization destination.
     channel: "ChannelReference"
-    #: Can be used to reference an external order instance, file etc.
+    #: Identifier of an external order instance, file, or other resource.
     external_id: typing.Optional[str]
+    #: Date and time (UTC) the information was synced.
     synced_at: datetime.datetime
 
     def __init__(
@@ -2946,13 +3165,18 @@ class TaxedItemPriceDraft(_BaseType):
 
 
 class TrackingData(_BaseType):
-    #: The ID to track one parcel.
+    """Information that helps track a Parcel."""
+
+    #: Identifier to track the Parcel.
     tracking_id: typing.Optional[str]
-    #: The carrier that delivers the parcel.
+    #: Name of the carrier that delivers the Parcel.
     carrier: typing.Optional[str]
+    #: Name of the provider that serves as facade to several carriers.
     provider: typing.Optional[str]
+    #: Transaction identifier with the `provider`.
     provider_transaction: typing.Optional[str]
-    #: Flag to distinguish if the parcel is on the way to the customer (false) or on the way back (true).
+    #: - If `true`, the Parcel is being returned.
+    #: - If `false`, the Parcel is being delivered to the customer.
     is_return: typing.Optional[bool]
 
     def __init__(
@@ -2985,32 +3209,41 @@ class TrackingData(_BaseType):
 
 
 class OrderAddDeliveryAction(OrderUpdateAction):
-    #: User-defined unique identifier of a Delivery.
+    """A [Delivery](ctp:api:type:Delivery) can only be added to an [Order](ctp:api:type:Order) if
+    its `shippingInfo` (for `shippingMode` = `Single`), or its `shipping` (for `shippingMode` = `Multiple`) exists.
+
+    Produces the [Delivery Added](ctp:api:type:DeliveryAddedMessage) Message.
+
+    """
+
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
     delivery_key: typing.Optional[str]
-    items: typing.Optional[typing.List["DeliveryItem"]]
-    #: User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+    #: `key` of the [ShippingMethod](ctp:api:type:ShippingMethod), required for `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
     shipping_key: typing.Optional[str]
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    #: Line Items or Custom Line Items to be included in the Delivery.
+    items: typing.Optional[typing.List["DeliveryItem"]]
+    #: Address the `parcels` should be delivered to.
     address: typing.Optional["BaseAddress"]
+    #: Parcels of the Delivery.
+    #:
+    #: If provided, this update action produces the [Parcel Added To Delivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message.
     parcels: typing.Optional[typing.List["ParcelDraft"]]
-    #: Custom Fields for the Transaction.
+    #: Custom Fields for the Delivery.
     custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
         *,
         delivery_key: typing.Optional[str] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None,
         shipping_key: typing.Optional[str] = None,
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.delivery_key = delivery_key
-        self.items = items
         self.shipping_key = shipping_key
+        self.items = items
         self.address = address
         self.parcels = parcels
         self.custom = custom
@@ -3032,9 +3265,10 @@ class OrderAddDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddItemShippingAddressAction(OrderUpdateAction):
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    """Adds an address to an Order when shipping to multiple addresses is desired."""
+
+    #: Address to append to `itemShippingAddresses`.
+    #: The new Address must have a `key` that is unique across this Order.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -3057,14 +3291,30 @@ class OrderAddItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderAddParcelToDeliveryAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    """To add a Parcel, at least one [Delivery](ctp:api:type:Delivery) must exist.
+
+    Produces the [Parcel Added To Delivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message.
+
+    """
+
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
     parcel_key: typing.Optional[str]
+    #: Value to set.
     measurements: typing.Optional["ParcelMeasurements"]
+    #: Value to set.
     tracking_data: typing.Optional["TrackingData"]
+    #: Value to set.
     items: typing.Optional[typing.List["DeliveryItem"]]
+    #: Custom Fields for the Parcel.
+    custom: typing.Optional["CustomFieldsDraft"]
 
     def __init__(
         self,
@@ -3074,7 +3324,8 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
         parcel_key: typing.Optional[str] = None,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
+        custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -3082,6 +3333,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
         self.measurements = measurements
         self.tracking_data = tracking_data
         self.items = items
+        self.custom = custom
 
         super().__init__(action="addParcelToDelivery")
 
@@ -3100,7 +3352,8 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
 
 
 class OrderAddPaymentAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
+    #: Payment to add to the [PaymentInfo](ctp:api:type:PaymentInfo).
+    #: Must not be assigned to another Order or active Cart already.
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -3121,8 +3374,15 @@ class OrderAddPaymentAction(OrderUpdateAction):
 
 
 class OrderAddReturnInfoAction(OrderUpdateAction):
+    """Produces the [Return Info Added](ctp:api:type:ReturnInfoAddedMessage) Message."""
+
+    #: Value to set.
     return_tracking_id: typing.Optional[str]
+    #: Items to be returned.
+    #: Must not be empty.
     items: typing.List["ReturnItemDraft"]
+    #: Value to set.
+    #: If not set, it defaults to the current date and time.
     return_date: typing.Optional[datetime.datetime]
 
     def __init__(
@@ -3153,6 +3413,9 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
 
 
 class OrderChangeOrderStateAction(OrderUpdateAction):
+    """Produces the [Order State Changed](ctp:api:type:OrderStateChangedMessage) Message."""
+
+    #: New status of the Order.
     order_state: "OrderState"
 
     def __init__(self, *, order_state: "OrderState"):
@@ -3175,9 +3438,12 @@ class OrderChangeOrderStateAction(OrderUpdateAction):
 
 
 class OrderChangePaymentStateAction(OrderUpdateAction):
-    payment_state: typing.Optional["PaymentState"]
+    """Produces the [Order Payment State Changed](ctp:api:type:OrderPaymentStateChangedMessage) Message."""
 
-    def __init__(self, *, payment_state: typing.Optional["PaymentState"] = None):
+    #: New payment status of the Order.
+    payment_state: "PaymentState"
+
+    def __init__(self, *, payment_state: "PaymentState"):
         self.payment_state = payment_state
 
         super().__init__(action="changePaymentState")
@@ -3197,9 +3463,12 @@ class OrderChangePaymentStateAction(OrderUpdateAction):
 
 
 class OrderChangeShipmentStateAction(OrderUpdateAction):
-    shipment_state: typing.Optional["ShipmentState"]
+    """Produces the [Order Shipment State Changed](ctp:api:type:OrderShipmentStateChangedMessage) Message."""
 
-    def __init__(self, *, shipment_state: typing.Optional["ShipmentState"] = None):
+    #: New shipment status of the Order.
+    shipment_state: "ShipmentState"
+
+    def __init__(self, *, shipment_state: "ShipmentState"):
         self.shipment_state = shipment_state
 
         super().__init__(action="changeShipmentState")
@@ -3219,11 +3488,27 @@ class OrderChangeShipmentStateAction(OrderUpdateAction):
 
 
 class OrderImportCustomLineItemStateAction(OrderUpdateAction):
-    custom_line_item_id: str
+    """The import of States does not follow any predefined rules and should be only used if no transitions are defined.
+    The `quantity` in the [ItemStates](ctp:api:type:ItemState) must match the sum of all Custom Line Item states' quantities.
+
+    """
+
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_id: typing.Optional[str]
+    #: `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_key: typing.Optional[str]
+    #: New status of the Custom Line Items.
     state: typing.List["ItemState"]
 
-    def __init__(self, *, custom_line_item_id: str, state: typing.List["ItemState"]):
+    def __init__(
+        self,
+        *,
+        custom_line_item_id: typing.Optional[str] = None,
+        custom_line_item_key: typing.Optional[str] = None,
+        state: typing.List["ItemState"]
+    ):
         self.custom_line_item_id = custom_line_item_id
+        self.custom_line_item_key = custom_line_item_key
         self.state = state
 
         super().__init__(action="importCustomLineItemState")
@@ -3243,11 +3528,27 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
 
 
 class OrderImportLineItemStateAction(OrderUpdateAction):
-    line_item_id: str
+    """The import of States does not follow any predefined rules and should be only used if no transitions are defined.
+    The `quantity` in the [ItemStates](ctp:api:type:ItemState) must match the sum of all Line Items states' quantities.
+
+    """
+
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
+    #: New status of the Line Items.
     state: typing.List["ItemState"]
 
-    def __init__(self, *, line_item_id: str, state: typing.List["ItemState"]):
+    def __init__(
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        state: typing.List["ItemState"]
+    ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.state = state
 
         super().__init__(action="importLineItemState")
@@ -3267,9 +3568,15 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
 
 
 class OrderRemoveDeliveryAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    """Produces the [DeliveryRemoved](ctp:api:type:DeliveryRemovedMessage) Message."""
+
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
 
     def __init__(
@@ -3298,6 +3605,12 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
+    """An address can only be removed if it is not referenced in any [ItemShippingTarget](ctp:api:type:ItemShippingTarget) of the Cart.
+    In such case, change the Line Item shipping address to a different `addressKey` first using the [Set LineItemShippingDetails](ctp:api:type:OrderSetLineItemShippingDetailsAction) update action, before you remove the obsolete address.
+
+    """
+
+    #: `key` of the Address to remove from `itemShippingAddresses`.
     address_key: str
 
     def __init__(self, *, address_key: str):
@@ -3320,9 +3633,15 @@ class OrderRemoveItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    """Produces the [ParcelRemovedFromDelivery](ctp:api:type:ParcelRemovedFromDeliveryMessage) Message."""
+
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
 
     def __init__(
@@ -3351,7 +3670,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
 
 
 class OrderRemovePaymentAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
+    #: Payment to remove from the [PaymentInfo](ctp:api:type:PaymentInfo).
     payment: "PaymentResourceIdentifier"
 
     def __init__(self, *, payment: "PaymentResourceIdentifier"):
@@ -3374,9 +3693,14 @@ class OrderRemovePaymentAction(OrderUpdateAction):
 
 
 class OrderSetBillingAddressAction(OrderUpdateAction):
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    """This action updates the `billingAddress` on the Order, but it does not change the billing address on the referenced [Cart](ctp:api:type:Cart) from which the Order is created.
+
+    Produces the [Order Billing Address Set](ctp:api:type:OrderBillingAddressSetMessage) Message.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -3487,7 +3811,10 @@ class OrderSetCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
-    custom_line_item_id: str
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_id: typing.Optional[str]
+    #: `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -3498,11 +3825,13 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        custom_line_item_id: str,
+        custom_line_item_id: typing.Optional[str] = None,
+        custom_line_item_key: typing.Optional[str] = None,
         name: str,
         value: typing.Optional[typing.Any] = None
     ):
         self.custom_line_item_id = custom_line_item_id
+        self.custom_line_item_key = custom_line_item_key
         self.name = name
         self.value = value
 
@@ -3523,21 +3852,26 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
-    custom_line_item_id: str
-    #: Defines the [Type](ctp:api:type:Type) that extends the CustomLineItem with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the CustomLineItem.
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_id: typing.Optional[str]
+    #: `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_key: typing.Optional[str]
+    #: Defines the [Type](ctp:api:type:Type) that extends the Custom Line Item with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Custom Line Item.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomLineItem.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Custom Line Item.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: str,
+        custom_line_item_id: typing.Optional[str] = None,
+        custom_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
+        self.custom_line_item_key = custom_line_item_key
         self.type = type
         self.fields = fields
 
@@ -3558,17 +3892,23 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
-    custom_line_item_id: str
-    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_id: typing.Optional[str]
+    #: `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_key: typing.Optional[str]
+    #: Value to set.
+    #: If empty, any existing value is removed.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: str,
+        custom_line_item_id: typing.Optional[str] = None,
+        custom_line_item_key: typing.Optional[str] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
     ):
         self.custom_line_item_id = custom_line_item_id
+        self.custom_line_item_key = custom_line_item_key
         self.shipping_details = shipping_details
 
         super().__init__(action="setCustomLineItemShippingDetails")
@@ -3620,6 +3960,14 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetCustomerEmailAction(OrderUpdateAction):
+    """This action updates the `customerEmail` on the Order, but it does not change the Customer email on the [Cart](ctp:api:type:Cart) the Order has been created from.
+
+    Produces the [Order Customer Email Set](ctp:api:type:OrderCustomerEmailSetMessage) Message.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     email: typing.Optional[str]
 
     def __init__(self, *, email: typing.Optional[str] = None):
@@ -3642,6 +3990,15 @@ class OrderSetCustomerEmailAction(OrderUpdateAction):
 
 
 class OrderSetCustomerIdAction(OrderUpdateAction):
+    """Setting the Order's `customerId` does not recalculate prices or discounts on the Order.
+    If the Customer belongs to a Customer Group, `customerGroup` on the [Order](ctp:api:type:Order) is updated automatically.
+
+    Produces the [OrderCustomerSet](ctp:api:type:OrderCustomerSetMessage) Message.
+
+    """
+
+    #: `id` of an existing [Customer](ctp:api:type:Customer).
+    #: If empty, any existing value is removed.
     customer_id: typing.Optional[str]
 
     def __init__(self, *, customer_id: typing.Optional[str] = None):
@@ -3664,13 +4021,18 @@ class OrderSetCustomerIdAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    """Produces the [DeliveryAddressSet](ctp:api:type:DeliveryAddressSetMessage) Message."""
+
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    #: Value to set.
+    #: If empty, any existing value is removed.
     address: typing.Optional["BaseAddress"]
 
     def __init__(
@@ -3701,9 +4063,13 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -3742,14 +4108,18 @@ class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
-    #: Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
+    #: Defines the [Type](ctp:api:type:Type) that extends the [Delivery](ctp:api:type:Delivery) `address` with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the [Delivery](ctp:api:type:Delivery) `address`.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address` in a Delivery.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the [Delivery](ctp:api:type:Delivery) `address`.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -3782,9 +4152,13 @@ class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -3823,9 +4197,13 @@ class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Delivery.
@@ -3863,10 +4241,18 @@ class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetDeliveryItemsAction(OrderUpdateAction):
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    """Produces the [Delivery Items Updated](ctp:api:type:DeliveryItemsUpdatedMessage) Message."""
+
+    #: `id` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_id: typing.Optional[str]
-    #: Either `deliveryId` or `deliveryKey` is required for this update action.
+    #: `key` of an existing [Delivery](ctp:api:type:Delivery).
+    #:
+    #: Either `deliveryId` or `deliveryKey` must be provided.
     delivery_key: typing.Optional[str]
+    #: Value to set.
+    #: If empty, any existing value is removed.
     items: typing.List["DeliveryItem"]
 
     def __init__(
@@ -3897,6 +4283,7 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
 
 
 class OrderSetItemShippingAddressCustomFieldAction(OrderUpdateAction):
+    #: `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
     address_key: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -3929,6 +4316,7 @@ class OrderSetItemShippingAddressCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetItemShippingAddressCustomTypeAction(OrderUpdateAction):
+    #: `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
     address_key: str
     #: Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the `itemShippingAddress`.
@@ -4009,10 +4397,10 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
     line_item_id: typing.Optional[str]
     #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_key: typing.Optional[str]
-    #: Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the LineItem.
+    #: Defines the [Type](ctp:api:type:Type) that extends the Line Item with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Line Item.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Line Item.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
@@ -4049,7 +4437,8 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
     line_item_id: typing.Optional[str]
     #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_key: typing.Optional[str]
-    #: For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
+    #: Value to set.
+    #: If empty, the existing value is removed.
     shipping_details: typing.Optional["ItemShippingDetailsDraft"]
 
     def __init__(
@@ -4080,6 +4469,9 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
 
 
 class OrderSetLocaleAction(OrderUpdateAction):
+    #: Value to set.
+    #: Must be one of the [Project](ctp:api:type:Project)'s languages.
+    #: If empty, any existing value is removed.
     locale: typing.Optional[str]
 
     def __init__(self, *, locale: typing.Optional[str] = None):
@@ -4100,6 +4492,9 @@ class OrderSetLocaleAction(OrderUpdateAction):
 
 
 class OrderSetOrderNumberAction(OrderUpdateAction):
+    #: Value to set.
+    #: Must be unique across a Project.
+    #: Once set, the value cannot be changed.
     order_number: typing.Optional[str]
 
     def __init__(self, *, order_number: typing.Optional[str] = None):
@@ -4122,9 +4517,13 @@ class OrderSetOrderNumberAction(OrderUpdateAction):
 
 
 class OrderSetParcelCustomFieldAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
@@ -4163,9 +4562,13 @@ class OrderSetParcelCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetParcelCustomTypeAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Parcel.
@@ -4203,10 +4606,18 @@ class OrderSetParcelCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetParcelItemsAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    """Produces the [ParcelItemsUpdated](ctp:api:type:ParcelItemsUpdatedMessage) Message."""
+
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
+    #: Value to set.
+    #: If empty, any existing value is removed.
     items: typing.List["DeliveryItem"]
 
     def __init__(
@@ -4237,10 +4648,18 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
 
 
 class OrderSetParcelMeasurementsAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    """Produces the [ParcelMeasurementsUpdated](ctp:api:type:ParcelMeasurementsUpdatedMessage) Message."""
+
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
+    #: Value to set.
+    #: If empty, any existing value is removed.
     measurements: typing.Optional["ParcelMeasurements"]
 
     def __init__(
@@ -4271,10 +4690,18 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
 
 
 class OrderSetParcelTrackingDataAction(OrderUpdateAction):
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    """Produces the [ParcelTrackingDataUpdated](ctp:api:type:ParcelTrackingDataUpdatedMessage) Message."""
+
+    #: `id` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_id: typing.Optional[str]
-    #: Either `parcelId` or `parcelKey` is required for this update action.
+    #: `key` of an existing [Parcel](ctp:api:type:Parcel).
+    #:
+    #: Either `parcelId` or `parcelKey` must be provided.
     parcel_key: typing.Optional[str]
+    #: Value to set.
+    #: If empty, any existing value is removed.
     tracking_data: typing.Optional["TrackingData"]
 
     def __init__(
@@ -4305,8 +4732,10 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
 
 
 class OrderSetPurchaseOrderNumberAction(OrderUpdateAction):
-    #: Identifier for a purchase order, usually in a B2B context.
-    #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+    """Produces the [PurchaseOrderNumberSet](ctp:api:type:OrderPurchaseOrderNumberSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     purchase_order_number: typing.Optional[str]
 
     def __init__(self, *, purchase_order_number: typing.Optional[str] = None):
@@ -4329,6 +4758,10 @@ class OrderSetPurchaseOrderNumberAction(OrderUpdateAction):
 
 
 class OrderSetReturnInfoAction(OrderUpdateAction):
+    """Produces the [Return Info Set](ctp:api:type:ReturnInfoSetMessage) Message."""
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     items: typing.Optional[typing.List["ReturnInfoDraft"]]
 
     def __init__(
@@ -4353,7 +4786,10 @@ class OrderSetReturnInfoAction(OrderUpdateAction):
 
 
 class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
-    return_item_id: str
+    #: `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_id: typing.Optional[str]
+    #: `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -4364,11 +4800,13 @@ class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
     def __init__(
         self,
         *,
-        return_item_id: str,
+        return_item_id: typing.Optional[str] = None,
+        return_item_key: typing.Optional[str] = None,
         name: str,
         value: typing.Optional[typing.Any] = None
     ):
         self.return_item_id = return_item_id
+        self.return_item_key = return_item_key
         self.name = name
         self.value = value
 
@@ -4389,21 +4827,26 @@ class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
 
 
 class OrderSetReturnItemCustomTypeAction(OrderUpdateAction):
-    return_item_id: str
-    #: Defines the [Type](ctp:api:type:Type) that extends the ReturnItem with [Custom Fields](/../api/projects/custom-fields).
-    #: If absent, any existing Type and Custom Fields are removed from the ReturnItem.
+    #: `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_id: typing.Optional[str]
+    #: `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_key: typing.Optional[str]
+    #: Defines the [Type](ctp:api:type:Type) that extends the Return Item with [Custom Fields](/../api/projects/custom-fields).
+    #: If absent, any existing Type and Custom Fields are removed from the Return Item.
     type: typing.Optional["TypeResourceIdentifier"]
-    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ReturnItem.
+    #: Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Return Item.
     fields: typing.Optional["FieldContainer"]
 
     def __init__(
         self,
         *,
-        return_item_id: str,
+        return_item_id: typing.Optional[str] = None,
+        return_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.return_item_id = return_item_id
+        self.return_item_key = return_item_key
         self.type = type
         self.fields = fields
 
@@ -4424,11 +4867,24 @@ class OrderSetReturnItemCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetReturnPaymentStateAction(OrderUpdateAction):
-    return_item_id: str
+    """To set a [ReturnPaymentState](ctp:api:type:ReturnPaymentState), the [Order](ctp:api:type:Order) `returnInfo` must have at least one [ReturnItem](ctp:api:type:ReturnItem)."""
+
+    #: `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_id: typing.Optional[str]
+    #: `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_key: typing.Optional[str]
+    #: New Payment status of the [ReturnItem](ctp:api:type:ReturnItem).
     payment_state: "ReturnPaymentState"
 
-    def __init__(self, *, return_item_id: str, payment_state: "ReturnPaymentState"):
+    def __init__(
+        self,
+        *,
+        return_item_id: typing.Optional[str] = None,
+        return_item_key: typing.Optional[str] = None,
+        payment_state: "ReturnPaymentState"
+    ):
         self.return_item_id = return_item_id
+        self.return_item_key = return_item_key
         self.payment_state = payment_state
 
         super().__init__(action="setReturnPaymentState")
@@ -4448,11 +4904,28 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
 
 
 class OrderSetReturnShipmentStateAction(OrderUpdateAction):
-    return_item_id: str
+    """To set a `ReturnShipmentState`, the [Order](ctp:api:type:Order) `returnInfo` must have at least one [ReturnItem](ctp:api:type:ReturnItem).
+
+    Produces the [Order Return Shipment State Changed](ctp:api:type:OrderReturnShipmentStateChangedMessage) Message.
+
+    """
+
+    #: `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_id: typing.Optional[str]
+    #: `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+    return_item_key: typing.Optional[str]
+    #: New shipment state of the [ReturnItem](ctp:api:type:ReturnItem).
     shipment_state: "ReturnShipmentState"
 
-    def __init__(self, *, return_item_id: str, shipment_state: "ReturnShipmentState"):
+    def __init__(
+        self,
+        *,
+        return_item_id: typing.Optional[str] = None,
+        return_item_key: typing.Optional[str] = None,
+        shipment_state: "ReturnShipmentState"
+    ):
         self.return_item_id = return_item_id
+        self.return_item_key = return_item_key
         self.shipment_state = shipment_state
 
         super().__init__(action="setReturnShipmentState")
@@ -4472,9 +4945,15 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
 
 
 class OrderSetShippingAddressAction(OrderUpdateAction):
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    """This action updates the `shippingAddress` on the Order, but it does not change the shipping address on the referenced [Cart](ctp:api:type:Cart) from which the Order is created.
+    Also, it does not recalculate the Cart as taxes may not fit to the shipping address anymore.
+
+    Produces the [Order Shipping Address Set](ctp:api:type:OrderShippingAddressSetMessage) Message.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
     address: typing.Optional["BaseAddress"]
 
     def __init__(self, *, address: typing.Optional["BaseAddress"] = None):
@@ -4557,7 +5036,19 @@ class OrderSetShippingAddressCustomTypeAction(OrderUpdateAction):
 
 
 class OrderSetStoreAction(OrderUpdateAction):
-    #: [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+    """Sets the [Store](ctp:api:type:Store) the Order is assigned to.
+    It should be used to migrate Orders to a new Store.
+    No validations are performed (such as that the Customer is allowed to create Orders in the Store).
+
+    Produces the [Order Store Set](ctp:api:type:OrderStoreSetMessage) Message.
+    Returns a `400` error if `store` references the same Store the Order is currently assigned to, including if you try to remove the value when no Store is currently assigned.
+
+    """
+
+    #: Value to set.
+    #: If empty, any existing value is removed.
+    #:
+    #: If `store` references the same Store the Order is currently assigned to or if you try to remove the value when no Store is currently assigned, a `400` error is returned.
     store: typing.Optional["StoreResourceIdentifier"]
 
     def __init__(self, *, store: typing.Optional["StoreResourceIdentifier"] = None):
@@ -4578,24 +5069,33 @@ class OrderSetStoreAction(OrderUpdateAction):
 
 
 class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
-    custom_line_item_id: str
+    """Produces the [Custom Line Item State Transition](ctp:api:type:CustomLineItemStateTransitionMessage) Message."""
+
+    #: `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_id: typing.Optional[str]
+    #: `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+    custom_line_item_key: typing.Optional[str]
+    #: Number of Custom Line Items that should transition [State](ctp:api:type:State).
     quantity: int
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+    #: [State](ctp:api:type:State) the Custom Line Item should transition from.
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+    #: [State](ctp:api:type:State) the Custom Line Item should transition to.
     to_state: "StateResourceIdentifier"
+    #: Date and time (UTC) to perform the [State](ctp:api:type:State) transition.
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        custom_line_item_id: str,
+        custom_line_item_id: typing.Optional[str] = None,
+        custom_line_item_key: typing.Optional[str] = None,
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
         actual_transition_date: typing.Optional[datetime.datetime] = None
     ):
         self.custom_line_item_id = custom_line_item_id
+        self.custom_line_item_key = custom_line_item_key
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
@@ -4618,24 +5118,33 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
 
 
 class OrderTransitionLineItemStateAction(OrderUpdateAction):
-    line_item_id: str
+    """Produces the [Line Item State Transition](ctp:api:type:LineItemStateTransitionMessage) Message."""
+
+    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
+    #: Number of Line Items that should transition [State](ctp:api:type:State).
     quantity: int
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+    #: [State](ctp:api:type:State) the Line Item should transition from.
     from_state: "StateResourceIdentifier"
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+    #: [State](ctp:api:type:State) the Line Item should transition to.
     to_state: "StateResourceIdentifier"
+    #: Date and time (UTC) to perform the [State](ctp:api:type:State) transition.
     actual_transition_date: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        line_item_id: str,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
         actual_transition_date: typing.Optional[datetime.datetime] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
         self.from_state = from_state
         self.to_state = to_state
@@ -4658,8 +5167,17 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
 
 
 class OrderTransitionStateAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+    """If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State.
+    If `transitions` is not set, no validation is performed.
+
+    This update action produces the [Order State Transition](ctp:api:type:OrderStateTransitionMessage) Message.
+
+    """
+
+    #: Value to set.
+    #: If there is no State yet, the new State must be an initial State.
     state: "StateResourceIdentifier"
+    #: Set to `true` to turn off validation.
     force: typing.Optional[bool]
 
     def __init__(
@@ -4685,9 +5203,9 @@ class OrderTransitionStateAction(OrderUpdateAction):
 
 
 class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
-    #: Polymorphic base type that represents a postal address and contact details.
-    #: Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-    #: only differ in the data type for the optional `custom` field.
+    """Updates an address in `itemShippingAddresses` by keeping the Address `key`."""
+
+    #: The new Address with the same `key` as the Address it will replace.
     address: "BaseAddress"
 
     def __init__(self, *, address: "BaseAddress"):
@@ -4710,20 +5228,24 @@ class OrderUpdateItemShippingAddressAction(OrderUpdateAction):
 
 
 class OrderUpdateSyncInfoAction(OrderUpdateAction):
-    #: [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
-    channel: "ChannelResourceIdentifier"
+    #: Set this to identify an external order instance, file, or other resource.
     external_id: typing.Optional[str]
+    #: The synchronization destination to set. Must not be empty.
+    #: The referenced Channel must have the [Channel Role](ctp:api:type:ChannelRoleEnum) `OrderExport` or `OrderImport`.
+    #: Otherwise this update action returns an [InvalidInput](ctp:api:type:InvalidInputError) error.
+    channel: "ChannelResourceIdentifier"
+    #: If not set, it defaults to the current date and time.
     synced_at: typing.Optional[datetime.datetime]
 
     def __init__(
         self,
         *,
-        channel: "ChannelResourceIdentifier",
         external_id: typing.Optional[str] = None,
+        channel: "ChannelResourceIdentifier",
         synced_at: typing.Optional[datetime.datetime] = None
     ):
-        self.channel = channel
         self.external_id = external_id
+        self.channel = channel
         self.synced_at = synced_at
 
         super().__init__(action="updateSyncInfo")

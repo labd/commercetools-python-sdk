@@ -93,6 +93,7 @@ class AttributeDefinitionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeDefinition(**data)
 
 
@@ -161,6 +162,7 @@ class AttributeDefinitionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeDefinitionDraft(**data)
 
 
@@ -177,6 +179,7 @@ class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeLocalizedEnumValue(**data)
 
 
@@ -189,6 +192,7 @@ class AttributePlainEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributePlainEnumValue(**data)
 
 
@@ -205,6 +209,7 @@ class AttributeTypeSchema(helpers.BaseSchema):
 
 
 class AttributeBooleanTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -215,6 +220,7 @@ class AttributeBooleanTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTimeTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -225,6 +231,7 @@ class AttributeDateTimeTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -253,6 +260,7 @@ class AttributeEnumTypeSchema(AttributeTypeSchema):
 
 
 class AttributeLocalizableTextTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -281,6 +289,7 @@ class AttributeLocalizedEnumTypeSchema(AttributeTypeSchema):
 
 
 class AttributeMoneyTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -309,6 +318,7 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
 
 
 class AttributeNumberTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -369,6 +379,7 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTextTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -379,6 +390,7 @@ class AttributeTextTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTimeTypeSchema(AttributeTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -424,6 +436,7 @@ class ProductTypeSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductType(**data)
 
 
@@ -447,6 +460,7 @@ class ProductTypeDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductTypeDraft(**data)
 
 
@@ -470,6 +484,7 @@ class ProductTypePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductTypePagedQueryResponse(**data)
 
 
@@ -492,6 +507,7 @@ class ProductTypeReferenceSchema(ReferenceSchema):
 
 
 class ProductTypeResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -580,6 +596,7 @@ class ProductTypeUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductTypeUpdate(**data)
 
 

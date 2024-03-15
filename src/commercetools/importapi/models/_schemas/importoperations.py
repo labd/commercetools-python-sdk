@@ -133,6 +133,7 @@ class ImportOperationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportOperation(**data)
 
 
@@ -154,6 +155,7 @@ class ImportOperationPagedResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportOperationPagedResponse(**data)
 
 
@@ -244,4 +246,5 @@ class ImportOperationStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportOperationStatus(**data)

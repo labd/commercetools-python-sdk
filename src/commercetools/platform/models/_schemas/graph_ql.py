@@ -58,6 +58,9 @@ class GraphQLErrorSchema(helpers.BaseSchema):
             "ConcurrentModification": helpers.absmod(
                 __name__, ".error.GraphQLConcurrentModificationErrorSchema"
             ),
+            "ContentTooLarge": helpers.absmod(
+                __name__, ".error.GraphQLContentTooLargeErrorSchema"
+            ),
             "CountryNotConfiguredInStore": helpers.absmod(
                 __name__, ".error.GraphQLCountryNotConfiguredInStoreErrorSchema"
             ),
@@ -165,8 +168,14 @@ class GraphQLErrorSchema(helpers.BaseSchema):
             "MatchingPriceNotFound": helpers.absmod(
                 __name__, ".error.GraphQLMatchingPriceNotFoundErrorSchema"
             ),
+            "MaxCartDiscountsReached": helpers.absmod(
+                __name__, ".error.GraphQLMaxCartDiscountsReachedErrorSchema"
+            ),
             "MaxResourceLimitExceeded": helpers.absmod(
                 __name__, ".error.GraphQLMaxResourceLimitExceededErrorSchema"
+            ),
+            "MaxStoreReferencesReached": helpers.absmod(
+                __name__, ".error.GraphQLMaxStoreReferencesReachedErrorSchema"
             ),
             "MissingRoleOnChannel": helpers.absmod(
                 __name__, ".error.GraphQLMissingRoleOnChannelErrorSchema"
@@ -179,9 +188,6 @@ class GraphQLErrorSchema(helpers.BaseSchema):
             ),
             "NoMatchingProductDiscountFound": helpers.absmod(
                 __name__, ".error.GraphQLNoMatchingProductDiscountFoundErrorSchema"
-            ),
-            "NotEnabled": helpers.absmod(
-                __name__, ".error.GraphQLNotEnabledErrorSchema"
             ),
             "ObjectNotFound": helpers.absmod(
                 __name__, ".error.GraphQLObjectNotFoundErrorSchema"
@@ -250,6 +256,9 @@ class GraphQLErrorSchema(helpers.BaseSchema):
             "ShippingMethodDoesNotMatchCart": helpers.absmod(
                 __name__, ".error.GraphQLShippingMethodDoesNotMatchCartErrorSchema"
             ),
+            "StoreCartDiscountsLimitReached": helpers.absmod(
+                __name__, ".error.GraphQLStoreCartDiscountsLimitReachedErrorSchema"
+            ),
             "SyntaxError": helpers.absmod(
                 __name__, ".error.GraphQLSyntaxErrorErrorSchema"
             ),
@@ -262,6 +271,7 @@ class GraphQLErrorSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.GraphQLError(**data)
 
 
@@ -274,6 +284,7 @@ class GraphQLErrorLocationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.GraphQLErrorLocation(**data)
 
 
@@ -298,6 +309,7 @@ class GraphQLRequestSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.GraphQLRequest(**data)
 
 
@@ -319,6 +331,7 @@ class GraphQLResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.GraphQLResponse(**data)
 
 

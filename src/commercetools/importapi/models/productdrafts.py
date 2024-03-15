@@ -225,7 +225,7 @@ class PriceDraftImport(_BaseType):
     #: The tiered prices for this price.
     tiers: typing.Optional[typing.List["PriceTier"]]
     #: User-defined unique identifier for the Embedded Price.
-    key: typing.Optional[str]
+    key: str
 
     def __init__(
         self,
@@ -239,7 +239,7 @@ class PriceDraftImport(_BaseType):
         custom: typing.Optional["Custom"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
-        key: typing.Optional[str] = None
+        key: str
     ):
         self.value = value
         self.country = country

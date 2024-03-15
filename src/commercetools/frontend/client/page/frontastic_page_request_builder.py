@@ -14,6 +14,7 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticPageRequestBuilder:
+
     _client: "BaseClient"
 
     def __init__(

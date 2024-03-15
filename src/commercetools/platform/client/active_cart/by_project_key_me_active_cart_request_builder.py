@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeActiveCartRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -36,7 +37,7 @@ class ByProjectKeyMeActiveCartRequestBuilder:
         """Retrieves the Customer's most recently modified active Cart.
         Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
 
-        If no active Cart exists, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+        If no active Cart exists, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         """
         headers = {} if headers is None else headers
@@ -52,5 +53,28 @@ class ByProjectKeyMeActiveCartRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
+            return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def head(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if an active Cart exists. Returns a `200 OK` status if an active Cart exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/me/active-cart",
+            params={},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

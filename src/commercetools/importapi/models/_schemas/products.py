@@ -75,6 +75,7 @@ class SearchKeywordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SearchKeyword(**data)
 
 
@@ -105,6 +106,7 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
 
 
 class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -207,4 +209,5 @@ class ProductImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductImport(**data)

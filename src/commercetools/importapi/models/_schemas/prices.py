@@ -28,6 +28,7 @@ class SubRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SubRate(**data)
 
 
@@ -59,6 +60,7 @@ class TaxRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxRate(**data)
 
 
@@ -148,4 +150,5 @@ class PriceImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PriceImport(**data)

@@ -172,6 +172,7 @@ class PaymentSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Payment(**data)
 
 
@@ -287,6 +288,7 @@ class PaymentDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentDraft(**data)
 
 
@@ -312,6 +314,7 @@ class PaymentMethodInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentMethodInfo(**data)
 
 
@@ -335,6 +338,7 @@ class PaymentPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentPagedQueryResponse(**data)
 
 
@@ -357,6 +361,7 @@ class PaymentReferenceSchema(ReferenceSchema):
 
 
 class PaymentResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -392,6 +397,7 @@ class PaymentStatusSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentStatus(**data)
 
 
@@ -421,6 +427,7 @@ class PaymentStatusDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentStatusDraft(**data)
 
 
@@ -512,6 +519,7 @@ class PaymentUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PaymentUpdate(**data)
 
 
@@ -563,6 +571,7 @@ class TransactionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Transaction(**data)
 
 
@@ -605,6 +614,7 @@ class TransactionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TransactionDraft(**data)
 
 

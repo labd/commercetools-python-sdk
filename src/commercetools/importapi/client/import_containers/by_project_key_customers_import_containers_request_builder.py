@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCustomersImportContainersRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 

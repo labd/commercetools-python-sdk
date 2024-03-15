@@ -46,6 +46,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -185,6 +186,30 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
+    def head(
+        self,
+        *,
+        where: typing.List["str"] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a Customer exists for a given Query Predicate. Returns a `200 OK` status if any Customers match the Query Predicate or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/customers",
+            params={"where": where},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
     def post(
         self,
         body: "CustomerDraft",
@@ -193,11 +218,11 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["CustomerSignInResult"]:
-        """When using this endpoint, if omitted, the Customer `stores` field is set to the Store specified in the path parameter.
+        """When using this endpoint, if omitted, the Customer `stores` field is set to the [Store](ctp:api:type:Store) specified in the path parameter.
 
         If the `anonymousCart` field is set on the [CustomerDraft](ctp:api:type:CustomerDraft), then the newly created Customer will be assigned to that [Cart](ctp:api:type:Cart).
         Similarly, if the `anonymousId` field is set, the Customer will be set on all [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [ShoppingLists](ctp:api:type:ShoppingList) and [Payments](ctp:api:type:Payment) with the same `anonymousId`.
-        If a Cart with a `store` field specified, the `store` field must reference the same Store specified in the `{storeKey}` path parameter.
+        If a Cart with a `store` field specified, the `store` field must reference the same [Store](ctp:api:type:Store) specified in the `{storeKey}` path parameter.
         Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
 
         """

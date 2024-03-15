@@ -31,6 +31,7 @@ class LocationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Location(**data)
 
 
@@ -71,6 +72,7 @@ class ZoneSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Zone(**data)
 
 
@@ -96,6 +98,7 @@ class ZoneDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ZoneDraft(**data)
 
 
@@ -119,6 +122,7 @@ class ZonePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ZonePagedQueryResponse(**data)
 
 
@@ -141,6 +145,7 @@ class ZoneReferenceSchema(ReferenceSchema):
 
 
 class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -177,6 +182,7 @@ class ZoneUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ZoneUpdate(**data)
 
 

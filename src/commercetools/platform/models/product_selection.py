@@ -198,9 +198,9 @@ class AssignedProductSelectionPagedQueryResponse(_BaseType):
 
 
 class ProductSelection(BaseResource):
-    #: Present on resources updated after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources updated after 1/02/2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1/02/2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the ProductSelection.
     key: typing.Optional[str]
@@ -266,7 +266,7 @@ class ProductSelectionAssignment(_BaseType):
     Given the mode of Product Selection, this assignment refers to, it may contain:
 
     - `variantSelection` field for a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-    - `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) ([BETA](/../offering/api-contract#public-beta)).
+    - `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
     """
 
     #: Reference to a Product that is assigned to the ProductSelection.
@@ -489,11 +489,12 @@ class ProductSelectionReference(Reference):
 
 
 class ProductSelectionResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_SELECTION)
 
     @classmethod

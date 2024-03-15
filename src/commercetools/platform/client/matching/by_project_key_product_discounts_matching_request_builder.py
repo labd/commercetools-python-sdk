@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductDiscountsMatchingRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 

@@ -103,7 +103,7 @@ class AttributeDefinition(_BaseType):
     #:
     #: Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
     #: The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
-    #: This constraint is enforced at both [Product creation](/../api/projects/products#create-product) and [Product update](/../api/projects/products#update-product).
+    #: This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/../api/projects/products#update-product).
     #: If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
     is_searchable: bool
 
@@ -267,7 +267,10 @@ class AttributePlainEnumValue(_BaseType):
 class AttributeReferenceTypeId(enum.Enum):
     """Name of the resource type that the value should reference. Supported resource type identifiers:"""
 
+    ASSOCIATE_ROLE = "associate-role"
+    BUSINESS_UNIT = "business-unit"
     CART = "cart"
+    CART_DISCOUNT = "cart-discount"
     CATEGORY = "category"
     CHANNEL = "channel"
     CUSTOMER = "customer"
@@ -356,6 +359,7 @@ class AttributeBooleanType(AttributeType):
     """Attribute type for Boolean values. Valid values for the Attribute are `true` and `false` (JSON Boolean)."""
 
     def __init__(self):
+
         super().__init__(name="boolean")
 
     @classmethod
@@ -371,7 +375,9 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="datetime")
 
     @classmethod
@@ -387,7 +393,9 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="date")
 
     @classmethod
@@ -429,6 +437,7 @@ class AttributeLocalizableTextType(AttributeType):
     """Attribute type for [LocalizedString](ctp:api:type:LocalizedString) values."""
 
     def __init__(self):
+
         super().__init__(name="ltext")
 
     @classmethod
@@ -471,7 +480,9 @@ class AttributeLocalizedEnumType(AttributeType):
 
 
 class AttributeMoneyType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="money")
 
     @classmethod
@@ -510,7 +521,9 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="number")
 
     @classmethod
@@ -575,6 +588,7 @@ class AttributeTextType(AttributeType):
     """Attribute type for plain text values."""
 
     def __init__(self):
+
         super().__init__(name="text")
 
     @classmethod
@@ -590,7 +604,9 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="time")
 
     @classmethod
@@ -606,9 +622,9 @@ class AttributeTimeType(AttributeType):
 
 
 class ProductType(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the ProductType.
     key: typing.Optional[str]
@@ -769,11 +785,12 @@ class ProductTypeReference(Reference):
 
 
 class ProductTypeResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.PRODUCT_TYPE)
 
     @classmethod
@@ -791,7 +808,8 @@ class ProductTypeResourceIdentifier(ResourceIdentifier):
 
 
 class ProductTypeUpdate(_BaseType):
-    #: Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: Expected version of the ProductType on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the ProductType.
     actions: typing.List["ProductTypeUpdateAction"]

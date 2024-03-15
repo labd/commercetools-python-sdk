@@ -7,6 +7,9 @@
 import typing
 import warnings
 
+from ..cart_discounts.by_project_key_in_store_key_by_store_key_cart_discounts_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder,
+)
 from ..carts.by_project_key_in_store_key_by_store_key_carts_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder,
 )
@@ -28,6 +31,12 @@ from ..product_projections.by_project_key_in_store_key_by_store_key_product_proj
 from ..product_selection_assignments.by_project_key_in_store_key_by_store_key_product_selection_assignments_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder,
 )
+from ..product_tailoring.by_project_key_in_store_key_by_store_key_product_tailoring_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyProductTailoringRequestBuilder,
+)
+from ..products.by_project_key_in_store_key_by_store_key_products_request_builder import (
+    ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder,
+)
 from ..shipping_methods.by_project_key_in_store_key_by_store_key_shipping_methods_request_builder import (
     ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder,
 )
@@ -40,6 +49,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -133,4 +143,30 @@ class ByProjectKeyInStoreKeyByStoreKeyRequestBuilder:
                 store_key=self._store_key,
                 client=self._client,
             )
+        )
+
+    def cart_discounts(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def product_tailoring(
+        self,
+    ) -> ByProjectKeyInStoreKeyByStoreKeyProductTailoringRequestBuilder:
+        """A Product Tailoring holds tailored data of Product in the Store."""
+        return ByProjectKeyInStoreKeyByStoreKeyProductTailoringRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
+        )
+
+    def products(self) -> ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder:
+        return ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder(
+            project_key=self._project_key,
+            store_key=self._store_key,
+            client=self._client,
         )

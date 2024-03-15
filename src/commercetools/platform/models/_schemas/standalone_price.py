@@ -21,6 +21,30 @@ from .type import FieldContainerField
 
 
 # Marshmallow Schemas
+class StagedPriceDraftSchema(helpers.BaseSchema):
+    value = helpers.Discriminator(
+        allow_none=True,
+        discriminator_field=("type", "type"),
+        discriminator_schemas={
+            "centPrecision": helpers.absmod(
+                __name__, ".common.CentPrecisionMoneyDraftSchema"
+            ),
+            "highPrecision": helpers.absmod(
+                __name__, ".common.HighPrecisionMoneyDraftSchema"
+            ),
+        },
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.StagedPriceDraft(**data)
+
+
 class StagedStandalonePriceSchema(helpers.BaseSchema):
     value = helpers.Discriminator(
         allow_none=True,
@@ -48,6 +72,7 @@ class StagedStandalonePriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StagedStandalonePrice(**data)
 
 
@@ -151,6 +176,7 @@ class StandalonePriceSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StandalonePrice(**data)
 
 
@@ -219,6 +245,13 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         load_default=None,
     )
+    staged = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".StagedPriceDraftSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
     active = marshmallow.fields.Boolean(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
@@ -228,6 +261,7 @@ class StandalonePriceDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StandalonePriceDraft(**data)
 
 
@@ -251,6 +285,7 @@ class StandalonePricePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StandalonePricePagedQueryResponse(**data)
 
 
@@ -273,6 +308,7 @@ class StandalonePriceReferenceSchema(ReferenceSchema):
 
 
 class StandalonePriceResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -304,6 +340,9 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
                 "removePriceTier": helpers.absmod(
                     __name__, ".StandalonePriceRemovePriceTierActionSchema"
                 ),
+                "removeStagedChanges": helpers.absmod(
+                    __name__, ".StandalonePriceRemoveStagedChangesActionSchema"
+                ),
                 "setCustomField": helpers.absmod(
                     __name__, ".StandalonePriceSetCustomFieldActionSchema"
                 ),
@@ -316,7 +355,7 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
                 "setKey": helpers.absmod(
                     __name__, ".StandalonePriceSetKeyActionSchema"
                 ),
-                "setPriceTier": helpers.absmod(
+                "setPriceTiers": helpers.absmod(
                     __name__, ".StandalonePriceSetPriceTiersActionSchema"
                 ),
                 "setValidFrom": helpers.absmod(
@@ -339,6 +378,7 @@ class StandalonePriceUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StandalonePriceUpdate(**data)
 
 
@@ -372,6 +412,7 @@ class StandalonePriceAddPriceTierActionSchema(StandalonePriceUpdateActionSchema)
 
 
 class StandalonePriceApplyStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -425,6 +466,17 @@ class StandalonePriceRemovePriceTierActionSchema(StandalonePriceUpdateActionSche
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.StandalonePriceRemovePriceTierAction(**data)
+
+
+class StandalonePriceRemoveStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.StandalonePriceRemoveStagedChangesAction(**data)
 
 
 class StandalonePriceSetCustomFieldActionSchema(StandalonePriceUpdateActionSchema):

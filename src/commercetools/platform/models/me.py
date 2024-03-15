@@ -11,7 +11,7 @@ import typing
 
 from ._abstract import _BaseType
 from .business_unit import BusinessUnitType
-from .cart import InventoryMode, TaxMode
+from .cart import InventoryMode, ShippingMode, TaxMode
 from .payment import TransactionType
 
 if typing.TYPE_CHECKING:
@@ -29,6 +29,7 @@ if typing.TYPE_CHECKING:
         InventoryMode,
         ItemShippingDetailsDraft,
         ItemShippingTarget,
+        ShippingMode,
         TaxMode,
     )
     from .channel import ChannelResourceIdentifier
@@ -184,11 +185,12 @@ __all__ = [
 
 
 class MyBusinessUnitAssociateDraft(_BaseType):
-    #: Expected version of the BusinessUnit on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the BusinessUnit on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: [Customer](ctp:api:type:Customer) to create and assign to the Business Unit.
     customer: "MyCustomerDraft"
-    #: Roles assigned to the new Associate within a Business Unit.
+    #: Roles assigned to the new Associate within a Business Unit. Can only contain [AssociateRoles](ctp:api:type:AssociateRole) with the `buyerAssignable` property set to `true`.
     associate_role_assignments: typing.List["AssociateRoleAssignmentDraft"]
 
     def __init__(
@@ -288,7 +290,7 @@ class MyBusinessUnitDraft(_BaseType):
 
 class MyBusinessUnitUpdate(_BaseType):
     #: Expected version of the BusinessUnit on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the BusinessUnit.
     actions: typing.List["BusinessUnitUpdateAction"]
@@ -437,6 +439,9 @@ class MyCartDraft(_BaseType):
     #:
     #: Eligible Shipping Methods or applicable Tax Rates are determined by the [Cart](ctp:api:type:Cart) `shippingAddress`, and not `itemShippingAddresses`.
     item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]]
+    #: - If set to `Single`, only a single Shipping Method can be added to the Cart.
+    #: - If set to `Multiple`, multiple Shipping Methods can be added to the Cart.
+    shipping_mode: typing.Optional["ShippingMode"]
     #: `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
     discount_codes: typing.Optional[typing.List["str"]]
     #: Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
@@ -467,6 +472,7 @@ class MyCartDraft(_BaseType):
         shipping_address: typing.Optional["BaseAddress"] = None,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         item_shipping_addresses: typing.Optional[typing.List["BaseAddress"]] = None,
+        shipping_mode: typing.Optional["ShippingMode"] = None,
         discount_codes: typing.Optional[typing.List["str"]] = None,
         country: typing.Optional[str] = None,
         locale: typing.Optional[str] = None,
@@ -484,6 +490,7 @@ class MyCartDraft(_BaseType):
         self.shipping_address = shipping_address
         self.shipping_method = shipping_method
         self.item_shipping_addresses = item_shipping_addresses
+        self.shipping_mode = shipping_mode
         self.discount_codes = discount_codes
         self.country = country
         self.locale = locale
@@ -506,7 +513,7 @@ class MyCartDraft(_BaseType):
 
 class MyCartUpdate(_BaseType):
     #: Expected version of the Cart on which the changes apply.
-    #: If it does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error is returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Cart.
     actions: typing.List["MyCartUpdateAction"]
@@ -683,6 +690,7 @@ class MyCompanyDraft(MyBusinessUnitDraft):
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None
     ):
+
         super().__init__(
             key=key,
             name=name,
@@ -797,7 +805,8 @@ class MyCustomerDraft(_BaseType):
 
 
 class MyCustomerUpdate(_BaseType):
-    #: Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the Customer on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Customer.
     actions: typing.List["MyCustomerUpdateAction"]
@@ -1046,10 +1055,9 @@ class MyLineItemDraft(_BaseType):
 
 
 class MyOrderFromCartDraft(_BaseType):
-    """When creating [B2B Orders](/../api/associates-overview#b2b-resources), the Customer must have the `MyOrderFromCartDraft` [Permission](ctp:api:type:Permission)."""
-
-    #: Unique identifier of the Cart that initiates an Order creation.
+    #: `id` of the [Cart](ctp:api:type:Cart) from which the Order is created.
     id: str
+    #: Current `version` of the [Cart](ctp:api:type:Cart) from which the Order is created.
     version: int
 
     def __init__(self, *, id: str, version: int):
@@ -1071,13 +1079,11 @@ class MyOrderFromCartDraft(_BaseType):
 
 
 class MyOrderFromQuoteDraft(_BaseType):
-    """When creating [B2B Orders](/../api/associates-overview#b2b-resources), the Customer must have the `MyOrderFromQuoteDraft` [Permission](ctp:api:type:Permission)."""
-
-    #: Unique identifier of the Quote from which the Order is created.
+    #: `id` of the [Quote](ctp:api:type:Quote) from which the Order is created.
     id: str
-    #: `version` of the [Quote](ctp:api:type:quote) from which the Order is created.
+    #: Current `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
     version: int
-    #: Set to `true`, if the `quoteState` of the referenced [Quote](ctp:api:type:quote) should be set to `Accepted`.
+    #: Set to `true`, if the `quoteState` of the referenced [Quote](ctp:api:type:Quote) should be set to `Accepted`.
     quote_state_to_accepted: typing.Optional[bool]
 
     def __init__(
@@ -1247,7 +1253,8 @@ class MyPaymentPagedQueryResponse(_BaseType):
 
 
 class MyPaymentUpdate(_BaseType):
-    #: Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the Payment on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Payment.
     actions: typing.List["MyPaymentUpdateAction"]
@@ -1321,9 +1328,11 @@ class MyQuoteRequestDraft(_BaseType):
     #: Current version of the Cart.
     cart_version: int
     #: Message from the Buyer included in the Quote Request.
-    comment: str
+    comment: typing.Optional[str]
 
-    def __init__(self, *, cart_id: str, cart_version: int, comment: str):
+    def __init__(
+        self, *, cart_id: str, cart_version: int, comment: typing.Optional[str] = None
+    ):
         self.cart_id = cart_id
         self.cart_version = cart_version
         self.comment = comment
@@ -1398,7 +1407,7 @@ class MyQuoteState(enum.Enum):
 
 class MyQuoteUpdate(_BaseType):
     #: Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the [Quote](ctp:api:type:Quote).
     actions: typing.List["MyQuoteUpdateAction"]
@@ -1500,7 +1509,8 @@ class MyShoppingListDraft(_BaseType):
 
 
 class MyShoppingListUpdate(_BaseType):
-    #: Expected version of the ShoppingList on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+    #: Expected version of the ShoppingList on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: List of update actions to be performed on the ShoppingList.
     actions: typing.List["MyShoppingListUpdateAction"]
@@ -1873,7 +1883,7 @@ class MyBusinessUnitChangeNameAction(MyBusinessUnitUpdateAction):
 
 
 class MyBusinessUnitChangeParentUnitAction(MyBusinessUnitUpdateAction):
-    """Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message."""
+    """Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentChanged](ctp:api:type:BusinessUnitParentChangedMessage) Message."""
 
     #: New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
     parent_unit: "BusinessUnitResourceIdentifier"
@@ -2022,6 +2032,8 @@ class MyBusinessUnitRemoveShippingAddressIdAction(MyBusinessUnitUpdateAction):
 
 
 class MyBusinessUnitSetAddressCustomFieldAction(MyBusinessUnitUpdateAction):
+    """Adding a Custom Field to an Address of a Business Unit generates the [BusinessUnitAddressCustomFieldAdded](ctp:api:type:BusinessUnitAddressCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitAddressCustomFieldRemoved](ctp:api:type:BusinessUnitAddressCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitAddressCustomFieldChanged](ctp:api:type:BusinessUnitAddressCustomFieldChangedMessage) Message."""
+
     #: ID of the `address` to be extended.
     address_id: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
@@ -2055,6 +2067,8 @@ class MyBusinessUnitSetAddressCustomFieldAction(MyBusinessUnitUpdateAction):
 
 
 class MyBusinessUnitSetAddressCustomTypeAction(MyBusinessUnitUpdateAction):
+    """Adding or updating a Custom Type to an Address of a Business Unit generates the [BusinessUnitAddressCustomTypeSet](ctp:api:type:BusinessUnitAddressCustomTypeSetMessage) Message, and removing one generates the [BusinessUnitAddressCustomTypeRemoved](ctp:api:type:BusinessUnitAddressCustomTypeRemovedMessage) Message."""
+
     #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the `address`.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2117,6 +2131,8 @@ class MyBusinessUnitSetContactEmailAction(MyBusinessUnitUpdateAction):
 
 
 class MyBusinessUnitSetCustomFieldAction(MyBusinessUnitUpdateAction):
+    """Adding a Custom Field to a Business Unit generates the [BusinessUnitCustomFieldAdded](ctp:api:type:BusinessUnitCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitCustomFieldRemoved](ctp:api:type:BusinessUnitCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitCustomFieldChanged](ctp:api:type:BusinessUnitCustomFieldChangedMessage) Message."""
+
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -2145,6 +2161,8 @@ class MyBusinessUnitSetCustomFieldAction(MyBusinessUnitUpdateAction):
 
 
 class MyBusinessUnitSetCustomTypeAction(MyBusinessUnitUpdateAction):
+    """Adding or updating a Custom Type on a Business Unit generates the [BusinessUnitCustomTypeSet](ctp:api:type:BusinessUnitCustomTypeSetMessage) Message, removing one generates the [BusinessUnitCustomTypeRemoved](ctp:api:type:BusinessUnitCustomTypeRemovedMessage) Message."""
+
     #: Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -2305,7 +2323,6 @@ class MyCartAddItemShippingAddressAction(MyCartUpdateAction):
 class MyCartAddLineItemAction(MyCartUpdateAction):
     """If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
     If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
-    A new Line Item is added when the `externalPrice` or `externalTotalPrice` is set in this update action.
     The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 
     If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
@@ -2415,7 +2432,7 @@ class MyCartAddPaymentAction(MyCartUpdateAction):
 
 
 class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction):
-    """To override the shipping details, see [Set LineItemShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction)."""
+    """To override the shipping details, see [Set LineItem ShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction)."""
 
     #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_id: typing.Optional[str]
@@ -2463,7 +2480,7 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
     the `shippingDetails` field is kept in its current state to avoid data loss.
 
     To change the Line Item quantity and shipping details together,
-    use this update action in combination with the [Set LineItemShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction) update action
+    use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction) update action
     in a single Cart update command.
 
     When the action applies to [LineItems](ctp:api:type:LineItem) with `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode),
@@ -2632,9 +2649,8 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
     line_item_id: typing.Optional[str]
     #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_key: typing.Optional[str]
-    #: New value to set.
-    #:
-    #: If `0`, the Line Item is removed from the Cart.
+    #: Amount to subtract from the LineItem's `quantity`.
+    #: If absent, the LineItem is removed from the Cart.
     quantity: typing.Optional[int]
     #: Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when decreasing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
     external_price: typing.Optional["Money"]
@@ -3501,6 +3517,8 @@ class MyCustomerSetCompanyNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
+    """Adding a Custom Field to a Customer generates the [CustomerCustomFieldAdded](ctp:api:type:CustomerCustomFieldAddedMessage) Message, removing one generates the [CustomerCustomFieldRemoved](ctp:api:type:CustomerCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerCustomFieldChanged](ctp:api:type:CustomerCustomFieldChangedMessage) Message."""
+
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -3529,6 +3547,8 @@ class MyCustomerSetCustomFieldAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
+    """Adding or updating a Custom Type on a Customer generates the [CustomerCustomTypeSet](ctp:api:type:CustomerCustomTypeSetMessage) Message, removing one generates the [CustomerCustomTypeRemoved](ctp:api:type:CustomerCustomTypeRemovedMessage) Message."""
+
     #: Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the MyCustomer.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -3659,7 +3679,7 @@ class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
-    """Setting the first name of the Customer produces the [CustomerFirstNameSetMessage](ctp:api:type:CustomerFirstNameSetMessage)."""
+    """Setting the first name of the Customer produces the [CustomerFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message."""
 
     #: Value to set.
     #: If empty, any existing value is removed.
@@ -3685,7 +3705,7 @@ class MyCustomerSetFirstNameAction(MyCustomerUpdateAction):
 
 
 class MyCustomerSetLastNameAction(MyCustomerUpdateAction):
-    """Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage)."""
+    """Setting the last name of the Customer produces the [CustomerLastNameSet](ctp:api:type:CustomerLastNameSetMessage) Message."""
 
     #: Value to set.
     #: If empty, any existing value is removed.
@@ -4042,6 +4062,7 @@ class MyQuoteRequestCancelAction(MyQuoteRequestUpdateAction):
     """Transitions the `quoteRequestState` of the Quote Request to `Cancelled`. Can only be used when the Quote Request is in state `Submitted`."""
 
     def __init__(self):
+
         super().__init__(action="cancelQuoteRequest")
 
     @classmethod
@@ -4059,6 +4080,8 @@ class MyQuoteRequestCancelAction(MyQuoteRequestUpdateAction):
 
 
 class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
+    #: User-defined identifier of the ShoppingListLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+    key: typing.Optional[str]
     #: `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
     sku: typing.Optional[str]
     #: Unique identifier of a [Product](ctp:api:type:Product).
@@ -4075,6 +4098,7 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         product_id: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
@@ -4082,6 +4106,7 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
+        self.key = key
         self.sku = sku
         self.product_id = product_id
         self.variant_id = variant_id
@@ -4108,6 +4133,8 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
 class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
     #: Name of the [TextLineItem](ctp:api:type:TextLineItem).
     name: "LocalizedString"
+    #: User-defined identifier of the TextLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+    key: typing.Optional[str]
     #: Description of the TextLineItem.
     description: typing.Optional["LocalizedString"]
     #: Number of entries in the TextLineItem.
@@ -4121,12 +4148,14 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
         self,
         *,
         name: "LocalizedString",
+        key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None
     ):
         self.name = name
+        self.key = key
         self.description = description
         self.quantity = quantity
         self.added_at = added_at
@@ -4149,9 +4178,9 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
-    #: `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    #: `id` of the ShoppingListLineItem to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_id: typing.Optional[str]
-    #: `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    #: `key` of the ShoppingListLineItem to update. Either `lineItemId` or `lineItemKey` is required.
     line_item_key: typing.Optional[str]
     #: New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
     quantity: int
@@ -4230,13 +4259,22 @@ class MyShoppingListChangeNameAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: New value to set. Must not be empty.
     name: "LocalizedString"
 
-    def __init__(self, *, text_line_item_id: str, name: "LocalizedString"):
+    def __init__(
+        self,
+        *,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
+        name: "LocalizedString"
+    ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.name = name
 
         super().__init__(action="changeTextLineItemName")
@@ -4256,13 +4294,22 @@ class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListChangeTextLineItemQuantityAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: New value to set. If `0`, the TextLineItem is removed from the ShoppingList.
     quantity: int
 
-    def __init__(self, *, text_line_item_id: str, quantity: int):
+    def __init__(
+        self,
+        *,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
+        quantity: int
+    ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.quantity = quantity
 
         super().__init__(action="changeTextLineItemQuantity")
@@ -4305,13 +4352,22 @@ class MyShoppingListChangeTextLineItemsOrderAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
-    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-    line_item_id: str
+    #: The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Amount to remove from the `quantity` of the ShoppingListLineItem. If not set, the ShoppingListLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the ShoppingListLineItem, the ShoppingListLineItem is removed from the ShoppingList.
     quantity: typing.Optional[int]
 
-    def __init__(self, *, line_item_id: str, quantity: typing.Optional[int] = None):
+    def __init__(
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
+    ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.quantity = quantity
 
         super().__init__(action="removeLineItem")
@@ -4331,15 +4387,22 @@ class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: Amount to remove from the `quantity` of the TextLineItem. If not set, the TextLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the TextLineItem, the TextLineItem is removed from the ShoppingList.
     quantity: typing.Optional[int]
 
     def __init__(
-        self, *, text_line_item_id: str, quantity: typing.Optional[int] = None
+        self,
+        *,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
+        quantity: typing.Optional[int] = None
     ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.quantity = quantity
 
         super().__init__(action="removeTextLineItem")
@@ -4473,8 +4536,10 @@ class MyShoppingListSetDescriptionAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
-    #: Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
-    line_item_id: str
+    #: Unique identifier of an the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem). Either `lineItemId` or `lineItemKey` is required.
+    line_item_id: typing.Optional[str]
+    #: The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -4483,9 +4548,15 @@ class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
     value: typing.Optional[typing.Any]
 
     def __init__(
-        self, *, line_item_id: str, name: str, value: typing.Optional[typing.Any] = None
+        self,
+        *,
+        line_item_id: typing.Optional[str] = None,
+        line_item_key: typing.Optional[str] = None,
+        name: str,
+        value: typing.Optional[typing.Any] = None
     ):
         self.line_item_id = line_item_id
+        self.line_item_key = line_item_key
         self.name = name
         self.value = value
 
@@ -4542,8 +4613,10 @@ class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -4554,11 +4627,13 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
     def __init__(
         self,
         *,
-        text_line_item_id: str,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
         name: str,
         value: typing.Optional[typing.Any] = None
     ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.name = name
         self.value = value
 
@@ -4579,8 +4654,10 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
 
 
 class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the TextLineItem.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -4590,11 +4667,13 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
     def __init__(
         self,
         *,
-        text_line_item_id: str,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None
     ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.type = type
         self.fields = fields
 
@@ -4615,18 +4694,22 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
 
 
 class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction):
-    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-    text_line_item_id: str
+    #: The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_id: typing.Optional[str]
+    #: The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+    text_line_item_key: typing.Optional[str]
     #: Value to set. If empty, any existing value will be removed.
     description: typing.Optional["LocalizedString"]
 
     def __init__(
         self,
         *,
-        text_line_item_id: str,
+        text_line_item_id: typing.Optional[str] = None,
+        text_line_item_key: typing.Optional[str] = None,
         description: typing.Optional["LocalizedString"] = None
     ):
         self.text_line_item_id = text_line_item_id
+        self.text_line_item_key = text_line_item_key
         self.description = description
 
         super().__init__(action="setTextLineItemDescription")

@@ -44,6 +44,8 @@ class ImportSummary(_BaseType):
 
 
 class OperationStates(_BaseType):
+    """The number of resources in each [Processing State](/processing-state#processingstate)."""
+
     #: The number of resources in the `processing` state.
     processing: int
     #: The number of resources in the `validationFailed` state.
@@ -56,6 +58,8 @@ class OperationStates(_BaseType):
     imported: int
     #: The number of resources in the `rejected` state.
     rejected: int
+    #: The number of resources in the `canceled` state.
+    canceled: int
 
     def __init__(
         self,
@@ -65,7 +69,8 @@ class OperationStates(_BaseType):
         unresolved: int,
         wait_for_master_variant: int,
         imported: int,
-        rejected: int
+        rejected: int,
+        canceled: int
     ):
         self.processing = processing
         self.validation_failed = validation_failed
@@ -73,6 +78,7 @@ class OperationStates(_BaseType):
         self.wait_for_master_variant = wait_for_master_variant
         self.imported = imported
         self.rejected = rejected
+        self.canceled = canceled
 
         super().__init__()
 

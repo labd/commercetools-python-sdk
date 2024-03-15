@@ -48,6 +48,7 @@ class BusinessUnitConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.BusinessUnitConfiguration(**data)
 
 
@@ -70,6 +71,7 @@ class CartsConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CartsConfiguration(**data)
 
 
@@ -84,6 +86,7 @@ class ExternalOAuthSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExternalOAuth(**data)
 
 
@@ -173,6 +176,7 @@ class ProjectSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Project(**data)
 
 
@@ -240,6 +244,7 @@ class ProjectUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProjectUpdate(**data)
 
 
@@ -276,6 +281,7 @@ class SearchIndexingConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SearchIndexingConfiguration(**data)
 
 
@@ -307,6 +313,7 @@ class SearchIndexingConfigurationValuesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SearchIndexingConfigurationValues(**data)
 
 
@@ -343,6 +350,7 @@ class CartClassificationTypeSchema(ShippingRateInputTypeSchema):
 
 
 class CartScoreTypeSchema(ShippingRateInputTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -353,6 +361,7 @@ class CartScoreTypeSchema(ShippingRateInputTypeSchema):
 
 
 class CartValueTypeSchema(ShippingRateInputTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -375,6 +384,7 @@ class ShoppingListsConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShoppingListsConfiguration(**data)
 
 

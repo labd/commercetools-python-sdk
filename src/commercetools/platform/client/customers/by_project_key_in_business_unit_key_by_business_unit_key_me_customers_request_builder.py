@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyMeCustomersRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _business_unit_key: str
@@ -39,7 +40,6 @@ class ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyMeCustomersRequestBuilder:
         """The My Business Unit endpoint does not support assigning existing Customers to a Business Unit.
         Associates with the `UpdateAssociates` [Permission](ctp:api:type:Permission) can use this endpoint to create a new Customer and associate it with the Business Unit.
         If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned.
-        The new Associate is created with an empty set of roles.
 
         """
         headers = {} if headers is None else headers

@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -39,7 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestBuilder:
         """The customer verifies the email using the token value.
         Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message.
 
-        If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+        If the Customer exists in the Project but the `stores` field references a different [Store](ctp:api:type:Store), this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         """
         headers = {} if headers is None else headers

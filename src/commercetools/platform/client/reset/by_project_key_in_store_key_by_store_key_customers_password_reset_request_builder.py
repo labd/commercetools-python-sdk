@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -38,7 +39,7 @@ class ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder:
     ) -> typing.Optional["Customer"]:
         """Resetting the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
 
-        If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+        If the Customer exists in the Project but the `stores` field references a different [Store](ctp:api:type:Store), this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 
         """
         headers = {} if headers is None else headers

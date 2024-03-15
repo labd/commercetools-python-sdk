@@ -83,6 +83,7 @@ class StateSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.State(**data)
 
 
@@ -126,6 +127,7 @@ class StateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StateDraft(**data)
 
 
@@ -149,6 +151,7 @@ class StatePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StatePagedQueryResponse(**data)
 
 
@@ -171,6 +174,7 @@ class StateReferenceSchema(ReferenceSchema):
 
 
 class StateResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -215,6 +219,7 @@ class StateUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StateUpdate(**data)
 
 

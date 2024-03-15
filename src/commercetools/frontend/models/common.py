@@ -12,6 +12,9 @@ import typing
 from ._abstract import _BaseType
 
 __all__ = [
+    "BuildMetadata",
+    "BuildUpload",
+    "BuildUploadResult",
     "DataSourceConfiguration",
     "DataSourceResponse",
     "DataSources",
@@ -565,3 +568,117 @@ class ViewData(_BaseType):
         from ._schemas.common import ViewDataSchema
 
         return ViewDataSchema().dump(self)
+
+
+class BuildUpload(_BaseType):
+    #: Metadata about the build.
+    metadata: "BuildMetadata"
+    #: Javascript bundle containing all code of the backend extensions.
+    extension: typing.BinaryIO
+    #: Map for the build file. When provided, exceptions will be logged with readable stack traces.
+    extension_map: typing.Optional[typing.BinaryIO]
+
+    def __init__(
+        self,
+        *,
+        metadata: "BuildMetadata",
+        extension: typing.BinaryIO,
+        extension_map: typing.Optional[typing.BinaryIO] = None
+    ):
+        self.metadata = metadata
+        self.extension = extension
+        self.extension_map = extension_map
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "BuildUpload":
+        from ._schemas.common import BuildUploadSchema
+
+        return BuildUploadSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import BuildUploadSchema
+
+        return BuildUploadSchema().dump(self)
+
+
+class BuildMetadata(_BaseType):
+    #: Name of the Git branch to deploy.
+    branch: str
+    #: Full commit ID hash of the current HEAD.
+    revision: str
+    #: Current time represented in the format `YYYY.MM.DD.HH.mm`. This value should be unique and sortable.
+    version_number: str
+    #: Node.js version for the [Extension runner](/../frontend-getting-started/development-concepts#extension-runner).
+    node_js_version: typing.Optional[int]
+    #: If `true`, the build is marked as successful and [displayed in the Studio](/../frontend-studio/using-deployment-in-the-studio).
+    build_successful: bool
+    #: Date and time of the build in the [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format. For example, `2023-11-21T08:14:31.830Z`.
+    build_time: str
+    #: Build duration in seconds.
+    build_duration: int
+    #: CI execution logs.
+    build_log: str
+    #: If `true`, the build is automatically deployed to the staging environment, if `buildSuccessful` is `true`.
+    deploy: typing.Optional[bool]
+
+    def __init__(
+        self,
+        *,
+        branch: str,
+        revision: str,
+        version_number: str,
+        node_js_version: typing.Optional[int] = None,
+        build_successful: bool,
+        build_time: str,
+        build_duration: int,
+        build_log: str,
+        deploy: typing.Optional[bool] = None
+    ):
+        self.branch = branch
+        self.revision = revision
+        self.version_number = version_number
+        self.node_js_version = node_js_version
+        self.build_successful = build_successful
+        self.build_time = build_time
+        self.build_duration = build_duration
+        self.build_log = build_log
+        self.deploy = deploy
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "BuildMetadata":
+        from ._schemas.common import BuildMetadataSchema
+
+        return BuildMetadataSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import BuildMetadataSchema
+
+        return BuildMetadataSchema().dump(self)
+
+
+class BuildUploadResult(_BaseType):
+    #: Status of the build.
+    status: str
+    #: Description of the upload result.
+    message: str
+
+    def __init__(self, *, status: str, message: str):
+        self.status = status
+        self.message = message
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "BuildUploadResult":
+        from ._schemas.common import BuildUploadResultSchema
+
+        return BuildUploadResultSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import BuildUploadResultSchema
+
+        return BuildUploadResultSchema().dump(self)

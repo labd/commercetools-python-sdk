@@ -7,6 +7,7 @@
 import typing
 import warnings
 
+from ...models.error import ErrorResponse
 from ...models.me import MyOrderFromQuoteDraft
 from ...models.order import Order
 
@@ -15,6 +16,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeOrdersQuotesRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -32,7 +34,20 @@ class ByProjectKeyMeOrdersQuotesRequestBuilder:
         *,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
-    ) -> "Order":
+    ) -> typing.Optional["Order"]:
+        """When creating [B2B Orders](/associates-overview#b2b-resources), the Customer must have the `CreateMyOrdersFromMyQuotes` [Permission](ctp:api:type:Permission).
+
+        Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+
+        Specific Error Codes:
+
+        - [OutOfStock](ctp:api:type:OutOfStockError)
+        - [PriceChanged](ctp:api:type:PriceChangedError)
+        - [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+        - [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+        - [AssociateMissingPermission](ctp:api:type:AssociateMissingPermissionError)
+
+        """
         headers = {} if headers is None else headers
         response = self._client._post(
             endpoint=f"/{self._project_key}/me/orders/quotes",
@@ -43,4 +58,9 @@ class ByProjectKeyMeOrdersQuotesRequestBuilder:
         )
         if response.status_code in (201, 200):
             return Order.deserialize(response.json())
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
         warnings.warn("Unhandled status code %d" % response.status_code)

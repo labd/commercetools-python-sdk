@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMessagesByIDRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _id: str
@@ -51,4 +52,27 @@ class ByProjectKeyMessagesByIDRequestBuilder:
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
             return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def head(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a Message exists for a given `id`. Returns a `200 OK` status if the Message exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/messages/{self._id}",
+            params={},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
         warnings.warn("Unhandled status code %d" % response.status_code)

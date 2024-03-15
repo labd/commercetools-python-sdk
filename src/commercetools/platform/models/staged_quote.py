@@ -47,9 +47,9 @@ __all__ = [
 class StagedQuote(BaseResource):
     #: User-specific unique identifier of the staged quote.
     key: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Predefined states tracking the status of the Staged Quote.
     staged_quote_state: "StagedQuoteState"
@@ -256,6 +256,7 @@ class StagedQuoteResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STAGED_QUOTE)
 
     @classmethod
@@ -282,7 +283,7 @@ class StagedQuoteState(enum.Enum):
 
 class StagedQuoteUpdate(_BaseType):
     #: Expected version of the [StagedQuote](ctp:api:type:StagedQuote) to which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the [StagedQuote](ctp:api:type:StagedQuote).
     actions: typing.List["StagedQuoteUpdateAction"]

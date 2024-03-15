@@ -97,4 +97,5 @@ class CategoryImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CategoryImport(**data)

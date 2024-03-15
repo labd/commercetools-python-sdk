@@ -46,6 +46,7 @@ class CustomObjectSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomObject(**data)
 
 
@@ -62,6 +63,7 @@ class CustomObjectDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomObjectDraft(**data)
 
 
@@ -85,6 +87,7 @@ class CustomObjectPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomObjectPagedQueryResponse(**data)
 
 

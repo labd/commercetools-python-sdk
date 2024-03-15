@@ -69,6 +69,7 @@ class AttributeGroupSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeGroup(**data)
 
 
@@ -100,6 +101,7 @@ class AttributeGroupDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeGroupDraft(**data)
 
 
@@ -123,6 +125,7 @@ class AttributeGroupPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeGroupPagedQueryResponse(**data)
 
 
@@ -145,6 +148,7 @@ class AttributeGroupReferenceSchema(ReferenceSchema):
 
 
 class AttributeGroupResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -188,6 +192,7 @@ class AttributeGroupUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeGroupUpdate(**data)
 
 
@@ -211,6 +216,7 @@ class AttributeReferenceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AttributeReference(**data)
 
 

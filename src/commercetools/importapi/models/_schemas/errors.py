@@ -93,6 +93,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ErrorResponse(**data)
 
 
@@ -110,6 +111,7 @@ class ErrorObjectSchema(helpers.BaseSchema):
 
 
 class AccessDeniedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -120,6 +122,7 @@ class AccessDeniedErrorSchema(ErrorObjectSchema):
 
 
 class InvalidScopeErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -130,6 +133,7 @@ class InvalidScopeErrorSchema(ErrorObjectSchema):
 
 
 class InvalidOperationSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -431,10 +435,12 @@ class VariantValuesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.VariantValues(**data)
 
 
 class InsufficientScopeErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -445,6 +451,7 @@ class InsufficientScopeErrorSchema(ErrorObjectSchema):
 
 
 class InvalidCredentialsErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -455,6 +462,7 @@ class InvalidCredentialsErrorSchema(ErrorObjectSchema):
 
 
 class InvalidTokenErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -493,6 +501,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
 
 
 class InvalidJsonInputSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -503,6 +512,7 @@ class InvalidJsonInputSchema(ErrorObjectSchema):
 
 
 class InvalidInputSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -632,6 +642,7 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 
 
 class ContentionErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -642,6 +653,7 @@ class ContentionErrorSchema(ErrorObjectSchema):
 
 
 class GenericErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 

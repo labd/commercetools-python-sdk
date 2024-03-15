@@ -765,9 +765,8 @@ class ProductVariantPatch(_BaseType):
 
     """
 
-    #: The [ProductVariant](/../api/projects/products#productvariant) to which this patch is applied.
-    #: The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the ProductVariantPatch is associated.
-    #: If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
+    #: Reference to the [ProductVariant](/../api/projects/products#productvariant) to update.
+    #: If the referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
     product_variant: "ProductVariantKeyReference"
     #: Maps to `ProductVariant.attributes`.
     #: - The referenced Attribute must be defined in an existing [ProductType](/../api/projects/productTypes#producttype), or the `state` of the [ImportOperation](/import-operation#importoperation) will be `validationFailed`.
@@ -777,17 +776,21 @@ class ProductVariantPatch(_BaseType):
     attributes: typing.Optional["Attributes"]
     #: If `false`, the attribute changes are applied to both [current and staged projected representations](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product).
     staged: typing.Optional[bool]
+    #: Reference to the [Product](/../api/projects/products#product) which contains the ProductVariant. Setting a value will batch process the import operations to minimize concurrency errors. If set, this field is required for every ProductVariantPatch in the [ProductVariantPatchRequest](ctp:import:type:ProductVariantPatchRequest).
+    product: typing.Optional["ProductKeyReference"]
 
     def __init__(
         self,
         *,
         product_variant: "ProductVariantKeyReference",
         attributes: typing.Optional["Attributes"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
+        product: typing.Optional["ProductKeyReference"] = None
     ):
         self.product_variant = product_variant
         self.attributes = attributes
         self.staged = staged
+        self.product = product
 
         super().__init__()
 

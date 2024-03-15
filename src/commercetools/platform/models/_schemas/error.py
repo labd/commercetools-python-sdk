@@ -33,6 +33,7 @@ class ErrorByExtensionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ErrorByExtension(**data)
 
 
@@ -68,6 +69,7 @@ class ErrorObjectSchema(helpers.BaseSchema):
 
 
 class AnonymousIdAlreadyInUseErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -226,6 +228,7 @@ class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
 
 
 class BadGatewayErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -267,6 +270,28 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.ConcurrentModificationError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class ContentTooLargeErrorSchema(ErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.ContentTooLargeError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -499,6 +524,12 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -516,6 +547,9 @@ class DuplicateFieldWithConflictingResourceErrorSchema(ErrorObjectSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -807,6 +841,7 @@ class EnumKeyDoesNotExistErrorSchema(ErrorObjectSchema):
 
 
 class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -828,6 +863,7 @@ class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
 
 
 class EnumValuesMustMatchErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -876,6 +912,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "BadGateway": helpers.absmod(__name__, ".BadGatewayErrorSchema"),
                 "ConcurrentModification": helpers.absmod(
                     __name__, ".ConcurrentModificationErrorSchema"
+                ),
+                "ContentTooLarge": helpers.absmod(
+                    __name__, ".ContentTooLargeErrorSchema"
                 ),
                 "CountryNotConfiguredInStore": helpers.absmod(
                     __name__, ".CountryNotConfiguredInStoreErrorSchema"
@@ -977,8 +1016,14 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "MatchingPriceNotFound": helpers.absmod(
                     __name__, ".MatchingPriceNotFoundErrorSchema"
                 ),
+                "MaxCartDiscountsReached": helpers.absmod(
+                    __name__, ".MaxCartDiscountsReachedErrorSchema"
+                ),
                 "MaxResourceLimitExceeded": helpers.absmod(
                     __name__, ".MaxResourceLimitExceededErrorSchema"
+                ),
+                "MaxStoreReferencesReached": helpers.absmod(
+                    __name__, ".MaxStoreReferencesReachedErrorSchema"
                 ),
                 "MissingRoleOnChannel": helpers.absmod(
                     __name__, ".MissingRoleOnChannelErrorSchema"
@@ -990,7 +1035,6 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "NoMatchingProductDiscountFound": helpers.absmod(
                     __name__, ".NoMatchingProductDiscountFoundErrorSchema"
                 ),
-                "NotEnabled": helpers.absmod(__name__, ".NotEnabledErrorSchema"),
                 "ObjectNotFound": helpers.absmod(
                     __name__, ".ObjectNotFoundErrorSchema"
                 ),
@@ -1045,6 +1089,9 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "ShippingMethodDoesNotMatchCart": helpers.absmod(
                     __name__, ".ShippingMethodDoesNotMatchCartErrorSchema"
                 ),
+                "StoreCartDiscountsLimitReached": helpers.absmod(
+                    __name__, ".StoreCartDiscountsLimitReachedErrorSchema"
+                ),
                 "SyntaxError": helpers.absmod(__name__, ".SyntaxErrorErrorSchema"),
             },
         ),
@@ -1058,6 +1105,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ErrorResponse(**data)
 
 
@@ -1072,6 +1120,7 @@ class AuthErrorResponseSchema(ErrorResponseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AuthErrorResponse(**data)
 
 
@@ -1283,6 +1332,7 @@ class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
 
 
 class ExternalOAuthFailedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1304,6 +1354,7 @@ class ExternalOAuthFailedErrorSchema(ErrorObjectSchema):
 
 
 class FeatureRemovedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1325,6 +1376,7 @@ class FeatureRemovedErrorSchema(ErrorObjectSchema):
 
 
 class GeneralErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1346,6 +1398,7 @@ class GeneralErrorSchema(ErrorObjectSchema):
 
 
 class InsufficientScopeErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1367,6 +1420,7 @@ class InsufficientScopeErrorSchema(ErrorObjectSchema):
 
 
 class InternalConstraintViolatedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1388,6 +1442,7 @@ class InternalConstraintViolatedErrorSchema(ErrorObjectSchema):
 
 
 class InvalidCredentialsErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1409,6 +1464,7 @@ class InvalidCredentialsErrorSchema(ErrorObjectSchema):
 
 
 class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1463,6 +1519,7 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
 
 
 class InvalidInputErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1535,6 +1592,7 @@ class InvalidJsonInputErrorSchema(ErrorObjectSchema):
 
 
 class InvalidOperationErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1556,6 +1614,7 @@ class InvalidOperationErrorSchema(ErrorObjectSchema):
 
 
 class InvalidSubjectErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1577,6 +1636,7 @@ class InvalidSubjectErrorSchema(ErrorObjectSchema):
 
 
 class InvalidTokenErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1598,6 +1658,7 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
 
 
 class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1667,6 +1728,28 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class MaxCartDiscountsReachedErrorSchema(ErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MaxCartDiscountsReachedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
     exceeded_resource = marshmallow_enum.EnumField(
         ReferenceTypeId,
@@ -1689,6 +1772,28 @@ class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.MaxResourceLimitExceededError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class MaxStoreReferencesReachedErrorSchema(ErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.MaxStoreReferencesReachedError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -1764,6 +1869,7 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
 
 
 class MoneyOverflowErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1785,6 +1891,7 @@ class MoneyOverflowErrorSchema(ErrorObjectSchema):
 
 
 class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1805,28 +1912,8 @@ class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
-class NotEnabledErrorSchema(ErrorObjectSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.pre_load
-    def pre_load(self, data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.pre_load(self, data)
-
-    @marshmallow.post_load(pass_original=True)
-    def post_load(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        data = field.post_load(data, original_data)
-        return models.NotEnabledError(**data)
-
-    @marshmallow.post_dump(pass_original=True)
-    def post_dump(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.post_dump(data, original_data)
-
-
 class ObjectNotFoundErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1879,6 +1966,7 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
 
 
 class OverCapacityErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1977,6 +2065,7 @@ class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
 
 
 class PendingOperationErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2132,6 +2221,7 @@ class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
 
 
 class QueryComplexityLimitExceededErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2153,6 +2243,7 @@ class QueryComplexityLimitExceededErrorSchema(ErrorObjectSchema):
 
 
 class QueryTimedOutErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2262,6 +2353,7 @@ class RequiredFieldErrorSchema(ErrorObjectSchema):
 
 
 class ResourceNotFoundErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2283,6 +2375,7 @@ class ResourceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2304,6 +2397,7 @@ class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
 
 
 class SearchDeactivatedErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2325,6 +2419,7 @@ class SearchDeactivatedErrorSchema(ErrorObjectSchema):
 
 
 class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2346,6 +2441,7 @@ class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
 
 
 class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2367,6 +2463,7 @@ class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2388,6 +2485,7 @@ class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
 
 
 class SemanticErrorErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2409,6 +2507,7 @@ class SemanticErrorErrorSchema(ErrorObjectSchema):
 
 
 class ShippingMethodDoesNotMatchCartErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2429,7 +2528,37 @@ class ShippingMethodDoesNotMatchCartErrorSchema(ErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class StoreCartDiscountsLimitReachedErrorSchema(ErrorObjectSchema):
+    stores = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.StoreCartDiscountsLimitReachedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class SyntaxErrorErrorSchema(ErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2474,6 +2603,7 @@ class VariantValuesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.VariantValues(**data)
 
 
@@ -2508,6 +2638,7 @@ class GraphQLErrorObjectSchema(helpers.BaseSchema):
 
 
 class GraphQLAnonymousIdAlreadyInUseErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2666,6 +2797,7 @@ class GraphQLAttributeNameDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLBadGatewayErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2707,6 +2839,28 @@ class GraphQLConcurrentModificationErrorSchema(GraphQLErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.GraphQLConcurrentModificationError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLContentTooLargeErrorSchema(GraphQLErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLContentTooLargeError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -2939,6 +3093,12 @@ class GraphQLDuplicateFieldWithConflictingResourceErrorSchema(GraphQLErrorObject
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -2956,6 +3116,9 @@ class GraphQLDuplicateFieldWithConflictingResourceErrorSchema(GraphQLErrorObject
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -3247,6 +3410,7 @@ class GraphQLEnumKeyDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLEnumValueIsUsedErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3268,6 +3432,7 @@ class GraphQLEnumValueIsUsedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLEnumValuesMustMatchErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3456,6 +3621,7 @@ class GraphQLExtensionUpdateActionsFailedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLExternalOAuthFailedErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3477,6 +3643,7 @@ class GraphQLExternalOAuthFailedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLFeatureRemovedErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3498,6 +3665,7 @@ class GraphQLFeatureRemovedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLGeneralErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3519,6 +3687,7 @@ class GraphQLGeneralErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInsufficientScopeErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3540,6 +3709,7 @@ class GraphQLInsufficientScopeErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInternalConstraintViolatedErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3561,6 +3731,7 @@ class GraphQLInternalConstraintViolatedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidCredentialsErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3582,6 +3753,7 @@ class GraphQLInvalidCredentialsErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidCurrentPasswordErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3636,6 +3808,7 @@ class GraphQLInvalidFieldErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidInputErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3708,6 +3881,7 @@ class GraphQLInvalidJsonInputErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidOperationErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3729,6 +3903,7 @@ class GraphQLInvalidOperationErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidSubjectErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3750,6 +3925,7 @@ class GraphQLInvalidSubjectErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidTokenErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3771,6 +3947,7 @@ class GraphQLInvalidTokenErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLLanguageUsedInStoresErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3840,6 +4017,28 @@ class GraphQLMatchingPriceNotFoundErrorSchema(GraphQLErrorObjectSchema):
         return field.post_dump(data, original_data)
 
 
+class GraphQLMaxCartDiscountsReachedErrorSchema(GraphQLErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMaxCartDiscountsReachedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class GraphQLMaxResourceLimitExceededErrorSchema(GraphQLErrorObjectSchema):
     exceeded_resource = marshmallow_enum.EnumField(
         ReferenceTypeId,
@@ -3862,6 +4061,28 @@ class GraphQLMaxResourceLimitExceededErrorSchema(GraphQLErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.GraphQLMaxResourceLimitExceededError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLMaxStoreReferencesReachedErrorSchema(GraphQLErrorObjectSchema):
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLMaxStoreReferencesReachedError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -3937,6 +4158,7 @@ class GraphQLMissingTaxRateForCountryErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLMoneyOverflowErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3958,6 +4180,7 @@ class GraphQLMoneyOverflowErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLNoMatchingProductDiscountFoundErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3978,28 +4201,8 @@ class GraphQLNoMatchingProductDiscountFoundErrorSchema(GraphQLErrorObjectSchema)
         return field.post_dump(data, original_data)
 
 
-class GraphQLNotEnabledErrorSchema(GraphQLErrorObjectSchema):
-    class Meta:
-        unknown = marshmallow.EXCLUDE
-
-    @marshmallow.pre_load
-    def pre_load(self, data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.pre_load(self, data)
-
-    @marshmallow.post_load(pass_original=True)
-    def post_load(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        data = field.post_load(data, original_data)
-        return models.GraphQLNotEnabledError(**data)
-
-    @marshmallow.post_dump(pass_original=True)
-    def post_dump(self, data, original_data, **kwargs):
-        field = typing.cast(helpers.RegexField, self.fields["_regex"])
-        return field.post_dump(data, original_data)
-
-
 class GraphQLObjectNotFoundErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4052,6 +4255,7 @@ class GraphQLOutOfStockErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLOverCapacityErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4150,6 +4354,7 @@ class GraphQLOverlappingStandalonePriceValidityErrorSchema(GraphQLErrorObjectSch
 
 
 class GraphQLPendingOperationErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4307,6 +4512,7 @@ class GraphQLProjectNotConfiguredForLanguagesErrorSchema(GraphQLErrorObjectSchem
 
 
 class GraphQLQueryComplexityLimitExceededErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4328,6 +4534,7 @@ class GraphQLQueryComplexityLimitExceededErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLQueryTimedOutErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4437,6 +4644,7 @@ class GraphQLRequiredFieldErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4458,6 +4666,7 @@ class GraphQLResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLResourceSizeLimitExceededErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4479,6 +4688,7 @@ class GraphQLResourceSizeLimitExceededErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchDeactivatedErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4500,6 +4710,7 @@ class GraphQLSearchDeactivatedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchExecutionFailureErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4521,6 +4732,7 @@ class GraphQLSearchExecutionFailureErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchFacetPathNotFoundErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4542,6 +4754,7 @@ class GraphQLSearchFacetPathNotFoundErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchIndexingInProgressErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4563,6 +4776,7 @@ class GraphQLSearchIndexingInProgressErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSemanticErrorErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4584,6 +4798,7 @@ class GraphQLSemanticErrorErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLShippingMethodDoesNotMatchCartErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4604,7 +4819,37 @@ class GraphQLShippingMethodDoesNotMatchCartErrorSchema(GraphQLErrorObjectSchema)
         return field.post_dump(data, original_data)
 
 
+class GraphQLStoreCartDiscountsLimitReachedErrorSchema(GraphQLErrorObjectSchema):
+    stores = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".store.StoreKeyReferenceSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLStoreCartDiscountsLimitReachedError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
 class GraphQLSyntaxErrorErrorSchema(GraphQLErrorObjectSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 

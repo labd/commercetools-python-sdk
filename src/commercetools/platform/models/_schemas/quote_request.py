@@ -223,6 +223,13 @@ class QuoteRequestSchema(BaseResourceSchema):
         load_default=None,
         data_key="purchaseOrderNumber",
     )
+    cart = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".cart.CartReferenceSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
     business_unit = helpers.LazyNestedField(
         nested=helpers.absmod(
             __name__, ".business_unit.BusinessUnitKeyReferenceSchema"
@@ -239,6 +246,7 @@ class QuoteRequestSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.QuoteRequest(**data)
 
 
@@ -255,7 +263,9 @@ class QuoteRequestDraftSchema(helpers.BaseSchema):
     key = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
-    comment = marshmallow.fields.String(allow_none=True, load_default=None)
+    comment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     custom = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.CustomFieldsDraftSchema"),
         allow_none=True,
@@ -282,6 +292,7 @@ class QuoteRequestDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.QuoteRequestDraft(**data)
 
 
@@ -305,6 +316,7 @@ class QuoteRequestPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.QuoteRequestPagedQueryResponse(**data)
 
 
@@ -327,6 +339,7 @@ class QuoteRequestReferenceSchema(ReferenceSchema):
 
 
 class QuoteRequestResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -369,6 +382,7 @@ class QuoteRequestUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.QuoteRequestUpdate(**data)
 
 

@@ -7,7 +7,6 @@ install:
 generate:
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/api/api.raml -o src/commercetools/platform/ -t PYTHON_CLIENT
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/importapi/api.raml -o src/commercetools/importapi/ -t PYTHON_CLIENT
-	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/ml/api.raml -o src/commercetools/ml/ -t PYTHON_CLIENT
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/frontend-api/api.raml -o src/commercetools/frontend/ -t PYTHON_CLIENT
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/checkout/api.raml -o src/commercetools/checkout/ -t PYTHON_CLIENT
 	find src/ -name "gen.properties" -delete

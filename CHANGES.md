@@ -1,3 +1,9 @@
+24.3.15
+--------
+- Regenerate code with latest RAML specifications, bringing the SDK up to date
+  again with new features released by commercetools.
+- Remove ML client as sunsetted
+
 23.6.29
 --------
 - Regenerate code with latest RAML specifications, bringing the SDK up to date

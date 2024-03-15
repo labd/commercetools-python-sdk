@@ -25,6 +25,7 @@ from .common import (
 
 # Fields
 class FieldContainerField(marshmallow.fields.Dict):
+
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.FieldContainer(**result)
@@ -40,6 +41,7 @@ class CustomFieldEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomFieldEnumValue(**data)
 
 
@@ -56,6 +58,7 @@ class CustomFieldLocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomFieldLocalizedEnumValue(**data)
 
 
@@ -77,6 +80,7 @@ class CustomFieldsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomFields(**data)
 
 
@@ -99,6 +103,7 @@ class CustomFieldsDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomFieldsDraft(**data)
 
 
@@ -147,6 +152,7 @@ class FieldDefinitionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.FieldDefinition(**data)
 
 
@@ -163,6 +169,7 @@ class FieldTypeSchema(helpers.BaseSchema):
 
 
 class CustomFieldBooleanTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -173,6 +180,7 @@ class CustomFieldBooleanTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -183,6 +191,7 @@ class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldDateTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -229,6 +238,7 @@ class CustomFieldLocalizedEnumTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldLocalizedStringTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -239,6 +249,7 @@ class CustomFieldLocalizedStringTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldMoneyTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -249,6 +260,7 @@ class CustomFieldMoneyTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldNumberTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -312,6 +324,7 @@ class CustomFieldSetTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldStringTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -322,6 +335,7 @@ class CustomFieldStringTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldTimeTypeSchema(FieldTypeSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -380,6 +394,7 @@ class TypeSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Type(**data)
 
 
@@ -417,6 +432,7 @@ class TypeDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TypeDraft(**data)
 
 
@@ -440,6 +456,7 @@ class TypePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TypePagedQueryResponse(**data)
 
 
@@ -462,6 +479,7 @@ class TypeReferenceSchema(ReferenceSchema):
 
 
 class TypeResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -528,6 +546,7 @@ class TypeUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TypeUpdate(**data)
 
 

@@ -129,6 +129,7 @@ class ProductDraftImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductDraftImport(**data)
 
 
@@ -244,6 +245,7 @@ class ProductVariantDraftImportSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantDraftImport(**data)
 
 
@@ -311,13 +313,12 @@ class PriceDraftImportSchema(helpers.BaseSchema):
         metadata={"omit_empty": True},
         load_default=None,
     )
-    key = marshmallow.fields.String(
-        allow_none=True, metadata={"omit_empty": True}, load_default=None
-    )
+    key = marshmallow.fields.String(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PriceDraftImport(**data)

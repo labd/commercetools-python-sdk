@@ -81,6 +81,9 @@ from .product_projections.by_project_key_product_projections_request_builder imp
 from .product_selections.by_project_key_product_selections_request_builder import (
     ByProjectKeyProductSelectionsRequestBuilder,
 )
+from .product_tailoring.by_project_key_product_tailoring_request_builder import (
+    ByProjectKeyProductTailoringRequestBuilder,
+)
 from .product_types.by_project_key_product_types_request_builder import (
     ByProjectKeyProductTypesRequestBuilder,
 )
@@ -128,6 +131,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -292,6 +296,13 @@ class ByProjectKeyRequestBuilder:
 
         """
         return ByProjectKeyProductSelectionsRequestBuilder(
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def product_tailoring(self) -> ByProjectKeyProductTailoringRequestBuilder:
+        """Product tailoring are used to contextualize product data for specific stores."""
+        return ByProjectKeyProductTailoringRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )
@@ -465,6 +476,24 @@ class ByProjectKeyRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
+            return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def head(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a Project exists for a given `projectKey`. Returns a `200 OK` status if the Project exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}",
+            params={},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 

@@ -131,6 +131,7 @@ class CustomerAddressSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerAddress(**data)
 
 
@@ -220,6 +221,7 @@ class CustomerImportSchema(ImportResourceSchema):
         allow_none=True,
         many=True,
         unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
         load_default=None,
     )
     default_billing_address = marshmallow.fields.Integer(
@@ -272,4 +274,5 @@ class CustomerImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomerImport(**data)

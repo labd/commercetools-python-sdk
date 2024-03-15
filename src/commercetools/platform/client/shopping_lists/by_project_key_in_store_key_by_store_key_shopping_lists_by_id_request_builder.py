@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -39,7 +40,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
         the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 
         """
@@ -59,6 +60,29 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
+    def head(
+        self,
+        *,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a ShoppingList exists for a given `id`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/shopping-lists/{self._id}",
+            params={},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
     def post(
         self,
         body: "ShoppingListUpdate",
@@ -67,7 +91,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
         the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 
         """
@@ -97,7 +121,7 @@ class ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ShoppingList"]:
-        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+        """If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
         the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 
         """

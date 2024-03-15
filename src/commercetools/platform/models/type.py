@@ -120,6 +120,7 @@ class CustomFieldLocalizedEnumValue(_BaseType):
 class CustomFieldReferenceValue(enum.Enum):
     """Defines which resource type a [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType) can reference."""
 
+    APPROVAL_FLOW = "approval-flow"
     ASSOCIATE_ROLE = "associate-role"
     BUSINESS_UNIT = "business-unit"
     CART = "cart"
@@ -315,6 +316,7 @@ class CustomFieldBooleanType(FieldType):
     """Field type for Boolean values."""
 
     def __init__(self):
+
         super().__init__(name="Boolean")
 
     @classmethod
@@ -335,6 +337,7 @@ class CustomFieldDateTimeType(FieldType):
     """Field type for [DateTime](ctp:api:type:DateTime) values."""
 
     def __init__(self):
+
         super().__init__(name="DateTime")
 
     @classmethod
@@ -355,6 +358,7 @@ class CustomFieldDateType(FieldType):
     """Field type for [Date](ctp:api:type:Date) values."""
 
     def __init__(self):
+
         super().__init__(name="Date")
 
     @classmethod
@@ -421,6 +425,7 @@ class CustomFieldLocalizedStringType(FieldType):
     """Field type for [LocalizedString](ctp:api:type:LocalizedString) values."""
 
     def __init__(self):
+
         super().__init__(name="LocalizedString")
 
     @classmethod
@@ -441,6 +446,7 @@ class CustomFieldMoneyType(FieldType):
     """Field type for [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney) values."""
 
     def __init__(self):
+
         super().__init__(name="Money")
 
     @classmethod
@@ -459,6 +465,7 @@ class CustomFieldNumberType(FieldType):
     """Field type for number values."""
 
     def __init__(self):
+
         super().__init__(name="Number")
 
     @classmethod
@@ -525,6 +532,7 @@ class CustomFieldStringType(FieldType):
     """Field type for string values."""
 
     def __init__(self):
+
         super().__init__(name="String")
 
     @classmethod
@@ -543,6 +551,7 @@ class CustomFieldTimeType(FieldType):
     """Field type for [Time](ctp:api:type:Time) values."""
 
     def __init__(self):
+
         super().__init__(name="Time")
 
     @classmethod
@@ -562,6 +571,7 @@ class ResourceTypeId(enum.Enum):
 
     ADDRESS = "address"
     ASSET = "asset"
+    APPROVAL_FLOW = "approval-flow"
     ASSOCIATE_ROLE = "associate-role"
     BUSINESS_UNIT = "business-unit"
     CART_DISCOUNT = "cart-discount"
@@ -594,9 +604,9 @@ class ResourceTypeId(enum.Enum):
 
 
 class Type(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Type.
     key: str
@@ -766,11 +776,12 @@ class TypeReference(Reference):
 
 
 class TypeResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.TYPE)
 
     @classmethod
@@ -796,7 +807,7 @@ class TypeTextInputHint(enum.Enum):
 
 class TypeUpdate(_BaseType):
     #: Expected version of the type on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Type.
     actions: typing.List["TypeUpdateAction"]

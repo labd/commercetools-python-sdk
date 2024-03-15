@@ -49,9 +49,9 @@ __all__ = [
 
 
 class Review(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Review.
     key: typing.Optional[str]
@@ -329,11 +329,12 @@ class ReviewReference(Reference):
 
 
 class ReviewResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.REVIEW)
 
     @classmethod

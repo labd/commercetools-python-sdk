@@ -38,6 +38,7 @@ class PriceFunctionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PriceFunction(**data)
 
 
@@ -113,6 +114,7 @@ class ShippingMethodSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingMethod(**data)
 
 
@@ -174,6 +176,7 @@ class ShippingMethodDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingMethodDraft(**data)
 
 
@@ -201,6 +204,7 @@ class ShippingMethodPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingMethodPagedQueryResponse(**data)
 
 
@@ -223,6 +227,7 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
 
 
 class ShippingMethodResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -290,6 +295,7 @@ class ShippingMethodUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingMethodUpdate(**data)
 
 
@@ -361,6 +367,7 @@ class ShippingRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingRate(**data)
 
 
@@ -401,6 +408,7 @@ class ShippingRateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingRateDraft(**data)
 
 
@@ -522,6 +530,7 @@ class ZoneRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ZoneRate(**data)
 
 
@@ -546,6 +555,7 @@ class ZoneRateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ZoneRateDraft(**data)
 
 

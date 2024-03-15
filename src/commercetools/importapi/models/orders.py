@@ -83,11 +83,11 @@ __all__ = [
 class ItemState(_BaseType):
     """The item's state."""
 
-    quantity: float
+    quantity: int
     #: Maps to `ItemState.state`.
     state: "StateKeyReference"
 
-    def __init__(self, *, quantity: float, state: "StateKeyReference"):
+    def __init__(self, *, quantity: int, state: "StateKeyReference"):
         self.quantity = quantity
         self.state = state
 
@@ -111,9 +111,9 @@ class ItemShippingTarget(_BaseType):
     #: Maps to `ItemShippingTarget.addressKey`.
     address_key: str
     #: Maps to `ItemShippingTarget.quantity`.
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, address_key: str, quantity: float):
+    def __init__(self, *, address_key: str, quantity: int):
         self.address_key = address_key
         self.quantity = quantity
 
@@ -271,7 +271,7 @@ class LineItemImportDraft(_BaseType):
     #: Maps to `LineItem.price`.
     price: "LineItemPrice"
     #: Maps to `LineItem.quantity`.
-    quantity: float
+    quantity: int
     state: typing.Optional[typing.List["ItemState"]]
     #: Maps to `LineItem.supplyChannel`.
     #: The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
@@ -295,7 +295,7 @@ class LineItemImportDraft(_BaseType):
         name: "LocalizedString",
         variant: "LineItemProductVariantImportDraft",
         price: "LineItemPrice",
-        quantity: float,
+        quantity: int,
         state: typing.Optional[typing.List["ItemState"]] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
@@ -422,18 +422,18 @@ class ShippingRateDraft(_BaseType):
 
 
 class ParcelMeasurements(_BaseType):
-    height_in_millimeter: typing.Optional[float]
-    length_in_millimeter: typing.Optional[float]
-    width_in_millimeter: typing.Optional[float]
-    weight_in_gram: typing.Optional[float]
+    height_in_millimeter: typing.Optional[int]
+    length_in_millimeter: typing.Optional[int]
+    width_in_millimeter: typing.Optional[int]
+    weight_in_gram: typing.Optional[int]
 
     def __init__(
         self,
         *,
-        height_in_millimeter: typing.Optional[float] = None,
-        length_in_millimeter: typing.Optional[float] = None,
-        width_in_millimeter: typing.Optional[float] = None,
-        weight_in_gram: typing.Optional[float] = None
+        height_in_millimeter: typing.Optional[int] = None,
+        length_in_millimeter: typing.Optional[int] = None,
+        width_in_millimeter: typing.Optional[int] = None,
+        weight_in_gram: typing.Optional[int] = None
     ):
         self.height_in_millimeter = height_in_millimeter
         self.length_in_millimeter = length_in_millimeter
@@ -492,9 +492,9 @@ class TrackingData(_BaseType):
 
 class DeliveryItem(_BaseType):
     id: str
-    quantity: float
+    quantity: int
 
-    def __init__(self, *, id: str, quantity: float):
+    def __init__(self, *, id: str, quantity: int):
         self.id = id
         self.quantity = quantity
 
@@ -518,7 +518,7 @@ class Parcel(_BaseType):
     measurements: typing.Optional["ParcelMeasurements"]
     tracking_data: typing.Optional["TrackingData"]
     items: typing.Optional[typing.List["DeliveryItem"]]
-    #: The representation to be sent to the server when creating a resource with custom fields.
+    #: The representation to be sent to the server when creating a resource with Custom Fields.
     custom: typing.Optional["Custom"]
 
     def __init__(
@@ -783,7 +783,7 @@ class CustomLineItemDraft(_BaseType):
     taxed_price: typing.Optional["CustomLineItemTaxedPrice"]
     total_price: "TypedMoney"
     slug: str
-    quantity: float
+    quantity: int
     state: typing.Optional[typing.List["ItemState"]]
     #: References a tax category by key.
     tax_category: typing.Optional["TaxCategoryKeyReference"]
@@ -802,7 +802,7 @@ class CustomLineItemDraft(_BaseType):
         taxed_price: typing.Optional["CustomLineItemTaxedPrice"] = None,
         total_price: "TypedMoney",
         slug: str,
-        quantity: float,
+        quantity: int,
         state: typing.Optional[typing.List["ItemState"]] = None,
         tax_category: typing.Optional["TaxCategoryKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
@@ -1101,9 +1101,9 @@ class ClassificationShippingRateInput(ShippingRateInput):
 
 
 class ScoreShippingRateInput(ShippingRateInput):
-    score: float
+    score: int
 
-    def __init__(self, *, score: float):
+    def __init__(self, *, score: int):
         self.score = score
 
         super().__init__(type=ShippingRateInputType.SCORE)
@@ -1126,7 +1126,7 @@ class OrderImport(_BaseType):
     """The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
 
     In commercetools, you can import an Order using the
-    [Create Order by Import](/../api/projects/orders-import#create-an-order-by-import)
+    [Create Order by Import](ctp:importapi:endpoint:/{projectKey}/orders/import:POST)
     endpoint method instead of creating it from a Cart.
 
     An OrderImport is a snapshot of an order at the time it was imported.

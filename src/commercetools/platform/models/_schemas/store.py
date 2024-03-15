@@ -44,6 +44,7 @@ class ProductSelectionSettingSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionSetting(**data)
 
 
@@ -66,6 +67,7 @@ class ProductSelectionSettingDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionSettingDraft(**data)
 
 
@@ -140,6 +142,7 @@ class StoreSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Store(**data)
 
 
@@ -205,10 +208,12 @@ class StoreDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StoreDraft(**data)
 
 
 class StoreKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -238,6 +243,7 @@ class StorePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StorePagedQueryResponse(**data)
 
 
@@ -260,6 +266,7 @@ class StoreReferenceSchema(ReferenceSchema):
 
 
 class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -334,6 +341,7 @@ class StoreUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.StoreUpdate(**data)
 
 

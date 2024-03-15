@@ -44,12 +44,12 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="2023.6.29",
+    version="2024.3.15",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",
     author_email="opensource@labdigital.nl",
-    url="https://github.com/labd/commercetools-python-sdk",
+    url="https://github.com/moo-print/commercetools-python-sdk",
     install_requires=install_requires,
     tests_require=tests_require,
     extras_require={
@@ -69,6 +69,7 @@ setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     zip_safe=False,

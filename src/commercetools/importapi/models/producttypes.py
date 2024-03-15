@@ -168,7 +168,9 @@ class AttributeType(_BaseType):
 
 
 class AttributeBooleanType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="boolean")
 
     @classmethod
@@ -184,7 +186,9 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="datetime")
 
     @classmethod
@@ -200,7 +204,9 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="date")
 
     @classmethod
@@ -260,7 +266,9 @@ class AttributePlainEnumValue(_BaseType):
 
 
 class AttributeLocalizableTextType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="ltext")
 
     @classmethod
@@ -331,7 +339,9 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributeMoneyType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="money")
 
     @classmethod
@@ -368,7 +378,9 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="number")
 
     @classmethod
@@ -427,7 +439,9 @@ class AttributeSetType(AttributeType):
 
 
 class AttributeTextType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="text")
 
     @classmethod
@@ -443,7 +457,9 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
+
     def __init__(self):
+
         super().__init__(name="time")
 
     @classmethod

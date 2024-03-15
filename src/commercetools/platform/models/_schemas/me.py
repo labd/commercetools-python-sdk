@@ -14,7 +14,7 @@ from commercetools import helpers
 
 from ... import models
 from ..business_unit import BusinessUnitType
-from ..cart import InventoryMode, TaxMode
+from ..cart import InventoryMode, ShippingMode, TaxMode
 from ..me import MyQuoteState
 from ..payment import TransactionType
 from .common import LocalizedStringField
@@ -48,6 +48,7 @@ class MyBusinessUnitAssociateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyBusinessUnitAssociateDraft(**data)
 
 
@@ -223,6 +224,7 @@ class MyBusinessUnitUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyBusinessUnitUpdate(**data)
 
 
@@ -323,6 +325,14 @@ class MyCartDraftSchema(helpers.BaseSchema):
         load_default=None,
         data_key="itemShippingAddresses",
     )
+    shipping_mode = marshmallow_enum.EnumField(
+        ShippingMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="shippingMode",
+    )
     discount_codes = marshmallow.fields.List(
         marshmallow.fields.String(allow_none=True),
         allow_none=True,
@@ -355,6 +365,7 @@ class MyCartDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCartDraft(**data)
 
 
@@ -455,6 +466,7 @@ class MyCartUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCartUpdate(**data)
 
 
@@ -471,6 +483,7 @@ class MyCartUpdateActionSchema(helpers.BaseSchema):
 
 
 class MyCompanyDraftSchema(MyBusinessUnitDraftSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -569,6 +582,7 @@ class MyCustomerDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerDraft(**data)
 
 
@@ -649,6 +663,7 @@ class MyCustomerUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyCustomerUpdate(**data)
 
 
@@ -749,6 +764,7 @@ class MyLineItemDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyLineItemDraft(**data)
 
 
@@ -761,6 +777,7 @@ class MyOrderFromCartDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyOrderFromCartDraft(**data)
 
 
@@ -779,6 +796,7 @@ class MyOrderFromQuoteDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyOrderFromQuoteDraft(**data)
 
 
@@ -832,6 +850,7 @@ class MyPaymentSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyPayment(**data)
 
 
@@ -871,6 +890,7 @@ class MyPaymentDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyPaymentDraft(**data)
 
 
@@ -894,6 +914,7 @@ class MyPaymentPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyPaymentPagedQueryResponse(**data)
 
 
@@ -936,6 +957,7 @@ class MyPaymentUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyPaymentUpdate(**data)
 
 
@@ -958,13 +980,16 @@ class MyQuoteRequestDraftSchema(helpers.BaseSchema):
     cart_version = marshmallow.fields.Integer(
         allow_none=True, load_default=None, data_key="cartVersion"
     )
-    comment = marshmallow.fields.String(allow_none=True, load_default=None)
+    comment = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyQuoteRequestDraft(**data)
 
 
@@ -989,6 +1014,7 @@ class MyQuoteRequestUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyQuoteRequestUpdate(**data)
 
 
@@ -1025,6 +1051,7 @@ class MyQuoteUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyQuoteUpdate(**data)
 
 
@@ -1098,6 +1125,7 @@ class MyShoppingListDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyShoppingListDraft(**data)
 
 
@@ -1177,6 +1205,7 @@ class MyShoppingListUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyShoppingListUpdate(**data)
 
 
@@ -1224,6 +1253,7 @@ class MyTransactionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.MyTransactionDraft(**data)
 
 
@@ -1256,6 +1286,12 @@ class ReplicaMyCartDraftSchema(helpers.BaseSchema):
             "customer-group": helpers.absmod(
                 __name__, ".customer_group.CustomerGroupReferenceSchema"
             ),
+            "customer-email-token": helpers.absmod(
+                __name__, ".customer.CustomerEmailTokenReferenceSchema"
+            ),
+            "customer-password-token": helpers.absmod(
+                __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+            ),
             "customer": helpers.absmod(__name__, ".customer.CustomerReferenceSchema"),
             "discount-code": helpers.absmod(
                 __name__, ".discount_code.DiscountCodeReferenceSchema"
@@ -1273,6 +1309,9 @@ class ReplicaMyCartDraftSchema(helpers.BaseSchema):
             ),
             "product-selection": helpers.absmod(
                 __name__, ".product_selection.ProductSelectionReferenceSchema"
+            ),
+            "product-tailoring": helpers.absmod(
+                __name__, ".product_tailoring.ProductTailoringReferenceSchema"
             ),
             "product-type": helpers.absmod(
                 __name__, ".product_type.ProductTypeReferenceSchema"
@@ -1311,6 +1350,7 @@ class ReplicaMyCartDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ReplicaMyCartDraft(**data)
 
 
@@ -2898,6 +2938,7 @@ class MyQuoteChangeMyQuoteStateActionSchema(MyQuoteUpdateActionSchema):
 
 
 class MyQuoteRequestCancelActionSchema(MyQuoteRequestUpdateActionSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2908,6 +2949,9 @@ class MyQuoteRequestCancelActionSchema(MyQuoteRequestUpdateActionSchema):
 
 
 class MyShoppingListAddLineItemActionSchema(MyShoppingListUpdateActionSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     sku = marshmallow.fields.String(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
@@ -2954,6 +2998,9 @@ class MyShoppingListAddTextLineItemActionSchema(MyShoppingListUpdateActionSchema
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
         load_default=None,
+    )
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
     )
     description = LocalizedStringField(
         allow_none=True,
@@ -3050,7 +3097,16 @@ class MyShoppingListChangeTextLineItemNameActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     name = LocalizedStringField(
         allow_none=True,
@@ -3071,7 +3127,16 @@ class MyShoppingListChangeTextLineItemQuantityActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
@@ -3105,7 +3170,16 @@ class MyShoppingListChangeTextLineItemsOrderActionSchema(
 
 class MyShoppingListRemoveLineItemActionSchema(MyShoppingListUpdateActionSchema):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
@@ -3122,7 +3196,16 @@ class MyShoppingListRemoveLineItemActionSchema(MyShoppingListUpdateActionSchema)
 
 class MyShoppingListRemoveTextLineItemActionSchema(MyShoppingListUpdateActionSchema):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     quantity = marshmallow.fields.Integer(
         allow_none=True, metadata={"omit_empty": True}, load_default=None
@@ -3216,7 +3299,16 @@ class MyShoppingListSetLineItemCustomFieldActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="lineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemId",
+    )
+    line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="lineItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -3263,7 +3355,16 @@ class MyShoppingListSetTextLineItemCustomFieldActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     name = marshmallow.fields.String(allow_none=True, load_default=None)
     value = marshmallow.fields.Raw(
@@ -3283,7 +3384,16 @@ class MyShoppingListSetTextLineItemCustomTypeActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     type = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".type.TypeResourceIdentifierSchema"),
@@ -3312,7 +3422,16 @@ class MyShoppingListSetTextLineItemDescriptionActionSchema(
     MyShoppingListUpdateActionSchema
 ):
     text_line_item_id = marshmallow.fields.String(
-        allow_none=True, load_default=None, data_key="textLineItemId"
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemId",
+    )
+    text_line_item_key = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="textLineItemKey",
     )
     description = LocalizedStringField(
         allow_none=True,

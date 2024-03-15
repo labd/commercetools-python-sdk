@@ -16,6 +16,7 @@ from .common import BaseResource, Reference, ReferenceTypeId, ResourceIdentifier
 if typing.TYPE_CHECKING:
     from .business_unit import BusinessUnitKeyReference
     from .cart import (
+        CartReference,
         CartResourceIdentifier,
         CustomLineItem,
         DirectDiscount,
@@ -61,9 +62,9 @@ __all__ = [
 class QuoteRequest(BaseResource):
     #: User-defined unique identifier of the QuoteRequest.
     key: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Indicates the current state of the Quote Request in the negotiation process.
     quote_request_state: "QuoteRequestState"
@@ -124,6 +125,8 @@ class QuoteRequest(BaseResource):
     #: Identifier for a purchase order, usually in a B2B context.
     #: The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
     purchase_order_number: typing.Optional[str]
+    #: The [Cart](ctp:api:type:Cart) from which a Quote is requested.
+    cart: typing.Optional["CartReference"]
     #: The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
     business_unit: typing.Optional["BusinessUnitKeyReference"]
 
@@ -161,6 +164,7 @@ class QuoteRequest(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         state: typing.Optional["StateReference"] = None,
         purchase_order_number: typing.Optional[str] = None,
+        cart: typing.Optional["CartReference"] = None,
         business_unit: typing.Optional["BusinessUnitKeyReference"] = None
     ):
         self.key = key
@@ -190,6 +194,7 @@ class QuoteRequest(BaseResource):
         self.custom = custom
         self.state = state
         self.purchase_order_number = purchase_order_number
+        self.cart = cart
         self.business_unit = business_unit
 
         super().__init__(
@@ -220,7 +225,7 @@ class QuoteRequestDraft(_BaseType):
     #: User-defined unique identifier for the QuoteRequest.
     key: typing.Optional[str]
     #: Message from the Buyer included in the Quote Request.
-    comment: str
+    comment: typing.Optional[str]
     #: Custom Fields to be added to the Quote Request.
     custom: typing.Optional["CustomFieldsDraft"]
     #: [State](ctp:api:type:State) of the Quote Request.
@@ -236,7 +241,7 @@ class QuoteRequestDraft(_BaseType):
         cart: "CartResourceIdentifier",
         cart_version: int,
         key: typing.Optional[str] = None,
-        comment: str,
+        comment: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         state: typing.Optional["StateReference"] = None,
         purchase_order_number: typing.Optional[str] = None
@@ -342,6 +347,7 @@ class QuoteRequestResourceIdentifier(ResourceIdentifier):
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.QUOTE_REQUEST)
 
     @classmethod
@@ -370,7 +376,7 @@ class QuoteRequestState(enum.Enum):
 
 class QuoteRequestUpdate(_BaseType):
     #: Expected version of the [QuoteRequest](ctp:api:type:QuoteRequest) to which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the [QuoteRequest](ctp:api:type:QuoteRequest).
     actions: typing.List["QuoteRequestUpdateAction"]

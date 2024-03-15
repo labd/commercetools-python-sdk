@@ -161,7 +161,7 @@ class CustomerImport(ImportResource):
     #: If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
     customer_group: typing.Optional["CustomerGroupKeyReference"]
     #: Maps to `Customer.addresses`.
-    addresses: typing.List["CustomerAddress"]
+    addresses: typing.Optional[typing.List["CustomerAddress"]]
     #: The index of the address in the addresses array. The `defaultBillingAddressId` of the customer will be set to the ID of that address.
     default_billing_address: typing.Optional[int]
     #: The indices of the billing addresses in the addresses array. The `billingAddressIds` of the customer will be set to the IDs of that addresses.
@@ -197,7 +197,7 @@ class CustomerImport(ImportResource):
         vat_id: typing.Optional[str] = None,
         is_email_verified: typing.Optional[bool] = None,
         customer_group: typing.Optional["CustomerGroupKeyReference"] = None,
-        addresses: typing.List["CustomerAddress"],
+        addresses: typing.Optional[typing.List["CustomerAddress"]] = None,
         default_billing_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_shipping_address: typing.Optional[int] = None,

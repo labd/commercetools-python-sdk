@@ -62,6 +62,7 @@ class CartsModel(BaseModel):
                     cent_amount=price * (line_item_draft.quantity or 0),
                     fraction_digits=2,
                 ),
+                tax_portions=[]
             ),
             taxed_price_portions=[],
             per_method_tax_rate=[],

@@ -33,7 +33,7 @@ from .common import LocalizedStringField
 
 # Marshmallow Schemas
 class ItemStateSchema(helpers.BaseSchema):
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.StateKeyReferenceSchema"),
         allow_none=True,
@@ -46,6 +46,7 @@ class ItemStateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ItemState(**data)
 
 
@@ -53,13 +54,14 @@ class ItemShippingTargetSchema(helpers.BaseSchema):
     address_key = marshmallow.fields.String(
         allow_none=True, load_default=None, data_key="addressKey"
     )
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ItemShippingTarget(**data)
 
 
@@ -77,6 +79,7 @@ class ItemShippingDetailsDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ItemShippingDetailsDraft(**data)
 
 
@@ -150,6 +153,7 @@ class LineItemPriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LineItemPrice(**data)
 
 
@@ -264,6 +268,7 @@ class LineItemProductVariantImportDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LineItemProductVariantImportDraft(**data)
 
 
@@ -292,7 +297,7 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         load_default=None,
     )
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
         allow_none=True,
@@ -346,6 +351,7 @@ class LineItemImportDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LineItemImportDraft(**data)
 
 
@@ -435,29 +441,30 @@ class ShippingRateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingRateDraft(**data)
 
 
 class ParcelMeasurementsSchema(helpers.BaseSchema):
-    height_in_millimeter = marshmallow.fields.Float(
+    height_in_millimeter = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="heightInMillimeter",
     )
-    length_in_millimeter = marshmallow.fields.Float(
+    length_in_millimeter = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="lengthInMillimeter",
     )
-    width_in_millimeter = marshmallow.fields.Float(
+    width_in_millimeter = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
         data_key="widthInMillimeter",
     )
-    weight_in_gram = marshmallow.fields.Float(
+    weight_in_gram = marshmallow.fields.Integer(
         allow_none=True,
         metadata={"omit_empty": True},
         load_default=None,
@@ -469,6 +476,7 @@ class ParcelMeasurementsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ParcelMeasurements(**data)
 
 
@@ -503,18 +511,20 @@ class TrackingDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TrackingData(**data)
 
 
 class DeliveryItemSchema(helpers.BaseSchema):
     id = marshmallow.fields.String(allow_none=True, load_default=None)
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DeliveryItem(**data)
 
 
@@ -559,6 +569,7 @@ class ParcelSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Parcel(**data)
 
 
@@ -594,6 +605,7 @@ class DeliverySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Delivery(**data)
 
 
@@ -617,6 +629,7 @@ class DiscountedLineItemPortionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountedLineItemPortion(**data)
 
 
@@ -641,6 +654,7 @@ class DiscountedLineItemPriceDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountedLineItemPriceDraft(**data)
 
 
@@ -720,6 +734,7 @@ class ShippingInfoImportDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ShippingInfoImportDraft(**data)
 
 
@@ -753,6 +768,7 @@ class ExternalTaxRateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ExternalTaxRateDraft(**data)
 
 
@@ -787,6 +803,7 @@ class CustomLineItemTaxedPriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomLineItemTaxedPrice(**data)
 
 
@@ -828,7 +845,7 @@ class CustomLineItemDraftSchema(helpers.BaseSchema):
         data_key="totalPrice",
     )
     slug = marshmallow.fields.String(allow_none=True, load_default=None)
-    quantity = marshmallow.fields.Float(allow_none=True, load_default=None)
+    quantity = marshmallow.fields.Integer(allow_none=True, load_default=None)
     state = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".ItemStateSchema"),
         allow_none=True,
@@ -884,6 +901,7 @@ class CustomLineItemDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.CustomLineItemDraft(**data)
 
 
@@ -909,6 +927,7 @@ class TaxPortionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxPortion(**data)
 
 
@@ -941,6 +960,7 @@ class TaxedPriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxedPrice(**data)
 
 
@@ -966,6 +986,7 @@ class SyncInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SyncInfo(**data)
 
 
@@ -990,6 +1011,7 @@ class DiscountCodeInfoSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountCodeInfo(**data)
 
 
@@ -1025,7 +1047,7 @@ class ClassificationShippingRateInputSchema(ShippingRateInputSchema):
 
 
 class ScoreShippingRateInputSchema(ShippingRateInputSchema):
-    score = marshmallow.fields.Float(allow_none=True, load_default=None)
+    score = marshmallow.fields.Integer(allow_none=True, load_default=None)
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -1223,4 +1245,5 @@ class OrderImportSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.OrderImport(**data)

@@ -29,6 +29,7 @@ class SubRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SubRate(**data)
 
 
@@ -69,6 +70,7 @@ class TaxCategorySchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxCategory(**data)
 
 
@@ -94,6 +96,7 @@ class TaxCategoryDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxCategoryDraft(**data)
 
 
@@ -117,6 +120,7 @@ class TaxCategoryPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxCategoryPagedQueryResponse(**data)
 
 
@@ -139,6 +143,7 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
 
 
 class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -182,6 +187,7 @@ class TaxCategoryUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxCategoryUpdate(**data)
 
 
@@ -228,6 +234,7 @@ class TaxRateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxRate(**data)
 
 
@@ -261,6 +268,7 @@ class TaxRateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TaxRateDraft(**data)
 
 

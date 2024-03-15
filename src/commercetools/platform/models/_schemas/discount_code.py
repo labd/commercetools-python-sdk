@@ -27,6 +27,9 @@ from .type import FieldContainerField
 
 # Marshmallow Schemas
 class DiscountCodeSchema(BaseResourceSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     last_modified_by = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".common.LastModifiedBySchema"),
         allow_none=True,
@@ -104,6 +107,12 @@ class DiscountCodeSchema(BaseResourceSchema):
                 "customer-group": helpers.absmod(
                     __name__, ".customer_group.CustomerGroupReferenceSchema"
                 ),
+                "customer-email-token": helpers.absmod(
+                    __name__, ".customer.CustomerEmailTokenReferenceSchema"
+                ),
+                "customer-password-token": helpers.absmod(
+                    __name__, ".customer.CustomerPasswordTokenReferenceSchema"
+                ),
                 "customer": helpers.absmod(
                     __name__, ".customer.CustomerReferenceSchema"
                 ),
@@ -123,6 +132,9 @@ class DiscountCodeSchema(BaseResourceSchema):
                 ),
                 "product-selection": helpers.absmod(
                     __name__, ".product_selection.ProductSelectionReferenceSchema"
+                ),
+                "product-tailoring": helpers.absmod(
+                    __name__, ".product_tailoring.ProductTailoringReferenceSchema"
                 ),
                 "product-type": helpers.absmod(
                     __name__, ".product_type.ProductTypeReferenceSchema"
@@ -203,10 +215,14 @@ class DiscountCodeSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountCode(**data)
 
 
 class DiscountCodeDraftSchema(helpers.BaseSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
     name = LocalizedStringField(
         allow_none=True,
         values=marshmallow.fields.String(allow_none=True),
@@ -285,6 +301,7 @@ class DiscountCodeDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountCodeDraft(**data)
 
 
@@ -308,6 +325,7 @@ class DiscountCodePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountCodePagedQueryResponse(**data)
 
 
@@ -330,6 +348,7 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
 
 
 class DiscountCodeResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -367,6 +386,7 @@ class DiscountCodeUpdateSchema(helpers.BaseSchema):
                 "setDescription": helpers.absmod(
                     __name__, ".DiscountCodeSetDescriptionActionSchema"
                 ),
+                "setKey": helpers.absmod(__name__, ".DiscountCodeSetKeyActionSchema"),
                 "setMaxApplications": helpers.absmod(
                     __name__, ".DiscountCodeSetMaxApplicationsActionSchema"
                 ),
@@ -394,6 +414,7 @@ class DiscountCodeUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountCodeUpdate(**data)
 
 
@@ -529,6 +550,20 @@ class DiscountCodeSetDescriptionActionSchema(DiscountCodeUpdateActionSchema):
     def post_load(self, data, **kwargs):
         del data["action"]
         return models.DiscountCodeSetDescriptionAction(**data)
+
+
+class DiscountCodeSetKeyActionSchema(DiscountCodeUpdateActionSchema):
+    key = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["action"]
+        return models.DiscountCodeSetKeyAction(**data)
 
 
 class DiscountCodeSetMaxApplicationsActionSchema(DiscountCodeUpdateActionSchema):

@@ -21,6 +21,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -68,7 +69,6 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["OrderPagedQueryResponse"]:
-        """Queries orders in a specific Store."""
         params = {
             "expand": expand,
             "sort": sort,
@@ -96,6 +96,30 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
+    def head(
+        self,
+        *,
+        where: typing.List["str"] = None,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/in-store/key={self._store_key}/orders",
+            params={"where": where},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code == 200:
+            return None
+        elif response.status_code == 404:
+            return None
+        elif response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
     def post(
         self,
         body: "OrderFromCartDraft",
@@ -104,10 +128,21 @@ class ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["Order"]:
-        """Creates an order from a Cart from a specific Store.
-        When using this endpoint the orders's store field is always set to the store specified in the path parameter.
-        The cart must have a shipping address set before creating an order. When using the Platform TaxMode,
-        the shipping address is used for tax calculation.
+        """Before you create an Order, the Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction).
+        The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
+
+        Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+
+        Specific Error Codes:
+
+        - [OutOfStock](ctp:api:type:OutOfStockError)
+        - [PriceChanged](ctp:api:type:PriceChangedError)
+        - [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+        - [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
+        - [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+        - [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+        - [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+        - [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
 
         """
         headers = {} if headers is None else headers

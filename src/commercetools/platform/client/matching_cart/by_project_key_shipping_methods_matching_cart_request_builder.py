@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
 
@@ -52,5 +53,29 @@ class ByProjectKeyShippingMethodsMatchingCartRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
+            return None
+        warnings.warn("Unhandled status code %d" % response.status_code)
+
+    def head(
+        self,
+        *,
+        cart_id: str,
+        headers: typing.Dict[str, str] = None,
+        options: typing.Dict[str, typing.Any] = None,
+    ) -> typing.Optional[None]:
+        """Checks if a ShippingMethod exists for the given Cart. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise."""
+        headers = {} if headers is None else headers
+        response = self._client._head(
+            endpoint=f"/{self._project_key}/shipping-methods/matching-cart",
+            params={"cartId": cart_id},
+            headers=headers,
+            options=options,
+        )
+        if response.status_code in (400, 401, 403, 500, 502, 503):
+            obj = ErrorResponse.deserialize(response.json())
+            raise self._client._create_exception(obj, response)
+        elif response.status_code == 404:
+            return None
+        elif response.status_code == 200:
             return None
         warnings.warn("Unhandled status code %d" % response.status_code)

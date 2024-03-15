@@ -73,6 +73,7 @@ class AssignedProductReferenceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssignedProductReference(**data)
 
 
@@ -122,6 +123,7 @@ class AssignedProductSelectionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssignedProductSelection(**data)
 
 
@@ -145,6 +147,7 @@ class AssignedProductSelectionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssignedProductSelectionPagedQueryResponse(**data)
 
 
@@ -199,6 +202,7 @@ class ProductSelectionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelection(**data)
 
 
@@ -251,6 +255,7 @@ class ProductSelectionAssignmentSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionAssignment(**data)
 
 
@@ -290,6 +295,7 @@ class ProductSelectionDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionDraft(**data)
 
 
@@ -313,6 +319,7 @@ class ProductSelectionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionPagedQueryResponse(**data)
 
 
@@ -336,6 +343,7 @@ class ProductSelectionProductPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionProductPagedQueryResponse(**data)
 
 
@@ -358,6 +366,7 @@ class ProductSelectionReferenceSchema(ReferenceSchema):
 
 
 class ProductSelectionResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -458,6 +467,7 @@ class ProductSelectionUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductSelectionUpdate(**data)
 
 
@@ -483,6 +493,7 @@ class ProductVariantExclusionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantExclusion(**data)
 
 
@@ -579,6 +590,7 @@ class ProductsInStorePagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductsInStorePagedQueryResponse(**data)
 
 

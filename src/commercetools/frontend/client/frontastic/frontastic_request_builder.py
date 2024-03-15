@@ -20,6 +20,7 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticRequestBuilder:
+
     _client: "BaseClient"
 
     def __init__(

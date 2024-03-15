@@ -14,6 +14,7 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticActionByNamespaceByActionRequestBuilder:
+
     _client: "BaseClient"
     _namespace: str
     _action: str

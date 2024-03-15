@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _store_key: str
@@ -36,10 +37,12 @@ class ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder:
         offset: int = None,
         with_total: bool = None,
         expand: typing.List["str"] = None,
+        where: typing.List["str"] = None,
+        predicate_var: typing.Dict[str, typing.List["str"]] = None,
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional["ProductsInStorePagedQueryResponse"]:
-        """Queries Product Selection assignments over all Product Selections that are active in a specific Store.
+        """Queries Product Selection assignments in a specific [Store](ctp:api:type:Store).
 
         The response will include duplicate Products whenever more than one active Product Selection of the Store
         includes a Product. To make clear through which Product Selection a Product is available in the Store
@@ -47,15 +50,20 @@ class ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder:
         Only Products of Product Selections that are activated in the Store will be returned.
 
         """
+        params = {
+            "limit": limit,
+            "offset": offset,
+            "withTotal": with_total,
+            "expand": expand,
+            "where": where,
+        }
+        predicate_var and params.update(
+            {f"var.{k}": v for k, v in predicate_var.items()}
+        )
         headers = {} if headers is None else headers
         response = self._client._get(
             endpoint=f"/{self._project_key}/in-store/key={self._store_key}/product-selection-assignments",
-            params={
-                "limit": limit,
-                "offset": offset,
-                "withTotal": with_total,
-                "expand": expand,
-            },
+            params=params,
             headers=headers,
             options=options,
         )

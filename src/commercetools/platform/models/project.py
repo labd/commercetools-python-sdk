@@ -252,7 +252,8 @@ class Project(_BaseType):
 
 
 class ProjectUpdate(_BaseType):
-    #: Expected version of the Project on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: Expected version of the Project on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Project.
     actions: typing.List["ProjectUpdateAction"]
@@ -410,7 +411,7 @@ class SearchIndexingConfigurationValues(_BaseType):
     status: typing.Optional["SearchIndexingConfigurationStatus"]
     #: Date and time (UTC) the Project was last updated. Only present on Projects last modified after 1 February 2019.
     last_modified_at: typing.Optional[datetime.datetime]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
 
     def __init__(
@@ -502,6 +503,7 @@ class CartScoreType(ShippingRateInputType):
     """Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges)."""
 
     def __init__(self):
+
         super().__init__(type=ShippingRateTierType.CART_SCORE)
 
     @classmethod
@@ -524,6 +526,7 @@ class CartValueType(ShippingRateInputType):
     """
 
     def __init__(self):
+
         super().__init__(type=ShippingRateTierType.CART_VALUE)
 
     @classmethod

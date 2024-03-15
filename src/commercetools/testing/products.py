@@ -47,9 +47,11 @@ class ProductsModel(BaseModel):
             category_order_hints=draft.category_order_hints,
             description=draft.description,
             master_variant=master_variant,
-            variants=[self._create_variant_from_draft(vd) for vd in draft.variants]
-            if draft.variants
-            else [],
+            variants=(
+                [self._create_variant_from_draft(vd) for vd in draft.variants]
+                if draft.variants
+                else []
+            ),
             slug=draft.slug or models.LocalizedString(),
             search_keywords=models.SearchKeywords(),
         )

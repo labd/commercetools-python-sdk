@@ -7,6 +7,12 @@
 import typing
 import warnings
 
+from ..approval_flows.by_project_key_as_associate_by_associate_id_in_business_unit_key_by_business_unit_key_approval_flows_request_builder import (
+    ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalFlowsRequestBuilder,
+)
+from ..approval_rules.by_project_key_as_associate_by_associate_id_in_business_unit_key_by_business_unit_key_approval_rules_request_builder import (
+    ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalRulesRequestBuilder,
+)
 from ..carts.by_project_key_as_associate_by_associate_id_in_business_unit_key_by_business_unit_key_carts_request_builder import (
     ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsRequestBuilder,
 )
@@ -25,6 +31,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _associate_id: str
@@ -41,6 +48,31 @@ class ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyRequ
         self._associate_id = associate_id
         self._business_unit_key = business_unit_key
         self._client = client
+
+    def approval_rules(
+        self,
+    ) -> ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalRulesRequestBuilder:
+        """An Approval Rule describes the conditions determining whether an Order that matches the predicate needs approval by an approver before it can be ordered by an requester within a Business Unit."""
+        return ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalRulesRequestBuilder(
+            project_key=self._project_key,
+            associate_id=self._associate_id,
+            business_unit_key=self._business_unit_key,
+            client=self._client,
+        )
+
+    def approval_flows(
+        self,
+    ) -> ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalFlowsRequestBuilder:
+        """Approval Flows connect Orders that require approval with the Approval Rules that initiate the approval requirement.
+        They represent the approval process by including information about approvals, rejections, and all involved parties.
+
+        """
+        return ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyApprovalFlowsRequestBuilder(
+            project_key=self._project_key,
+            associate_id=self._associate_id,
+            business_unit_key=self._business_unit_key,
+            client=self._client,
+        )
 
     def carts(
         self,

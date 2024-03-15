@@ -41,6 +41,7 @@ __all__ = [
     "DiscountCodeSetCustomFieldAction",
     "DiscountCodeSetCustomTypeAction",
     "DiscountCodeSetDescriptionAction",
+    "DiscountCodeSetKeyAction",
     "DiscountCodeSetMaxApplicationsAction",
     "DiscountCodeSetMaxApplicationsPerCustomerAction",
     "DiscountCodeSetNameAction",
@@ -53,9 +54,11 @@ __all__ = [
 
 
 class DiscountCode(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: User-defined unique identifier of the DiscountCode.
+    key: typing.Optional[str]
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Name of the DiscountCode.
     name: typing.Optional["LocalizedString"]
@@ -97,6 +100,7 @@ class DiscountCode(BaseResource):
         version: int,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
+        key: typing.Optional[str] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
         created_by: typing.Optional["CreatedBy"] = None,
         name: typing.Optional["LocalizedString"] = None,
@@ -114,6 +118,7 @@ class DiscountCode(BaseResource):
         valid_until: typing.Optional[datetime.datetime] = None,
         application_version: typing.Optional[int] = None
     ):
+        self.key = key
         self.last_modified_by = last_modified_by
         self.created_by = created_by
         self.name = name
@@ -151,6 +156,8 @@ class DiscountCode(BaseResource):
 
 
 class DiscountCodeDraft(_BaseType):
+    #: User-defined unique identifier for the DiscountCode.
+    key: typing.Optional[str]
     #: Name of the DiscountCode.
     name: typing.Optional["LocalizedString"]
     #: Description of the DiscountCode.
@@ -180,6 +187,7 @@ class DiscountCodeDraft(_BaseType):
     def __init__(
         self,
         *,
+        key: typing.Optional[str] = None,
         name: typing.Optional["LocalizedString"] = None,
         description: typing.Optional["LocalizedString"] = None,
         code: str,
@@ -193,6 +201,7 @@ class DiscountCodeDraft(_BaseType):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None
     ):
+        self.key = key
         self.name = name
         self.description = description
         self.code = code
@@ -293,11 +302,12 @@ class DiscountCodeReference(Reference):
 
 
 class DiscountCodeResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountCode](ctp:api:type:DiscountCode)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountCode](ctp:api:type:DiscountCode). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.DISCOUNT_CODE)
 
     @classmethod
@@ -316,7 +326,7 @@ class DiscountCodeResourceIdentifier(ResourceIdentifier):
 
 class DiscountCodeUpdate(_BaseType):
     #: Expected version of the DiscountCode on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the DiscountCode.
     actions: typing.List["DiscountCodeUpdateAction"]
@@ -383,6 +393,10 @@ class DiscountCodeUpdateAction(_BaseType):
             from ._schemas.discount_code import DiscountCodeSetDescriptionActionSchema
 
             return DiscountCodeSetDescriptionActionSchema().load(data)
+        if data["action"] == "setKey":
+            from ._schemas.discount_code import DiscountCodeSetKeyActionSchema
+
+            return DiscountCodeSetKeyActionSchema().load(data)
         if data["action"] == "setMaxApplications":
             from ._schemas.discount_code import (
                 DiscountCodeSetMaxApplicationsActionSchema,
@@ -595,6 +609,32 @@ class DiscountCodeSetDescriptionAction(DiscountCodeUpdateAction):
         from ._schemas.discount_code import DiscountCodeSetDescriptionActionSchema
 
         return DiscountCodeSetDescriptionActionSchema().dump(self)
+
+
+class DiscountCodeSetKeyAction(DiscountCodeUpdateAction):
+    """This action generates a [DiscountCodeKeySet](ctp:api:type:DiscountCodeKeySetMessage) Message."""
+
+    #: Unique value to set.
+    #: If empty, any existing value will be removed.
+    key: typing.Optional[str]
+
+    def __init__(self, *, key: typing.Optional[str] = None):
+        self.key = key
+
+        super().__init__(action="setKey")
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DiscountCodeSetKeyAction":
+        from ._schemas.discount_code import DiscountCodeSetKeyActionSchema
+
+        return DiscountCodeSetKeyActionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.discount_code import DiscountCodeSetKeyActionSchema
+
+        return DiscountCodeSetKeyActionSchema().dump(self)
 
 
 class DiscountCodeSetMaxApplicationsAction(DiscountCodeUpdateAction):

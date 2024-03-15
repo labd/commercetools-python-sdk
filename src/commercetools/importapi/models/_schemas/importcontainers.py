@@ -42,6 +42,7 @@ class ImportContainerSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportContainer(**data)
 
 
@@ -61,6 +62,7 @@ class ImportContainerDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportContainerDraft(**data)
 
 
@@ -80,6 +82,7 @@ class ImportContainerUpdateDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportContainerUpdateDraft(**data)
 
 
@@ -101,4 +104,5 @@ class ImportContainerPagedResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportContainerPagedResponse(**data)

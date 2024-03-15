@@ -27,18 +27,21 @@ from .type import FieldContainerField
 
 # Fields
 class CategoryOrderHintsField(marshmallow.fields.Dict):
+
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.CategoryOrderHints(**result)
 
 
 class ProductVariantChannelAvailabilityMapField(marshmallow.fields.Dict):
+
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.ProductVariantChannelAvailabilityMap(**result)
 
 
 class SearchKeywordsField(marshmallow.fields.Dict):
+
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.SearchKeywords(**result)
@@ -54,6 +57,7 @@ class AttributeSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Attribute(**data)
 
 
@@ -85,6 +89,7 @@ class FacetRangeSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.FacetRange(**data)
 
 
@@ -156,6 +161,7 @@ class FacetTermSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.FacetTerm(**data)
 
 
@@ -248,6 +254,7 @@ class ProductSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Product(**data)
 
 
@@ -274,6 +281,7 @@ class ProductCatalogDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductCatalogData(**data)
 
 
@@ -360,6 +368,7 @@ class ProductDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductData(**data)
 
 
@@ -490,6 +499,7 @@ class ProductDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductDraft(**data)
 
 
@@ -513,6 +523,7 @@ class ProductPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductPagedQueryResponse(**data)
 
 
@@ -650,6 +661,7 @@ class ProductProjectionSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductProjection(**data)
 
 
@@ -673,6 +685,7 @@ class ProductProjectionPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductProjectionPagedQueryResponse(**data)
 
 
@@ -702,6 +715,7 @@ class ProductProjectionPagedSearchResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductProjectionPagedSearchResponse(**data)
 
 
@@ -724,6 +738,7 @@ class ProductReferenceSchema(ReferenceSchema):
 
 
 class ProductResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -881,6 +896,7 @@ class ProductUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductUpdate(**data)
 
 
@@ -976,6 +992,7 @@ class ProductVariantSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariant(**data)
 
 
@@ -991,10 +1008,7 @@ class ProductVariantAvailabilitySchema(helpers.BaseSchema):
         load_default=None,
     )
     is_on_stock = marshmallow.fields.Boolean(
-        allow_none=True,
-        metadata={"omit_empty": True},
-        load_default=None,
-        data_key="isOnStock",
+        allow_none=True, load_default=None, data_key="isOnStock"
     )
     restockable_in_days = marshmallow.fields.Integer(
         allow_none=True,
@@ -1008,12 +1022,19 @@ class ProductVariantAvailabilitySchema(helpers.BaseSchema):
         load_default=None,
         data_key="availableQuantity",
     )
+    id = marshmallow.fields.String(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+    version = marshmallow.fields.Integer(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantAvailability(**data)
 
 
@@ -1044,6 +1065,7 @@ class ProductVariantChannelAvailabilitySchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantChannelAvailability(**data)
 
 
@@ -1092,6 +1114,7 @@ class ProductVariantDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProductVariantDraft(**data)
 
 
@@ -1132,6 +1155,7 @@ class SearchKeywordSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.SearchKeyword(**data)
 
 
@@ -1169,6 +1193,7 @@ class SuggestionSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Suggestion(**data)
 
 
@@ -1237,6 +1262,7 @@ class TermFacetResultSchema(FacetResultSchema):
 
 
 class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1764,6 +1790,7 @@ class ProductRemoveVariantActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2482,6 +2509,7 @@ class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
 
 
 class ProductUnpublishActionSchema(ProductUpdateActionSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 

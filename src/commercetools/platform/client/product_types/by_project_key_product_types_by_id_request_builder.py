@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductTypesByIDRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _id: str
@@ -58,7 +59,7 @@ class ByProjectKeyProductTypesByIDRequestBuilder:
         headers: typing.Dict[str, str] = None,
         options: typing.Dict[str, typing.Any] = None,
     ) -> typing.Optional[None]:
-        """Checks if a Product Type with given `id` exists. Responds with a `200 OK` status if the `Product Type` exists or `404 Not Found` otherwise."""
+        """Checks if a ProductType exists for a given `id`. Returns a `200 OK` status if the ProductType exists or a `404 Not Found` otherwise."""
         headers = {} if headers is None else headers
         response = self._client._head(
             endpoint=f"/{self._project_key}/product-types/{self._id}",

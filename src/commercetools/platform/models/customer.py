@@ -38,8 +38,10 @@ __all__ = [
     "CustomerCreateEmailToken",
     "CustomerCreatePasswordResetToken",
     "CustomerDraft",
+    "CustomerEmailTokenReference",
     "CustomerEmailVerify",
     "CustomerPagedQueryResponse",
+    "CustomerPasswordTokenReference",
     "CustomerReference",
     "CustomerRemoveAddressAction",
     "CustomerRemoveBillingAddressIdAction",
@@ -99,11 +101,11 @@ class Customer(BaseResource):
     #:
     #: Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
     customer_number: typing.Optional[str]
-    #: Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
     #: It is the mandatory unique identifier of a Customer.
@@ -334,7 +336,7 @@ class CustomerDraft(_BaseType):
     #:
     #: Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
     customer_number: typing.Optional[str]
-    #: Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+    #: Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
     #: Email address of the Customer that must be [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
     #: It is the mandatory unique identifier of a Customer.
@@ -470,6 +472,27 @@ class CustomerDraft(_BaseType):
         return CustomerDraftSchema().dump(self)
 
 
+class CustomerEmailTokenReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [CustomerToken](ctp:api:type:CustomerToken) for email verification."""
+
+    def __init__(self, *, id: str):
+
+        super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER_EMAIL_TOKEN)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerEmailTokenReference":
+        from ._schemas.customer import CustomerEmailTokenReferenceSchema
+
+        return CustomerEmailTokenReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import CustomerEmailTokenReferenceSchema
+
+        return CustomerEmailTokenReferenceSchema().dump(self)
+
+
 class CustomerEmailVerify(_BaseType):
     #: Expected version of the Customer.
     version: typing.Optional[int]
@@ -543,6 +566,27 @@ class CustomerPagedQueryResponse(_BaseType):
         return CustomerPagedQueryResponseSchema().dump(self)
 
 
+class CustomerPasswordTokenReference(Reference):
+    """[Reference](ctp:api:type:Reference) to a [CustomerToken](ctp:api:type:CustomerToken) for password reset."""
+
+    def __init__(self, *, id: str):
+
+        super().__init__(id=id, type_id=ReferenceTypeId.CUSTOMER_PASSWORD_TOKEN)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "CustomerPasswordTokenReference":
+        from ._schemas.customer import CustomerPasswordTokenReferenceSchema
+
+        return CustomerPasswordTokenReferenceSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.customer import CustomerPasswordTokenReferenceSchema
+
+        return CustomerPasswordTokenReferenceSchema().dump(self)
+
+
 class CustomerReference(Reference):
     """[Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer)."""
 
@@ -600,11 +644,12 @@ class CustomerResetPassword(_BaseType):
 
 
 class CustomerResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.CUSTOMER)
 
     @classmethod
@@ -702,33 +747,33 @@ class CustomerSignin(_BaseType):
 class CustomerToken(_BaseType):
     #: Unique identifier of the token.
     id: str
+    #: The `id` of the Customer.
+    customer_id: str
+    #: Value of the token.
+    value: str
+    #: Date and time (UTC) the token expires.
+    expires_at: datetime.datetime
     #: Date and time (UTC) the token was initially created.
     created_at: datetime.datetime
     #: When the token is created, `lastModifiedAt` is set to `createdAt`.
     last_modified_at: typing.Optional[datetime.datetime]
-    #: The `id` of the Customer.
-    customer_id: str
-    #: Date and time (UTC) the token expires.
-    expires_at: datetime.datetime
-    #: Value of the token.
-    value: str
 
     def __init__(
         self,
         *,
         id: str,
-        created_at: datetime.datetime,
-        last_modified_at: typing.Optional[datetime.datetime] = None,
         customer_id: str,
+        value: str,
         expires_at: datetime.datetime,
-        value: str
+        created_at: datetime.datetime,
+        last_modified_at: typing.Optional[datetime.datetime] = None
     ):
         self.id = id
+        self.customer_id = customer_id
+        self.value = value
+        self.expires_at = expires_at
         self.created_at = created_at
         self.last_modified_at = last_modified_at
-        self.customer_id = customer_id
-        self.expires_at = expires_at
-        self.value = value
 
         super().__init__()
 
@@ -745,7 +790,8 @@ class CustomerToken(_BaseType):
 
 
 class CustomerUpdate(_BaseType):
-    #: Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: Expected version of the Customer on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Customer.
     actions: typing.List["CustomerUpdateAction"]
@@ -1184,7 +1230,7 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
 
 
 class CustomerChangeEmailAction(CustomerUpdateAction):
-    """Changing the email of the Customer produces the [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message."""
+    """Changes the `email` of the Customer and sets the `isEmailVerified` property to `false`. This update action generates a [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message."""
 
     #: Value to set.
     email: str
@@ -1346,6 +1392,8 @@ class CustomerRemoveStoreAction(CustomerUpdateAction):
 
 
 class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
+    """Adding a Custom Field to an Address of a Customer generates the [CustomerAddressCustomFieldAdded](ctp:api:type:CustomerAddressCustomFieldAddedMessage) Message, removing one generates the [CustomerAddressCustomFieldRemoved](ctp:api:type:CustomerAddressCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerAddressCustomFieldChanged](ctp:api:type:CustomerAddressCustomFieldChangedMessage) Message."""
+
     #: User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
     address_id: str
     #: Name of the [Custom Field](/../api/projects/custom-fields).
@@ -1379,6 +1427,8 @@ class CustomerSetAddressCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
+    """Adding or updating a Custom Type on an Address of a Customer generates the [CustomerAddressCustomTypeSet](ctp:api:type:CustomerAddressCustomTypeSetMessage) Message, and removing one generates the [CustomerAddressCustomTypeRemoved](ctp:api:type:CustomerAddressCustomTypeRemovedMessage) Message."""
+
     #: User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
     address_id: str
     #: Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
@@ -1470,6 +1520,8 @@ class CustomerSetCompanyNameAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomFieldAction(CustomerUpdateAction):
+    """Adding a Custom Field to a Customer generates the [CustomerCustomFieldAdded](ctp:api:type:CustomerCustomFieldAddedMessage) Message, removing one generates the [CustomerCustomFieldRemoved](ctp:api:type:CustomerCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerCustomFieldChanged](ctp:api:type:CustomerCustomFieldChangedMessage) Message."""
+
     #: Name of the [Custom Field](/../api/projects/custom-fields).
     name: str
     #: If `value` is absent or `null`, this field will be removed if it exists.
@@ -1498,6 +1550,8 @@ class CustomerSetCustomFieldAction(CustomerUpdateAction):
 
 
 class CustomerSetCustomTypeAction(CustomerUpdateAction):
+    """Adding or updating a Custom Type on a Customer generates the [CustomerCustomTypeSet](ctp:api:type:CustomerCustomTypeSetMessage) Message, removing one generates the [CustomerCustomTypeRemoved](ctp:api:type:CustomerCustomTypeRemovedMessage) Message."""
+
     #: Defines the [Type](ctp:api:type:Type) that extends the Customer with [Custom Fields](/../api/projects/custom-fields).
     #: If absent, any existing Type and Custom Fields are removed from the Customer.
     type: typing.Optional["TypeResourceIdentifier"]
@@ -1710,6 +1764,8 @@ class CustomerSetExternalIdAction(CustomerUpdateAction):
 
 
 class CustomerSetFirstNameAction(CustomerUpdateAction):
+    """Setting the first name of the Customer produces the [CustomeFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message."""
+
     #: Value to set. If empty, any existing value is removed.
     first_name: typing.Optional[str]
 
@@ -1754,7 +1810,7 @@ class CustomerSetKeyAction(CustomerUpdateAction):
 
 
 class CustomerSetLastNameAction(CustomerUpdateAction):
-    """Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage)."""
+    """Setting the last name of the Customer produces the [CustomerLastNameSet](ctp:api:type:CustomerLastNameSetMessage) Message."""
 
     #: Value to set. If empty, any existing value is removed.
     last_name: typing.Optional[str]
@@ -1879,7 +1935,7 @@ class CustomerSetStoresAction(CustomerUpdateAction):
 
 
 class CustomerSetTitleAction(CustomerUpdateAction):
-    """Setting the title of the Customer produces the [CustomerTitleSetMessage](ctp:api:type:CustomerTitleSetMessage)."""
+    """Setting the title of the Customer produces the [CustomerTitleSet](ctp:api:type:CustomerTitleSetMessage) Message."""
 
     #: Value to set. If empty, any existing value is removed.
     title: typing.Optional[str]

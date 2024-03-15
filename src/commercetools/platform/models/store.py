@@ -122,9 +122,9 @@ class ProductSelectionSettingDraft(_BaseType):
 
 
 class Store(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique and immutable identifier for the Store.
     key: str
@@ -262,9 +262,10 @@ class StoreDraft(_BaseType):
 
 
 class StoreKeyReference(KeyReference):
-    """[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key."""
+    """[Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store) by its key."""
 
     def __init__(self, *, key: str):
+
         super().__init__(key=key, type_id=ReferenceTypeId.STORE)
 
     @classmethod
@@ -329,7 +330,7 @@ class StorePagedQueryResponse(_BaseType):
 
 
 class StoreReference(Reference):
-    """[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store)."""
+    """[Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store)."""
 
     #: Contains the representation of the expanded Store. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Stores.
     obj: typing.Optional["Store"]
@@ -352,11 +353,12 @@ class StoreReference(Reference):
 
 
 class StoreResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store)."""
+    """[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.STORE)
 
     @classmethod
@@ -374,7 +376,8 @@ class StoreResourceIdentifier(ResourceIdentifier):
 
 
 class StoreUpdate(_BaseType):
-    #: Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+    #: Expected version of the Store on which the changes should be applied.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the Store.
     actions: typing.List["StoreUpdateAction"]

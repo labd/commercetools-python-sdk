@@ -18,6 +18,7 @@ from ..common import MoneyType, ReferenceType
 
 # Fields
 class LocalizedStringField(marshmallow.fields.Dict):
+
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.LocalizedString(**result)
@@ -63,6 +64,7 @@ class AssetSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Asset(**data)
 
 
@@ -75,6 +77,7 @@ class AssetDimensionsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssetDimensions(**data)
 
 
@@ -102,6 +105,7 @@ class AssetSourceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.AssetSource(**data)
 
 
@@ -122,6 +126,7 @@ class ImageSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Image(**data)
 
 
@@ -134,6 +139,7 @@ class EnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.EnumValue(**data)
 
 
@@ -150,6 +156,7 @@ class LocalizedEnumValueSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LocalizedEnumValue(**data)
 
 
@@ -161,6 +168,7 @@ class ImportResourceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ImportResource(**data)
 
 
@@ -184,6 +192,7 @@ class KeyReferenceSchema(helpers.BaseSchema):
 
 
 class CartKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -194,6 +203,7 @@ class CartKeyReferenceSchema(KeyReferenceSchema):
 
 
 class CartDiscountKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -204,6 +214,7 @@ class CartDiscountKeyReferenceSchema(KeyReferenceSchema):
 
 
 class CategoryKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -214,6 +225,7 @@ class CategoryKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ChannelKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -224,6 +236,7 @@ class ChannelKeyReferenceSchema(KeyReferenceSchema):
 
 
 class CustomerKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -234,6 +247,7 @@ class CustomerKeyReferenceSchema(KeyReferenceSchema):
 
 
 class CustomerGroupKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -244,6 +258,7 @@ class CustomerGroupKeyReferenceSchema(KeyReferenceSchema):
 
 
 class DiscountCodeKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -254,6 +269,7 @@ class DiscountCodeKeyReferenceSchema(KeyReferenceSchema):
 
 
 class OrderKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -264,6 +280,7 @@ class OrderKeyReferenceSchema(KeyReferenceSchema):
 
 
 class PaymentKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -274,6 +291,7 @@ class PaymentKeyReferenceSchema(KeyReferenceSchema):
 
 
 class PriceKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -284,6 +302,7 @@ class PriceKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ProductKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -294,6 +313,7 @@ class ProductKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ProductDiscountKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -304,6 +324,7 @@ class ProductDiscountKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ProductTypeKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -314,6 +335,7 @@ class ProductTypeKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ProductVariantKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -324,6 +346,7 @@ class ProductVariantKeyReferenceSchema(KeyReferenceSchema):
 
 
 class ShippingMethodKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -334,6 +357,7 @@ class ShippingMethodKeyReferenceSchema(KeyReferenceSchema):
 
 
 class StateKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -344,6 +368,7 @@ class StateKeyReferenceSchema(KeyReferenceSchema):
 
 
 class StoreKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -354,6 +379,7 @@ class StoreKeyReferenceSchema(KeyReferenceSchema):
 
 
 class TaxCategoryKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -364,6 +390,7 @@ class TaxCategoryKeyReferenceSchema(KeyReferenceSchema):
 
 
 class TypeKeyReferenceSchema(KeyReferenceSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -400,6 +427,7 @@ class UnresolvedReferencesSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.UnresolvedReferences(**data)
 
 
@@ -444,6 +472,7 @@ class HighPrecisionMoneySchema(TypedMoneySchema):
 
 
 class MoneySchema(TypedMoneySchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -475,6 +504,7 @@ class DiscountedPriceSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DiscountedPrice(**data)
 
 
@@ -497,6 +527,7 @@ class PriceTierSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PriceTier(**data)
 
 
@@ -614,4 +645,5 @@ class AddressSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Address(**data)

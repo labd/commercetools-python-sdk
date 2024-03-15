@@ -57,4 +57,5 @@ class InventoryImportSchema(ImportResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.InventoryImport(**data)

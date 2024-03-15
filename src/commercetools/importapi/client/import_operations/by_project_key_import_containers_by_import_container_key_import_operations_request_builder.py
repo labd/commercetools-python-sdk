@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _import_container_key: str
@@ -32,8 +33,8 @@ class ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestBui
     def get(
         self,
         *,
-        limit: float = None,
-        offset: float = None,
+        limit: int = None,
+        offset: int = None,
         sort: typing.List["str"] = None,
         resource_key: str = None,
         state: "ProcessingState" = None,

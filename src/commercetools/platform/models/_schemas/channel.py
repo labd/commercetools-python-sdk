@@ -100,6 +100,7 @@ class ChannelSchema(BaseResourceSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Channel(**data)
 
 
@@ -153,6 +154,7 @@ class ChannelDraftSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ChannelDraft(**data)
 
 
@@ -176,6 +178,7 @@ class ChannelPagedQueryResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ChannelPagedQueryResponse(**data)
 
 
@@ -198,6 +201,7 @@ class ChannelReferenceSchema(ReferenceSchema):
 
 
 class ChannelResourceIdentifierSchema(ResourceIdentifierSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -255,6 +259,7 @@ class ChannelUpdateSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ChannelUpdate(**data)
 
 

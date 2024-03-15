@@ -15,6 +15,7 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder:
+
     _client: "BaseClient"
     _project_key: str
     _email_token: str

@@ -48,9 +48,9 @@ __all__ = [
 
 
 class AssociateRole(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the AssociateRole.
     key: str
@@ -147,9 +147,10 @@ class AssociateRoleDraft(_BaseType):
 
 
 class AssociateRoleKeyReference(KeyReference):
-    """[Reference](ctp:api:type:TypeReference) to an [AssociateRole](ctp:api:type:AssociateRole) by its key."""
+    """[Reference](ctp:api:type:Reference) to an [AssociateRole](ctp:api:type:AssociateRole) by its key."""
 
     def __init__(self, *, key: str):
+
         super().__init__(key=key, type_id=ReferenceTypeId.ASSOCIATE_ROLE)
 
     @classmethod
@@ -216,7 +217,7 @@ class AssociateRolePagedQueryResponse(_BaseType):
 
 
 class AssociateRoleReference(Reference):
-    """[Reference](ctp:api:type:TypeReference) to an [AssociateRole](ctp:api:type:AssociateRole)."""
+    """[Reference](ctp:api:type:Reference) to an [AssociateRole](ctp:api:type:AssociateRole)."""
 
     #: Contains the representation of the expanded AssociateRole. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for AssociateRole.
     obj: typing.Optional["AssociateRole"]
@@ -241,11 +242,12 @@ class AssociateRoleReference(Reference):
 
 
 class AssociateRoleResourceIdentifier(ResourceIdentifier):
-    """[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole)."""
+    """[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned."""
 
     def __init__(
         self, *, id: typing.Optional[str] = None, key: typing.Optional[str] = None
     ):
+
         super().__init__(id=id, key=key, type_id=ReferenceTypeId.ASSOCIATE_ROLE)
 
     @classmethod
@@ -264,7 +266,7 @@ class AssociateRoleResourceIdentifier(ResourceIdentifier):
 
 class AssociateRoleUpdate(_BaseType):
     #: Expected version of the AssociateRole on which the changes should be applied.
-    #: If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+    #: If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
     version: int
     #: Update actions to be performed on the AssociateRole.
     actions: typing.List["AssociateRoleUpdateAction"]
@@ -341,7 +343,7 @@ class AssociateRoleUpdateAction(_BaseType):
 
 
 class Permission(enum.Enum):
-    """Permissions grant granular access to [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [QuoteRequests](ctp:api:type:QuoteRequest)."""
+    """Permissions grant granular access to [Approval Rules](ctp:api:type:ApprovalRule), [Approval Flows](ctp:api:type:ApprovalFlow), [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [Quote Requests](ctp:api:type:QuoteRequest)."""
 
     ADD_CHILD_UNITS = "AddChildUnits"
     UPDATE_ASSOCIATES = "UpdateAssociates"
@@ -379,6 +381,9 @@ class Permission(enum.Enum):
     UPDATE_OTHERS_QUOTE_REQUESTS = "UpdateOthersQuoteRequests"
     CREATE_MY_QUOTE_REQUESTS_FROM_MY_CARTS = "CreateMyQuoteRequestsFromMyCarts"
     CREATE_QUOTE_REQUESTS_FROM_OTHERS_CARTS = "CreateQuoteRequestsFromOthersCarts"
+    CREATE_APPROVAL_RULES = "CreateApprovalRules"
+    UPDATE_APPROVAL_RULES = "UpdateApprovalRules"
+    UPDATE_APPROVAL_FLOWS = "UpdateApprovalFlows"
 
 
 class AssociateRoleAddPermissionAction(AssociateRoleUpdateAction):

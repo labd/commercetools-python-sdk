@@ -32,6 +32,7 @@ class DataSourceConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DataSourceConfiguration(**data)
 
 
@@ -48,15 +49,18 @@ class DataSourceResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DataSourceResponse(**data)
 
 
 class DataSourcesSchema(helpers.BaseSchema):
+
     class Meta:
         unknown = marshmallow.EXCLUDE
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.DataSources(**data)
 
 
@@ -69,6 +73,7 @@ class ErrorSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Error(**data)
 
 
@@ -87,6 +92,7 @@ class FooterSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Footer(**data)
 
 
@@ -105,6 +111,7 @@ class HeadSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Head(**data)
 
 
@@ -131,6 +138,7 @@ class LayoutElementSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LayoutElement(**data)
 
 
@@ -145,6 +153,7 @@ class LayoutElementConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.LayoutElementConfiguration(**data)
 
 
@@ -163,6 +172,7 @@ class MainSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Main(**data)
 
 
@@ -183,6 +193,7 @@ class PageSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Page(**data)
 
 
@@ -212,6 +223,7 @@ class PageDataResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PageDataResponse(**data)
 
 
@@ -248,6 +260,7 @@ class PageFolderSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PageFolder(**data)
 
 
@@ -261,6 +274,7 @@ class PagePreviewContextSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PagePreviewContext(**data)
 
 
@@ -281,6 +295,7 @@ class PagePreviewDataResponseSchema(PageDataResponseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PagePreviewDataResponse(**data)
 
 
@@ -298,6 +313,7 @@ class PathConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.PathConfiguration(**data)
 
 
@@ -317,6 +333,7 @@ class ProjectContextSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ProjectContext(**data)
 
 
@@ -335,6 +352,7 @@ class RedirectResponseSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.RedirectResponse(**data)
 
 
@@ -363,6 +381,7 @@ class SectionsSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Sections(**data)
 
 
@@ -385,6 +404,7 @@ class TasticSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.Tastic(**data)
 
 
@@ -398,6 +418,7 @@ class TasticConfigurationSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.TasticConfiguration(**data)
 
 
@@ -415,4 +436,76 @@ class ViewDataSchema(helpers.BaseSchema):
 
     @marshmallow.post_load
     def post_load(self, data, **kwargs):
+
         return models.ViewData(**data)
+
+
+class BuildUploadSchema(helpers.BaseSchema):
+    metadata = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".BuildMetadataSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+    extension = marshmallow.fields.ToDo(allow_none=True, load_default=None)
+    extension_map = marshmallow.fields.ToDo(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.BuildUpload(**data)
+
+
+class BuildMetadataSchema(helpers.BaseSchema):
+    branch = marshmallow.fields.String(allow_none=True, load_default=None)
+    revision = marshmallow.fields.String(allow_none=True, load_default=None)
+    version_number = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="versionNumber"
+    )
+    node_js_version = marshmallow.fields.Integer(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="nodeJsVersion",
+    )
+    build_successful = marshmallow.fields.Boolean(
+        allow_none=True, load_default=None, data_key="buildSuccessful"
+    )
+    build_time = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="buildTime"
+    )
+    build_duration = marshmallow.fields.Integer(
+        allow_none=True, load_default=None, data_key="buildDuration"
+    )
+    build_log = marshmallow.fields.String(
+        allow_none=True, load_default=None, data_key="buildLog"
+    )
+    deploy = marshmallow.fields.Boolean(
+        allow_none=True, metadata={"omit_empty": True}, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.BuildMetadata(**data)
+
+
+class BuildUploadResultSchema(helpers.BaseSchema):
+    status = marshmallow.fields.String(allow_none=True, load_default=None)
+    message = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.BuildUploadResult(**data)

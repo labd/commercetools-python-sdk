@@ -30,7 +30,7 @@ def ct_platform_client(
     yield PlatformClient(
         client_id="client-id",
         client_secret="client-secret",
-        scope=[],
+        scope=["manage_project:test"],
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )

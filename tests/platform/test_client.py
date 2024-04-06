@@ -13,6 +13,7 @@ from commercetools.platform.client import Client
 def client_environment_settings(monkeypatch):
     monkeypatch.setenv("CTP_PROJECT_KEY", "project_key")
     monkeypatch.setenv("CTP_CLIENT_ID", "client_id")
+    monkeypatch.setenv("CTP_SCOPES", "manage_project:project_key")
     monkeypatch.setenv("CTP_CLIENT_SECRET", "client_secret")
     monkeypatch.setenv("CTP_CLIENT_SCOPES", "some_scope")
     monkeypatch.setenv("CTP_API_URL", "https://api.europe-west1.gcp.commercetools.com")
@@ -34,6 +35,7 @@ def test_auto_refresh(commercetools_api):
     client = Client(
         client_id="unittest",
         client_secret="mysecret",
+        scope=["manage_project:test"],
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     ).with_project_key("unittest")
@@ -64,7 +66,7 @@ def test_cache_token(commercetools_api):
     Client(
         client_id="unittest",
         client_secret="none",
-        project_key="test",
+        scope=["manage_project:test"],
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     )
@@ -81,7 +83,7 @@ def test_allows_passing_custom_http_adapter():
     Client(
         client_id="unittest",
         client_secret="none",
-        project_key="test",
+        scope=["manage_project:test"],
         url="https://api.europe-west1.gcp.commercetools.com",
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
         http_adapter=my_adapter,

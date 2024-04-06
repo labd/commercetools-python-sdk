@@ -20,7 +20,7 @@ def test_http_server(ct_platform_client, commercetools_http_server):
     client = Client(
         client_id="client-id",
         client_secret="client-secret",
-        scope=[],
+        scope=["manage_project:test"],
         url=commercetools_http_server.api_url,
         token_url=f"{commercetools_http_server.api_url}/oauth/token",
     )
@@ -55,7 +55,7 @@ def test_http_server_expanding(ct_platform_client: Client, commercetools_http_se
     client = Client(
         client_id="client-id",
         client_secret="client-secret",
-        scope=[],
+        scope=["manage_project:test"],
         url=commercetools_http_server.api_url,
         token_url=f"{commercetools_http_server.api_url}/oauth/token",
     )

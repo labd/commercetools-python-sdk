@@ -9,6 +9,7 @@ from .categories import *  # noqa
 from .common import *  # noqa
 from .customers import *  # noqa
 from .customfields import *  # noqa
+from .discount_codes import *  # noqa
 from .errors import *  # noqa
 from .importcontainers import *  # noqa
 from .importoperations import *  # noqa

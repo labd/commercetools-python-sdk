@@ -16,6 +16,7 @@ from ... import models
 from ..project import (
     BusinessUnitConfigurationStatus,
     OrderSearchStatus,
+    ProductSearchIndexingMode,
     SearchIndexingConfigurationStatus,
 )
 from ..shipping_method import ShippingRateTierType
@@ -267,6 +268,14 @@ class SearchIndexingConfigurationSchema(helpers.BaseSchema):
         unknown=marshmallow.EXCLUDE,
         metadata={"omit_empty": True},
         load_default=None,
+    )
+    products_search = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".SearchIndexingConfigurationValuesSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="productsSearch",
     )
     orders = helpers.LazyNestedField(
         nested=helpers.absmod(__name__, ".SearchIndexingConfigurationValuesSchema"),
@@ -539,6 +548,13 @@ class ProjectChangeOrderSearchStatusActionSchema(ProjectUpdateActionSchema):
 
 class ProjectChangeProductSearchIndexingEnabledActionSchema(ProjectUpdateActionSchema):
     enabled = marshmallow.fields.Boolean(allow_none=True, load_default=None)
+    mode = marshmallow_enum.EnumField(
+        ProductSearchIndexingMode,
+        by_value=True,
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

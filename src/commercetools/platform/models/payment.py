@@ -74,9 +74,9 @@ __all__ = [
 
 
 class Payment(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Payment.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Payment.
     created_by: typing.Optional["CreatedBy"]
     #: Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
     customer: typing.Optional["CustomerReference"]

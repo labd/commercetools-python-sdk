@@ -103,9 +103,9 @@ class Customer(BaseResource):
     customer_number: typing.Optional[str]
     #: Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
     external_id: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Customer.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Customer.
     created_by: typing.Optional["CreatedBy"]
     #: Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
     #: It is the mandatory unique identifier of a Customer.

@@ -62,9 +62,9 @@ __all__ = [
 class QuoteRequest(BaseResource):
     #: User-defined unique identifier of the QuoteRequest.
     key: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the QuoteRequest.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the QuoteRequest.
     created_by: typing.Optional["CreatedBy"]
     #: Indicates the current state of the Quote Request in the negotiation process.
     quote_request_state: "QuoteRequestState"

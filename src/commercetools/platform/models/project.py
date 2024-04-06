@@ -31,6 +31,8 @@ __all__ = [
     "CartsConfiguration",
     "ExternalOAuth",
     "OrderSearchStatus",
+    "ProductSearchIndexingMode",
+    "ProductSearchStatus",
     "Project",
     "ProjectChangeBusinessUnitStatusOnCreationAction",
     "ProjectChangeCartsConfigurationAction",
@@ -165,6 +167,18 @@ class ExternalOAuth(_BaseType):
 
 class OrderSearchStatus(enum.Enum):
     """Specifies the status of the [Order Search](/../api/projects/order-search) index."""
+
+    ACTIVATED = "Activated"
+    DEACTIVATED = "Deactivated"
+
+
+class ProductSearchIndexingMode(enum.Enum):
+    PRODUCT_PROJECTIONS_SEARCH = "ProductProjectionsSearch"
+    PRODUCTS_SEARCH = "ProductsSearch"
+
+
+class ProductSearchStatus(enum.Enum):
+    """Specifies the status of the [Product Search](/../api/projects/product-search) index."""
 
     ACTIVATED = "Activated"
     DEACTIVATED = "Deactivated"
@@ -370,6 +384,8 @@ class SearchIndexingConfiguration(_BaseType):
 
     #: Configuration for the [Product Projection Search](/../api/projects/products-search) and [Product Suggestions](/../api/projects/products-suggestions) endpoints.
     products: typing.Optional["SearchIndexingConfigurationValues"]
+    #: Configuration for the [Product Search](/../api/projects/product-search) feature.
+    products_search: typing.Optional["SearchIndexingConfigurationValues"]
     #: Configuration for the [Order Search](/../api/projects/order-search) feature.
     orders: typing.Optional["SearchIndexingConfigurationValues"]
 
@@ -377,9 +393,11 @@ class SearchIndexingConfiguration(_BaseType):
         self,
         *,
         products: typing.Optional["SearchIndexingConfigurationValues"] = None,
+        products_search: typing.Optional["SearchIndexingConfigurationValues"] = None,
         orders: typing.Optional["SearchIndexingConfigurationValues"] = None
     ):
         self.products = products
+        self.products_search = products_search
         self.orders = orders
 
         super().__init__()
@@ -411,7 +429,7 @@ class SearchIndexingConfigurationValues(_BaseType):
     status: typing.Optional["SearchIndexingConfigurationStatus"]
     #: Date and time (UTC) the Project was last updated. Only present on Projects last modified after 1 February 2019.
     last_modified_at: typing.Optional[datetime.datetime]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the SearchIndexingConfigurationValues.
     last_modified_by: typing.Optional["LastModifiedBy"]
 
     def __init__(
@@ -810,9 +828,17 @@ class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
     #: - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
     #: - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
     enabled: bool
+    #: Controls whether the action should apply to [Product Projection Search](/../api/projects/products-search) or to [Product Search](/../api/projects/product-search).
+    mode: typing.Optional["ProductSearchIndexingMode"]
 
-    def __init__(self, *, enabled: bool):
+    def __init__(
+        self,
+        *,
+        enabled: bool,
+        mode: typing.Optional["ProductSearchIndexingMode"] = None
+    ):
         self.enabled = enabled
+        self.mode = mode
 
         super().__init__(action="changeProductSearchIndexingEnabled")
 

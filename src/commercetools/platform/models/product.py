@@ -311,9 +311,9 @@ class Product(BaseResource):
 
     """
 
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Product.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Product.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Product.
     #:
@@ -496,6 +496,8 @@ class ProductDraft(_BaseType):
     #: It must match the pattern `[a-zA-Z0-9_\\-]{2,256}`.
     slug: "LocalizedString"
     #: User-defined unique identifier for the Product.
+    #:
+    #: To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
     key: typing.Optional[str]
     #: Description of the Product.
     description: typing.Optional["LocalizedString"]
@@ -2873,6 +2875,8 @@ class ProductSetImageLabelAction(ProductUpdateAction):
 
 class ProductSetKeyAction(ProductUpdateAction):
     #: Value to set. If empty, any existing value will be removed.
+    #:
+    #: To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
     key: typing.Optional[str]
 
     def __init__(self, *, key: typing.Optional[str] = None):

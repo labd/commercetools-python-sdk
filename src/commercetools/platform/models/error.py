@@ -108,6 +108,7 @@ __all__ = [
     "GraphQLInvalidSubjectError",
     "GraphQLInvalidTokenError",
     "GraphQLLanguageUsedInStoresError",
+    "GraphQLLockedFieldError",
     "GraphQLMatchingPriceNotFoundError",
     "GraphQLMaxCartDiscountsReachedError",
     "GraphQLMaxResourceLimitExceededError",
@@ -152,6 +153,7 @@ __all__ = [
     "InvalidSubjectError",
     "InvalidTokenError",
     "LanguageUsedInStoresError",
+    "LockedFieldError",
     "MatchingPriceNotFoundError",
     "MaxCartDiscountsReachedError",
     "MaxResourceLimitExceededError",
@@ -401,6 +403,10 @@ class ErrorObject(_BaseType):
             from ._schemas.error import LanguageUsedInStoresErrorSchema
 
             return LanguageUsedInStoresErrorSchema().load(data)
+        if data["code"] == "LockedField":
+            from ._schemas.error import LockedFieldErrorSchema
+
+            return LockedFieldErrorSchema().load(data)
         if data["code"] == "MatchingPriceNotFound":
             from ._schemas.error import MatchingPriceNotFoundErrorSchema
 
@@ -1995,6 +2001,33 @@ class LanguageUsedInStoresError(ErrorObject):
         return LanguageUsedInStoresErrorSchema().dump(self)
 
 
+class LockedFieldError(ErrorObject):
+    """Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
+
+    To confirm if the operation was successful, repeat the request.
+
+    """
+
+    #: Field that is currently locked.
+    field: str
+
+    def __init__(self, *, message: str, field: str, **kwargs):
+        self.field = field
+        kwargs.pop("code", None)
+        super().__init__(message=message, code="LockedField", **kwargs)
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "LockedFieldError":
+        from ._schemas.error import LockedFieldErrorSchema
+
+        return LockedFieldErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import LockedFieldErrorSchema
+
+        return LockedFieldErrorSchema().dump(self)
+
+
 class MatchingPriceNotFoundError(ErrorObject):
     """Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
 
@@ -3216,6 +3249,10 @@ class GraphQLErrorObject(_BaseType):
             from ._schemas.error import GraphQLLanguageUsedInStoresErrorSchema
 
             return GraphQLLanguageUsedInStoresErrorSchema().load(data)
+        if data["code"] == "LockedField":
+            from ._schemas.error import GraphQLLockedFieldErrorSchema
+
+            return GraphQLLockedFieldErrorSchema().load(data)
         if data["code"] == "MatchingPriceNotFound":
             from ._schemas.error import GraphQLMatchingPriceNotFoundErrorSchema
 
@@ -4683,6 +4720,35 @@ class GraphQLLanguageUsedInStoresError(GraphQLErrorObject):
         from ._schemas.error import GraphQLLanguageUsedInStoresErrorSchema
 
         return GraphQLLanguageUsedInStoresErrorSchema().dump(self)
+
+
+class GraphQLLockedFieldError(GraphQLErrorObject):
+    """Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
+
+    To confirm if the operation was successful, repeat the request.
+
+    """
+
+    #: Field that is currently locked.
+    field: str
+
+    def __init__(self, *, field: str, **kwargs):
+        self.field = field
+        kwargs.pop("code", None)
+        super().__init__(code="LockedField", **kwargs)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "GraphQLLockedFieldError":
+        from ._schemas.error import GraphQLLockedFieldErrorSchema
+
+        return GraphQLLockedFieldErrorSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.error import GraphQLLockedFieldErrorSchema
+
+        return GraphQLLockedFieldErrorSchema().dump(self)
 
 
 class GraphQLMatchingPriceNotFoundError(GraphQLErrorObject):

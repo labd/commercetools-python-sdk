@@ -9,6 +9,9 @@ import warnings
 
 from ...models.error import ErrorResponse
 from ...models.product import Product, ProductDraft, ProductPagedQueryResponse
+from ..search.by_project_key_products_search_request_builder import (
+    ByProjectKeyProductsSearchRequestBuilder,
+)
 from .by_project_key_products_by_id_request_builder import (
     ByProjectKeyProductsByIDRequestBuilder,
 )
@@ -43,6 +46,13 @@ class ByProjectKeyProductsRequestBuilder:
     def with_id(self, id: str) -> ByProjectKeyProductsByIDRequestBuilder:
         return ByProjectKeyProductsByIDRequestBuilder(
             id=id,
+            project_key=self._project_key,
+            client=self._client,
+        )
+
+    def search(self) -> ByProjectKeyProductsSearchRequestBuilder:
+        """This endpoint provides high-performance search queries over Products. Product Search allows searching through all products with a current projection in your Project."""
+        return ByProjectKeyProductsSearchRequestBuilder(
             project_key=self._project_key,
             client=self._client,
         )

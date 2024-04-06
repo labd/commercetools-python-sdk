@@ -48,9 +48,9 @@ __all__ = [
 
 
 class AssociateRole(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the AssociateRole.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the AssociateRole.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the AssociateRole.
     key: str

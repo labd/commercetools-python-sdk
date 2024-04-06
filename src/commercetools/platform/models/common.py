@@ -25,6 +25,8 @@ __all__ = [
     "AssetDimensions",
     "AssetDraft",
     "AssetSource",
+    "Attribution",
+    "AttributionSource",
     "BaseAddress",
     "BaseResource",
     "CentPrecisionMoney",
@@ -305,6 +307,39 @@ class AssetSource(_BaseType):
         from ._schemas.common import AssetSourceSchema
 
         return AssetSourceSchema().dump(self)
+
+
+class Attribution(_BaseType):
+    """Indicates the source and method that indirectly created or modified the resource. This is present on resources created or updated after 1 April 2024."""
+
+    #: `id` of the [API Client](ctp:api:type:ApiClient) that created or modified the resource.
+    client_id: typing.Optional[str]
+    #: Method used to initiate the creation or modification of the resource.
+    source: "AttributionSource"
+
+    def __init__(
+        self, *, client_id: typing.Optional[str] = None, source: "AttributionSource"
+    ):
+        self.client_id = client_id
+        self.source = source
+
+        super().__init__()
+
+    @classmethod
+    def deserialize(cls, data: typing.Dict[str, typing.Any]) -> "Attribution":
+        from ._schemas.common import AttributionSchema
+
+        return AttributionSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.common import AttributionSchema
+
+        return AttributionSchema().dump(self)
+
+
+class AttributionSource(enum.Enum):
+    IMPORT = "Import"
+    EXPORT = "Export"
 
 
 class BaseAddress(_BaseType):
@@ -676,7 +711,10 @@ class ClientLogging(_BaseType):
 
 
 class CreatedBy(ClientLogging):
-    """Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked)."""
+    """IDs and references that created the resource. This is present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked)."""
+
+    #: Indicates if the resource was created indirectly.
+    attributed_to: typing.Optional["Attribution"]
 
     def __init__(
         self,
@@ -685,8 +723,10 @@ class CreatedBy(ClientLogging):
         external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
-        associate: typing.Optional["CustomerReference"] = None
+        associate: typing.Optional["CustomerReference"] = None,
+        attributed_to: typing.Optional["Attribution"] = None
     ):
+        self.attributed_to = attributed_to
 
         super().__init__(
             client_id=client_id,
@@ -893,7 +933,10 @@ class KeyReference(_BaseType):
 
 
 class LastModifiedBy(ClientLogging):
-    """Present on resources modified after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked)."""
+    """IDs and references that last modified the resource. This is present on resources created or updated after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked)."""
+
+    #: Indicates if the resource was modified indirectly.
+    attributed_to: typing.Optional["Attribution"]
 
     def __init__(
         self,
@@ -902,8 +945,10 @@ class LastModifiedBy(ClientLogging):
         external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
-        associate: typing.Optional["CustomerReference"] = None
+        associate: typing.Optional["CustomerReference"] = None,
+        attributed_to: typing.Optional["Attribution"] = None
     ):
+        self.attributed_to = attributed_to
 
         super().__init__(
             client_id=client_id,

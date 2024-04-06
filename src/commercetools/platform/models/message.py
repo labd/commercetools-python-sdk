@@ -614,9 +614,9 @@ class ContainerAndKey(_BaseType):
 class Message(BaseResource):
     """Base representation of a Message containing common fields to all [Message Types](/../api/projects/messages#message-types)."""
 
-    #: Value of `createdBy`.
+    #: IDs and references that last modified the Message.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Message.
     created_by: typing.Optional["CreatedBy"]
     #: Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
     #: `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.

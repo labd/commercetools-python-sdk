@@ -1013,6 +1013,7 @@ class ErrorResponseSchema(helpers.BaseSchema):
                 "LanguageUsedInStores": helpers.absmod(
                     __name__, ".LanguageUsedInStoresErrorSchema"
                 ),
+                "LockedField": helpers.absmod(__name__, ".LockedFieldErrorSchema"),
                 "MatchingPriceNotFound": helpers.absmod(
                     __name__, ".MatchingPriceNotFoundErrorSchema"
                 ),
@@ -1672,6 +1673,29 @@ class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.LanguageUsedInStoresError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class LockedFieldErrorSchema(ErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.LockedFieldError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):
@@ -3961,6 +3985,29 @@ class GraphQLLanguageUsedInStoresErrorSchema(GraphQLErrorObjectSchema):
         field = typing.cast(helpers.RegexField, self.fields["_regex"])
         data = field.post_load(data, original_data)
         return models.GraphQLLanguageUsedInStoresError(**data)
+
+    @marshmallow.post_dump(pass_original=True)
+    def post_dump(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.post_dump(data, original_data)
+
+
+class GraphQLLockedFieldErrorSchema(GraphQLErrorObjectSchema):
+    field = marshmallow.fields.String(allow_none=True, load_default=None)
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.pre_load
+    def pre_load(self, data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        return field.pre_load(self, data)
+
+    @marshmallow.post_load(pass_original=True)
+    def post_load(self, data, original_data, **kwargs):
+        field = typing.cast(helpers.RegexField, self.fields["_regex"])
+        data = field.post_load(data, original_data)
+        return models.GraphQLLockedFieldError(**data)
 
     @marshmallow.post_dump(pass_original=True)
     def post_dump(self, data, original_data, **kwargs):

@@ -1425,9 +1425,9 @@ class Order(BaseResource):
     #: User-defined date and time (UTC) of the Order.
     #: Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
     completed_at: typing.Optional[datetime.datetime]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Order.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Order.
     created_by: typing.Optional["CreatedBy"]
 
     def __init__(

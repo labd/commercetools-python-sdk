@@ -122,9 +122,9 @@ class ProductSelectionSettingDraft(_BaseType):
 
 
 class Store(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Store.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Store.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique and immutable identifier for the Store.
     key: str

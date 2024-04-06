@@ -16,6 +16,7 @@ if typing.TYPE_CHECKING:
     from .categories import CategoryImport
     from .common import ImportResourceType
     from .customers import CustomerImport
+    from .discount_codes import DiscountCodeImport
     from .importoperations import ImportOperationStatus
     from .inventories import InventoryImport
     from .order_patches import OrderPatchImport
@@ -31,6 +32,7 @@ if typing.TYPE_CHECKING:
 __all__ = [
     "CategoryImportRequest",
     "CustomerImportRequest",
+    "DiscountCodeImportRequest",
     "ImportRequest",
     "ImportResponse",
     "InventoryImportRequest",
@@ -112,6 +114,10 @@ class ImportRequest(_BaseType):
             from ._schemas.importrequests import TypeImportRequestSchema
 
             return TypeImportRequestSchema().load(data)
+        if data["type"] == "discount-code":
+            from ._schemas.importrequests import DiscountCodeImportRequestSchema
+
+            return DiscountCodeImportRequestSchema().load(data)
 
     def serialize(self) -> typing.Dict[str, typing.Any]:
         from ._schemas.importrequests import ImportRequestSchema
@@ -455,3 +461,28 @@ class TypeImportRequest(ImportRequest):
         from ._schemas.importrequests import TypeImportRequestSchema
 
         return TypeImportRequestSchema().dump(self)
+
+
+class DiscountCodeImportRequest(ImportRequest):
+    """The request body to [import Discount Codes](#import-discount-codes). Contains data for [Discount Codes](/../api/projects/discountCodes#discountcode) to be created or updated in a Project."""
+
+    #: The Discount Code import resources of this request.
+    resources: typing.List["DiscountCodeImport"]
+
+    def __init__(self, *, resources: typing.List["DiscountCodeImport"]):
+        self.resources = resources
+
+        super().__init__(type=ImportResourceType.DISCOUNT_CODE)
+
+    @classmethod
+    def deserialize(
+        cls, data: typing.Dict[str, typing.Any]
+    ) -> "DiscountCodeImportRequest":
+        from ._schemas.importrequests import DiscountCodeImportRequestSchema
+
+        return DiscountCodeImportRequestSchema().load(data)
+
+    def serialize(self) -> typing.Dict[str, typing.Any]:
+        from ._schemas.importrequests import DiscountCodeImportRequestSchema
+
+        return DiscountCodeImportRequestSchema().dump(self)

@@ -35,9 +35,9 @@ __all__ = [
 
 
 class ApprovalFlow(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+    #: IDs and references that created the ApprovalFlow.
     created_by: typing.Optional["CreatedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+    #: IDs and references that last modified the ApprovalFlow.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: [Order](ctp:api:type:Order) that needs to be approved.
     order: "OrderReference"

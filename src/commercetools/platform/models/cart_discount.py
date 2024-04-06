@@ -83,9 +83,9 @@ __all__ = [
 
 
 class CartDiscount(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the CartDiscount.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the CartDiscount.
     created_by: typing.Optional["CreatedBy"]
     #: Name of the CartDiscount.
     name: "LocalizedString"
@@ -802,6 +802,8 @@ class CartDiscountValueFixedDraft(CartDiscountValueDraft):
 
 class CartDiscountValueGiftLineItem(CartDiscountValue):
     #: Reference to a Product.
+    #:
+    #: A Gift Line Item can be present on a Cart even if the referenced Product is unpublished.
     product: "ProductReference"
     #: [ProductVariant](ctp:api:type:ProductVariant) of the Product.
     variant_id: int
@@ -846,6 +848,8 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
     """
 
     #: ResourceIdentifier of a Product.
+    #:
+    #: A Gift Line Item is added to a Cart even if the referenced Product is unpublished.
     product: "ProductResourceIdentifier"
     #: [ProductVariant](ctp:api:type:ProductVariant) of the Product.
     variant_id: int

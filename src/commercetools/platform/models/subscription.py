@@ -948,9 +948,9 @@ class SqsDestination(Destination):
 
 
 class Subscription(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Subscription.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Subscription.
     created_by: typing.Optional["CreatedBy"]
     #: Change notifications subscribed to.
     changes: typing.List["ChangeSubscription"]
@@ -1053,12 +1053,13 @@ class SubscriptionDraft(_BaseType):
 
 
 class SubscriptionHealthStatus(enum.Enum):
-    """The health status of the Subscription that indicates whether messages are being delivered to the Destination."""
+    """The health status of the Subscription that indicates whether messages are being delivered."""
 
     HEALTHY = "Healthy"
     CONFIGURATION_ERROR = "ConfigurationError"
     CONFIGURATION_ERROR_DELIVERY_STOPPED = "ConfigurationErrorDeliveryStopped"
     TEMPORARY_ERROR = "TemporaryError"
+    MANUALLY_SUSPENDED = "ManuallySuspended"
 
 
 class SubscriptionPagedQueryResponse(_BaseType):

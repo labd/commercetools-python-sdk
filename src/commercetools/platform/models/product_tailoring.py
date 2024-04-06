@@ -41,9 +41,9 @@ __all__ = [
 class ProductTailoring(BaseResource):
     """A single ProductTailoring representation contains the _current_ and the _staged_ representation of its product data tailored per Store."""
 
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the ProductTailoring.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the ProductTailoring.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the ProductTailoring.
     key: typing.Optional[str]

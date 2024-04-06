@@ -89,9 +89,9 @@ class ShoppingList(BaseResource):
     store: typing.Optional["StoreKeyReference"]
     #: Custom Fields defined for the ShoppingList.
     custom: typing.Optional["CustomFields"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the ShoppingList.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the ShoppingList.
     created_by: typing.Optional["CreatedBy"]
 
     def __init__(

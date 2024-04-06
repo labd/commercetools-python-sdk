@@ -949,6 +949,9 @@ class OrderEditPreviewFailureSchema(OrderEditResultSchema):
                 "LanguageUsedInStores": helpers.absmod(
                     __name__, ".error.LanguageUsedInStoresErrorSchema"
                 ),
+                "LockedField": helpers.absmod(
+                    __name__, ".error.LockedFieldErrorSchema"
+                ),
                 "MatchingPriceNotFound": helpers.absmod(
                     __name__, ".error.MatchingPriceNotFoundErrorSchema"
                 ),

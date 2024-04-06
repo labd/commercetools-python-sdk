@@ -991,6 +991,7 @@ class ImportResourceType(enum.Enum):
     PRODUCT_VARIANT_PATCH = "product-variant-patch"
     STANDALONE_PRICE = "standalone-price"
     TYPE = "type"
+    DISCOUNT_CODE = "discount-code"
 
 
 class ReferenceType(enum.Enum):

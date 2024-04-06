@@ -37,9 +37,9 @@ __all__ = [
 
 
 class CustomerGroup(BaseResource):
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the CustomerGroup.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the CustomerGroup.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier for the CustomerGroup.
     key: typing.Optional[str]

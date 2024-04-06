@@ -48,9 +48,9 @@ __all__ = [
 
 
 class ApprovalRule(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+    #: IDs and references that created the ApprovalRule.
     created_by: typing.Optional["CreatedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+    #: IDs and references that last modified the ApprovalRule.
     last_modified_by: typing.Optional["LastModifiedBy"]
     #: User-defined unique identifier of the Approval Rule. Must be unique within a [Business Unit](ctp:api:type:BusinessUnit).
     key: typing.Optional[str]

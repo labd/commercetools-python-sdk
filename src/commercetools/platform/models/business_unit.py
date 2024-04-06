@@ -232,9 +232,9 @@ class AssociateRoleInheritanceMode(enum.Enum):
 class BusinessUnit(BaseResource):
     """Generic type to model the fields that all types of Business Units have in common."""
 
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the BusinessUnit.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the BusinessUnit.
     created_by: typing.Optional["CreatedBy"]
     #: User-defined unique identifier of the Business Unit.
     key: str

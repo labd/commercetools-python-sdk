@@ -13,7 +13,7 @@ import marshmallow_enum
 from commercetools import helpers
 
 from ... import models
-from ..common import MoneyType, ReferenceTypeId
+from ..common import AttributionSource, MoneyType, ReferenceTypeId
 
 
 # Fields
@@ -213,6 +213,26 @@ class AssetSourceSchema(helpers.BaseSchema):
     def post_load(self, data, **kwargs):
 
         return models.AssetSource(**data)
+
+
+class AttributionSchema(helpers.BaseSchema):
+    client_id = marshmallow.fields.String(
+        allow_none=True,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="clientId",
+    )
+    source = marshmallow_enum.EnumField(
+        AttributionSource, by_value=True, allow_none=True, load_default=None
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+
+        return models.Attribution(**data)
 
 
 class BaseAddressSchema(helpers.BaseSchema):
@@ -425,6 +445,14 @@ class ClientLoggingSchema(helpers.BaseSchema):
 
 
 class CreatedBySchema(ClientLoggingSchema):
+    attributed_to = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".AttributionSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="attributedTo",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -568,6 +596,14 @@ class KeyReferenceSchema(helpers.BaseSchema):
 
 
 class LastModifiedBySchema(ClientLoggingSchema):
+    attributed_to = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".AttributionSchema"),
+        allow_none=True,
+        unknown=marshmallow.EXCLUDE,
+        metadata={"omit_empty": True},
+        load_default=None,
+        data_key="attributedTo",
+    )
 
     class Meta:
         unknown = marshmallow.EXCLUDE

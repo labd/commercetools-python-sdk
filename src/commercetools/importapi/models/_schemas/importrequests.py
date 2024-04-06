@@ -288,3 +288,21 @@ class TypeImportRequestSchema(ImportRequestSchema):
     def post_load(self, data, **kwargs):
         del data["type"]
         return models.TypeImportRequest(**data)
+
+
+class DiscountCodeImportRequestSchema(ImportRequestSchema):
+    resources = helpers.LazyNestedField(
+        nested=helpers.absmod(__name__, ".discount_codes.DiscountCodeImportSchema"),
+        allow_none=True,
+        many=True,
+        unknown=marshmallow.EXCLUDE,
+        load_default=None,
+    )
+
+    class Meta:
+        unknown = marshmallow.EXCLUDE
+
+    @marshmallow.post_load
+    def post_load(self, data, **kwargs):
+        del data["type"]
+        return models.DiscountCodeImportRequest(**data)

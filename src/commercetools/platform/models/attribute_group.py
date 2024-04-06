@@ -34,9 +34,9 @@ __all__ = [
 
 
 class AttributeGroup(BaseResource):
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the AttributeGroup.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the AttributeGroup.
     created_by: typing.Optional["CreatedBy"]
     #: Name of the AttributeGroup.
     name: "LocalizedString"

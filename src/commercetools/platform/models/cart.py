@@ -284,9 +284,9 @@ class Cart(BaseResource):
     custom: typing.Optional["CustomFields"]
     #: Number of days after which an active Cart is deleted since its last modification. Configured in [Project settings](ctp:api:type:CartsConfiguration).
     delete_days_after_last_modification: typing.Optional[int]
-    #: Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Cart.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Cart.
     created_by: typing.Optional["CreatedBy"]
 
     def __init__(
@@ -1948,7 +1948,7 @@ class LineItemDraft(_BaseType):
     external_price: typing.Optional["Money"]
     #: Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
-    #: Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    #: Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Single` [ShippingMode](ctp:api:type:ShippingMode).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
     per_method_external_tax_rate: typing.Optional[
@@ -2014,7 +2014,7 @@ class LineItemDraft(_BaseType):
 
 
 class LineItemMode(enum.Enum):
-    """Indicates how a Line Item is added to a Cart."""
+    """Indicates how a Line Item was added to a Cart."""
 
     STANDARD = "Standard"
     GIFT_LINE_ITEM = "GiftLineItem"
@@ -2946,7 +2946,7 @@ class CartAddLineItemAction(CartUpdateAction):
     external_price: typing.Optional["Money"]
     #: Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
     external_total_price: typing.Optional["ExternalLineItemTotalPrice"]
-    #: External Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+    #: External Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Single` [ShippingMode](ctp:api:type:ShippingMode).
     external_tax_rate: typing.Optional["ExternalTaxRateDraft"]
     #: Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
     per_method_external_tax_rate: typing.Optional[

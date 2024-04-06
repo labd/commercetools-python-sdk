@@ -165,6 +165,9 @@ class GraphQLErrorSchema(helpers.BaseSchema):
             "LanguageUsedInStores": helpers.absmod(
                 __name__, ".error.GraphQLLanguageUsedInStoresErrorSchema"
             ),
+            "LockedField": helpers.absmod(
+                __name__, ".error.GraphQLLockedFieldErrorSchema"
+            ),
             "MatchingPriceNotFound": helpers.absmod(
                 __name__, ".error.GraphQLMatchingPriceNotFoundErrorSchema"
             ),

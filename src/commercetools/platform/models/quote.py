@@ -63,9 +63,9 @@ __all__ = [
 class Quote(BaseResource):
     #: User-defined unique identifier of the Quote.
     key: typing.Optional[str]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that last modified the Quote.
     last_modified_by: typing.Optional["LastModifiedBy"]
-    #: Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+    #: IDs and references that created the Quote.
     created_by: typing.Optional["CreatedBy"]
     #: Quote Request related to the Quote.
     quote_request: "QuoteRequestReference"

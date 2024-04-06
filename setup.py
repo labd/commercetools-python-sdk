@@ -25,15 +25,15 @@ tests_require = [
     "mock==4.0.3",
     "pretend==1.0.9",
     "coverage[toml]>=6.2",
-    "pytest-cov==3.0.0",
-    "pytest==7.0.1",
+    "pytest-cov==5.0.0",
+    "pytest==8.1.1",
     # Linting
     "isort==5.10.1",
     "flake8==4.0.1",
     "flake8-blind-except==0.2.0",
     "flake8-debugger==4.0.0",
     "flake8-imports==0.1.1",
-    "mypy==0.931",
+    "mypy==1.9.0",
 ]
 
 
@@ -44,7 +44,7 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="2024.3.15",
+    version="2024.4.6",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",
@@ -68,7 +68,8 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     zip_safe=False,

@@ -1,8 +1,13 @@
-24.3.15
---------
+24.4.6
+------
 - Regenerate code with latest RAML specifications, bringing the SDK up to date
   again with new features released by commercetools.
 - Remove ML client as sunsetted
+- *BREAKING*: the SDK now returns `None` instead of raising an exception when
+  a resource is not found.
+- *BREAKING*: the `scope` parameter in the `Client` class is now required.
+- *BREAKING*: the old `commercetools.services.*` is removed, use the
+- `commercetools.platform.*` instead. See release notes for `14.0.0`
 
 23.6.29
 --------

@@ -52,9 +52,9 @@ jobs:
     - name: Prepare artifacts
       run: mkdir .coverage-data && mv .coverage.* .coverage-data/
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
-        name: coverage-data
+        name: coverage-data-${{ matrix.python-version }}
         path: .coverage-data/
 
   coverage:
@@ -62,10 +62,11 @@ jobs:
     needs: [test]
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
-        name: coverage-data
         path: .
+        pattern: coverage-data-*
+        merge-multiple: true
 
     - name: Set up Python 3.12
       uses: actions/setup-python@v5

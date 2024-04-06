@@ -81,7 +81,7 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            raise self._client._create_exception(None, response)
+            return None
         warnings.warn("Unhandled status code %d" % response.status_code)
 
     def head(
@@ -135,5 +135,5 @@ class ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder:
             obj = ErrorResponse.deserialize(response.json())
             raise self._client._create_exception(obj, response)
         elif response.status_code == 404:
-            raise self._client._create_exception(None, response)
+            return None
         warnings.warn("Unhandled status code %d" % response.status_code)

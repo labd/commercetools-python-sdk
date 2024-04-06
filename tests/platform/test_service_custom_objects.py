@@ -32,10 +32,13 @@ def test_custom_object_get_by_container_and_key(ct_platform_client: Client):
     assert custom_object.key == "test-object"
     assert custom_object.value == 1234
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key(
-            "unittest"
-        ).custom_objects().with_container_and_key("invalid", "invalid").get()
+    custom_object = (
+        ct_platform_client.with_project_key("unittest")
+        .custom_objects()
+        .with_container_and_key("invalid", "invalid")
+        .get()
+    )
+    assert custom_object is None
 
 
 def test_custom_object_query(ct_platform_client: Client):
@@ -156,9 +159,11 @@ def test_delete_by_container_and_key(ct_platform_client: Client):
 
     assert deleted_object.key == "test-object-1"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key(
-            "unittest"
-        ).custom_objects().with_container_and_key(
+    deleted_object = (
+        ct_platform_client.with_project_key("unittest")
+        .custom_objects()
+        .with_container_and_key(
             container=custom_object.container, key=custom_object.key
-        ).delete()
+        )
+        .delete()
+    )

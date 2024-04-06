@@ -30,10 +30,13 @@ def test_category_with_id_get(ct_platform_client: Client):
     assert category.id
     assert category.key == "test-category"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").categories().with_id(
-            "invalid"
-        ).get()
+    category = (
+        ct_platform_client.with_project_key("unittest")
+        .categories()
+        .with_id("invalid")
+        .get()
+    )
+    assert category is None
 
 
 def test_category_get_by_key(ct_platform_client: Client):
@@ -61,10 +64,13 @@ def test_category_get_by_key(ct_platform_client: Client):
     assert category.id
     assert category.key == "test-category"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").categories().with_key(
-            "invalid"
-        ).get()
+    category = (
+        ct_platform_client.with_project_key("unittest")
+        .categories()
+        .with_key("invalid")
+        .get()
+    )
+    assert category is None
 
 
 def test_category_query(ct_platform_client: Client):

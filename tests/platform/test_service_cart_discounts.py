@@ -18,7 +18,7 @@ def test_cart_discount_with_id(ct_platform_client: Client):
                 value=models.CartDiscountValueRelative(permyriad=10),
                 cart_predicate="",
                 sort_order="",
-                requires_discount_code=False
+                requires_discount_code=False,
             )
         )
     )
@@ -33,13 +33,13 @@ def test_cart_discount_with_id(ct_platform_client: Client):
     )
     assert cart_discount.id
 
-    with pytest.raises(HTTPError):
-        (
-            ct_platform_client.with_project_key("unittest")
-            .cart_discounts()
-            .with_id("invalid")
-            .get()
-        )
+    cart_discount = (
+        ct_platform_client.with_project_key("unittest")
+        .cart_discounts()
+        .with_id("invalid")
+        .get()
+    )
+    assert cart_discount is None
 
 
 def test_cart_discount_query(ct_platform_client: Client):

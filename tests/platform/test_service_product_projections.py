@@ -35,10 +35,13 @@ def test_product_projections_with_id_get(ct_platform_client: Client):
 
 
 def test_product_projections_get_by_id_not_found(ct_platform_client: Client):
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").products().with_id(
-            "invalid"
-        ).get()
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .with_id("invalid")
+        .get()
+    )
+    assert product is None
 
 
 def test_product_projections_get_by_key(ct_platform_client: Client):
@@ -83,10 +86,13 @@ def test_product_projections_query_parameters_are_passed(
 
 
 def test_product_projections_get_by_key_not_found(ct_platform_client: Client):
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").products().with_id(
-            "invalid"
-        ).get()
+    product = (
+        ct_platform_client.with_project_key("unittest")
+        .products()
+        .with_id("invalid")
+        .get()
+    )
+    assert product is None
 
 
 def test_product_projections_query(ct_platform_client: Client):

@@ -34,10 +34,13 @@ def test_shipping_method_with_id_get(ct_platform_client: Client):
     assert shipping_method.id
     assert shipping_method.key == "test-shipping-method"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").shipping_methods().with_id(
-            "invalid"
-        ).get()
+    shipping_method = (
+        ct_platform_client.with_project_key("unittest")
+        .shipping_methods()
+        .with_id("invalid")
+        .get()
+    )
+    assert shipping_method is None
 
 
 def test_shipping_method_query(ct_platform_client: Client):

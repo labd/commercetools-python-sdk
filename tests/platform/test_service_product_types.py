@@ -28,10 +28,13 @@ def test_product_types_with_id_get(ct_platform_client: Client):
     assert product_type.id
     assert product_type.key == "test-product-type"
 
-    with pytest.raises(HTTPError) as e:
-        ct_platform_client.with_project_key("unittest").product_types().with_id(
-            "invalid"
-        ).get()
+    product_type = (
+        ct_platform_client.with_project_key("unittest")
+        .product_types()
+        .with_id("invalid")
+        .get()
+    )
+    assert product_type is None
 
 
 def test_product_types_get_by_key(ct_platform_client: Client):
@@ -57,10 +60,13 @@ def test_product_types_get_by_key(ct_platform_client: Client):
     assert product_type.id
     assert product_type.key == "test-product-type"
 
-    with pytest.raises(HTTPError) as e:
-        ct_platform_client.with_project_key("unittest").product_types().with_id(
-            "invalid"
-        ).get()
+    product_type = (
+        ct_platform_client.with_project_key("unittest")
+        .product_types()
+        .with_id("invalid")
+        .get()
+    )
+    assert product_type is None
 
 
 def test_product_type_query(ct_platform_client: Client):

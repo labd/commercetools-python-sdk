@@ -35,10 +35,13 @@ def test_discount_code_with_id_get(ct_platform_client: Client):
     assert discount_code.id
     assert discount_code.code == "1337"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").discount_codes().with_id(
-            "invalid"
-        ).get()
+    discount_code = (
+        ct_platform_client.with_project_key("unittest")
+        .discount_codes()
+        .with_id("invalid")
+        .get()
+    )
+    assert discount_code is None
 
 
 def test_discount_code_query(ct_platform_client: Client):

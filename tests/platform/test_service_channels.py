@@ -28,10 +28,13 @@ def test_channel_with_id_get(ct_platform_client: Client):
     assert channel.id
     assert channel.key == "test-channel"
 
-    with pytest.raises(HTTPError):
-        ct_platform_client.with_project_key("unittest").channels().with_id(
-            "invalid"
-        ).get()
+    channel = (
+        ct_platform_client.with_project_key("unittest")
+        .channels()
+        .with_id("invalid")
+        .get()
+    )
+    assert channel is None
 
 
 def test_channel_query(ct_platform_client: Client):

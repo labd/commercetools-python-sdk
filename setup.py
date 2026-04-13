@@ -26,7 +26,7 @@ tests_require = [
     "pretend==1.0.9",
     "coverage[toml]>=6.2",
     "pytest-cov==5.0.0",
-    "pytest==8.1.1",
+    "pytest==9.0.3",
     # Linting
     "isort==5.10.1",
     "flake8==4.0.1",

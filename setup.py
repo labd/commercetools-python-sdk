@@ -7,7 +7,8 @@ install_requires = [
     "pytz",
     "requests-oauthlib>=1.0.0",
     "requests_mock>=1.8.0",
-    "marshmallow>=3.10.0",
+    # marshmallow 4 removed APIs the generated schemas use
+    "marshmallow>=3.10.0,<4",
     "marshmallow-enum>=1.5.1",
     "WebOb>=1.8.0",
     "Werkzeug>=0.15.2",
@@ -21,12 +22,12 @@ docs_require = [
 ]
 
 tests_require = [
-    "freezegun==1.2.0",
+    "freezegun==1.5.5",
     "mock==4.0.3",
     "pretend==1.0.9",
     "coverage[toml]>=6.2",
-    "pytest-cov==5.0.0",
-    "pytest==8.1.1",
+    "pytest-cov==7.1.0",
+    "pytest==9.0.3",
     # Linting
     "isort==5.10.1",
     "flake8==4.0.1",
@@ -44,12 +45,13 @@ with open("README.rst") as fh:
 
 setup(
     name="commercetools",
-    version="2024.4.6",
+    version="2026.10.12",
     description="SDK for Commercetools",
     long_description=long_description,
     author="Lab Digital B.V.",
     author_email="opensource@labdigital.nl",
     url="https://github.com/labd/commercetools-python-sdk",
+    python_requires=">=3.10",
     install_requires=install_requires,
     tests_require=tests_require,
     extras_require={
@@ -65,11 +67,11 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
     zip_safe=False,

@@ -221,8 +221,10 @@ class Infix(Symbol):
                     func=ast.Name(id="filter_field", ctx=ast.Load()),
                     args=[
                         ast.Name(id="obj", ctx=ast.Load()),
-                        ast.List(elts=[ast.Str(s=i) for i in path], ctx=ast.Load()),
-                        ast.Str(s=self.value),
+                        ast.List(
+                            elts=[ast.Constant(value=i) for i in path], ctx=ast.Load()
+                        ),
+                        ast.Constant(value=self.value),
                         rhs,
                     ],
                     keywords=[],
@@ -321,11 +323,11 @@ class LiteralToken(Symbol):
 
     def ast(self, context: "Context"):
         if self.value.isdigit():
-            return ast.Num(n=int(self.value))
+            return ast.Constant(value=int(self.value))
         if self.value in ["true", "false"]:
-            return ast.NameConstant(self.parse_bool(self.value))
+            return ast.Constant(self.parse_bool(self.value))
         else:
-            return ast.Str(s=self.value[1:-1])
+            return ast.Constant(value=self.value[1:-1])
 
     def parse_bool(self, value) -> bool:
         return value == "true"
@@ -370,7 +372,7 @@ class FunctionCall(Symbol):
 
     def ast(self, context: "Context"):
         node = self.first.ast(context)
-        node.elts.insert(0, ast.Str(s=self.value))
+        node.elts.insert(0, ast.Constant(value=self.value))
         return node
 
 

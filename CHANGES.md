@@ -1,5 +1,13 @@
-24.4.6
-------
+26.10.12
+--------
+- Require Python 3.10 or newer; tested on 3.10–3.14.
+- Pin marshmallow below 4. A fresh install with marshmallow 4 failed to import
+  (`cannot import name 'RAISE' from 'marshmallow.utils'`).
+- Fix the testing predicates on Python 3.14 (`ast.Str`/`ast.Num` were removed).
+- Publish an SBOM (SPDX and CycloneDX) with each GitHub release.
+
+Changes below were prepared as 24.4.6 but never released:
+
 - Regenerate code with latest RAML specifications, bringing the SDK up to date
   again with new features released by commercetools.
 - Remove ML client as sunsetted

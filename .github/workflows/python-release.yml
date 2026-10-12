@@ -4,24 +4,125 @@ on:
   release:
     types: [created]
 
+permissions: {}
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # attach the SBOM to the GitHub release
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.12
-      uses: actions/setup-python@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
-        python-version: "3.12"
+        persist-credentials: false
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: "3.13"
 
     - name: Install build requirements
-      run: python -m pip install wheel
+      run: python -m pip install uv
 
     - name: Build package
-      run: python setup.py sdist bdist_wheel
+      run: uv build
+
+    - name: Read package version
+      id: version
+      run: |
+        set -euo pipefail
+        version=$(python - <<'PY'
+        import glob, zipfile
+        whl = glob.glob("dist/*.whl")[0]
+        with zipfile.ZipFile(whl) as z:
+            meta = next(n for n in z.namelist() if n.endswith(".dist-info/METADATA"))
+            for line in z.read(meta).decode().splitlines():
+                if line.startswith("Version: "):
+                    print(line.split(": ", 1)[1])
+                    break
+        PY
+        )
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+    # Install the built wheel into a clean env: the package plus the runtime
+    # dependencies users get today. Installing a wheel runs no repo code.
+    - name: Install runtime environment
+      run: |
+        uv venv .sbom-venv
+        uv pip install --python .sbom-venv dist/*.whl
+
+    - uses: anchore/sbom-action/download-syft@66cbf4bc1f1c0d2edc94016e65bc221b6bb0ad6c # v0.24.3
+      id: syft
+
+    # Scan site-packages only; the venv's bin links to the interpreter outside it.
+    # SPDX for the release page, CycloneDX 1.6 for DependencyTrack.
+    - name: Generate SBOM
+      env:
+        SYFT: ${{ steps.syft.outputs.cmd }}
+        SYFT_FILE_METADATA_SELECTION: none
+        VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        set -euo pipefail
+        "$SYFT" dir:.sbom-venv/lib \
+          --source-name commercetools \
+          --source-version "${VERSION}" \
+          -o spdx-json=commercetools.spdx.json \
+          -o cyclonedx-json@1.6=commercetools.raw.cdx.json
+        # The package's own entry points at the local wheel (file://); drop it.
+        jq '.components |= map(if .externalReferences then .externalReferences |= map(select(.url | startswith("file://") | not)) else . end)' \
+          commercetools.raw.cdx.json > commercetools.cdx.json
 
     - name: Publish package
-      uses: pypa/gh-action-pypi-publish@v1.8.14
+      uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
       with:
         user: __token__
         password: ${{ secrets.pypi_password }}
+
+    - name: Attach SBOM to release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ github.event.release.tag_name }}
+      run: gh release upload "${TAG}" commercetools.spdx.json commercetools.cdx.json --clobber
+
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: sbom-cyclonedx
+        path: commercetools.cdx.json
+        retention-days: 7
+
+  # Separate job so the DT key is never present while repo code runs (the build
+  # above executes setup.py).
+  dependencytrack:
+    needs: release
+    if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+    - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+      with:
+        name: sbom-cyclonedx
+
+    # Each release becomes a version under the "oss/python/commercetools"
+    # library container (OSS > OSS Python), which rolls up the latest version.
+    - name: Upload SBOM to DependencyTrack
+      env:
+        DT_API_KEY: ${{ secrets.DEPENDENCYTRACK_OSS_APIKEY }}
+        DT_URL: https://dependencytrack-api.labdigital.nl:8443
+        PROJECT: oss/python/commercetools
+        VERSION: ${{ needs.release.outputs.version }}
+      run: |
+        set -euo pipefail
+        if [ -z "${DT_API_KEY}" ]; then
+          echo "::error::DEPENDENCYTRACK_OSS_APIKEY is not available to this repo"
+          exit 1
+        fi
+        curl -sS --fail-with-body -X POST "${DT_URL}/api/v1/bom" \
+          -H "X-Api-Key: ${DT_API_KEY}" \
+          -F "autoCreate=true" \
+          -F "projectName=${PROJECT}" \
+          -F "projectVersion=${VERSION}" \
+          -F "parentName=${PROJECT}" \
+          -F "isLatest=true" \
+          -F "bom=@commercetools.cdx.json"

@@ -440,7 +440,7 @@ class ProductsBackend(ServiceBackend):
             ("^(?P<id>[^/]+)$", "GET", self.get_by_id),
             ("^(?P<id>[^/]+)$", "POST", self.update_by_id),
             ("^(?P<id>[^/]+)$", "DELETE", self.delete_by_id),
-            ("^(?P<id>[^/]+)\/images$", "POST", self.upload_image),
+            ("^(?P<id>[^/]+)/images$", "POST", self.upload_image),
         ]
 
     # Fixme: use decorator for this

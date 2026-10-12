@@ -1,13 +1,18 @@
-24.4.6
-------
-- Regenerate code with latest RAML specifications, bringing the SDK up to date
-  again with new features released by commercetools.
-- Remove ML client as sunsetted
+26.10.12
+--------
 - *BREAKING*: the SDK now returns `None` instead of raising an exception when
   a resource is not found.
 - *BREAKING*: the `scope` parameter in the `Client` class is now required.
-- *BREAKING*: the old `commercetools.services.*` is removed, use the
-- `commercetools.platform.*` instead. See release notes for `14.0.0`
+- *BREAKING*: the old `commercetools.services.*` is removed, use
+  `commercetools.platform.*` instead. See release notes for `14.0.0`.
+- *BREAKING*: requires Python 3.10 or newer; tested on 3.10–3.14.
+- Pin marshmallow below 4. A fresh install with marshmallow 4 failed to import
+  (`cannot import name 'RAISE' from 'marshmallow.utils'`).
+- Regenerate code with latest RAML specifications, bringing the SDK up to date
+  again with new features released by commercetools.
+- Remove ML client as sunsetted.
+- Fix the testing predicates on Python 3.14 (`ast.Str`/`ast.Num` were removed).
+- Publish an SBOM (SPDX and CycloneDX) with each GitHub release.
 
 23.6.29
 --------

@@ -40,7 +40,8 @@ def test_auto_refresh(commercetools_api):
         token_url="https://auth.europe-west1.gcp.commercetools.com/oauth/token",
     ).with_project_key("unittest")
     client.products().get()
-    time.sleep(1)
+    # Margin past the 1s expiry; exactly 1s made this test flaky
+    time.sleep(1.5)
     client.products().get()
     client.products().get()
 

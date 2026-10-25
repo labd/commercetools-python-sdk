@@ -10,8 +10,8 @@ generate:
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/frontend-api/api.raml -o src/commercetools/frontend/ -t PYTHON_CLIENT
 	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/checkout/api.raml -o src/commercetools/checkout/ -t PYTHON_CLIENT
 	find src/ -name "gen.properties" -delete
-	isort src/commercetools/
-	black src/commercetools/
+	ruff check --fix --select I src/commercetools/
+	ruff format src/commercetools/
 
 test:
 	pytest tests/
@@ -26,8 +26,12 @@ runserver:
 	python -mcommercetools.testing.server
 
 format:
-	isort src tests
-	black src/ tests/
+	ruff check --fix src tests
+	ruff format src tests
+
+lint:
+	ruff format --check src tests
+	ruff check src tests
 
 release:
 	pip install twine wheel

@@ -29,11 +29,7 @@ tests_require = [
     "pytest-cov==7.1.0",
     "pytest==9.0.3",
     # Linting
-    "isort==5.10.1",
-    "flake8==4.0.1",
-    "flake8-blind-except==0.2.0",
-    "flake8-debugger==4.0.0",
-    "flake8-imports==0.1.1",
+    "ruff==0.17.2",
     "mypy==1.9.0",
 ]
 

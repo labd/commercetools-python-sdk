@@ -194,5 +194,5 @@ def test_deserialize():
     assert result.action == models.ExtensionAction.CREATE
     assert result.resource.type_id == models.ReferenceTypeId.ORDER
 
-    serialized = models.ExtensionInput.serialize(result)
+    models.ExtensionInput.serialize(result)
     # assert serialized == data

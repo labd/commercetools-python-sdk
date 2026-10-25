@@ -1,5 +1,4 @@
 import importlib
-import inspect
 import typing
 
 from marshmallow import Schema, class_registry, fields, missing, post_dump
@@ -11,8 +10,6 @@ from marshmallow.exceptions import (
 from marshmallow.fields import Field, Nested
 from marshmallow.utils import RAISE, is_collection
 from marshmallow.utils import missing as missing_
-
-from commercetools.exceptions import CommercetoolsError
 
 
 def absmod(source, target):

@@ -11,7 +11,7 @@ def test_get_with_id(ct_platform_client: Client):
                 master_variant=models.ProductVariantDraft(sku="123"),
                 publish=True,
                 name=models.LocalizedString(nl="Test product"),
-                slug=models.LocalizedString(en=f"my-product"),
+                slug=models.LocalizedString(en="my-product"),
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             )
         )

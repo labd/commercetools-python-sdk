@@ -1,4 +1,3 @@
-import copy
 import datetime
 import typing
 import uuid
@@ -11,7 +10,7 @@ from commercetools.platform.models._schemas.extension import (
     ExtensionUpdateSchema,
 )
 from commercetools.testing.abstract import BaseModel, ServiceBackend
-from commercetools.testing.utils import update_attribute, update_nested_object_attribute
+from commercetools.testing.utils import update_nested_object_attribute
 
 
 class ExtensionsModel(BaseModel):

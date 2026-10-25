@@ -435,7 +435,7 @@ class PredicateFilter:
     def match(self, obj):
         try:
             return eval(self._code, {}, {"obj": obj, "filter_field": self.filter_field})
-        except TypeError as exc:
+        except TypeError:
             return False
 
     def _get_schema_fields(self, schema):

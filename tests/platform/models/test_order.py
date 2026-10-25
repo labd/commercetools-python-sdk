@@ -2,7 +2,7 @@ from commercetools.platform.models import order
 
 
 def test_deserialize_order_paged_query_response():
-    response = order.OrderPagedQueryResponse.deserialize(
+    order.OrderPagedQueryResponse.deserialize(
         {
             "limit": 20,
             "offset": 0,

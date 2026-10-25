@@ -1,6 +1,5 @@
 from commercetools.platform import models
 from commercetools.platform.client import Client
-from commercetools.platform.models._schemas.review import ReviewDraftSchema
 
 
 def test_create_review(ct_platform_client: Client):

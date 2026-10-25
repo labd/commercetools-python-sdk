@@ -1,6 +1,3 @@
-import pytest
-from requests.exceptions import HTTPError
-
 from commercetools.platform import models
 from commercetools.platform.client import Client
 
@@ -74,7 +71,7 @@ def test_category_get_by_key(ct_platform_client: Client):
 
 
 def test_category_query(ct_platform_client: Client):
-    category = (
+    (
         ct_platform_client.with_project_key("unittest")
         .categories()
         .post(
@@ -85,7 +82,7 @@ def test_category_query(ct_platform_client: Client):
             )
         )
     )
-    category = (
+    (
         ct_platform_client.with_project_key("unittest")
         .categories()
         .post(

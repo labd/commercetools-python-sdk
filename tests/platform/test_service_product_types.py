@@ -1,6 +1,3 @@
-import pytest
-from requests.exceptions import HTTPError
-
 from commercetools.platform import models
 from commercetools.platform.client import Client
 

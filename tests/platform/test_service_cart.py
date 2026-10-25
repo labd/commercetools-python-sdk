@@ -19,8 +19,8 @@ def cart_draft(ct_platform_client: Client):
         models.ProductDraft(
             key="product-1",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product-1"),
-            slug=models.LocalizedString(en=f"my-product-1"),
+            name=models.LocalizedString(en="my-product-1"),
+            slug=models.LocalizedString(en="my-product-1"),
             publish=True,
         )
     )
@@ -28,8 +28,8 @@ def cart_draft(ct_platform_client: Client):
         models.ProductDraft(
             key="product-2",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product-2"),
-            slug=models.LocalizedString(en=f"my-product-2"),
+            name=models.LocalizedString(en="my-product-2"),
+            slug=models.LocalizedString(en="my-product-2"),
             publish=True,
         )
     )

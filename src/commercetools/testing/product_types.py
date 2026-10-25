@@ -6,7 +6,6 @@ import uuid
 from commercetools.platform import models
 from commercetools.platform.models._schemas.product_type import (
     AttributeDefinitionSchema,
-    ProductTypeChangeAttributeConstraintActionSchema,
     ProductTypeDraftSchema,
     ProductTypePagedQueryResponseSchema,
     ProductTypeSchema,

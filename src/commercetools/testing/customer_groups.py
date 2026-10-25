@@ -9,7 +9,6 @@ from commercetools.platform.models._schemas.customer_group import (
     CustomerGroupSchema,
     CustomerGroupUpdateSchema,
 )
-from commercetools.platform.models._schemas.review import ReviewUpdateSchema
 from commercetools.testing import abstract, utils
 from commercetools.testing.utils import update_attribute
 

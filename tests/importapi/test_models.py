@@ -33,7 +33,7 @@ def test_serialization_optional_values():
     assert expected == data_cycle
 
 
-def test_serialization_optional_values():
+def test_serialization_custom_fields():
     now = datetime.datetime(2021, 1, 30, 11, 21, 8)
     custom = models.Custom(
         type=models.TypeKeyReference(key="my-custom-type"),

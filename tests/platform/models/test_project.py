@@ -25,7 +25,7 @@ def test_serialize_deserialize():
         "version": 9,
     }
     result = project.Project.deserialize(data)
-    serialized = project.Project.serialize(result)
+    project.Project.serialize(result)
 
     # TODO: Ideally the serialized data is exactly the same as the original input
     # This is true except for the date (got 2018-10-24T08:58:22.935000+00:00 instead of Z)

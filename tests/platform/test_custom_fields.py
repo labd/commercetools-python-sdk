@@ -1,5 +1,4 @@
 from commercetools.platform import models
-from commercetools.platform.models._schemas.type import CustomFieldsDraftSchema
 
 
 def test_serialize_field_container():

@@ -1,8 +1,6 @@
 import uuid
 
-import pytest
 import requests_mock
-from requests.exceptions import HTTPError
 
 from commercetools.platform import models
 from commercetools.platform.client import Client
@@ -33,8 +31,8 @@ def test_products_create(ct_platform_client: Client):
     draft = models.ProductDraft(
         key="test-product",
         publish=True,
-        name=models.LocalizedString(en=f"my-product"),
-        slug=models.LocalizedString(en=f"my-product"),
+        name=models.LocalizedString(en="my-product"),
+        slug=models.LocalizedString(en="my-product"),
         product_type=models.ProductTypeResourceIdentifier(key="dummy"),
         master_variant=models.ProductVariantDraft(
             assets=[
@@ -138,19 +136,19 @@ def test_products_get_by_key(ct_platform_client: Client):
 def test_product_query(ct_platform_client: Client):
     ct_platform_client.with_project_key("unittest").products().post(
         models.ProductDraft(
-            key=f"product-1",
+            key="product-1",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product-1"),
-            slug=models.LocalizedString(en=f"my-product-1"),
+            name=models.LocalizedString(en="my-product-1"),
+            slug=models.LocalizedString(en="my-product-1"),
             publish=True,
         )
     )
     ct_platform_client.with_project_key("unittest").products().post(
         models.ProductDraft(
-            key=f"product-2",
+            key="product-2",
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-            name=models.LocalizedString(en=f"my-product-2"),
-            slug=models.LocalizedString(en=f"my-product-2"),
+            name=models.LocalizedString(en="my-product-2"),
+            slug=models.LocalizedString(en="my-product-2"),
             publish=True,
         )
     )
@@ -179,8 +177,8 @@ def test_product_query_where(ct_platform_client: Client):
     product_client.post(
         models.ProductDraft(
             key="test-product1",
-            name=models.LocalizedString(en=f"my-product-1"),
-            slug=models.LocalizedString(en=f"my-product-1"),
+            name=models.LocalizedString(en="my-product-1"),
+            slug=models.LocalizedString(en="my-product-1"),
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=models.ProductVariantDraft(
                 prices=[
@@ -197,8 +195,8 @@ def test_product_query_where(ct_platform_client: Client):
     product_client.post(
         models.ProductDraft(
             key="test-product-2",
-            name=models.LocalizedString(en=f"my-product-1"),
-            slug=models.LocalizedString(en=f"my-product-1"),
+            name=models.LocalizedString(en="my-product-1"),
+            slug=models.LocalizedString(en="my-product-1"),
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             master_variant=models.ProductVariantDraft(
                 prices=[
@@ -215,8 +213,8 @@ def test_product_query_where(ct_platform_client: Client):
     product_client.post(
         models.ProductDraft(
             key="test-product2",
-            name=models.LocalizedString(en=f"my-product-1"),
-            slug=models.LocalizedString(en=f"my-product-1"),
+            name=models.LocalizedString(en="my-product-1"),
+            slug=models.LocalizedString(en="my-product-1"),
             product_type=models.ProductTypeResourceIdentifier(key="dummy"),
         )
     )
@@ -252,8 +250,8 @@ def test_product_update(ct_platform_client: Client):
         .post(
             models.ProductDraft(
                 key="test-product",
-                name=models.LocalizedString(en=f"my-product-1"),
-                slug=models.LocalizedString(en=f"my-product-1"),
+                name=models.LocalizedString(en="my-product-1"),
+                slug=models.LocalizedString(en="my-product-1"),
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
                 master_variant=models.ProductVariantDraft(sku="1", key="1"),
             )
@@ -346,8 +344,8 @@ def test_product_update_add_change_price_staged(ct_platform_client: Client):
         .post(
             models.ProductDraft(
                 key="test-product",
-                name=models.LocalizedString(en=f"my-product-1"),
-                slug=models.LocalizedString(en=f"my-product-1"),
+                name=models.LocalizedString(en="my-product-1"),
+                slug=models.LocalizedString(en="my-product-1"),
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
                 master_variant=models.ProductVariantDraft(sku="1", key="1"),
             )
@@ -412,8 +410,8 @@ def test_product_update_add_price_current(ct_platform_client: Client):
         .post(
             models.ProductDraft(
                 key="test-product",
-                name=models.LocalizedString(en=f"my-product-1"),
-                slug=models.LocalizedString(en=f"my-product-1"),
+                name=models.LocalizedString(en="my-product-1"),
+                slug=models.LocalizedString(en="my-product-1"),
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
                 master_variant=models.ProductVariantDraft(sku="1", key="1"),
                 publish=True,
@@ -447,7 +445,7 @@ def test_product_update_add_price_current(ct_platform_client: Client):
 
 def test_predicate_var(ct_platform_client: Client):
     with requests_mock.Mocker(real_http=True, case_sensitive=True) as m:
-        result = (
+        (
             ct_platform_client.with_project_key("unittest")
             .products()
             .get(

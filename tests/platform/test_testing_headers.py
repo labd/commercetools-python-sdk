@@ -12,8 +12,8 @@ def test_correlation_id_is_set_in_exception(ct_platform_client: Client):
         .post(
             models.ProductDraft(
                 key="test-product",
-                name=models.LocalizedString(en=f"my-product"),
-                slug=models.LocalizedString(en=f"my-product"),
+                name=models.LocalizedString(en="my-product"),
+                slug=models.LocalizedString(en="my-product"),
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
             )
         )

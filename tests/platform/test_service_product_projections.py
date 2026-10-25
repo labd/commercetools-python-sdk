@@ -1,6 +1,3 @@
-import pytest
-from requests.exceptions import HTTPError
-
 from commercetools.platform import models
 from commercetools.platform.client import Client
 
@@ -14,8 +11,8 @@ def test_product_projections_with_id_get(ct_platform_client: Client):
             models.ProductDraft(
                 key="test-product",
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-                name=models.LocalizedString(en=f"my-product"),
-                slug=models.LocalizedString(en=f"my-product"),
+                name=models.LocalizedString(en="my-product"),
+                slug=models.LocalizedString(en="my-product"),
                 master_variant=variant,
                 variants=[variant],
                 publish=False,
@@ -53,8 +50,8 @@ def test_product_projections_get_by_key(ct_platform_client: Client):
             models.ProductDraft(
                 key="test-product",
                 product_type=models.ProductTypeResourceIdentifier(key="dummy"),
-                name=models.LocalizedString(en=f"my-product"),
-                slug=models.LocalizedString(en=f"my-product"),
+                name=models.LocalizedString(en="my-product"),
+                slug=models.LocalizedString(en="my-product"),
                 master_variant=variant,
                 variants=[variant],
                 publish=False,
@@ -127,7 +124,7 @@ def test_product_projections_query(ct_platform_client: Client):
 
     # single sort query
     result = client.product_projections().get(
-        sort="id asc", where=[f'slug(nl-NL="product-3")'], expand=["parent.category"]
+        sort="id asc", where=['slug(nl-NL="product-3")'], expand=["parent.category"]
     )
     assert result
     assert len(result.results) == 2

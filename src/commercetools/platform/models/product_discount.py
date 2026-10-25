@@ -101,7 +101,7 @@ class ProductDiscount(BaseResource):
         is_active: bool,
         references: typing.List["Reference"],
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -169,7 +169,7 @@ class ProductDiscountDraft(_BaseType):
         sort_order: str,
         is_active: bool,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.name = name
         self.key = key
@@ -255,7 +255,7 @@ class ProductDiscountPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ProductDiscount"]
+        results: typing.List["ProductDiscount"],
     ):
         self.limit = limit
         self.offset = offset
@@ -856,7 +856,7 @@ class ProductDiscountSetValidFromAndUntilAction(ProductDiscountUpdateAction):
         self,
         *,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until

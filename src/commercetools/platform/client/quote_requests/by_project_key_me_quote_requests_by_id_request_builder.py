@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeQuoteRequestsByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _id: str

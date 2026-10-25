@@ -58,7 +58,7 @@ class ResponseMessage(_BaseType):
         code: str,
         type: str,
         message: str,
-        payload: typing.Optional[object] = None
+        payload: typing.Optional[object] = None,
     ):
         self.code = code
         self.type = type

@@ -70,7 +70,7 @@ class OperationStates(_BaseType):
         wait_for_master_variant: int,
         imported: int,
         rejected: int,
-        canceled: int
+        canceled: int,
     ):
         self.processing = processing
         self.validation_failed = validation_failed

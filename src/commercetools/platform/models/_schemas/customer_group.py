@@ -126,7 +126,6 @@ class CustomerGroupReferenceSchema(ReferenceSchema):
 
 
 class CustomerGroupResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

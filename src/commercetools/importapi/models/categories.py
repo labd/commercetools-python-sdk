@@ -61,7 +61,7 @@ class CategoryImport(ImportResource):
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.name = name
         self.slug = slug

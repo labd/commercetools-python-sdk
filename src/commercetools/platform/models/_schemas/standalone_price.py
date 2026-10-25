@@ -308,7 +308,6 @@ class StandalonePriceReferenceSchema(ReferenceSchema):
 
 
 class StandalonePriceResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -412,7 +411,6 @@ class StandalonePriceAddPriceTierActionSchema(StandalonePriceUpdateActionSchema)
 
 
 class StandalonePriceApplyStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -469,7 +467,6 @@ class StandalonePriceRemovePriceTierActionSchema(StandalonePriceUpdateActionSche
 
 
 class StandalonePriceRemoveStagedChangesActionSchema(StandalonePriceUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

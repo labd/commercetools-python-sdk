@@ -84,7 +84,7 @@ class Zone(BaseResource):
         key: typing.Optional[str] = None,
         name: str,
         description: typing.Optional[str] = None,
-        locations: typing.List["Location"]
+        locations: typing.List["Location"],
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -128,7 +128,7 @@ class ZoneDraft(_BaseType):
         key: typing.Optional[str] = None,
         name: str,
         description: typing.Optional[str] = None,
-        locations: typing.Optional[typing.List["Location"]] = None
+        locations: typing.Optional[typing.List["Location"]] = None,
     ):
         self.key = key
         self.name = name
@@ -174,7 +174,7 @@ class ZonePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Zone"]
+        results: typing.List["Zone"],
     ):
         self.limit = limit
         self.offset = offset

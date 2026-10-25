@@ -143,7 +143,6 @@ class TaxCategoryReferenceSchema(ReferenceSchema):
 
 
 class TaxCategoryResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

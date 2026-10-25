@@ -405,7 +405,6 @@ class CartDiscountReferenceSchema(ReferenceSchema):
 
 
 class CartDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -452,7 +451,6 @@ class CartDiscountLineItemsTargetSchema(CartDiscountTargetSchema):
 
 
 class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -463,7 +461,6 @@ class CartDiscountShippingCostTargetSchema(CartDiscountTargetSchema):
 
 
 class CartDiscountTotalPriceTargetSchema(CartDiscountTargetSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

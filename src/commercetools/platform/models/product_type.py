@@ -117,7 +117,7 @@ class AttributeDefinition(_BaseType):
         attribute_constraint: "AttributeConstraintEnum",
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: "TextInputHint",
-        is_searchable: bool
+        is_searchable: bool,
     ):
         self.type = type
         self.name = name
@@ -181,7 +181,7 @@ class AttributeDefinitionDraft(_BaseType):
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional[bool] = None
+        is_searchable: typing.Optional[bool] = None,
     ):
         self.type = type
         self.name = name
@@ -375,7 +375,6 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="datetime")
@@ -393,7 +392,6 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="date")
@@ -480,7 +478,6 @@ class AttributeLocalizedEnumType(AttributeType):
 
 
 class AttributeMoneyType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="money")
@@ -521,7 +518,6 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="number")
@@ -604,7 +600,6 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="time")
@@ -647,7 +642,7 @@ class ProductType(BaseResource):
         key: typing.Optional[str] = None,
         name: str,
         description: str,
-        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
+        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -691,7 +686,7 @@ class ProductTypeDraft(_BaseType):
         key: typing.Optional[str] = None,
         name: str,
         description: str,
-        attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None
+        attributes: typing.Optional[typing.List["AttributeDefinitionDraft"]] = None,
     ):
         self.key = key
         self.name = name
@@ -737,7 +732,7 @@ class ProductTypePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ProductType"]
+        results: typing.List["ProductType"],
     ):
         self.limit = limit
         self.offset = offset
@@ -1545,7 +1540,7 @@ class ProductTypeSetInputTipAction(ProductTypeUpdateAction):
         self,
         *,
         attribute_name: str,
-        input_tip: typing.Optional["LocalizedString"] = None
+        input_tip: typing.Optional["LocalizedString"] = None,
     ):
         self.attribute_name = attribute_name
         self.input_tip = input_tip

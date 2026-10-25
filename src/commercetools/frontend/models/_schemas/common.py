@@ -54,7 +54,6 @@ class DataSourceResponseSchema(helpers.BaseSchema):
 
 
 class DataSourcesSchema(helpers.BaseSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

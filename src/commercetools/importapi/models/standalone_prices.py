@@ -62,7 +62,7 @@ class StandalonePriceImport(ImportResource):
         valid_until: typing.Optional[datetime.datetime] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.sku = sku
         self.value = value

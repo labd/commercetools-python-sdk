@@ -494,7 +494,7 @@ class FieldDefinition(_BaseType):
         name: str,
         label: "LocalizedString",
         required: bool,
-        input_hint: typing.Optional["TypeTextInputHint"] = None
+        input_hint: typing.Optional["TypeTextInputHint"] = None,
     ):
         self.type = type
         self.name = name
@@ -535,7 +535,7 @@ class TypeImport(ImportResource):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         resource_type_ids: typing.List["ResourceTypeId"],
-        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None
+        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ):
         self.name = name
         self.description = description

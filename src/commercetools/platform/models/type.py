@@ -175,7 +175,7 @@ class CustomFieldsDraft(_BaseType):
         self,
         *,
         type: "TypeResourceIdentifier",
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -225,7 +225,7 @@ class FieldDefinition(_BaseType):
         name: str,
         label: "LocalizedString",
         required: bool,
-        input_hint: typing.Optional["TypeTextInputHint"] = None
+        input_hint: typing.Optional["TypeTextInputHint"] = None,
     ):
         self.type = type
         self.name = name
@@ -632,7 +632,7 @@ class Type(BaseResource):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         resource_type_ids: typing.List["ResourceTypeId"],
-        field_definitions: typing.List["FieldDefinition"]
+        field_definitions: typing.List["FieldDefinition"],
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -680,7 +680,7 @@ class TypeDraft(_BaseType):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         resource_type_ids: typing.List["ResourceTypeId"],
-        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None
+        field_definitions: typing.Optional[typing.List["FieldDefinition"]] = None,
     ):
         self.key = key
         self.name = name
@@ -727,7 +727,7 @@ class TypePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Type"]
+        results: typing.List["Type"],
     ):
         self.limit = limit
         self.offset = offset

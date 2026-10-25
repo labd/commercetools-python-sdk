@@ -1301,7 +1301,6 @@ class OrderReferenceSchema(ReferenceSchema):
 
 
 class OrderSearchQuerySchema(helpers.BaseSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1312,7 +1311,6 @@ class OrderSearchQuerySchema(helpers.BaseSchema):
 
 
 class OrderSearchCompoundExpressionSchema(OrderSearchQuerySchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1398,7 +1396,6 @@ class OrderSearchOrExpressionSchema(OrderSearchCompoundExpressionSchema):
 
 
 class OrderSearchQueryExpressionSchema(OrderSearchQuerySchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

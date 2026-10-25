@@ -106,7 +106,6 @@ class CustomTokenizerSchema(SuggestTokenizerSchema):
 
 
 class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

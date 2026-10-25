@@ -45,7 +45,7 @@ class SearchKeyword(_BaseType):
         self,
         *,
         text: str,
-        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None
+        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ):
         self.text = text
         self.suggest_tokenizer = suggest_tokenizer
@@ -112,7 +112,6 @@ class CustomTokenizer(SuggestTokenizer):
 
 
 class WhitespaceTokenizer(SuggestTokenizer):
-
     def __init__(self):
 
         super().__init__(type="whitespace")
@@ -224,7 +223,7 @@ class ProductImport(ImportResource):
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateKeyReference"] = None,
         publish: typing.Optional[bool] = None,
-        price_mode: typing.Optional["ProductPriceModeEnum"] = None
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None,
     ):
         self.name = name
         self.product_type = product_type

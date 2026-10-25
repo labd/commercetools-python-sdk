@@ -70,7 +70,7 @@ class ErrorResponse(_BaseType):
         message: str,
         error: typing.Optional[str] = None,
         error_description: typing.Optional[str] = None,
-        errors: typing.Optional[typing.List["ErrorObject"]] = None
+        errors: typing.Optional[typing.List["ErrorObject"]] = None,
     ):
         self.status_code = status_code
         self.message = message
@@ -321,7 +321,7 @@ class DuplicateFieldError(ErrorObject):
         *,
         message: str,
         field: typing.Optional[str] = None,
-        duplicate_value: typing.Optional[typing.Any] = None
+        duplicate_value: typing.Optional[typing.Any] = None,
     ):
         self.field = field
         self.duplicate_value = duplicate_value
@@ -378,7 +378,7 @@ class VariantValues(_BaseType):
         *,
         sku: typing.Optional[str] = None,
         prices: typing.List["PriceImport"],
-        attributes: typing.List["Attribute"]
+        attributes: typing.List["Attribute"],
     ):
         self.sku = sku
         self.prices = prices
@@ -399,7 +399,6 @@ class VariantValues(_BaseType):
 
 
 class InsufficientScopeError(ErrorObject):
-
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="insufficient_scope")
@@ -419,7 +418,6 @@ class InsufficientScopeError(ErrorObject):
 
 
 class InvalidCredentialsError(ErrorObject):
-
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="InvalidCredentials")
@@ -439,7 +437,6 @@ class InvalidCredentialsError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="invalid_token")
@@ -477,7 +474,7 @@ class InvalidFieldError(ErrorObject):
         field: str,
         invalid_value: typing.Any,
         allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
-        resource_index: typing.Optional[int] = None
+        resource_index: typing.Optional[int] = None,
     ):
         self.field = field
         self.invalid_value = invalid_value
@@ -657,7 +654,7 @@ class InvalidStateTransitionError(ErrorObject):
         *,
         message: str,
         current_state: "ProcessingState",
-        new_state: "ProcessingState"
+        new_state: "ProcessingState",
     ):
         self.current_state = current_state
         self.new_state = new_state
@@ -698,7 +695,7 @@ class ConcurrentModificationError(ErrorObject):
         message: str,
         specified_version: typing.Optional[int] = None,
         current_version: int,
-        conflicted_resource: typing.Optional[typing.Any] = None
+        conflicted_resource: typing.Optional[typing.Any] = None,
     ):
         self.specified_version = specified_version
         self.current_version = current_version
@@ -721,7 +718,6 @@ class ConcurrentModificationError(ErrorObject):
 
 
 class ContentionError(ErrorObject):
-
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="Contention")
@@ -739,7 +735,6 @@ class ContentionError(ErrorObject):
 
 
 class GenericError(ErrorObject):
-
     def __init__(self, *, message: str):
 
         super().__init__(message=message, code="Generic")

@@ -108,7 +108,6 @@ class AssociateRoleDraftSchema(helpers.BaseSchema):
 
 
 class AssociateRoleKeyReferenceSchema(KeyReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -161,7 +160,6 @@ class AssociateRoleReferenceSchema(ReferenceSchema):
 
 
 class AssociateRoleResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

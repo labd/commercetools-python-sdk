@@ -73,7 +73,7 @@ class BusinessUnitConfiguration(_BaseType):
         my_business_unit_status_on_creation: "BusinessUnitConfigurationStatus",
         my_business_unit_associate_role_on_creation: typing.Optional[
             "AssociateRoleKeyReference"
-        ] = None
+        ] = None,
     ):
         self.my_business_unit_status_on_creation = my_business_unit_status_on_creation
         self.my_business_unit_associate_role_on_creation = (
@@ -116,7 +116,7 @@ class CartsConfiguration(_BaseType):
         self,
         *,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        country_tax_rate_fallback_enabled: typing.Optional[bool] = None
+        country_tax_rate_fallback_enabled: typing.Optional[bool] = None,
     ):
         self.delete_days_after_last_modification = delete_days_after_last_modification
         self.country_tax_rate_fallback_enabled = country_tax_rate_fallback_enabled
@@ -233,7 +233,7 @@ class Project(_BaseType):
         shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
         external_o_auth: typing.Optional["ExternalOAuth"] = None,
         search_indexing: typing.Optional["SearchIndexingConfiguration"] = None,
-        business_units: typing.Optional["BusinessUnitConfiguration"] = None
+        business_units: typing.Optional["BusinessUnitConfiguration"] = None,
     ):
         self.version = version
         self.key = key
@@ -394,7 +394,7 @@ class SearchIndexingConfiguration(_BaseType):
         *,
         products: typing.Optional["SearchIndexingConfigurationValues"] = None,
         products_search: typing.Optional["SearchIndexingConfigurationValues"] = None,
-        orders: typing.Optional["SearchIndexingConfigurationValues"] = None
+        orders: typing.Optional["SearchIndexingConfigurationValues"] = None,
     ):
         self.products = products
         self.products_search = products_search
@@ -437,7 +437,7 @@ class SearchIndexingConfigurationValues(_BaseType):
         *,
         status: typing.Optional["SearchIndexingConfigurationStatus"] = None,
         last_modified_at: typing.Optional[datetime.datetime] = None,
-        last_modified_by: typing.Optional["LastModifiedBy"] = None
+        last_modified_by: typing.Optional["LastModifiedBy"] = None,
     ):
         self.status = status
         self.last_modified_at = last_modified_at
@@ -835,7 +835,7 @@ class ProjectChangeProductSearchIndexingEnabledAction(ProjectUpdateAction):
         self,
         *,
         enabled: bool,
-        mode: typing.Optional["ProductSearchIndexingMode"] = None
+        mode: typing.Optional["ProductSearchIndexingMode"] = None,
     ):
         self.enabled = enabled
         self.mode = mode
@@ -944,7 +944,7 @@ class ProjectSetShippingRateInputTypeAction(ProjectUpdateAction):
     def __init__(
         self,
         *,
-        shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None
+        shipping_rate_input_type: typing.Optional["ShippingRateInputType"] = None,
     ):
         self.shipping_rate_input_type = shipping_rate_input_type
 

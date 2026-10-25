@@ -27,7 +27,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductProjectionsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

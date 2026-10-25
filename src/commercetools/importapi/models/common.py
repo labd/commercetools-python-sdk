@@ -92,7 +92,7 @@ class Asset(_BaseType):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List["str"]] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.key = key
         self.sources = sources
@@ -156,7 +156,7 @@ class AssetSource(_BaseType):
         uri: str,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
-        content_type: typing.Optional[str] = None
+        content_type: typing.Optional[str] = None,
     ):
         self.uri = uri
         self.key = key
@@ -192,7 +192,7 @@ class Image(_BaseType):
         *,
         url: str,
         dimensions: "AssetDimensions",
-        label: typing.Optional[str] = None
+        label: typing.Optional[str] = None,
     ):
         self.url = url
         self.dimensions = dimensions
@@ -839,7 +839,7 @@ class TypedMoney(_BaseType):
         type: "MoneyType",
         fraction_digits: typing.Optional[int] = None,
         cent_amount: int,
-        currency_code: str
+        currency_code: str,
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -874,7 +874,7 @@ class HighPrecisionMoney(TypedMoney):
         fraction_digits: typing.Optional[int] = None,
         cent_amount: int,
         currency_code: str,
-        precise_amount: int
+        precise_amount: int,
     ):
         self.precise_amount = precise_amount
 
@@ -898,13 +898,12 @@ class HighPrecisionMoney(TypedMoney):
 
 
 class Money(TypedMoney):
-
     def __init__(
         self,
         *,
         fraction_digits: typing.Optional[int] = None,
         cent_amount: int,
-        currency_code: str
+        currency_code: str,
     ):
 
         super().__init__(
@@ -1089,7 +1088,7 @@ class Address(_BaseType):
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.id = id
         self.key = key

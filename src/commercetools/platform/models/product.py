@@ -185,7 +185,7 @@ class FacetRange(_BaseType):
         total: float,
         min: float,
         max: float,
-        mean: float
+        mean: float,
     ):
         self.from_ = from_
         self.from_str = from_str
@@ -255,7 +255,7 @@ class FacetTerm(_BaseType):
         *,
         term: typing.Any,
         count: int,
-        product_count: typing.Optional[int] = None
+        product_count: typing.Optional[int] = None,
     ):
         self.term = term
         self.count = count
@@ -347,7 +347,7 @@ class Product(BaseResource):
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
-        price_mode: typing.Optional["ProductPriceModeEnum"] = None
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -396,7 +396,7 @@ class ProductCatalogData(_BaseType):
         published: bool,
         current: "ProductData",
         staged: "ProductData",
-        has_staged_changes: bool
+        has_staged_changes: bool,
     ):
         self.published = published
         self.current = current
@@ -458,7 +458,7 @@ class ProductData(_BaseType):
         meta_keywords: typing.Optional["LocalizedString"] = None,
         master_variant: "ProductVariant",
         variants: typing.List["ProductVariant"],
-        search_keywords: "SearchKeywords"
+        search_keywords: "SearchKeywords",
     ):
         self.name = name
         self.categories = categories
@@ -545,7 +545,7 @@ class ProductDraft(_BaseType):
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
         publish: typing.Optional[bool] = None,
-        price_mode: typing.Optional["ProductPriceModeEnum"] = None
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None,
     ):
         self.product_type = product_type
         self.name = name
@@ -604,7 +604,7 @@ class ProductPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Product"]
+        results: typing.List["Product"],
     ):
         self.limit = limit
         self.offset = offset
@@ -703,7 +703,7 @@ class ProductProjection(BaseResource):
         tax_category: typing.Optional["TaxCategoryReference"] = None,
         state: typing.Optional["StateReference"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
-        price_mode: typing.Optional["ProductPriceModeEnum"] = None
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None,
     ):
         self.key = key
         self.product_type = product_type
@@ -767,7 +767,7 @@ class ProductProjectionPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["ProductProjection"]
+        results: typing.List["ProductProjection"],
     ):
         self.limit = limit
         self.count = count
@@ -809,7 +809,7 @@ class ProductProjectionPagedSearchResponse(_BaseType):
         total: typing.Optional[int] = None,
         offset: int,
         results: typing.List["ProductProjection"],
-        facets: "FacetResults"
+        facets: "FacetResults",
     ):
         self.limit = limit
         self.count = count
@@ -1166,7 +1166,7 @@ class ProductVariant(_BaseType):
         availability: typing.Optional["ProductVariantAvailability"] = None,
         is_matching_variant: typing.Optional[bool] = None,
         scoped_price: typing.Optional["ScopedPrice"] = None,
-        scoped_price_discounted: typing.Optional[bool] = None
+        scoped_price_discounted: typing.Optional[bool] = None,
     ):
         self.id = id
         self.sku = sku
@@ -1219,7 +1219,7 @@ class ProductVariantAvailability(_BaseType):
         restockable_in_days: typing.Optional[int] = None,
         available_quantity: typing.Optional[int] = None,
         id: typing.Optional[str] = None,
-        version: typing.Optional[int] = None
+        version: typing.Optional[int] = None,
     ):
         self.channels = channels
         self.is_on_stock = is_on_stock
@@ -1263,7 +1263,7 @@ class ProductVariantChannelAvailability(_BaseType):
         restockable_in_days: typing.Optional[int] = None,
         available_quantity: typing.Optional[int] = None,
         id: str,
-        version: int
+        version: int,
     ):
         self.is_on_stock = is_on_stock
         self.restockable_in_days = restockable_in_days
@@ -1318,7 +1318,7 @@ class ProductVariantDraft(_BaseType):
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
-        assets: typing.Optional[typing.List["AssetDraft"]] = None
+        assets: typing.Optional[typing.List["AssetDraft"]] = None,
     ):
         self.sku = sku
         self.key = key
@@ -1371,7 +1371,7 @@ class SearchKeyword(_BaseType):
         self,
         *,
         text: str,
-        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None
+        suggest_tokenizer: typing.Optional["SuggestTokenizer"] = None,
     ):
         self.text = text
         self.suggest_tokenizer = suggest_tokenizer
@@ -1481,7 +1481,7 @@ class TermFacetResult(FacetResult):
         missing: int,
         total: int,
         other: int,
-        terms: typing.List["FacetTerm"]
+        terms: typing.List["FacetTerm"],
     ):
         self.data_type = data_type
         self.missing = missing
@@ -1552,7 +1552,7 @@ class ProductAddAssetAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset: "AssetDraft",
-        position: typing.Optional[int] = None
+        position: typing.Optional[int] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1592,7 +1592,7 @@ class ProductAddExternalImageAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         image: "Image",
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1636,7 +1636,7 @@ class ProductAddPriceAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         price: "PriceDraft",
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1672,7 +1672,7 @@ class ProductAddToCategoryAction(ProductUpdateAction):
         *,
         category: "CategoryResourceIdentifier",
         order_hint: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.category = category
         self.order_hint = order_hint
@@ -1719,7 +1719,7 @@ class ProductAddVariantAction(ProductUpdateAction):
         images: typing.Optional[typing.List["Image"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         staged: typing.Optional[bool] = None,
-        assets: typing.Optional[typing.List["AssetDraft"]] = None
+        assets: typing.Optional[typing.List["AssetDraft"]] = None,
     ):
         self.sku = sku
         self.key = key
@@ -1769,7 +1769,7 @@ class ProductChangeAssetNameAction(ProductUpdateAction):
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: "LocalizedString"
+        name: "LocalizedString",
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1812,7 +1812,7 @@ class ProductChangeAssetOrderAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
-        asset_order: typing.List["str"]
+        asset_order: typing.List["str"],
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1853,7 +1853,7 @@ class ProductChangeMasterVariantAction(ProductUpdateAction):
         *,
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -1916,7 +1916,7 @@ class ProductChangePriceAction(ProductUpdateAction):
         *,
         price_id: str,
         price: "PriceDraft",
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.price_id = price_id
         self.price = price
@@ -2013,7 +2013,7 @@ class ProductMoveImageToPositionAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         image_url: str,
         position: int,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2083,7 +2083,7 @@ class ProductRemoveAssetAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
-        asset_key: typing.Optional[str] = None
+        asset_key: typing.Optional[str] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2119,7 +2119,7 @@ class ProductRemoveFromCategoryAction(ProductUpdateAction):
         self,
         *,
         category: "CategoryResourceIdentifier",
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.category = category
         self.staged = staged
@@ -2158,7 +2158,7 @@ class ProductRemoveImageAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         image_url: str,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2205,7 +2205,7 @@ class ProductRemovePriceAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         variant_id: typing.Optional[int] = None,
         price: typing.Optional["PriceDraft"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.price_id = price_id
         self.sku = sku
@@ -2249,7 +2249,7 @@ class ProductRemoveVariantAction(ProductUpdateAction):
         *,
         id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.id = id
         self.sku = sku
@@ -2346,7 +2346,7 @@ class ProductSetAssetCustomFieldAction(ProductUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2400,7 +2400,7 @@ class ProductSetAssetCustomTypeAction(ProductUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2450,7 +2450,7 @@ class ProductSetAssetDescriptionAction(ProductUpdateAction):
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        description: typing.Optional["LocalizedString"] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2496,7 +2496,7 @@ class ProductSetAssetKeyAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         staged: typing.Optional[bool] = None,
         asset_id: str,
-        asset_key: typing.Optional[str] = None
+        asset_key: typing.Optional[str] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2544,7 +2544,7 @@ class ProductSetAssetSourcesAction(ProductUpdateAction):
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.List["AssetSource"]
+        sources: typing.List["AssetSource"],
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2593,7 +2593,7 @@ class ProductSetAssetTagsAction(ProductUpdateAction):
         staged: typing.Optional[bool] = None,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        tags: typing.Optional[typing.List["str"]] = None
+        tags: typing.Optional[typing.List["str"]] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2650,7 +2650,7 @@ class ProductSetAttributeAction(ProductUpdateAction):
         sku: typing.Optional[str] = None,
         name: str,
         value: typing.Optional[typing.Any] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -2702,7 +2702,7 @@ class ProductSetAttributeInAllVariantsAction(ProductUpdateAction):
         *,
         name: str,
         value: typing.Optional[typing.Any] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.name = name
         self.value = value
@@ -2737,7 +2737,7 @@ class ProductSetCategoryOrderHintAction(ProductUpdateAction):
         *,
         category_id: str,
         order_hint: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.category_id = category_id
         self.order_hint = order_hint
@@ -2769,7 +2769,7 @@ class ProductSetDescriptionAction(ProductUpdateAction):
         self,
         *,
         description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.description = description
         self.staged = staged
@@ -2806,7 +2806,7 @@ class ProductSetDiscountedPriceAction(ProductUpdateAction):
         *,
         price_id: str,
         staged: typing.Optional[bool] = None,
-        discounted: typing.Optional["DiscountedPriceDraft"] = None
+        discounted: typing.Optional["DiscountedPriceDraft"] = None,
     ):
         self.price_id = price_id
         self.staged = staged
@@ -2849,7 +2849,7 @@ class ProductSetImageLabelAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         image_url: str,
         label: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.sku = sku
         self.variant_id = variant_id
@@ -2906,7 +2906,7 @@ class ProductSetMetaDescriptionAction(ProductUpdateAction):
         self,
         *,
         meta_description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_description = meta_description
         self.staged = staged
@@ -2937,7 +2937,7 @@ class ProductSetMetaKeywordsAction(ProductUpdateAction):
         self,
         *,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_keywords = meta_keywords
         self.staged = staged
@@ -2968,7 +2968,7 @@ class ProductSetMetaTitleAction(ProductUpdateAction):
         self,
         *,
         meta_title: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_title = meta_title
         self.staged = staged
@@ -3004,7 +3004,7 @@ class ProductSetPriceKeyAction(ProductUpdateAction):
         *,
         price_id: str,
         staged: typing.Optional[bool] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.price_id = price_id
         self.staged = staged
@@ -3070,7 +3070,7 @@ class ProductSetPricesAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         prices: typing.List["PriceDraft"],
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -3111,7 +3111,7 @@ class ProductSetProductPriceCustomFieldAction(ProductUpdateAction):
         price_id: str,
         staged: typing.Optional[bool] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.price_id = price_id
         self.staged = staged
@@ -3151,7 +3151,7 @@ class ProductSetProductPriceCustomTypeAction(ProductUpdateAction):
         price_id: str,
         staged: typing.Optional[bool] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.price_id = price_id
         self.staged = staged
@@ -3192,7 +3192,7 @@ class ProductSetProductVariantKeyAction(ProductUpdateAction):
         variant_id: typing.Optional[int] = None,
         sku: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -3262,7 +3262,7 @@ class ProductSetSkuAction(ProductUpdateAction):
         *,
         variant_id: int,
         sku: typing.Optional[str] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.variant_id = variant_id
         self.sku = sku
@@ -3321,7 +3321,7 @@ class ProductTransitionStateAction(ProductUpdateAction):
         self,
         *,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        force: typing.Optional[bool] = None
+        force: typing.Optional[bool] = None,
     ):
         self.state = state
         self.force = force

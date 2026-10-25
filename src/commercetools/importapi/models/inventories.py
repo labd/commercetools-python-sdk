@@ -44,7 +44,7 @@ class InventoryImport(ImportResource):
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
         supply_channel: typing.Optional["ChannelKeyReference"] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.sku = sku
         self.quantity_on_stock = quantity_on_stock

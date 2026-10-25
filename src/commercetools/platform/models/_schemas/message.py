@@ -457,7 +457,6 @@ class AssociateRoleCreatedMessageSchema(MessageSchema):
 
 
 class AssociateRoleDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -947,7 +946,6 @@ class BusinessUnitDefaultShippingAddressSetMessageSchema(MessageSchema):
 
 
 class BusinessUnitDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1159,7 +1157,6 @@ class CartDiscountCreatedMessageSchema(MessageSchema):
 
 
 class CartDiscountDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1534,7 +1531,6 @@ class CustomerDateOfBirthSetMessageSchema(MessageSchema):
 
 
 class CustomerDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1574,7 +1570,6 @@ class CustomerEmailTokenCreatedMessageSchema(MessageSchema):
 
 
 class CustomerEmailVerifiedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1784,7 +1779,6 @@ class DiscountCodeCreatedMessageSchema(MessageSchema):
 
 
 class DiscountCodeDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2477,7 +2471,6 @@ class MessagesConfigurationDraftSchema(helpers.BaseSchema):
 
 
 class OrderMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4220,7 +4213,6 @@ class ProductSelectionCreatedMessageSchema(MessageSchema):
 
 
 class ProductSelectionDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4711,7 +4703,6 @@ class ProductTailoringUnpublishedMessageSchema(MessageSchema):
 
 
 class ProductUnpublishedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4805,7 +4796,6 @@ class QuoteCustomerChangedMessageSchema(MessageSchema):
 
 
 class QuoteDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4875,7 +4865,6 @@ class QuoteRequestCustomerChangedMessageSchema(MessageSchema):
 
 
 class QuoteRequestDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -5294,7 +5283,6 @@ class StagedQuoteCreatedMessageSchema(MessageSchema):
 
 
 class StagedQuoteDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -5784,7 +5772,6 @@ class StoreCreatedMessageSchema(MessageSchema):
 
 
 class StoreDeletedMessageSchema(MessageSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -6284,7 +6271,6 @@ class AssociateRoleCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class AssociateRoleDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -6774,7 +6760,6 @@ class BusinessUnitDefaultShippingAddressSetMessagePayloadSchema(MessagePayloadSc
 
 
 class BusinessUnitDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -6986,7 +6971,6 @@ class CartDiscountCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class CartDiscountDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -7361,7 +7345,6 @@ class CustomerDateOfBirthSetMessagePayloadSchema(MessagePayloadSchema):
 
 
 class CustomerDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -7401,7 +7384,6 @@ class CustomerEmailTokenCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class CustomerEmailVerifiedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -7611,7 +7593,6 @@ class DiscountCodeCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class DiscountCodeDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -7711,7 +7692,6 @@ class InventoryEntryQuantitySetMessagePayloadSchema(MessagePayloadSchema):
 
 
 class OrderMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -9422,7 +9402,6 @@ class ProductSelectionCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class ProductSelectionDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -9913,7 +9892,6 @@ class ProductTailoringUnpublishedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class ProductUnpublishedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -10007,7 +9985,6 @@ class QuoteCustomerChangedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class QuoteDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -10077,7 +10054,6 @@ class QuoteRequestCustomerChangedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class QuoteRequestDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -10513,7 +10489,6 @@ class StagedQuoteCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class StagedQuoteDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -11003,7 +10978,6 @@ class StoreCreatedMessagePayloadSchema(MessagePayloadSchema):
 
 
 class StoreDeletedMessagePayloadSchema(MessagePayloadSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

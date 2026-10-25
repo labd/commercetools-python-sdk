@@ -93,7 +93,7 @@ class StagedQuote(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         state: typing.Optional["StateReference"] = None,
         purchase_order_number: typing.Optional[str] = None,
-        business_unit: typing.Optional["BusinessUnitKeyReference"] = None
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -154,7 +154,7 @@ class StagedQuoteDraft(_BaseType):
         quote_request_state_to_accepted: typing.Optional[bool] = None,
         key: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        state: typing.Optional["StateReference"] = None
+        state: typing.Optional["StateReference"] = None,
     ):
         self.quote_request = quote_request
         self.quote_request_version = quote_request_version
@@ -202,7 +202,7 @@ class StagedQuotePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["StagedQuote"]
+        results: typing.List["StagedQuote"],
     ):
         self.limit = limit
         self.offset = offset
@@ -415,7 +415,7 @@ class StagedQuoteSetCustomTypeAction(StagedQuoteUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

@@ -87,7 +87,7 @@ class PagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         results: typing.List["BaseResource"],
-        meta: typing.Optional[object] = None
+        meta: typing.Optional[object] = None,
     ):
         self.limit = limit
         self.offset = offset
@@ -176,7 +176,7 @@ class Asset(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List["str"]] = None,
         custom: typing.Optional["CustomFields"] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.id = id
         self.sources = sources
@@ -247,7 +247,7 @@ class AssetDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         tags: typing.Optional[typing.List["str"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.sources = sources
         self.name = name
@@ -288,7 +288,7 @@ class AssetSource(_BaseType):
         uri: str,
         key: typing.Optional[str] = None,
         dimensions: typing.Optional["AssetDimensions"] = None,
-        content_type: typing.Optional[str] = None
+        content_type: typing.Optional[str] = None,
     ):
         self.uri = uri
         self.key = key
@@ -430,7 +430,7 @@ class BaseAddress(_BaseType):
         email: typing.Optional[str] = None,
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
-        external_id: typing.Optional[str] = None
+        external_id: typing.Optional[str] = None,
     ):
         self.id = id
         self.key = key
@@ -509,7 +509,7 @@ class Address(BaseAddress):
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.custom = custom
 
@@ -590,7 +590,7 @@ class AddressDraft(BaseAddress):
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.custom = custom
 
@@ -646,7 +646,7 @@ class BaseResource(_BaseType):
         id: str,
         version: int,
         created_at: datetime.datetime,
-        last_modified_at: datetime.datetime
+        last_modified_at: datetime.datetime,
     ):
         self.id = id
         self.version = version
@@ -688,7 +688,7 @@ class ClientLogging(_BaseType):
         external_user_id: typing.Optional[str] = None,
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
-        associate: typing.Optional["CustomerReference"] = None
+        associate: typing.Optional["CustomerReference"] = None,
     ):
         self.client_id = client_id
         self.external_user_id = external_user_id
@@ -724,7 +724,7 @@ class CreatedBy(ClientLogging):
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         associate: typing.Optional["CustomerReference"] = None,
-        attributed_to: typing.Optional["Attribution"] = None
+        attributed_to: typing.Optional["Attribution"] = None,
     ):
         self.attributed_to = attributed_to
 
@@ -853,7 +853,7 @@ class Image(_BaseType):
         *,
         url: str,
         dimensions: "ImageDimensions",
-        label: typing.Optional[str] = None
+        label: typing.Optional[str] = None,
     ):
         self.url = url
         self.dimensions = dimensions
@@ -946,7 +946,7 @@ class LastModifiedBy(ClientLogging):
         customer: typing.Optional["CustomerReference"] = None,
         anonymous_id: typing.Optional[str] = None,
         associate: typing.Optional["CustomerReference"] = None,
-        attributed_to: typing.Optional["Attribution"] = None
+        attributed_to: typing.Optional["Attribution"] = None,
     ):
         self.attributed_to = attributed_to
 
@@ -1055,7 +1055,7 @@ class Price(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.key = key
@@ -1128,7 +1128,7 @@ class PriceDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPriceDraft"] = None,
         tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.value = value
@@ -1260,7 +1260,7 @@ class QueryPrice(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPriceDraft"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        tiers: typing.Optional[typing.List["PriceTierDraft"]] = None
+        tiers: typing.Optional[typing.List["PriceTierDraft"]] = None,
     ):
         self.id = id
         self.value = value
@@ -1514,7 +1514,7 @@ class ResourceIdentifier(_BaseType):
         *,
         type_id: typing.Optional["ReferenceTypeId"] = None,
         id: typing.Optional[str] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.type_id = type_id
         self.id = id
@@ -1700,7 +1700,7 @@ class ScopedPrice(_BaseType):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.value = value
@@ -1744,7 +1744,7 @@ class TypedMoney(Money):
         cent_amount: int,
         currency_code: str,
         type: "MoneyType",
-        fraction_digits: int
+        fraction_digits: int,
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -1804,7 +1804,7 @@ class HighPrecisionMoney(TypedMoney):
         cent_amount: int,
         currency_code: str,
         fraction_digits: int,
-        precise_amount: int
+        precise_amount: int,
     ):
         self.precise_amount = precise_amount
 
@@ -1846,7 +1846,7 @@ class TypedMoneyDraft(Money):
         cent_amount: typing.Optional[int] = None,
         currency_code: str,
         type: typing.Optional["MoneyType"] = None,
-        fraction_digits: typing.Optional[int] = None
+        fraction_digits: typing.Optional[int] = None,
     ):
         self.type = type
         self.fraction_digits = fraction_digits
@@ -1878,7 +1878,7 @@ class CentPrecisionMoneyDraft(TypedMoneyDraft):
         *,
         cent_amount: typing.Optional[int] = None,
         currency_code: str,
-        fraction_digits: typing.Optional[int] = None
+        fraction_digits: typing.Optional[int] = None,
     ):
 
         super().__init__(
@@ -1914,7 +1914,7 @@ class HighPrecisionMoneyDraft(TypedMoneyDraft):
         cent_amount: typing.Optional[int] = None,
         currency_code: str,
         fraction_digits: int,
-        precise_amount: int
+        precise_amount: int,
     ):
         self.precise_amount = precise_amount
 

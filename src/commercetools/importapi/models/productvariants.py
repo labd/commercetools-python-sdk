@@ -291,7 +291,7 @@ class DateTimeSetAttribute(Attribute):
         self,
         *,
         name: typing.Optional[str] = None,
-        value: typing.List["datetime.datetime"]
+        value: typing.List["datetime.datetime"],
     ):
         self.value = value
 
@@ -453,7 +453,7 @@ class LocalizableTextSetAttribute(Attribute):
         self,
         *,
         name: typing.Optional[str] = None,
-        value: typing.List["LocalizedString"]
+        value: typing.List["LocalizedString"],
     ):
         self.value = value
 
@@ -735,7 +735,7 @@ class ProductVariantImport(ImportResource):
         images: typing.Optional[typing.List["Image"]] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
         publish: typing.Optional[bool] = None,
-        product: "ProductKeyReference"
+        product: "ProductKeyReference",
     ):
         self.sku = sku
         self.is_master_variant = is_master_variant
@@ -785,7 +785,7 @@ class ProductVariantPatch(_BaseType):
         product_variant: "ProductVariantKeyReference",
         attributes: typing.Optional["Attributes"] = None,
         staged: typing.Optional[bool] = None,
-        product: typing.Optional["ProductKeyReference"] = None
+        product: typing.Optional["ProductKeyReference"] = None,
     ):
         self.product_variant = product_variant
         self.attributes = attributes

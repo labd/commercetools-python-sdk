@@ -79,7 +79,7 @@ class AssignedProductReference(_BaseType):
         *,
         product: "ProductReference",
         variant_selection: typing.Optional["ProductVariantSelection"] = None,
-        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
     ):
         self.product = product
         self.variant_selection = variant_selection
@@ -121,7 +121,7 @@ class AssignedProductSelection(_BaseType):
         product_selection: "ProductSelectionReference",
         variant_selection: typing.Optional["ProductVariantSelection"] = None,
         variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
-        created_at: datetime.datetime
+        created_at: datetime.datetime,
     ):
         self.product_selection = product_selection
         self.variant_selection = variant_selection
@@ -169,7 +169,7 @@ class AssignedProductSelectionPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["AssignedProductSelection"]
+        results: typing.List["AssignedProductSelection"],
     ):
         self.limit = limit
         self.offset = offset
@@ -231,7 +231,7 @@ class ProductSelection(BaseResource):
         product_count: int,
         type: typing.Optional["ProductSelectionTypeEnum"] = None,
         mode: "ProductSelectionMode",
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -290,7 +290,7 @@ class ProductSelectionAssignment(_BaseType):
         product: "ProductReference",
         product_selection: "ProductSelectionReference",
         variant_selection: typing.Optional["ProductVariantSelection"] = None,
-        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
     ):
         self.product = product
         self.product_selection = product_selection
@@ -332,7 +332,7 @@ class ProductSelectionDraft(_BaseType):
         name: "LocalizedString",
         custom: typing.Optional["CustomFieldsDraft"] = None,
         type: typing.Optional["ProductSelectionTypeEnum"] = None,
-        mode: typing.Optional["ProductSelectionMode"] = None
+        mode: typing.Optional["ProductSelectionMode"] = None,
     ):
         self.key = key
         self.name = name
@@ -386,7 +386,7 @@ class ProductSelectionPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ProductSelection"]
+        results: typing.List["ProductSelection"],
     ):
         self.limit = limit
         self.offset = offset
@@ -435,7 +435,7 @@ class ProductSelectionProductPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["AssignedProductReference"]
+        results: typing.List["AssignedProductReference"],
     ):
         self.limit = limit
         self.offset = offset
@@ -900,7 +900,7 @@ class ProductsInStorePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ProductSelectionAssignment"]
+        results: typing.List["ProductSelectionAssignment"],
     ):
         self.limit = limit
         self.offset = offset
@@ -941,7 +941,7 @@ class ProductSelectionAddProductAction(ProductSelectionUpdateAction):
         self,
         *,
         product: "ProductResourceIdentifier",
-        variant_selection: typing.Optional["ProductVariantSelection"] = None
+        variant_selection: typing.Optional["ProductVariantSelection"] = None,
     ):
         self.product = product
         self.variant_selection = variant_selection
@@ -1002,7 +1002,7 @@ class ProductSelectionExcludeProductAction(ProductSelectionUpdateAction):
         self,
         *,
         product: "ProductResourceIdentifier",
-        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
     ):
         self.product = product
         self.variant_exclusion = variant_exclusion
@@ -1097,7 +1097,7 @@ class ProductSelectionSetCustomTypeAction(ProductSelectionUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1163,7 +1163,7 @@ class ProductSelectionSetVariantExclusionAction(ProductSelectionUpdateAction):
         self,
         *,
         product: "ProductResourceIdentifier",
-        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None
+        variant_exclusion: typing.Optional["ProductVariantExclusion"] = None,
     ):
         self.product = product
         self.variant_exclusion = variant_exclusion
@@ -1206,7 +1206,7 @@ class ProductSelectionSetVariantSelectionAction(ProductSelectionUpdateAction):
         self,
         *,
         product: "ProductResourceIdentifier",
-        variant_selection: typing.Optional["ProductVariantSelection"] = None
+        variant_selection: typing.Optional["ProductVariantSelection"] = None,
     ):
         self.product = product
         self.variant_selection = variant_selection

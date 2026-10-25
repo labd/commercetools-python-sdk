@@ -590,7 +590,7 @@ class AssociateMissingPermissionError(ErrorObject):
         business_unit: "BusinessUnitResourceIdentifier",
         associate_on_behalf: typing.Optional["CustomerResourceIdentifier"] = None,
         permissions: typing.List["Permission"],
-        **kwargs
+        **kwargs,
     ):
         self.associate = associate
         self.business_unit = business_unit
@@ -634,7 +634,7 @@ class AttributeDefinitionAlreadyExistsError(ErrorObject):
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -679,7 +679,7 @@ class AttributeDefinitionTypeConflictError(ErrorObject):
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -833,7 +833,7 @@ class CountryNotConfiguredInStoreError(ErrorObject):
         message: str,
         store_countries: typing.List["str"],
         country: str,
-        **kwargs
+        **kwargs,
     ):
         self.store_countries = store_countries
         self.country = country
@@ -887,7 +887,7 @@ class DiscountCodeNonApplicableError(ErrorObject):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         validity_check_time: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.discount_code = discount_code
         self.reason = reason
@@ -1032,7 +1032,7 @@ class DuplicateFieldWithConflictingResourceError(ErrorObject):
         field: str,
         duplicate_value: typing.Any,
         conflicting_resource: "Reference",
-        **kwargs
+        **kwargs,
     ):
         self.field = field
         self.duplicate_value = duplicate_value
@@ -1151,7 +1151,7 @@ class DuplicateStandalonePriceScopeError(ErrorObject):
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_standalone_price = conflicting_standalone_price
         self.sku = sku
@@ -1248,7 +1248,7 @@ class EnumKeyAlreadyExistsError(ErrorObject):
         message: str,
         conflicting_enum_key: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
@@ -1287,7 +1287,7 @@ class EnumKeyDoesNotExistError(ErrorObject):
         message: str,
         conflicting_enum_key: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_enum_key = conflicting_enum_key
         self.conflicting_attribute_name = conflicting_attribute_name
@@ -1375,7 +1375,7 @@ class ErrorResponse(_BaseType):
         *,
         status_code: int,
         message: str,
-        errors: typing.Optional[typing.List["ErrorObject"]] = None
+        errors: typing.Optional[typing.List["ErrorObject"]] = None,
     ):
         self.status_code = status_code
         self.message = message
@@ -1410,7 +1410,7 @@ class AuthErrorResponse(ErrorResponse):
         message: str,
         errors: typing.List["ErrorObject"],
         error: str,
-        error_description: typing.Optional[str] = None
+        error_description: typing.Optional[str] = None,
     ):
         self.error = error
         self.error_description = error_description
@@ -1458,7 +1458,7 @@ class ExtensionBadResponseError(ErrorObject):
         extension_status_code: typing.Optional[int] = None,
         extension_id: str,
         extension_key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -1501,7 +1501,7 @@ class ExtensionError(_BaseType):
         message: str,
         extension_id: str,
         extension_key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.code = code
         self.message = message
@@ -1537,7 +1537,7 @@ class ExtensionNoResponseError(ErrorObject):
         message: str,
         extension_id: str,
         extension_key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.extension_id = extension_id
         self.extension_key = extension_key
@@ -1607,7 +1607,7 @@ class ExtensionUpdateActionsFailedError(ErrorObject):
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
         extension_errors: typing.List["ExtensionError"],
-        **kwargs
+        **kwargs,
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -1696,7 +1696,6 @@ class GeneralError(ErrorObject):
 
 
 class InsufficientScopeError(ErrorObject):
-
     def __init__(self, *, message: str, **kwargs):
 
         kwargs.pop("code", None)
@@ -1813,7 +1812,7 @@ class InvalidFieldError(ErrorObject):
         field: str,
         invalid_value: typing.Any,
         allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
-        **kwargs
+        **kwargs,
     ):
         self.field = field
         self.invalid_value = invalid_value
@@ -1938,7 +1937,6 @@ class InvalidOperationError(ErrorObject):
 
 
 class InvalidSubjectError(ErrorObject):
-
     def __init__(self, *, message: str, **kwargs):
 
         kwargs.pop("code", None)
@@ -1957,7 +1955,6 @@ class InvalidSubjectError(ErrorObject):
 
 
 class InvalidTokenError(ErrorObject):
-
     def __init__(self, *, message: str, **kwargs):
 
         kwargs.pop("code", None)
@@ -2063,7 +2060,7 @@ class MatchingPriceNotFoundError(ErrorObject):
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
-        **kwargs
+        **kwargs,
     ):
         self.product_id = product_id
         self.variant_id = variant_id
@@ -2200,7 +2197,7 @@ class MissingRoleOnChannelError(ErrorObject):
         message: str,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         missing_role: "ChannelRoleEnum",
-        **kwargs
+        **kwargs,
     ):
         self.channel = channel
         self.missing_role = missing_role
@@ -2245,7 +2242,7 @@ class MissingTaxRateForCountryError(ErrorObject):
         tax_category_id: str,
         country: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.tax_category_id = tax_category_id
         self.country = country
@@ -2359,7 +2356,7 @@ class OutOfStockError(ErrorObject):
         message: str,
         line_items: typing.List["str"],
         skus: typing.List["str"],
-        **kwargs
+        **kwargs,
     ):
         self.line_items = line_items
         self.skus = skus
@@ -2445,7 +2442,7 @@ class OverlappingStandalonePriceValidityError(ErrorObject):
         valid_until: typing.Optional[datetime.datetime] = None,
         conflicting_valid_from: typing.Optional[datetime.datetime] = None,
         conflicting_valid_until: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_standalone_price = conflicting_standalone_price
         self.sku = sku
@@ -2582,7 +2579,7 @@ class ProductPresentWithDifferentVariantSelectionError(ErrorObject):
         message: str,
         product: "ProductReference",
         existing_variant_selection: "ProductVariantSelection",
-        **kwargs
+        **kwargs,
     ):
         self.product = product
         self.existing_variant_selection = existing_variant_selection
@@ -2590,7 +2587,7 @@ class ProductPresentWithDifferentVariantSelectionError(ErrorObject):
         super().__init__(
             message=message,
             code="ProductPresentWithDifferentVariantSelection",
-            **kwargs
+            **kwargs,
         )
 
     @classmethod
@@ -2626,7 +2623,7 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
         *,
         message: str,
         languages: typing.Optional[typing.List["str"]] = None,
-        **kwargs
+        **kwargs,
     ):
         self.languages = languages
         kwargs.pop("code", None)
@@ -2649,7 +2646,6 @@ class ProjectNotConfiguredForLanguagesError(ErrorObject):
 
 
 class QueryComplexityLimitExceededError(ErrorObject):
-
     def __init__(self, *, message: str, **kwargs):
 
         kwargs.pop("code", None)
@@ -2704,7 +2700,7 @@ class ReferenceExistsError(ErrorObject):
         *,
         message: str,
         referenced_by: typing.Optional["ReferenceTypeId"] = None,
-        **kwargs
+        **kwargs,
     ):
         self.referenced_by = referenced_by
         kwargs.pop("code", None)
@@ -2739,7 +2735,7 @@ class ReferencedResourceNotFoundError(ErrorObject):
         type_id: "ReferenceTypeId",
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.type_id = type_id
         self.id = id
@@ -3035,7 +3031,7 @@ class VariantValues(_BaseType):
         *,
         sku: typing.Optional[str] = None,
         prices: typing.List["PriceDraft"],
-        attributes: typing.List["Attribute"]
+        attributes: typing.List["Attribute"],
     ):
         self.sku = sku
         self.prices = prices
@@ -3441,7 +3437,7 @@ class GraphQLAssociateMissingPermissionError(GraphQLErrorObject):
         business_unit: "BusinessUnitResourceIdentifier",
         associate_on_behalf: typing.Optional["CustomerResourceIdentifier"] = None,
         permissions: typing.List["Permission"],
-        **kwargs
+        **kwargs,
     ):
         self.associate = associate
         self.business_unit = business_unit
@@ -3484,7 +3480,7 @@ class GraphQLAttributeDefinitionAlreadyExistsError(GraphQLErrorObject):
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -3526,7 +3522,7 @@ class GraphQLAttributeDefinitionTypeConflictError(GraphQLErrorObject):
         conflicting_product_type_id: str,
         conflicting_product_type_name: str,
         conflicting_attribute_name: str,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_product_type_id = conflicting_product_type_id
         self.conflicting_product_type_name = conflicting_product_type_name
@@ -3726,7 +3722,7 @@ class GraphQLDiscountCodeNonApplicableError(GraphQLErrorObject):
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
         validity_check_time: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.discount_code = discount_code
         self.reason = reason
@@ -3870,7 +3866,7 @@ class GraphQLDuplicateFieldWithConflictingResourceError(GraphQLErrorObject):
         field: str,
         duplicate_value: typing.Any,
         conflicting_resource: "Reference",
-        **kwargs
+        **kwargs,
     ):
         self.field = field
         self.duplicate_value = duplicate_value
@@ -3990,7 +3986,7 @@ class GraphQLDuplicateStandalonePriceScopeError(GraphQLErrorObject):
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_standalone_price = conflicting_standalone_price
         self.sku = sku
@@ -4215,7 +4211,7 @@ class GraphQLExtensionBadResponseError(GraphQLErrorObject):
         extension_status_code: typing.Optional[int] = None,
         extension_id: str,
         extension_key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -4315,7 +4311,7 @@ class GraphQLExtensionUpdateActionsFailedError(GraphQLErrorObject):
         localized_message: typing.Optional["LocalizedString"] = None,
         extension_extra_info: typing.Optional[object] = None,
         extension_errors: typing.List["ExtensionError"],
-        **kwargs
+        **kwargs,
     ):
         self.localized_message = localized_message
         self.extension_extra_info = extension_extra_info
@@ -4406,7 +4402,6 @@ class GraphQLGeneralError(GraphQLErrorObject):
 
 
 class GraphQLInsufficientScopeError(GraphQLErrorObject):
-
     def __init__(self, **kwargs):
 
         kwargs.pop("code", None)
@@ -4522,7 +4517,7 @@ class GraphQLInvalidFieldError(GraphQLErrorObject):
         field: str,
         invalid_value: typing.Any,
         allowed_values: typing.Optional[typing.List["typing.Any"]] = None,
-        **kwargs
+        **kwargs,
     ):
         self.field = field
         self.invalid_value = invalid_value
@@ -4655,7 +4650,6 @@ class GraphQLInvalidOperationError(GraphQLErrorObject):
 
 
 class GraphQLInvalidSubjectError(GraphQLErrorObject):
-
     def __init__(self, **kwargs):
 
         kwargs.pop("code", None)
@@ -4676,7 +4670,6 @@ class GraphQLInvalidSubjectError(GraphQLErrorObject):
 
 
 class GraphQLInvalidTokenError(GraphQLErrorObject):
-
     def __init__(self, **kwargs):
 
         kwargs.pop("code", None)
@@ -4785,7 +4778,7 @@ class GraphQLMatchingPriceNotFoundError(GraphQLErrorObject):
         country: typing.Optional[str] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         channel: typing.Optional["ChannelReference"] = None,
-        **kwargs
+        **kwargs,
     ):
         self.product_id = product_id
         self.variant_id = variant_id
@@ -4921,7 +4914,7 @@ class GraphQLMissingRoleOnChannelError(GraphQLErrorObject):
         *,
         channel: typing.Optional["ChannelResourceIdentifier"] = None,
         missing_role: "ChannelRoleEnum",
-        **kwargs
+        **kwargs,
     ):
         self.channel = channel
         self.missing_role = missing_role
@@ -4965,7 +4958,7 @@ class GraphQLMissingTaxRateForCountryError(GraphQLErrorObject):
         tax_category_id: str,
         country: typing.Optional[str] = None,
         state: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.tax_category_id = tax_category_id
         self.country = country
@@ -5165,7 +5158,7 @@ class GraphQLOverlappingStandalonePriceValidityError(GraphQLErrorObject):
         valid_until: typing.Optional[datetime.datetime] = None,
         conflicting_valid_from: typing.Optional[datetime.datetime] = None,
         conflicting_valid_until: typing.Optional[datetime.datetime] = None,
-        **kwargs
+        **kwargs,
     ):
         self.conflicting_standalone_price = conflicting_standalone_price
         self.sku = sku
@@ -5301,7 +5294,7 @@ class GraphQLProductPresentWithDifferentVariantSelectionError(GraphQLErrorObject
         *,
         product: "ProductReference",
         existing_variant_selection: "ProductVariantSelection",
-        **kwargs
+        **kwargs,
     ):
         self.product = product
         self.existing_variant_selection = existing_variant_selection
@@ -5362,7 +5355,6 @@ class GraphQLProjectNotConfiguredForLanguagesError(GraphQLErrorObject):
 
 
 class GraphQLQueryComplexityLimitExceededError(GraphQLErrorObject):
-
     def __init__(self, **kwargs):
 
         kwargs.pop("code", None)
@@ -5451,7 +5443,7 @@ class GraphQLReferencedResourceNotFoundError(GraphQLErrorObject):
         type_id: "ReferenceTypeId",
         id: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        **kwargs
+        **kwargs,
     ):
         self.type_id = type_id
         self.id = id

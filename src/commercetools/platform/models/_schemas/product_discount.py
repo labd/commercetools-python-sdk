@@ -315,7 +315,6 @@ class ProductDiscountReferenceSchema(ReferenceSchema):
 
 
 class ProductDiscountResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -450,7 +449,6 @@ class ProductDiscountValueAbsoluteDraftSchema(ProductDiscountValueDraftSchema):
 
 
 class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -461,7 +459,6 @@ class ProductDiscountValueExternalSchema(ProductDiscountValueSchema):
 
 
 class ProductDiscountValueExternalDraftSchema(ProductDiscountValueDraftSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

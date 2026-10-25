@@ -57,7 +57,7 @@ class ReturnItemDraft(_BaseType):
         line_item_id: typing.Optional[str] = None,
         custom_line_item_id: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,
-        shipment_state: "ReturnShipmentState"
+        shipment_state: "ReturnShipmentState",
     ):
         self.quantity = quantity
         self.line_item_id = line_item_id
@@ -91,7 +91,7 @@ class ReturnInfo(_BaseType):
         *,
         items: typing.List["ReturnItemDraft"],
         return_tracking_id: typing.Optional[str] = None,
-        return_date: typing.Optional[datetime.datetime] = None
+        return_date: typing.Optional[datetime.datetime] = None,
     ):
         self.items = items
         self.return_tracking_id = return_tracking_id
@@ -123,7 +123,7 @@ class DeliveryParcel(_BaseType):
         delivery_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ):
         self.delivery_id = delivery_id
         self.measurements = measurements
@@ -154,7 +154,7 @@ class DeliveryParcelDraft(_BaseType):
         *,
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ):
         self.measurements = measurements
         self.tracking_data = tracking_data
@@ -184,7 +184,7 @@ class DeliveryDraft(_BaseType):
         *,
         items: typing.List["DeliveryItem"],
         address: typing.Optional["Address"] = None,
-        parcels: typing.List["DeliveryParcelDraft"]
+        parcels: typing.List["DeliveryParcelDraft"],
     ):
         self.items = items
         self.address = address
@@ -234,7 +234,7 @@ class ParcelMeasurementDraft(_BaseType):
         self,
         *,
         parcel_id: str,
-        measurements: typing.Optional["ParcelMeasurements"] = None
+        measurements: typing.Optional["ParcelMeasurements"] = None,
     ):
         self.parcel_id = parcel_id
         self.measurements = measurements
@@ -287,7 +287,7 @@ class ParcelItems(_BaseType):
         self,
         *,
         parcel_id: str,
-        items: typing.Optional[typing.List["DeliveryItem"]] = None
+        items: typing.Optional[typing.List["DeliveryItem"]] = None,
     ):
         self.parcel_id = parcel_id
         self.items = items
@@ -383,7 +383,7 @@ class OrderField(_BaseType):
         set_delivery_address: typing.Optional["DeliveryAddressDraft"] = None,
         set_parcel_measurements: typing.Optional["ParcelMeasurementDraft"] = None,
         set_parcel_tracking_data: typing.Optional["ParcelTrackingData"] = None,
-        set_parcel_items: typing.Optional[typing.List["ParcelItems"]] = None
+        set_parcel_items: typing.Optional[typing.List["ParcelItems"]] = None,
     ):
         self.add_return_info = add_return_info
         self.add_parcel_to_delivery = add_parcel_to_delivery

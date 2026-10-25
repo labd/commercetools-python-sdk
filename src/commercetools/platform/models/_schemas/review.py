@@ -396,7 +396,6 @@ class ReviewReferenceSchema(ReferenceSchema):
 
 
 class ReviewResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

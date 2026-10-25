@@ -173,7 +173,7 @@ class LayoutElement(_BaseType):
         *,
         layout_element_id: str,
         configuration: "LayoutElementConfiguration",
-        tastics: typing.List["Tastic"]
+        tastics: typing.List["Tastic"],
     ):
         self.layout_element_id = layout_element_id
         self.configuration = configuration
@@ -314,7 +314,7 @@ class PageFolder(_BaseType):
         name: typing.Optional[str] = None,
         ancestor_ids_materialized_path: str,
         depth: float,
-        sort: float
+        sort: float,
     ):
         self.page_folder_id = page_folder_id
         self.is_dynamic = is_dynamic
@@ -371,7 +371,7 @@ class PagePreviewDataResponse(PageDataResponse):
         page: "Page",
         data: "ViewData",
         preview_id: str,
-        preview_context: "PagePreviewContext"
+        preview_context: "PagePreviewContext",
     ):
         self.preview_id = preview_id
         self.preview_context = preview_context
@@ -427,7 +427,7 @@ class ProjectContext(_BaseType):
         *,
         environment: "Environment",
         locales: typing.List["str"],
-        default_locale: str
+        default_locale: str,
     ):
         self.environment = environment
         self.locales = locales
@@ -583,7 +583,7 @@ class BuildUpload(_BaseType):
         *,
         metadata: "BuildMetadata",
         extension: typing.BinaryIO,
-        extension_map: typing.Optional[typing.BinaryIO] = None
+        extension_map: typing.Optional[typing.BinaryIO] = None,
     ):
         self.metadata = metadata
         self.extension = extension
@@ -634,7 +634,7 @@ class BuildMetadata(_BaseType):
         build_time: str,
         build_duration: int,
         build_log: str,
-        deploy: typing.Optional[bool] = None
+        deploy: typing.Optional[bool] = None,
     ):
         self.branch = branch
         self.revision = revision

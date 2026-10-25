@@ -145,7 +145,6 @@ class ZoneReferenceSchema(ReferenceSchema):
 
 
 class ZoneResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

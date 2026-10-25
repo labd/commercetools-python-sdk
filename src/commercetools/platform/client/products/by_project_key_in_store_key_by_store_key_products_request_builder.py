@@ -19,7 +19,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str

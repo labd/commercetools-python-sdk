@@ -175,7 +175,7 @@ class Quote(BaseResource):
         quote_state: "QuoteState",
         state: typing.Optional["StateReference"] = None,
         purchase_order_number: typing.Optional[str] = None,
-        business_unit: typing.Optional["BusinessUnitKeyReference"] = None
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -255,7 +255,7 @@ class QuoteDraft(_BaseType):
         staged_quote_version: int,
         staged_quote_state_to_sent: typing.Optional[bool] = None,
         state: typing.Optional["StateReference"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.staged_quote = staged_quote
@@ -303,7 +303,7 @@ class QuotePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Quote"]
+        results: typing.List["Quote"],
     ):
         self.limit = limit
         self.offset = offset
@@ -567,7 +567,7 @@ class QuoteSetCustomTypeAction(QuoteUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

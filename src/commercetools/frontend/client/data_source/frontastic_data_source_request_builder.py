@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticDataSourceRequestBuilder:
-
     _client: "BaseClient"
 
     def __init__(

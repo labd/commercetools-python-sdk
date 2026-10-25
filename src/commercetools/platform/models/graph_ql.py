@@ -36,7 +36,7 @@ class GraphQLError(_BaseType):
         message: str,
         locations: typing.List["GraphQLErrorLocation"],
         path: typing.Optional[typing.List["typing.Any"]] = None,
-        extensions: "GraphQLErrorObject"
+        extensions: "GraphQLErrorObject",
     ):
         self.message = message
         self.locations = locations
@@ -89,7 +89,7 @@ class GraphQLRequest(_BaseType):
         *,
         query: str,
         operation_name: typing.Optional[str] = None,
-        variables: typing.Optional["GraphQLVariablesMap"] = None
+        variables: typing.Optional["GraphQLVariablesMap"] = None,
     ):
         self.query = query
         self.operation_name = operation_name
@@ -117,7 +117,7 @@ class GraphQLResponse(_BaseType):
         self,
         *,
         data: typing.Optional[typing.Any] = None,
-        errors: typing.Optional[typing.List["GraphQLError"]] = None
+        errors: typing.Optional[typing.List["GraphQLError"]] = None,
     ):
         self.data = data
         self.errors = errors

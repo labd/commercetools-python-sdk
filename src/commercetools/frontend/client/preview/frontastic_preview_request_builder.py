@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticPreviewRequestBuilder:
-
     _client: "BaseClient"
 
     def __init__(

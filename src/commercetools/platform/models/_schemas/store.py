@@ -213,7 +213,6 @@ class StoreDraftSchema(helpers.BaseSchema):
 
 
 class StoreKeyReferenceSchema(KeyReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -266,7 +265,6 @@ class StoreReferenceSchema(ReferenceSchema):
 
 
 class StoreResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

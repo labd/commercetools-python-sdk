@@ -359,7 +359,6 @@ class CartClassificationTypeSchema(ShippingRateInputTypeSchema):
 
 
 class CartScoreTypeSchema(ShippingRateInputTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -370,7 +369,6 @@ class CartScoreTypeSchema(ShippingRateInputTypeSchema):
 
 
 class CartValueTypeSchema(ShippingRateInputTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

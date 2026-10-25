@@ -227,7 +227,6 @@ class ShippingMethodReferenceSchema(ReferenceSchema):
 
 
 class ShippingMethodResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

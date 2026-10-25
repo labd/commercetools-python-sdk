@@ -86,7 +86,7 @@ class TaxCategory(BaseResource):
         name: str,
         description: typing.Optional[str] = None,
         rates: typing.List["TaxRate"],
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -130,7 +130,7 @@ class TaxCategoryDraft(_BaseType):
         name: str,
         description: typing.Optional[str] = None,
         rates: typing.Optional[typing.List["TaxRateDraft"]] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.name = name
         self.description = description
@@ -176,7 +176,7 @@ class TaxCategoryPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["TaxCategory"]
+        results: typing.List["TaxCategory"],
     ):
         self.limit = limit
         self.offset = offset
@@ -346,7 +346,7 @@ class TaxRate(_BaseType):
         included_in_price: bool,
         country: str,
         state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ):
         self.id = id
         self.key = key
@@ -398,7 +398,7 @@ class TaxRateDraft(_BaseType):
         country: str,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.name = name
         self.amount = amount
@@ -480,7 +480,7 @@ class TaxCategoryRemoveTaxRateAction(TaxCategoryUpdateAction):
         self,
         *,
         tax_rate_id: typing.Optional[str] = None,
-        tax_rate_key: typing.Optional[str] = None
+        tax_rate_key: typing.Optional[str] = None,
     ):
         self.tax_rate_id = tax_rate_id
         self.tax_rate_key = tax_rate_key
@@ -516,7 +516,7 @@ class TaxCategoryReplaceTaxRateAction(TaxCategoryUpdateAction):
         *,
         tax_rate_id: typing.Optional[str] = None,
         tax_rate_key: typing.Optional[str] = None,
-        tax_rate: "TaxRateDraft"
+        tax_rate: "TaxRateDraft",
     ):
         self.tax_rate_id = tax_rate_id
         self.tax_rate_key = tax_rate_key

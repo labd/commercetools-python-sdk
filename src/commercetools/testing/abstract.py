@@ -28,9 +28,9 @@ class BaseModel:
         self._storage = storage
         self.objects = storage.init_store(self._primary_type_name)
 
-        assert (
-            self._resource_schema
-        ), f"{self.__class__.__name__} has no resource schema defined"
+        assert self._resource_schema, (
+            f"{self.__class__.__name__} has no resource schema defined"
+        )
 
     def add_existing(self, obj):
         """Add an 'existing' object to the storage.

@@ -103,7 +103,6 @@ class AttributeTypeSchema(helpers.BaseSchema):
 
 
 class AttributeBooleanTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -114,7 +113,6 @@ class AttributeBooleanTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTimeTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -125,7 +123,6 @@ class AttributeDateTimeTypeSchema(AttributeTypeSchema):
 
 
 class AttributeDateTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -167,7 +164,6 @@ class AttributePlainEnumValueSchema(helpers.BaseSchema):
 
 
 class AttributeLocalizableTextTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -213,7 +209,6 @@ class AttributeLocalizedEnumValueSchema(helpers.BaseSchema):
 
 
 class AttributeMoneyTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -242,7 +237,6 @@ class AttributeNestedTypeSchema(AttributeTypeSchema):
 
 
 class AttributeNumberTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -303,7 +297,6 @@ class AttributeSetTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTextTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -314,7 +307,6 @@ class AttributeTextTypeSchema(AttributeTypeSchema):
 
 
 class AttributeTimeTypeSchema(AttributeTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

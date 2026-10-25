@@ -362,7 +362,6 @@ class QuoteReferenceSchema(ReferenceSchema):
 
 
 class QuoteResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

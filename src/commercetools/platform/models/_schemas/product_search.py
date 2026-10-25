@@ -54,7 +54,6 @@ class ProductPagedSearchResponseSchema(helpers.BaseSchema):
 
 
 class ProductSearchErrorResponseSchema(ErrorResponseSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -360,7 +359,6 @@ class ProductSearchFacetDistinctValueSchema(helpers.BaseSchema):
 
 
 class ProductSearchFacetExpressionSchema(helpers.BaseSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

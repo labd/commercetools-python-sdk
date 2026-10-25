@@ -25,7 +25,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeCartsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

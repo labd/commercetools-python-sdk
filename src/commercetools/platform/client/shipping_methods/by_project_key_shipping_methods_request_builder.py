@@ -37,7 +37,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyShippingMethodsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

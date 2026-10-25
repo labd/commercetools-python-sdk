@@ -118,7 +118,7 @@ class Category(BaseResource):
         meta_keywords: typing.Optional["LocalizedString"] = None,
         custom: typing.Optional["CustomFields"] = None,
         assets: typing.Optional[typing.List["Asset"]] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -199,7 +199,7 @@ class CategoryDraft(_BaseType):
         meta_keywords: typing.Optional["LocalizedString"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         assets: typing.Optional[typing.List["AssetDraft"]] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.name = name
         self.slug = slug
@@ -253,7 +253,7 @@ class CategoryPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Category"]
+        results: typing.List["Category"],
     ):
         self.limit = limit
         self.offset = offset
@@ -492,7 +492,7 @@ class CategoryChangeAssetNameAction(CategoryUpdateAction):
         *,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        name: "LocalizedString"
+        name: "LocalizedString",
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -645,7 +645,7 @@ class CategoryRemoveAssetAction(CategoryUpdateAction):
         self,
         *,
         asset_id: typing.Optional[str] = None,
-        asset_key: typing.Optional[str] = None
+        asset_key: typing.Optional[str] = None,
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -684,7 +684,7 @@ class CategorySetAssetCustomFieldAction(CategoryUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -724,7 +724,7 @@ class CategorySetAssetCustomTypeAction(CategoryUpdateAction):
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -760,7 +760,7 @@ class CategorySetAssetDescriptionAction(CategoryUpdateAction):
         *,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        description: typing.Optional["LocalizedString"] = None,
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -823,7 +823,7 @@ class CategorySetAssetSourcesAction(CategoryUpdateAction):
         *,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        sources: typing.List["AssetSource"]
+        sources: typing.List["AssetSource"],
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -858,7 +858,7 @@ class CategorySetAssetTagsAction(CategoryUpdateAction):
         *,
         asset_id: typing.Optional[str] = None,
         asset_key: typing.Optional[str] = None,
-        tags: typing.Optional[typing.List["str"]] = None
+        tags: typing.Optional[typing.List["str"]] = None,
     ):
         self.asset_id = asset_id
         self.asset_key = asset_key
@@ -919,7 +919,7 @@ class CategorySetCustomTypeAction(CategoryUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

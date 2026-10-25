@@ -186,7 +186,7 @@ class Customer(BaseResource):
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreKeyReference"]] = None,
-        authentication_mode: "AuthenticationMode"
+        authentication_mode: "AuthenticationMode",
     ):
         self.key = key
         self.customer_number = customer_number
@@ -428,7 +428,7 @@ class CustomerDraft(_BaseType):
         locale: typing.Optional[str] = None,
         salutation: typing.Optional[str] = None,
         stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
-        authentication_mode: typing.Optional["AuthenticationMode"] = None
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
     ):
         self.key = key
         self.customer_number = customer_number
@@ -542,7 +542,7 @@ class CustomerPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Customer"]
+        results: typing.List["Customer"],
     ):
         self.limit = limit
         self.offset = offset
@@ -623,7 +623,7 @@ class CustomerResetPassword(_BaseType):
         *,
         token_value: str,
         new_password: str,
-        version: typing.Optional[int] = None
+        version: typing.Optional[int] = None,
     ):
         self.token_value = token_value
         self.new_password = new_password
@@ -720,7 +720,7 @@ class CustomerSignin(_BaseType):
         anonymous_cart: typing.Optional["CartResourceIdentifier"] = None,
         anonymous_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
         anonymous_id: typing.Optional[str] = None,
-        update_product_data: typing.Optional[bool] = None
+        update_product_data: typing.Optional[bool] = None,
     ):
         self.email = email
         self.password = password
@@ -766,7 +766,7 @@ class CustomerToken(_BaseType):
         value: str,
         expires_at: datetime.datetime,
         created_at: datetime.datetime,
-        last_modified_at: typing.Optional[datetime.datetime] = None
+        last_modified_at: typing.Optional[datetime.datetime] = None,
     ):
         self.id = id
         self.customer_id = customer_id
@@ -1051,7 +1051,7 @@ class MyCustomerSignin(_BaseType):
         email: str,
         password: str,
         active_cart_sign_in_mode: typing.Optional["AnonymousCartSignInMode"] = None,
-        update_product_data: typing.Optional[bool] = None
+        update_product_data: typing.Optional[bool] = None,
     ):
         self.email = email
         self.password = password
@@ -1109,7 +1109,7 @@ class CustomerAddBillingAddressIdAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1142,7 +1142,7 @@ class CustomerAddShippingAddressIdAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1207,7 +1207,7 @@ class CustomerChangeAddressAction(CustomerUpdateAction):
         *,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
-        address: "BaseAddress"
+        address: "BaseAddress",
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1270,7 +1270,7 @@ class CustomerRemoveAddressAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1306,7 +1306,7 @@ class CustomerRemoveBillingAddressIdAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1342,7 +1342,7 @@ class CustomerRemoveShippingAddressIdAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1442,7 +1442,7 @@ class CustomerSetAddressCustomTypeAction(CustomerUpdateAction):
         *,
         address_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.address_id = address_id
         self.type = type
@@ -1562,7 +1562,7 @@ class CustomerSetCustomTypeAction(CustomerUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1593,7 +1593,7 @@ class CustomerSetCustomerGroupAction(CustomerUpdateAction):
     def __init__(
         self,
         *,
-        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
     ):
         self.customer_group = customer_group
 
@@ -1680,7 +1680,7 @@ class CustomerSetDefaultBillingAddressAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1718,7 +1718,7 @@ class CustomerSetDefaultShippingAddressAction(CustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key

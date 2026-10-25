@@ -25,7 +25,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str

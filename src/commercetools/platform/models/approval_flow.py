@@ -79,7 +79,7 @@ class ApprovalFlow(BaseResource):
         eligible_approvers: typing.List["RuleApprover"],
         pending_approvers: typing.List["RuleApprover"],
         current_tier_pending_approvers: typing.List["RuleApprover"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.created_by = created_by
         self.last_modified_by = last_modified_by
@@ -162,7 +162,7 @@ class ApprovalFlowPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ApprovalFlow"]
+        results: typing.List["ApprovalFlow"],
     ):
         self.limit = limit
         self.offset = offset
@@ -199,7 +199,7 @@ class ApprovalFlowRejection(_BaseType):
         *,
         rejecter: "Associate",
         rejected_at: datetime.datetime,
-        reason: typing.Optional[str] = None
+        reason: typing.Optional[str] = None,
     ):
         self.rejecter = rejecter
         self.rejected_at = rejected_at
@@ -384,7 +384,7 @@ class ApprovalFlowSetCustomTypeAction(ApprovalFlowUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

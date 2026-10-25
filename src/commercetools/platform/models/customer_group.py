@@ -59,7 +59,7 @@ class CustomerGroup(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         key: typing.Optional[str] = None,
         name: str,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -100,7 +100,7 @@ class CustomerGroupDraft(_BaseType):
         *,
         key: typing.Optional[str] = None,
         group_name: str,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.group_name = group_name
@@ -145,7 +145,7 @@ class CustomerGroupPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["CustomerGroup"]
+        results: typing.List["CustomerGroup"],
     ):
         self.limit = limit
         self.offset = offset
@@ -346,7 +346,7 @@ class CustomerGroupSetCustomTypeAction(CustomerGroupUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

@@ -100,7 +100,7 @@ class Associate(_BaseType):
         *,
         associate_role_assignments: typing.List["AssociateRoleAssignment"],
         roles: typing.Optional[typing.List["AssociateRoleDeprecated"]] = None,
-        customer: "CustomerReference"
+        customer: "CustomerReference",
     ):
         self.associate_role_assignments = associate_role_assignments
         self.roles = roles
@@ -133,7 +133,7 @@ class AssociateDraft(_BaseType):
         *,
         associate_role_assignments: typing.List["AssociateRoleAssignmentDraft"],
         roles: typing.Optional[typing.List["AssociateRoleDeprecated"]] = None,
-        customer: "CustomerResourceIdentifier"
+        customer: "CustomerResourceIdentifier",
     ):
         self.associate_role_assignments = associate_role_assignments
         self.roles = roles
@@ -163,7 +163,7 @@ class AssociateRoleAssignment(_BaseType):
         self,
         *,
         associate_role: "AssociateRoleKeyReference",
-        inheritance: "AssociateRoleInheritanceMode"
+        inheritance: "AssociateRoleInheritanceMode",
     ):
         self.associate_role = associate_role
         self.inheritance = inheritance
@@ -194,7 +194,7 @@ class AssociateRoleAssignmentDraft(_BaseType):
         self,
         *,
         associate_role: "AssociateRoleResourceIdentifier",
-        inheritance: typing.Optional["AssociateRoleInheritanceMode"] = None
+        inheritance: typing.Optional["AssociateRoleInheritanceMode"] = None,
     ):
         self.associate_role = associate_role
         self.inheritance = inheritance
@@ -303,7 +303,7 @@ class BusinessUnit(BaseResource):
         associates: typing.List["Associate"],
         inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
-        top_level_unit: "BusinessUnitKeyReference"
+        top_level_unit: "BusinessUnitKeyReference",
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -417,7 +417,7 @@ class BusinessUnitDraft(_BaseType):
         default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.status = status
@@ -500,7 +500,7 @@ class BusinessUnitPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["BusinessUnit"]
+        results: typing.List["BusinessUnit"],
     ):
         self.limit = limit
         self.offset = offset
@@ -790,7 +790,7 @@ class Company(BusinessUnit):
         associates: typing.List["Associate"],
         inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
-        top_level_unit: "BusinessUnitKeyReference"
+        top_level_unit: "BusinessUnitKeyReference",
     ):
 
         super().__init__(
@@ -851,7 +851,7 @@ class CompanyDraft(BusinessUnitDraft):
         default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
 
         super().__init__(
@@ -915,7 +915,7 @@ class Division(BusinessUnit):
         associates: typing.List["Associate"],
         inherited_associates: typing.Optional[typing.List["InheritedAssociate"]] = None,
         parent_unit: "BusinessUnitKeyReference",
-        top_level_unit: "BusinessUnitKeyReference"
+        top_level_unit: "BusinessUnitKeyReference",
     ):
 
         super().__init__(
@@ -983,7 +983,7 @@ class DivisionDraft(BusinessUnitDraft):
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        parent_unit: "BusinessUnitResourceIdentifier"
+        parent_unit: "BusinessUnitResourceIdentifier",
     ):
         self.parent_unit = parent_unit
 
@@ -1027,7 +1027,7 @@ class InheritedAssociate(_BaseType):
         self,
         *,
         associate_role_assignments: typing.List["InheritedAssociateRoleAssignment"],
-        customer: "CustomerReference"
+        customer: "CustomerReference",
     ):
         self.associate_role_assignments = associate_role_assignments
         self.customer = customer
@@ -1056,7 +1056,7 @@ class InheritedAssociateRoleAssignment(_BaseType):
         self,
         *,
         associate_role: "AssociateRoleKeyReference",
-        source: "BusinessUnitKeyReference"
+        source: "BusinessUnitKeyReference",
     ):
         self.associate_role = associate_role
         self.source = source
@@ -1139,7 +1139,7 @@ class BusinessUnitAddBillingAddressIdAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1172,7 +1172,7 @@ class BusinessUnitAddShippingAddressIdAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1236,7 +1236,7 @@ class BusinessUnitChangeAddressAction(BusinessUnitUpdateAction):
         *,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
-        address: "BaseAddress"
+        address: "BaseAddress",
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1398,7 +1398,7 @@ class BusinessUnitRemoveAddressAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1456,7 +1456,7 @@ class BusinessUnitRemoveBillingAddressIdAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1493,7 +1493,7 @@ class BusinessUnitRemoveShippingAddressIdAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1605,7 +1605,7 @@ class BusinessUnitSetAddressCustomTypeAction(BusinessUnitUpdateAction):
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None,
-        address_id: str
+        address_id: str,
     ):
         self.type = type
         self.fields = fields
@@ -1721,7 +1721,7 @@ class BusinessUnitSetCustomTypeAction(BusinessUnitUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1754,7 +1754,7 @@ class BusinessUnitSetDefaultBillingAddressAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1791,7 +1791,7 @@ class BusinessUnitSetDefaultShippingAddressAction(BusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1831,7 +1831,7 @@ class BusinessUnitSetStoreModeAction(BusinessUnitUpdateAction):
         self,
         *,
         store_mode: "BusinessUnitStoreMode",
-        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
     ):
         self.store_mode = store_mode
         self.stores = stores

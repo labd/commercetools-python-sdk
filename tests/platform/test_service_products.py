@@ -447,7 +447,6 @@ def test_product_update_add_price_current(ct_platform_client: Client):
 
 def test_predicate_var(ct_platform_client: Client):
     with requests_mock.Mocker(real_http=True, case_sensitive=True) as m:
-
         result = (
             ct_platform_client.with_project_key("unittest")
             .products()

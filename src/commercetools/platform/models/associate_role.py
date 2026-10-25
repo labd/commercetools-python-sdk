@@ -76,7 +76,7 @@ class AssociateRole(BaseResource):
         buyer_assignable: bool,
         name: typing.Optional[str] = None,
         permissions: typing.List["Permission"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -124,7 +124,7 @@ class AssociateRoleDraft(_BaseType):
         name: typing.Optional[str] = None,
         buyer_assignable: typing.Optional[bool] = None,
         permissions: typing.Optional[typing.List["Permission"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.name = name
@@ -192,7 +192,7 @@ class AssociateRolePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["AssociateRole"]
+        results: typing.List["AssociateRole"],
     ):
         self.limit = limit
         self.offset = offset
@@ -504,7 +504,7 @@ class AssociateRoleSetCustomTypeAction(AssociateRoleUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

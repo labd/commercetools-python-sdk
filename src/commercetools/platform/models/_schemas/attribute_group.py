@@ -148,7 +148,6 @@ class AttributeGroupReferenceSchema(ReferenceSchema):
 
 
 class AttributeGroupResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

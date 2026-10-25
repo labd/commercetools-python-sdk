@@ -46,7 +46,7 @@ class ApiClient(_BaseType):
         delete_at: typing.Optional[datetime.datetime] = None,
         created_at: typing.Optional[datetime.datetime] = None,
         access_token_validity_seconds: typing.Optional[int] = None,
-        refresh_token_validity_seconds: typing.Optional[int] = None
+        refresh_token_validity_seconds: typing.Optional[int] = None,
     ):
         self.id = id
         self.name = name
@@ -91,7 +91,7 @@ class ApiClientDraft(_BaseType):
         scope: str,
         delete_days_after_creation: typing.Optional[int] = None,
         access_token_validity_seconds: typing.Optional[int] = None,
-        refresh_token_validity_seconds: typing.Optional[int] = None
+        refresh_token_validity_seconds: typing.Optional[int] = None,
     ):
         self.name = name
         self.scope = scope
@@ -138,7 +138,7 @@ class ApiClientPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ApiClient"]
+        results: typing.List["ApiClient"],
     ):
         self.limit = limit
         self.offset = offset

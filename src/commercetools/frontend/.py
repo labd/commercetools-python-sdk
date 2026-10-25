@@ -5,13 +5,14 @@
 # but send a pull request to the Lab Digital fork of rmf-codegen at
 # https://github.com/labd/rmf-codegen
 import re
+import typing
 
 import marshmallow
 import marshmallow_enum
 
 from commercetools import helpers
+
 from ... import models
-import typing
 
 # Fields
 

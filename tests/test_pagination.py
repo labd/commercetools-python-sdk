@@ -1,7 +1,6 @@
 import pytest
 
 from commercetools import paginators
-from commercetools.contrib.pytest import ct_platform_client
 from commercetools.platform import models
 from commercetools.platform.client import Client
 from commercetools.platform.client.by_project_key_request_builder import (

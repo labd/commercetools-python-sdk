@@ -1,4 +1,4 @@
-from commercetools.testing.abstract import BaseBackend, BaseModel
+from commercetools.testing.abstract import BaseBackend
 from commercetools.testing.utils import create_commercetools_response
 
 

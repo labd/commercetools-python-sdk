@@ -19,7 +19,7 @@ def test_raises_exception(ct_platform_client: PlatformClient):
         )
     )
 
-    result = (
+    (
         ct_platform_client.with_project_key("foo")
         .channels()
         .with_id(channel.id)
@@ -34,7 +34,7 @@ def test_raises_exception(ct_platform_client: PlatformClient):
         )
     )
 
-    result = (
+    (
         ct_platform_client.with_project_key("foo")
         .channels()
         .with_id(channel.id)

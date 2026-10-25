@@ -15,7 +15,6 @@ from commercetools.platform.models._schemas.order import (
     OrderUpdateSchema,
 )
 from commercetools.platform.models._schemas.payment import PaymentReferenceSchema
-from commercetools.platform.models.common import CentPrecisionMoney
 from commercetools.testing.abstract import BaseModel, ServiceBackend
 from commercetools.testing.utils import (
     create_commercetools_response,

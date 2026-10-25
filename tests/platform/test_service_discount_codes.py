@@ -1,8 +1,6 @@
 from datetime import datetime
 
-import pytest
 from freezegun import freeze_time
-from requests.exceptions import HTTPError
 
 from commercetools.platform import models
 from commercetools.platform.client import Client

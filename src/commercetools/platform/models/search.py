@@ -406,7 +406,7 @@ class SearchQueryExpressionValue(_BaseType):
         *,
         field: str,
         boost: typing.Optional[float] = None,
-        field_type: typing.Optional["SearchFieldType"] = None
+        field_type: typing.Optional["SearchFieldType"] = None,
     ):
         self.field = field
         self.boost = boost
@@ -442,7 +442,7 @@ class SearchAnyValue(SearchQueryExpressionValue):
         field_type: typing.Optional["SearchFieldType"] = None,
         value: typing.Any,
         language: typing.Optional[str] = None,
-        case_insensitive: typing.Optional[bool] = None
+        case_insensitive: typing.Optional[bool] = None,
     ):
         self.value = value
         self.language = language
@@ -477,7 +477,7 @@ class SearchDateRangeValue(SearchQueryExpressionValue):
         gte: typing.Optional[datetime.date] = None,
         gt: typing.Optional[datetime.date] = None,
         lte: typing.Optional[datetime.date] = None,
-        lt: typing.Optional[datetime.date] = None
+        lt: typing.Optional[datetime.date] = None,
     ):
         self.gte = gte
         self.gt = gt
@@ -513,7 +513,7 @@ class SearchDateTimeRangeValue(SearchQueryExpressionValue):
         gte: typing.Optional[datetime.datetime] = None,
         gt: typing.Optional[datetime.datetime] = None,
         lte: typing.Optional[datetime.datetime] = None,
-        lt: typing.Optional[datetime.datetime] = None
+        lt: typing.Optional[datetime.datetime] = None,
     ):
         self.gte = gte
         self.gt = gt
@@ -546,7 +546,7 @@ class SearchExistsValue(SearchQueryExpressionValue):
         field: str,
         boost: typing.Optional[float] = None,
         field_type: typing.Optional["SearchFieldType"] = None,
-        language: typing.Optional[str] = None
+        language: typing.Optional[str] = None,
     ):
         self.language = language
 
@@ -578,7 +578,7 @@ class SearchFullTextPrefixValue(SearchQueryExpressionValue):
         field_type: typing.Optional["SearchFieldType"] = None,
         value: typing.Any,
         language: typing.Optional[str] = None,
-        must_match: typing.Optional["SearchMatchType"] = None
+        must_match: typing.Optional["SearchMatchType"] = None,
     ):
         self.value = value
         self.language = language
@@ -614,7 +614,7 @@ class SearchFullTextValue(SearchQueryExpressionValue):
         field_type: typing.Optional["SearchFieldType"] = None,
         value: typing.Any,
         language: typing.Optional[str] = None,
-        must_match: typing.Optional["SearchMatchType"] = None
+        must_match: typing.Optional["SearchMatchType"] = None,
     ):
         self.value = value
         self.language = language
@@ -649,7 +649,7 @@ class SearchLongRangeValue(SearchQueryExpressionValue):
         gte: typing.Optional[int] = None,
         gt: typing.Optional[int] = None,
         lte: typing.Optional[int] = None,
-        lt: typing.Optional[int] = None
+        lt: typing.Optional[int] = None,
     ):
         self.gte = gte
         self.gt = gt
@@ -685,7 +685,7 @@ class SearchNumberRangeValue(SearchQueryExpressionValue):
         gte: typing.Optional[float] = None,
         gt: typing.Optional[float] = None,
         lte: typing.Optional[float] = None,
-        lt: typing.Optional[float] = None
+        lt: typing.Optional[float] = None,
     ):
         self.gte = gte
         self.gt = gt
@@ -754,7 +754,7 @@ class SearchSorting(_BaseType):
         order: "SearchSortOrder",
         mode: typing.Optional["SearchSortMode"] = None,
         field_type: typing.Optional["SearchFieldType"] = None,
-        filter: typing.Optional["SearchQueryExpression"] = None
+        filter: typing.Optional["SearchQueryExpression"] = None,
     ):
         self.field = field
         self.language = language
@@ -814,7 +814,7 @@ class SearchTimeRangeValue(SearchQueryExpressionValue):
         gte: typing.Optional[datetime.time] = None,
         gt: typing.Optional[datetime.time] = None,
         lte: typing.Optional[datetime.time] = None,
-        lt: typing.Optional[datetime.time] = None
+        lt: typing.Optional[datetime.time] = None,
     ):
         self.gte = gte
         self.gt = gt

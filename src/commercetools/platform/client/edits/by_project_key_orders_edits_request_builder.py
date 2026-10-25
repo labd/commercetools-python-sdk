@@ -21,7 +21,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyOrdersEditsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

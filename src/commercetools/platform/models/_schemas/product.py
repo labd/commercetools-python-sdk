@@ -27,21 +27,18 @@ from .type import FieldContainerField
 
 # Fields
 class CategoryOrderHintsField(marshmallow.fields.Dict):
-
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.CategoryOrderHints(**result)
 
 
 class ProductVariantChannelAvailabilityMapField(marshmallow.fields.Dict):
-
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.ProductVariantChannelAvailabilityMap(**result)
 
 
 class SearchKeywordsField(marshmallow.fields.Dict):
-
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.SearchKeywords(**result)
@@ -738,7 +735,6 @@ class ProductReferenceSchema(ReferenceSchema):
 
 
 class ProductResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1262,7 +1258,6 @@ class TermFacetResultSchema(FacetResultSchema):
 
 
 class WhitespaceTokenizerSchema(SuggestTokenizerSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1790,7 +1785,6 @@ class ProductRemoveVariantActionSchema(ProductUpdateActionSchema):
 
 
 class ProductRevertStagedChangesActionSchema(ProductUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2509,7 +2503,6 @@ class ProductTransitionStateActionSchema(ProductUpdateActionSchema):
 
 
 class ProductUnpublishActionSchema(ProductUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

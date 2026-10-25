@@ -37,7 +37,6 @@ class SearchMatchingVariantSchema(helpers.BaseSchema):
 
 
 class SearchQuerySchema(helpers.BaseSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -48,7 +47,6 @@ class SearchQuerySchema(helpers.BaseSchema):
 
 
 class SearchCompoundExpressionSchema(SearchQuerySchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -134,7 +132,6 @@ class SearchOrExpressionSchema(SearchCompoundExpressionSchema):
 
 
 class SearchQueryExpressionSchema(SearchQuerySchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

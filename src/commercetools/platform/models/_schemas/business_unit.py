@@ -395,7 +395,6 @@ class BusinessUnitDraftSchema(helpers.BaseSchema):
 
 
 class BusinessUnitKeyReferenceSchema(KeyReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -456,7 +455,6 @@ class BusinessUnitReferenceSchema(ReferenceSchema):
 
 
 class BusinessUnitResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -579,7 +577,6 @@ class BusinessUnitUpdateActionSchema(helpers.BaseSchema):
 
 
 class CompanySchema(BusinessUnitSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -590,7 +587,6 @@ class CompanySchema(BusinessUnitSchema):
 
 
 class CompanyDraftSchema(BusinessUnitDraftSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -601,7 +597,6 @@ class CompanyDraftSchema(BusinessUnitDraftSchema):
 
 
 class DivisionSchema(BusinessUnitSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

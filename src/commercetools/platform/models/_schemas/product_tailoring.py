@@ -306,7 +306,6 @@ class ProductTailoringReferenceSchema(ReferenceSchema):
 
 
 class ProductTailoringResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -329,7 +328,6 @@ class ProductTailoringUpdateActionSchema(helpers.BaseSchema):
 
 
 class ProductTailoringPublishActionSchema(ProductTailoringUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -500,7 +498,6 @@ class ProductTailoringSetSlugActionSchema(ProductTailoringUpdateActionSchema):
 
 
 class ProductTailoringUnpublishActionSchema(ProductTailoringUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

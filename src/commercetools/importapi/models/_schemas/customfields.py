@@ -18,7 +18,6 @@ from .common import LocalizedStringField
 
 # Fields
 class FieldContainerField(marshmallow.fields.Dict):
-
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.FieldContainer(**result)

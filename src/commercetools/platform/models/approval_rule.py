@@ -85,7 +85,7 @@ class ApprovalRule(BaseResource):
         predicate: str,
         approvers: "ApproverHierarchy",
         requesters: typing.List["RuleRequester"],
-        business_unit: "BusinessUnitKeyReference"
+        business_unit: "BusinessUnitKeyReference",
     ):
         self.created_by = created_by
         self.last_modified_by = last_modified_by
@@ -142,7 +142,7 @@ class ApprovalRuleDraft(_BaseType):
         status: "ApprovalRuleStatus",
         predicate: str,
         approvers: "ApproverHierarchyDraft",
-        requesters: typing.List["RuleRequesterDraft"]
+        requesters: typing.List["RuleRequesterDraft"],
     ):
         self.key = key
         self.name = name
@@ -191,7 +191,7 @@ class ApprovalRulePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ApprovalRule"]
+        results: typing.List["ApprovalRule"],
     ):
         self.limit = limit
         self.offset = offset

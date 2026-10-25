@@ -334,7 +334,7 @@ class Cart(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None
+        created_by: typing.Optional["CreatedBy"] = None,
     ):
         self.key = key
         self.customer_id = customer_id
@@ -505,7 +505,7 @@ class CartDraft(_BaseType):
         locale: typing.Optional[str] = None,
         origin: typing.Optional["CartOrigin"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.currency = currency
         self.key = key
@@ -586,7 +586,7 @@ class CartPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Cart"]
+        results: typing.List["Cart"],
     ):
         self.limit = limit
         self.offset = offset
@@ -1068,7 +1068,7 @@ class CustomLineItem(_BaseType):
         ],
         custom: typing.Optional["CustomFields"] = None,
         shipping_details: typing.Optional["ItemShippingDetails"] = None,
-        price_mode: "CustomLineItemPriceMode"
+        price_mode: "CustomLineItemPriceMode",
     ):
         self.id = id
         self.key = key
@@ -1141,7 +1141,7 @@ class CustomLineItemDraft(_BaseType):
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        price_mode: typing.Optional["CustomLineItemPriceMode"] = None
+        price_mode: typing.Optional["CustomLineItemPriceMode"] = None,
     ):
         self.name = name
         self.key = key
@@ -1211,7 +1211,7 @@ class CustomShippingDraft(_BaseType):
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.shipping_method_name = shipping_method_name
@@ -1254,7 +1254,7 @@ class DirectDiscount(_BaseType):
         *,
         id: str,
         value: "CartDiscountValue",
-        target: typing.Optional["CartDiscountTarget"] = None
+        target: typing.Optional["CartDiscountTarget"] = None,
     ):
         self.id = id
         self.value = value
@@ -1296,7 +1296,7 @@ class DirectDiscountDraft(_BaseType):
         self,
         *,
         value: "CartDiscountValue",
-        target: typing.Optional["CartDiscountTarget"] = None
+        target: typing.Optional["CartDiscountTarget"] = None,
     ):
         self.value = value
         self.target = target
@@ -1395,7 +1395,7 @@ class DiscountOnTotalPrice(_BaseType):
         discounted_amount: "TypedMoney",
         included_discounts: typing.List["DiscountedTotalPricePortion"],
         discounted_net_amount: typing.Optional["TypedMoney"] = None,
-        discounted_gross_amount: typing.Optional["TypedMoney"] = None
+        discounted_gross_amount: typing.Optional["TypedMoney"] = None,
     ):
         self.discounted_amount = discounted_amount
         self.included_discounts = included_discounts
@@ -1478,7 +1478,7 @@ class DiscountedLineItemPrice(_BaseType):
         self,
         *,
         value: "TypedMoney",
-        included_discounts: typing.List["DiscountedLineItemPortion"]
+        included_discounts: typing.List["DiscountedLineItemPortion"],
     ):
         self.value = value
         self.included_discounts = included_discounts
@@ -1642,7 +1642,7 @@ class ExternalTaxRateDraft(_BaseType):
         included_in_price: typing.Optional[bool] = None,
         country: str,
         state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ):
         self.name = name
         self.amount = amount
@@ -1751,7 +1751,7 @@ class ItemShippingTarget(_BaseType):
         *,
         address_key: str,
         quantity: int,
-        shipping_method_key: typing.Optional[str] = None
+        shipping_method_key: typing.Optional[str] = None,
     ):
         self.address_key = address_key
         self.quantity = quantity
@@ -1873,7 +1873,7 @@ class LineItem(_BaseType):
         shipping_details: typing.Optional["ItemShippingDetails"] = None,
         custom: typing.Optional["CustomFields"] = None,
         added_at: typing.Optional[datetime.datetime] = None,
-        last_modified_at: typing.Optional[datetime.datetime] = None
+        last_modified_at: typing.Optional[datetime.datetime] = None,
     ):
         self.id = id
         self.key = key
@@ -1981,7 +1981,7 @@ class LineItemDraft(_BaseType):
         ] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -2038,7 +2038,7 @@ class MethodExternalTaxRateDraft(_BaseType):
         self,
         *,
         shipping_method_key: str,
-        tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method_key = shipping_method_key
         self.tax_rate = tax_rate
@@ -2095,7 +2095,7 @@ class MethodTaxedPrice(_BaseType):
         self,
         *,
         shipping_method_key: str,
-        taxed_price: typing.Optional["TaxedItemPrice"] = None
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
     ):
         self.shipping_method_key = shipping_method_key
         self.taxed_price = taxed_price
@@ -2126,7 +2126,7 @@ class ReplicaCartDraft(_BaseType):
         self,
         *,
         reference: typing.Union["CartReference", "OrderReference"],
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.reference = reference
         self.key = key
@@ -2177,7 +2177,7 @@ class Shipping(_BaseType):
         shipping_info: "ShippingInfo",
         shipping_address: "Address",
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        shipping_custom_fields: typing.Optional["CustomFields"] = None
+        shipping_custom_fields: typing.Optional["CustomFields"] = None,
     ):
         self.shipping_key = shipping_key
         self.shipping_info = shipping_info
@@ -2231,7 +2231,7 @@ class ShippingDraft(_BaseType):
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.shipping_method = shipping_method
@@ -2291,7 +2291,7 @@ class ShippingInfo(_BaseType):
         shipping_method: typing.Optional["ShippingMethodReference"] = None,
         deliveries: typing.Optional[typing.List["Delivery"]] = None,
         discounted_price: typing.Optional["DiscountedLineItemPrice"] = None,
-        shipping_method_state: "ShippingMethodState"
+        shipping_method_state: "ShippingMethodState",
     ):
         self.shipping_method_name = shipping_method_name
         self.price = price
@@ -2514,7 +2514,7 @@ class TaxPortion(_BaseType):
         *,
         name: typing.Optional[str] = None,
         rate: float,
-        amount: "CentPrecisionMoney"
+        amount: "CentPrecisionMoney",
     ):
         self.name = name
         self.rate = rate
@@ -2590,7 +2590,7 @@ class TaxedItemPrice(_BaseType):
         total_net: "CentPrecisionMoney",
         total_gross: "CentPrecisionMoney",
         tax_portions: typing.List["TaxPortion"],
-        total_tax: typing.Optional["CentPrecisionMoney"] = None
+        total_tax: typing.Optional["CentPrecisionMoney"] = None,
     ):
         self.total_net = total_net
         self.total_gross = total_gross
@@ -2631,7 +2631,7 @@ class TaxedPrice(_BaseType):
         total_net: "CentPrecisionMoney",
         total_gross: "CentPrecisionMoney",
         tax_portions: typing.List["TaxPortion"],
-        total_tax: typing.Optional["CentPrecisionMoney"] = None
+        total_tax: typing.Optional["CentPrecisionMoney"] = None,
     ):
         self.total_net = total_net
         self.total_gross = total_gross
@@ -2670,7 +2670,7 @@ class TaxedPriceDraft(_BaseType):
         total_net: "Money",
         total_gross: "Money",
         tax_portions: typing.List["TaxPortionDraft"],
-        total_tax: typing.Optional["TypedMoneyDraft"] = None
+        total_tax: typing.Optional["TypedMoneyDraft"] = None,
     ):
         self.total_net = total_net
         self.total_gross = total_gross
@@ -2743,7 +2743,7 @@ class CartAddCustomLineItemAction(CartUpdateAction):
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        price_mode: typing.Optional["CustomLineItemPriceMode"] = None
+        price_mode: typing.Optional["CustomLineItemPriceMode"] = None,
     ):
         self.money = money
         self.name = name
@@ -2813,7 +2813,7 @@ class CartAddCustomShippingMethodAction(CartUpdateAction):
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.shipping_method_name = shipping_method_name
@@ -2979,7 +2979,7 @@ class CartAddLineItemAction(CartUpdateAction):
         ] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -3066,7 +3066,7 @@ class CartAddShippingMethodAction(CartUpdateAction):
         shipping_rate_input: typing.Optional["ShippingRateInputDraft"] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.shipping_method = shipping_method
@@ -3109,7 +3109,7 @@ class CartAddShoppingListAction(CartUpdateAction):
         *,
         shopping_list: "ShoppingListResourceIdentifier",
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.shopping_list = shopping_list
         self.distribution_channel = distribution_channel
@@ -3144,7 +3144,7 @@ class CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction(CartUpdateActio
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        targets_delta: typing.List["ItemShippingTarget"]
+        targets_delta: typing.List["ItemShippingTarget"],
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3189,7 +3189,7 @@ class CartApplyDeltaToLineItemShippingDetailsTargetsAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        targets_delta: typing.List["ItemShippingTarget"]
+        targets_delta: typing.List["ItemShippingTarget"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3228,7 +3228,7 @@ class CartChangeCustomLineItemMoneyAction(CartUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        money: "Money"
+        money: "Money",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3263,7 +3263,7 @@ class CartChangeCustomLineItemPriceModeAction(CartUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        mode: "CustomLineItemPriceMode"
+        mode: "CustomLineItemPriceMode",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3311,7 +3311,7 @@ class CartChangeCustomLineItemQuantityAction(CartUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3370,7 +3370,7 @@ class CartChangeLineItemQuantityAction(CartUpdateAction):
         line_item_key: typing.Optional[str] = None,
         quantity: int,
         external_price: typing.Optional["Money"] = None,
-        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3541,7 +3541,7 @@ class CartRemoveCustomLineItemAction(CartUpdateAction):
         self,
         *,
         custom_line_item_id: typing.Optional[str] = None,
-        custom_line_item_key: typing.Optional[str] = None
+        custom_line_item_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3635,7 +3635,7 @@ class CartRemoveLineItemAction(CartUpdateAction):
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
-        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3795,7 +3795,7 @@ class CartSetBillingAddressCustomTypeAction(CartUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -3853,7 +3853,7 @@ class CartSetCartTotalTaxAction(CartUpdateAction):
         self,
         *,
         external_total_gross: "Money",
-        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None
+        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None,
     ):
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions
@@ -3947,7 +3947,7 @@ class CartSetCustomLineItemCustomFieldAction(CartUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3987,7 +3987,7 @@ class CartSetCustomLineItemCustomTypeAction(CartUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -4024,7 +4024,7 @@ class CartSetCustomLineItemShippingDetailsAction(CartUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -4066,7 +4066,7 @@ class CartSetCustomLineItemTaxAmountAction(CartUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -4109,7 +4109,7 @@ class CartSetCustomLineItemTaxRateAction(CartUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -4157,7 +4157,7 @@ class CartSetCustomShippingMethodAction(CartUpdateAction):
         shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method_name = shipping_method_name
         self.shipping_rate = shipping_rate
@@ -4191,7 +4191,7 @@ class CartSetCustomTypeAction(CartUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -4251,7 +4251,7 @@ class CartSetCustomerGroupAction(CartUpdateAction):
     def __init__(
         self,
         *,
-        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
     ):
         self.customer_group = customer_group
 
@@ -4410,7 +4410,7 @@ class CartSetItemShippingAddressCustomTypeAction(CartUpdateAction):
         *,
         address_key: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.address_key = address_key
         self.type = type
@@ -4472,7 +4472,7 @@ class CartSetLineItemCustomFieldAction(CartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4512,7 +4512,7 @@ class CartSetLineItemCustomTypeAction(CartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4552,7 +4552,7 @@ class CartSetLineItemDistributionChannelAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4588,7 +4588,7 @@ class CartSetLineItemInventoryModeAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        inventory_mode: typing.Optional["InventoryMode"] = None
+        inventory_mode: typing.Optional["InventoryMode"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4626,7 +4626,7 @@ class CartSetLineItemPriceAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        external_price: typing.Optional["Money"] = None
+        external_price: typing.Optional["Money"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4662,7 +4662,7 @@ class CartSetLineItemShippingDetailsAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4701,7 +4701,7 @@ class CartSetLineItemSupplyChannelAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4743,7 +4743,7 @@ class CartSetLineItemTaxAmountAction(CartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4786,7 +4786,7 @@ class CartSetLineItemTaxRateAction(CartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4825,7 +4825,7 @@ class CartSetLineItemTotalPriceAction(CartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4944,7 +4944,7 @@ class CartSetShippingAddressCustomTypeAction(CartUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -4982,7 +4982,7 @@ class CartSetShippingCustomFieldAction(CartUpdateAction):
         *,
         shipping_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.shipping_key = shipping_key
         self.name = name
@@ -5022,7 +5022,7 @@ class CartSetShippingCustomTypeAction(CartUpdateAction):
         *,
         shipping_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.shipping_key = shipping_key
         self.type = type
@@ -5059,7 +5059,7 @@ class CartSetShippingMethodAction(CartUpdateAction):
         self,
         *,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
@@ -5093,7 +5093,7 @@ class CartSetShippingMethodTaxAmountAction(CartUpdateAction):
         self,
         *,
         shipping_key: typing.Optional[str] = None,
-        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
+        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.external_tax_amount = external_tax_amount
@@ -5127,7 +5127,7 @@ class CartSetShippingMethodTaxRateAction(CartUpdateAction):
         self,
         *,
         shipping_key: typing.Optional[str] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.external_tax_rate = external_tax_rate

@@ -25,7 +25,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _associate_id: str

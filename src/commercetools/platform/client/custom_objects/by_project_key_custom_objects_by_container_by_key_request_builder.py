@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _container: str

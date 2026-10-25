@@ -77,7 +77,7 @@ class State(BaseResource):
         initial: bool,
         built_in: bool,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
-        transitions: typing.Optional[typing.List["StateReference"]] = None
+        transitions: typing.Optional[typing.List["StateReference"]] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -138,7 +138,7 @@ class StateDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         initial: typing.Optional[bool] = None,
         roles: typing.Optional[typing.List["StateRoleEnum"]] = None,
-        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
+        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None,
     ):
         self.key = key
         self.type = type
@@ -187,7 +187,7 @@ class StatePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["State"]
+        results: typing.List["State"],
     ):
         self.limit = limit
         self.offset = offset
@@ -550,7 +550,7 @@ class StateSetTransitionsAction(StateUpdateAction):
     def __init__(
         self,
         *,
-        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None
+        transitions: typing.Optional[typing.List["StateResourceIdentifier"]] = None,
     ):
         self.transitions = transitions
 

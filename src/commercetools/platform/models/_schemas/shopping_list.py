@@ -359,7 +359,6 @@ class ShoppingListReferenceSchema(ReferenceSchema):
 
 
 class ShoppingListResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

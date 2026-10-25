@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInventoriesRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

@@ -591,7 +591,6 @@ class CartReferenceSchema(ReferenceSchema):
 
 
 class CartResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1212,7 +1211,6 @@ class DirectDiscountDraftSchema(helpers.BaseSchema):
 
 
 class DirectDiscountReferenceSchema(ReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3290,7 +3288,6 @@ class CartChangeTaxRoundingModeActionSchema(CartUpdateActionSchema):
 
 
 class CartFreezeCartActionSchema(CartUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4529,7 +4526,6 @@ class CartSetShippingRateInputActionSchema(CartUpdateActionSchema):
 
 
 class CartUnfreezeCartActionSchema(CartUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

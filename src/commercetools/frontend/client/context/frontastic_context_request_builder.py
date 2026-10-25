@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticContextRequestBuilder:
-
     _client: "BaseClient"
 
     def __init__(

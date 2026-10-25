@@ -167,7 +167,7 @@ class CloudEventsPayload(_BaseType):
         sequence: typing.Optional[str] = None,
         sequencetype: typing.Optional[str] = None,
         dataref: typing.Optional[str] = None,
-        data: "DeliveryPayload"
+        data: "DeliveryPayload",
     ):
         self.specversion = specversion
         self.id = id
@@ -262,7 +262,7 @@ class DeliveryPayload(_BaseType):
         resource: "Reference",
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
         self.project_key = project_key
         self.notification_type = notification_type
@@ -434,7 +434,7 @@ class ConfluentCloudDestination(Destination):
         api_secret: str,
         acks: str,
         topic: str,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.bootstrap_server = bootstrap_server
         self.api_key = api_key
@@ -576,7 +576,7 @@ class MessageDeliveryPayload(DeliveryPayload):
         last_modified_at: datetime.datetime,
         sequence_number: int,
         resource_version: int,
-        payload_not_included: typing.Optional["PayloadNotIncluded"] = None
+        payload_not_included: typing.Optional["PayloadNotIncluded"] = None,
     ):
         self.id = id
         self.version = version
@@ -624,7 +624,7 @@ class MessageSubscription(_BaseType):
         self,
         *,
         resource_type_id: "MessageSubscriptionResourceTypeId",
-        types: typing.Optional[typing.List["str"]] = None
+        types: typing.Optional[typing.List["str"]] = None,
     ):
         self.resource_type_id = resource_type_id
         self.types = types
@@ -728,7 +728,7 @@ class ResourceCreatedDeliveryPayload(DeliveryPayload):
             "UserProvidedIdentifiers"
         ] = None,
         version: int,
-        modified_at: datetime.datetime
+        modified_at: datetime.datetime,
     ):
         self.version = version
         self.modified_at = modified_at
@@ -774,7 +774,7 @@ class ResourceDeletedDeliveryPayload(DeliveryPayload):
         ] = None,
         version: int,
         modified_at: datetime.datetime,
-        data_erasure: typing.Optional[bool] = None
+        data_erasure: typing.Optional[bool] = None,
     ):
         self.version = version
         self.modified_at = modified_at
@@ -821,7 +821,7 @@ class ResourceUpdatedDeliveryPayload(DeliveryPayload):
         ] = None,
         version: int,
         old_version: int,
-        modified_at: datetime.datetime
+        modified_at: datetime.datetime,
     ):
         self.version = version
         self.old_version = old_version
@@ -874,7 +874,7 @@ class SnsDestination(Destination):
         access_key: typing.Optional[str] = None,
         access_secret: typing.Optional[str] = None,
         topic_arn: str,
-        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None
+        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None,
     ):
         self.access_key = access_key
         self.access_secret = access_secret
@@ -925,7 +925,7 @@ class SqsDestination(Destination):
         access_secret: typing.Optional[str] = None,
         queue_url: str,
         region: str,
-        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None
+        authentication_mode: typing.Optional["AwsAuthenticationMode"] = None,
     ):
         self.access_key = access_key
         self.access_secret = access_secret
@@ -979,7 +979,7 @@ class Subscription(BaseResource):
         key: typing.Optional[str] = None,
         messages: typing.List["MessageSubscription"],
         format: "DeliveryFormat",
-        status: "SubscriptionHealthStatus"
+        status: "SubscriptionHealthStatus",
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -1030,7 +1030,7 @@ class SubscriptionDraft(_BaseType):
         destination: "Destination",
         key: typing.Optional[str] = None,
         messages: typing.Optional[typing.List["MessageSubscription"]] = None,
-        format: typing.Optional["DeliveryFormat"] = None
+        format: typing.Optional["DeliveryFormat"] = None,
     ):
         self.changes = changes
         self.destination = destination
@@ -1087,7 +1087,7 @@ class SubscriptionPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Subscription"]
+        results: typing.List["Subscription"],
     ):
         self.limit = limit
         self.offset = offset

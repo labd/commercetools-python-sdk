@@ -80,7 +80,7 @@ class InventoryEntry(BaseResource):
         available_quantity: int,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -137,7 +137,7 @@ class InventoryEntryDraft(_BaseType):
         quantity_on_stock: int,
         restockable_in_days: typing.Optional[int] = None,
         expected_delivery: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.sku = sku
         self.key = key
@@ -318,7 +318,7 @@ class InventoryPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["InventoryEntry"]
+        results: typing.List["InventoryEntry"],
     ):
         self.limit = limit
         self.offset = offset
@@ -456,7 +456,7 @@ class InventoryEntrySetCustomTypeAction(InventoryEntryUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

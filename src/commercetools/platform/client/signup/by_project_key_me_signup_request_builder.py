@@ -16,7 +16,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMeSignupRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

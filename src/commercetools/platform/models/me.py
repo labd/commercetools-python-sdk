@@ -198,7 +198,7 @@ class MyBusinessUnitAssociateDraft(_BaseType):
         *,
         version: int,
         customer: "MyCustomerDraft",
-        associate_role_assignments: typing.List["AssociateRoleAssignmentDraft"]
+        associate_role_assignments: typing.List["AssociateRoleAssignmentDraft"],
     ):
         self.version = version
         self.customer = customer
@@ -256,7 +256,7 @@ class MyBusinessUnitDraft(_BaseType):
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
         default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
-        default_billing_address: typing.Optional[int] = None
+        default_billing_address: typing.Optional[int] = None,
     ):
         self.key = key
         self.unit_type = unit_type
@@ -477,7 +477,7 @@ class MyCartDraft(_BaseType):
         country: typing.Optional[str] = None,
         locale: typing.Optional[str] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.currency = currency
         self.customer_email = customer_email
@@ -688,7 +688,7 @@ class MyCompanyDraft(MyBusinessUnitDraft):
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
         default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
-        default_billing_address: typing.Optional[int] = None
+        default_billing_address: typing.Optional[int] = None,
     ):
 
         super().__init__(
@@ -771,7 +771,7 @@ class MyCustomerDraft(_BaseType):
         default_billing_address: typing.Optional[int] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         locale: typing.Optional[str] = None,
-        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None
+        stores: typing.Optional[typing.List["StoreResourceIdentifier"]] = None,
     ):
         self.email = email
         self.password = password
@@ -953,7 +953,7 @@ class MyDivisionDraft(MyBusinessUnitDraft):
         default_shipping_address: typing.Optional[int] = None,
         billing_addresses: typing.Optional[typing.List["int"]] = None,
         default_billing_address: typing.Optional[int] = None,
-        parent_unit: "BusinessUnitResourceIdentifier"
+        parent_unit: "BusinessUnitResourceIdentifier",
     ):
         self.parent_unit = parent_unit
 
@@ -1027,7 +1027,7 @@ class MyLineItemDraft(_BaseType):
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -1091,7 +1091,7 @@ class MyOrderFromQuoteDraft(_BaseType):
         *,
         id: str,
         version: int,
-        quote_state_to_accepted: typing.Optional[bool] = None
+        quote_state_to_accepted: typing.Optional[bool] = None,
     ):
         self.id = id
         self.version = version
@@ -1140,7 +1140,7 @@ class MyPayment(_BaseType):
         amount_planned: "CentPrecisionMoney",
         payment_method_info: "PaymentMethodInfo",
         transactions: typing.List["Transaction"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.version = version
@@ -1182,7 +1182,7 @@ class MyPaymentDraft(_BaseType):
         amount_planned: "Money",
         payment_method_info: typing.Optional["PaymentMethodInfo"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        transaction: typing.Optional["MyTransactionDraft"] = None
+        transaction: typing.Optional["MyTransactionDraft"] = None,
     ):
         self.amount_planned = amount_planned
         self.payment_method_info = payment_method_info
@@ -1228,7 +1228,7 @@ class MyPaymentPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["MyPayment"]
+        results: typing.List["MyPayment"],
     ):
         self.limit = limit
         self.count = count
@@ -1484,7 +1484,7 @@ class MyShoppingListDraft(_BaseType):
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         delete_days_after_last_modification: typing.Optional[int] = None,
-        store: typing.Optional["StoreResourceIdentifier"] = None
+        store: typing.Optional["StoreResourceIdentifier"] = None,
     ):
         self.name = name
         self.description = description
@@ -1661,7 +1661,7 @@ class MyTransactionDraft(_BaseType):
         type: "TransactionType",
         amount: "Money",
         interaction_id: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.timestamp = timestamp
         self.type = type
@@ -1741,7 +1741,7 @@ class MyBusinessUnitAddBillingAddressIdAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1774,7 +1774,7 @@ class MyBusinessUnitAddShippingAddressIdAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1810,7 +1810,7 @@ class MyBusinessUnitChangeAddressAction(MyBusinessUnitUpdateAction):
         *,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
-        address: "BaseAddress"
+        address: "BaseAddress",
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1919,7 +1919,7 @@ class MyBusinessUnitRemoveAddressAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -1977,7 +1977,7 @@ class MyBusinessUnitRemoveBillingAddressIdAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -2010,7 +2010,7 @@ class MyBusinessUnitRemoveShippingAddressIdAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -2082,7 +2082,7 @@ class MyBusinessUnitSetAddressCustomTypeAction(MyBusinessUnitUpdateAction):
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
         fields: typing.Optional["FieldContainer"] = None,
-        address_id: str
+        address_id: str,
     ):
         self.type = type
         self.fields = fields
@@ -2173,7 +2173,7 @@ class MyBusinessUnitSetCustomTypeAction(MyBusinessUnitUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -2206,7 +2206,7 @@ class MyBusinessUnitSetDefaultBillingAddressAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -2239,7 +2239,7 @@ class MyBusinessUnitSetDefaultShippingAddressAction(MyBusinessUnitUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -2378,7 +2378,7 @@ class MyCartAddLineItemAction(MyCartUpdateAction):
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -2446,7 +2446,7 @@ class MyCartApplyDeltaToLineItemShippingDetailsTargetsAction(MyCartUpdateAction)
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        targets_delta: typing.List["ItemShippingTarget"]
+        targets_delta: typing.List["ItemShippingTarget"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -2509,7 +2509,7 @@ class MyCartChangeLineItemQuantityAction(MyCartUpdateAction):
         line_item_key: typing.Optional[str] = None,
         quantity: int,
         external_price: typing.Optional["Money"] = None,
-        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -2667,7 +2667,7 @@ class MyCartRemoveLineItemAction(MyCartUpdateAction):
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
-        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -2833,7 +2833,7 @@ class MyCartSetCustomTypeAction(MyCartUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -2928,7 +2928,7 @@ class MyCartSetLineItemCustomFieldAction(MyCartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -2968,7 +2968,7 @@ class MyCartSetLineItemCustomTypeAction(MyCartUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3008,7 +3008,7 @@ class MyCartSetLineItemDistributionChannelAction(MyCartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3044,7 +3044,7 @@ class MyCartSetLineItemShippingDetailsAction(MyCartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3083,7 +3083,7 @@ class MyCartSetLineItemSupplyChannelAction(MyCartUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3178,7 +3178,7 @@ class MyCartSetShippingMethodAction(MyCartUpdateAction):
         self,
         *,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
@@ -3261,7 +3261,7 @@ class MyCustomerAddBillingAddressIdAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3294,7 +3294,7 @@ class MyCustomerAddShippingAddressIdAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3334,7 +3334,7 @@ class MyCustomerChangeAddressAction(MyCustomerUpdateAction):
         *,
         address_id: typing.Optional[str] = None,
         address_key: typing.Optional[str] = None,
-        address: "BaseAddress"
+        address: "BaseAddress",
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3397,7 +3397,7 @@ class MyCustomerRemoveAddressAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3433,7 +3433,7 @@ class MyCustomerRemoveBillingAddressIdAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3469,7 +3469,7 @@ class MyCustomerRemoveShippingAddressIdAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3559,7 +3559,7 @@ class MyCustomerSetCustomTypeAction(MyCustomerUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -3621,7 +3621,7 @@ class MyCustomerSetDefaultBillingAddressAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -3657,7 +3657,7 @@ class MyCustomerSetDefaultShippingAddressAction(MyCustomerUpdateAction):
         self,
         *,
         address_id: typing.Optional[str] = None,
-        address_key: typing.Optional[str] = None
+        address_key: typing.Optional[str] = None,
     ):
         self.address_id = address_id
         self.address_key = address_key
@@ -4104,7 +4104,7 @@ class MyShoppingListAddLineItemAction(MyShoppingListUpdateAction):
         variant_id: typing.Optional[int] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.sku = sku
@@ -4152,7 +4152,7 @@ class MyShoppingListAddTextLineItemAction(MyShoppingListUpdateAction):
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.key = key
@@ -4190,7 +4190,7 @@ class MyShoppingListChangeLineItemQuantityAction(MyShoppingListUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4271,7 +4271,7 @@ class MyShoppingListChangeTextLineItemNameAction(MyShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        name: "LocalizedString"
+        name: "LocalizedString",
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -4306,7 +4306,7 @@ class MyShoppingListChangeTextLineItemQuantityAction(MyShoppingListUpdateAction)
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -4364,7 +4364,7 @@ class MyShoppingListRemoveLineItemAction(MyShoppingListUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4399,7 +4399,7 @@ class MyShoppingListRemoveTextLineItemAction(MyShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -4460,7 +4460,7 @@ class MyShoppingListSetCustomTypeAction(MyShoppingListUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -4553,7 +4553,7 @@ class MyShoppingListSetLineItemCustomFieldAction(MyShoppingListUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4590,7 +4590,7 @@ class MyShoppingListSetLineItemCustomTypeAction(MyShoppingListUpdateAction):
         *,
         line_item_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.type = type
@@ -4630,7 +4630,7 @@ class MyShoppingListSetTextLineItemCustomFieldAction(MyShoppingListUpdateAction)
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -4670,7 +4670,7 @@ class MyShoppingListSetTextLineItemCustomTypeAction(MyShoppingListUpdateAction):
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -4706,7 +4706,7 @@ class MyShoppingListSetTextLineItemDescriptionAction(MyShoppingListUpdateAction)
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        description: typing.Optional["LocalizedString"] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key

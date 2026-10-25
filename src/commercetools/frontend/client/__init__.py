@@ -11,7 +11,6 @@ from .frontastic.frontastic_request_builder import FrontasticRequestBuilder
 
 
 class Client(BaseClient):
-
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("url", "https://{project}-{customer}.frontastic.io")
         super().__init__(**kwargs)

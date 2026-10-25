@@ -22,7 +22,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyImportContainersRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

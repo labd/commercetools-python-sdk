@@ -73,7 +73,7 @@ class AttributeDefinition(_BaseType):
         attribute_constraint: typing.Optional["AttributeConstraintEnum"] = None,
         input_tip: typing.Optional["LocalizedString"] = None,
         input_hint: typing.Optional["TextInputHint"] = None,
-        is_searchable: typing.Optional[bool] = None
+        is_searchable: typing.Optional[bool] = None,
     ):
         self.type = type
         self.name = name
@@ -168,7 +168,6 @@ class AttributeType(_BaseType):
 
 
 class AttributeBooleanType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="boolean")
@@ -186,7 +185,6 @@ class AttributeBooleanType(AttributeType):
 
 
 class AttributeDateTimeType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="datetime")
@@ -204,7 +202,6 @@ class AttributeDateTimeType(AttributeType):
 
 
 class AttributeDateType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="date")
@@ -266,7 +263,6 @@ class AttributePlainEnumValue(_BaseType):
 
 
 class AttributeLocalizableTextType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="ltext")
@@ -339,7 +335,6 @@ class AttributeLocalizedEnumValue(_BaseType):
 
 
 class AttributeMoneyType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="money")
@@ -378,7 +373,6 @@ class AttributeNestedType(AttributeType):
 
 
 class AttributeNumberType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="number")
@@ -439,7 +433,6 @@ class AttributeSetType(AttributeType):
 
 
 class AttributeTextType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="text")
@@ -457,7 +450,6 @@ class AttributeTextType(AttributeType):
 
 
 class AttributeTimeType(AttributeType):
-
     def __init__(self):
 
         super().__init__(name="time")
@@ -502,7 +494,7 @@ class ProductTypeImport(ImportResource):
         key: str,
         name: str,
         description: str,
-        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None
+        attributes: typing.Optional[typing.List["AttributeDefinition"]] = None,
     ):
         self.name = name
         self.description = description

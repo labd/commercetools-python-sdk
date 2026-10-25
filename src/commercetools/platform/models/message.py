@@ -645,7 +645,7 @@ class Message(BaseResource):
         type: str,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -1447,7 +1447,7 @@ class ApprovalFlowApprovedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         associate: "CustomerReference",
-        order: "OrderReference"
+        order: "OrderReference",
     ):
         self.associate = associate
         self.order = order
@@ -1504,7 +1504,7 @@ class ApprovalFlowCompletedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         status: "ApprovalFlowStatus",
-        order: "OrderReference"
+        order: "OrderReference",
     ):
         self.status = status
         self.order = order
@@ -1558,7 +1558,7 @@ class ApprovalFlowCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        approval_flow: "ApprovalFlow"
+        approval_flow: "ApprovalFlow",
     ):
         self.approval_flow = approval_flow
 
@@ -1617,7 +1617,7 @@ class ApprovalFlowRejectedMessage(Message):
         ] = None,
         associate: "CustomerReference",
         rejection_reason: typing.Optional[str] = None,
-        order: "OrderReference"
+        order: "OrderReference",
     ):
         self.associate = associate
         self.rejection_reason = rejection_reason
@@ -1675,7 +1675,7 @@ class ApprovalRuleApproversSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         approvers: "ApproverHierarchy",
-        old_approvers: "ApproverHierarchy"
+        old_approvers: "ApproverHierarchy",
     ):
         self.approvers = approvers
         self.old_approvers = old_approvers
@@ -1729,7 +1729,7 @@ class ApprovalRuleCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        approval_rule: "ApprovalRule"
+        approval_rule: "ApprovalRule",
     ):
         self.approval_rule = approval_rule
 
@@ -1785,7 +1785,7 @@ class ApprovalRuleDescriptionSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         description: typing.Optional[str] = None,
-        old_description: typing.Optional[str] = None
+        old_description: typing.Optional[str] = None,
     ):
         self.description = description
         self.old_description = old_description
@@ -1842,7 +1842,7 @@ class ApprovalRuleKeySetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         key: typing.Optional[str] = None,
-        old_key: typing.Optional[str] = None
+        old_key: typing.Optional[str] = None,
     ):
         self.key = key
         self.old_key = old_key
@@ -1899,7 +1899,7 @@ class ApprovalRuleNameSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        old_name: str
+        old_name: str,
     ):
         self.name = name
         self.old_name = old_name
@@ -1956,7 +1956,7 @@ class ApprovalRulePredicateSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         predicate: str,
-        old_predicate: str
+        old_predicate: str,
     ):
         self.predicate = predicate
         self.old_predicate = old_predicate
@@ -2013,7 +2013,7 @@ class ApprovalRuleRequestersSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         requesters: typing.List["RuleRequester"],
-        old_requesters: typing.List["RuleRequester"]
+        old_requesters: typing.List["RuleRequester"],
     ):
         self.requesters = requesters
         self.old_requesters = old_requesters
@@ -2070,7 +2070,7 @@ class ApprovalRuleStatusSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         status: "ApprovalRuleStatus",
-        old_status: "ApprovalRuleStatus"
+        old_status: "ApprovalRuleStatus",
     ):
         self.status = status
         self.old_status = old_status
@@ -2124,7 +2124,7 @@ class AssociateRoleBuyerAssignableChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        buyer_assignable: bool
+        buyer_assignable: bool,
     ):
         self.buyer_assignable = buyer_assignable
 
@@ -2177,7 +2177,7 @@ class AssociateRoleCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        associate_role: "AssociateRole"
+        associate_role: "AssociateRole",
     ):
         self.associate_role = associate_role
 
@@ -2226,7 +2226,7 @@ class AssociateRoleDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -2278,7 +2278,7 @@ class AssociateRoleNameChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -2331,7 +2331,7 @@ class AssociateRolePermissionAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        permission: "Permission"
+        permission: "Permission",
     ):
         self.permission = permission
 
@@ -2384,7 +2384,7 @@ class AssociateRolePermissionRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        permission: "Permission"
+        permission: "Permission",
     ):
         self.permission = permission
 
@@ -2437,7 +2437,7 @@ class AssociateRolePermissionsSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        permissions: typing.List["Permission"]
+        permissions: typing.List["Permission"],
     ):
         self.permissions = permissions
 
@@ -2490,7 +2490,7 @@ class BusinessUnitAddressAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -2543,7 +2543,7 @@ class BusinessUnitAddressChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -2599,7 +2599,7 @@ class BusinessUnitAddressCustomFieldAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -2659,7 +2659,7 @@ class BusinessUnitAddressCustomFieldChangedMessage(Message):
         ] = None,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -2714,7 +2714,7 @@ class BusinessUnitAddressCustomFieldRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -2767,7 +2767,7 @@ class BusinessUnitAddressCustomTypeRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.old_type_id = old_type_id
 
@@ -2823,7 +2823,7 @@ class BusinessUnitAddressCustomTypeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.old_type_id = old_type_id
@@ -2877,7 +2877,7 @@ class BusinessUnitAddressRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -2930,7 +2930,7 @@ class BusinessUnitAssociateAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        associate: "Associate"
+        associate: "Associate",
     ):
         self.associate = associate
 
@@ -2983,7 +2983,7 @@ class BusinessUnitAssociateChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        associate: "Associate"
+        associate: "Associate",
     ):
         self.associate = associate
 
@@ -3039,7 +3039,7 @@ class BusinessUnitAssociateModeChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         associate_mode: "BusinessUnitAssociateMode",
-        old_associate_mode: "BusinessUnitAssociateMode"
+        old_associate_mode: "BusinessUnitAssociateMode",
     ):
         self.associate_mode = associate_mode
         self.old_associate_mode = old_associate_mode
@@ -3093,7 +3093,7 @@ class BusinessUnitAssociateRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        associate: "Associate"
+        associate: "Associate",
     ):
         self.associate = associate
 
@@ -3146,7 +3146,7 @@ class BusinessUnitAssociatesSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        associates: typing.List["Associate"]
+        associates: typing.List["Associate"],
     ):
         self.associates = associates
 
@@ -3199,7 +3199,7 @@ class BusinessUnitBillingAddressAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -3252,7 +3252,7 @@ class BusinessUnitBillingAddressRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -3305,7 +3305,7 @@ class BusinessUnitContactEmailSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        contact_email: typing.Optional[str] = None
+        contact_email: typing.Optional[str] = None,
     ):
         self.contact_email = contact_email
 
@@ -3358,7 +3358,7 @@ class BusinessUnitCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        business_unit: "BusinessUnit"
+        business_unit: "BusinessUnit",
     ):
         self.business_unit = business_unit
 
@@ -3414,7 +3414,7 @@ class BusinessUnitCustomFieldAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -3474,7 +3474,7 @@ class BusinessUnitCustomFieldChangedMessage(Message):
         ] = None,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -3529,7 +3529,7 @@ class BusinessUnitCustomFieldRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -3582,7 +3582,7 @@ class BusinessUnitCustomTypeRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.old_type_id = old_type_id
 
@@ -3638,7 +3638,7 @@ class BusinessUnitCustomTypeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.old_type_id = old_type_id
@@ -3692,7 +3692,7 @@ class BusinessUnitDefaultBillingAddressSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: typing.Optional["Address"] = None
+        address: typing.Optional["Address"] = None,
     ):
         self.address = address
 
@@ -3745,7 +3745,7 @@ class BusinessUnitDefaultShippingAddressSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: typing.Optional["Address"] = None
+        address: typing.Optional["Address"] = None,
     ):
         self.address = address
 
@@ -3794,7 +3794,7 @@ class BusinessUnitDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -3846,7 +3846,7 @@ class BusinessUnitNameChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -3902,7 +3902,7 @@ class BusinessUnitParentChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         old_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
-        new_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None
+        new_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
     ):
         self.old_parent_unit = old_parent_unit
         self.new_parent_unit = new_parent_unit
@@ -3956,7 +3956,7 @@ class BusinessUnitShippingAddressAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -4009,7 +4009,7 @@ class BusinessUnitShippingAddressRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -4062,7 +4062,7 @@ class BusinessUnitStatusChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        active: "BusinessUnitStatus"
+        active: "BusinessUnitStatus",
     ):
         self.active = active
 
@@ -4115,7 +4115,7 @@ class BusinessUnitStoreAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        store: "StoreKeyReference"
+        store: "StoreKeyReference",
     ):
         self.store = store
 
@@ -4177,7 +4177,7 @@ class BusinessUnitStoreModeChangedMessage(Message):
         stores: typing.List["StoreKeyReference"],
         store_mode: "BusinessUnitStoreMode",
         old_stores: typing.List["StoreKeyReference"],
-        old_store_mode: "BusinessUnitStoreMode"
+        old_store_mode: "BusinessUnitStoreMode",
     ):
         self.stores = stores
         self.store_mode = store_mode
@@ -4233,7 +4233,7 @@ class BusinessUnitStoreRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        store: "StoreKeyReference"
+        store: "StoreKeyReference",
     ):
         self.store = store
 
@@ -4286,7 +4286,7 @@ class BusinessUnitStoresSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        stores: typing.List["StoreKeyReference"]
+        stores: typing.List["StoreKeyReference"],
     ):
         self.stores = stores
 
@@ -4339,7 +4339,7 @@ class CartDiscountCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        cart_discount: "CartDiscount"
+        cart_discount: "CartDiscount",
     ):
         self.cart_discount = cart_discount
 
@@ -4388,7 +4388,7 @@ class CartDiscountDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -4440,7 +4440,7 @@ class CartDiscountStoreAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        store: "StoreKeyReference"
+        store: "StoreKeyReference",
     ):
         self.store = store
 
@@ -4493,7 +4493,7 @@ class CartDiscountStoreRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        store: "StoreKeyReference"
+        store: "StoreKeyReference",
     ):
         self.store = store
 
@@ -4546,7 +4546,7 @@ class CartDiscountStoresSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        stores: typing.List["StoreKeyReference"]
+        stores: typing.List["StoreKeyReference"],
     ):
         self.stores = stores
 
@@ -4599,7 +4599,7 @@ class CategoryCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        category: "Category"
+        category: "Category",
     ):
         self.category = category
 
@@ -4655,7 +4655,7 @@ class CategorySlugChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         slug: "LocalizedString",
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.slug = slug
         self.old_slug = old_slug
@@ -4709,7 +4709,7 @@ class CustomerAddressAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -4762,7 +4762,7 @@ class CustomerAddressChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -4821,7 +4821,7 @@ class CustomerAddressCustomFieldAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -4882,7 +4882,7 @@ class CustomerAddressCustomFieldChangedMessage(Message):
         ] = None,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -4937,7 +4937,7 @@ class CustomerAddressCustomFieldRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -4990,7 +4990,7 @@ class CustomerAddressCustomTypeRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.previous_type_id = previous_type_id
 
@@ -5046,7 +5046,7 @@ class CustomerAddressCustomTypeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -5100,7 +5100,7 @@ class CustomerAddressRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        address: "Address"
+        address: "Address",
     ):
         self.address = address
 
@@ -5153,7 +5153,7 @@ class CustomerCompanyNameSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        company_name: typing.Optional[str] = None
+        company_name: typing.Optional[str] = None,
     ):
         self.company_name = company_name
 
@@ -5206,7 +5206,7 @@ class CustomerCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        customer: "Customer"
+        customer: "Customer",
     ):
         self.customer = customer
 
@@ -5265,7 +5265,7 @@ class CustomerCustomFieldAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -5326,7 +5326,7 @@ class CustomerCustomFieldChangedMessage(Message):
         ] = None,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -5381,7 +5381,7 @@ class CustomerCustomFieldRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -5434,7 +5434,7 @@ class CustomerCustomTypeRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.previous_type_id = previous_type_id
 
@@ -5490,7 +5490,7 @@ class CustomerCustomTypeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -5544,7 +5544,7 @@ class CustomerDateOfBirthSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        date_of_birth: typing.Optional[datetime.date] = None
+        date_of_birth: typing.Optional[datetime.date] = None,
     ):
         self.date_of_birth = date_of_birth
 
@@ -5593,7 +5593,7 @@ class CustomerDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -5645,7 +5645,7 @@ class CustomerEmailChangedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        email: str
+        email: str,
     ):
         self.email = email
 
@@ -5701,7 +5701,7 @@ class CustomerEmailTokenCreatedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         customer_id: str,
-        expires_at: datetime.datetime
+        expires_at: datetime.datetime,
     ):
         self.customer_id = customer_id
         self.expires_at = expires_at
@@ -5751,7 +5751,7 @@ class CustomerEmailVerifiedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -5803,7 +5803,7 @@ class CustomerFirstNameSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        first_name: typing.Optional[str] = None
+        first_name: typing.Optional[str] = None,
     ):
         self.first_name = first_name
 
@@ -5862,7 +5862,7 @@ class CustomerGroupCustomFieldAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -5922,7 +5922,7 @@ class CustomerGroupCustomFieldChangedMessage(Message):
         ] = None,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -5977,7 +5977,7 @@ class CustomerGroupCustomFieldRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -6030,7 +6030,7 @@ class CustomerGroupCustomTypeRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.old_type_id = old_type_id
 
@@ -6086,7 +6086,7 @@ class CustomerGroupCustomTypeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        old_type_id: typing.Optional[str] = None
+        old_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.old_type_id = old_type_id
@@ -6140,7 +6140,7 @@ class CustomerGroupSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        customer_group: typing.Optional["CustomerGroupReference"] = None
+        customer_group: typing.Optional["CustomerGroupReference"] = None,
     ):
         self.customer_group = customer_group
 
@@ -6193,7 +6193,7 @@ class CustomerLastNameSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        last_name: typing.Optional[str] = None
+        last_name: typing.Optional[str] = None,
     ):
         self.last_name = last_name
 
@@ -6249,7 +6249,7 @@ class CustomerPasswordTokenCreatedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         customer_id: str,
-        expires_at: datetime.datetime
+        expires_at: datetime.datetime,
     ):
         self.customer_id = customer_id
         self.expires_at = expires_at
@@ -6303,7 +6303,7 @@ class CustomerPasswordUpdatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        reset: bool
+        reset: bool,
     ):
         self.reset = reset
 
@@ -6356,7 +6356,7 @@ class CustomerTitleSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        title: typing.Optional[str] = None
+        title: typing.Optional[str] = None,
     ):
         self.title = title
 
@@ -6409,7 +6409,7 @@ class DiscountCodeCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discount_code: "DiscountCode"
+        discount_code: "DiscountCode",
     ):
         self.discount_code = discount_code
 
@@ -6458,7 +6458,7 @@ class DiscountCodeDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -6513,7 +6513,7 @@ class DiscountCodeKeySetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         key: typing.Optional[str] = None,
-        old_key: typing.Optional[str] = None
+        old_key: typing.Optional[str] = None,
     ):
         self.key = key
         self.old_key = old_key
@@ -6567,7 +6567,7 @@ class InventoryEntryCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        inventory_entry: "InventoryEntry"
+        inventory_entry: "InventoryEntry",
     ):
         self.inventory_entry = inventory_entry
 
@@ -6623,7 +6623,7 @@ class InventoryEntryDeletedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         sku: str,
-        supply_channel: typing.Optional["ChannelReference"] = None
+        supply_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.sku = sku
         self.supply_channel = supply_channel
@@ -6692,7 +6692,7 @@ class InventoryEntryQuantitySetMessage(Message):
         new_quantity_on_stock: int,
         old_available_quantity: int,
         new_available_quantity: int,
-        supply_channel: typing.Optional["ChannelReference"] = None
+        supply_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
@@ -6753,7 +6753,7 @@ class MessagePagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["Message"]
+        results: typing.List["Message"],
     ):
         self.limit = limit
         self.count = count
@@ -6836,7 +6836,6 @@ class MessagesConfigurationDraft(_BaseType):
 
 
 class OrderMessage(Message):
-
     def __init__(
         self,
         *,
@@ -6852,7 +6851,7 @@ class OrderMessage(Message):
         type: str,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -7106,7 +7105,7 @@ class CustomLineItemStateTransitionMessage(OrderMessage):
         transition_date: datetime.datetime,
         quantity: int,
         from_state: "StateReference",
-        to_state: "StateReference"
+        to_state: "StateReference",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -7167,7 +7166,7 @@ class DeliveryAddedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         delivery: "Delivery",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery = delivery
         self.shipping_key = shipping_key
@@ -7228,7 +7227,7 @@ class DeliveryAddressSetMessage(OrderMessage):
         delivery_id: str,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.address = address
@@ -7293,7 +7292,7 @@ class DeliveryItemsUpdatedMessage(OrderMessage):
         delivery_id: str,
         items: typing.List["DeliveryItem"],
         old_items: typing.List["DeliveryItem"],
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.items = items
@@ -7352,7 +7351,7 @@ class DeliveryRemovedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         delivery: "Delivery",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery = delivery
         self.shipping_key = shipping_key
@@ -7421,7 +7420,7 @@ class LineItemStateTransitionMessage(OrderMessage):
         transition_date: datetime.datetime,
         quantity: int,
         from_state: "StateReference",
-        to_state: "StateReference"
+        to_state: "StateReference",
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -7482,7 +7481,7 @@ class OrderBillingAddressSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
+        old_address: typing.Optional["Address"] = None,
     ):
         self.address = address
         self.old_address = old_address
@@ -7536,7 +7535,7 @@ class OrderCreatedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        order: "Order"
+        order: "Order",
     ):
         self.order = order
 
@@ -7590,7 +7589,7 @@ class OrderCustomFieldAddedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         name: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.name = name
         self.value = value
@@ -7651,7 +7650,7 @@ class OrderCustomFieldChangedMessage(OrderMessage):
         ] = None,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -7706,7 +7705,7 @@ class OrderCustomFieldRemovedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        name: str
+        name: str,
     ):
         self.name = name
 
@@ -7759,7 +7758,7 @@ class OrderCustomLineItemAddedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        custom_line_item: "CustomLineItem"
+        custom_line_item: "CustomLineItem",
     ):
         self.custom_line_item = custom_line_item
 
@@ -7823,7 +7822,7 @@ class OrderCustomLineItemDiscountSetMessage(OrderMessage):
         discounted_price_per_quantity: typing.List[
             "DiscountedLineItemPriceForQuantity"
         ],
-        taxed_price: typing.Optional["TaxedItemPrice"] = None
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -7888,7 +7887,7 @@ class OrderCustomLineItemQuantityChangedMessage(OrderMessage):
         custom_line_item_id: str,
         custom_line_item_key: typing.Optional[str] = None,
         quantity: int,
-        old_quantity: int
+        old_quantity: int,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -7950,7 +7949,7 @@ class OrderCustomLineItemRemovedMessage(OrderMessage):
         ] = None,
         custom_line_item_id: str,
         custom_line_item_key: typing.Optional[str] = None,
-        custom_line_item: "CustomLineItem"
+        custom_line_item: "CustomLineItem",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -8005,7 +8004,7 @@ class OrderCustomTypeRemovedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.previous_type_id = previous_type_id
 
@@ -8061,7 +8060,7 @@ class OrderCustomTypeSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -8118,7 +8117,7 @@ class OrderCustomerEmailSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         email: typing.Optional[str] = None,
-        old_email: typing.Optional[str] = None
+        old_email: typing.Optional[str] = None,
     ):
         self.email = email
         self.old_email = old_email
@@ -8175,7 +8174,7 @@ class OrderCustomerGroupSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
     ):
         self.customer_group = customer_group
         self.old_customer_group = old_customer_group
@@ -8238,7 +8237,7 @@ class OrderCustomerSetMessage(OrderMessage):
         customer: typing.Optional["CustomerReference"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         old_customer: typing.Optional["CustomerReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
     ):
         self.customer = customer
         self.customer_group = customer_group
@@ -8294,7 +8293,7 @@ class OrderDeletedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        order: "Order"
+        order: "Order",
     ):
         self.order = order
 
@@ -8345,7 +8344,7 @@ class OrderDiscountCodeAddedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discount_code: "DiscountCodeReference"
+        discount_code: "DiscountCodeReference",
     ):
         self.discount_code = discount_code
 
@@ -8398,7 +8397,7 @@ class OrderDiscountCodeRemovedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discount_code: "DiscountCodeReference"
+        discount_code: "DiscountCodeReference",
     ):
         self.discount_code = discount_code
 
@@ -8457,7 +8456,7 @@ class OrderDiscountCodeStateSetMessage(OrderMessage):
         ] = None,
         discount_code: "DiscountCodeReference",
         state: "DiscountCodeState",
-        old_state: typing.Optional["DiscountCodeState"] = None
+        old_state: typing.Optional["DiscountCodeState"] = None,
     ):
         self.discount_code = discount_code
         self.state = state
@@ -8515,7 +8514,7 @@ class OrderEditAppliedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         edit: "OrderEdit",
-        result: "OrderEditApplied"
+        result: "OrderEditApplied",
     ):
         self.edit = edit
         self.result = result
@@ -8569,7 +8568,7 @@ class OrderImportedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        order: "Order"
+        order: "Order",
     ):
         self.order = order
 
@@ -8623,7 +8622,7 @@ class OrderLineItemAddedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         line_item: "LineItem",
-        added_quantity: int
+        added_quantity: int,
     ):
         self.line_item = line_item
         self.added_quantity = added_quantity
@@ -8695,7 +8694,7 @@ class OrderLineItemDiscountSetMessage(OrderMessage):
         ],
         total_price: "Money",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
-        taxed_price_portions: typing.List["MethodTaxedPrice"]
+        taxed_price_portions: typing.List["MethodTaxedPrice"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -8759,7 +8758,7 @@ class OrderLineItemDistributionChannelSetMessage(OrderMessage):
         ] = None,
         line_item_id: str,
         line_item_key: typing.Optional[str] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None
+        distribution_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -8838,7 +8837,7 @@ class OrderLineItemRemovedMessage(OrderMessage):
         new_total_price: "CentPrecisionMoney",
         new_taxed_price: typing.Optional["TaxedItemPrice"] = None,
         new_price: typing.Optional["Price"] = None,
-        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None
+        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -8899,7 +8898,7 @@ class OrderPaymentAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        payment: "PaymentReference"
+        payment: "PaymentReference",
     ):
         self.payment = payment
 
@@ -8955,7 +8954,7 @@ class OrderPaymentStateChangedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         payment_state: "PaymentState",
-        old_payment_state: typing.Optional["PaymentState"] = None
+        old_payment_state: typing.Optional["PaymentState"] = None,
     ):
         self.payment_state = payment_state
         self.old_payment_state = old_payment_state
@@ -9012,7 +9011,7 @@ class OrderPurchaseOrderNumberSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         purchase_order_number: typing.Optional[str] = None,
-        old_purchase_order_number: typing.Optional[str] = None
+        old_purchase_order_number: typing.Optional[str] = None,
     ):
         self.purchase_order_number = purchase_order_number
         self.old_purchase_order_number = old_purchase_order_number
@@ -9069,7 +9068,7 @@ class OrderReturnShipmentStateChangedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         return_item_id: str,
-        return_shipment_state: "ReturnShipmentState"
+        return_shipment_state: "ReturnShipmentState",
     ):
         self.return_item_id = return_item_id
         self.return_shipment_state = return_shipment_state
@@ -9126,7 +9125,7 @@ class OrderShipmentStateChangedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         shipment_state: "ShipmentState",
-        old_shipment_state: typing.Optional["ShipmentState"] = None
+        old_shipment_state: typing.Optional["ShipmentState"] = None,
     ):
         self.shipment_state = shipment_state
         self.old_shipment_state = old_shipment_state
@@ -9183,7 +9182,7 @@ class OrderShippingAddressSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
+        old_address: typing.Optional["Address"] = None,
     ):
         self.address = address
         self.old_address = old_address
@@ -9240,7 +9239,7 @@ class OrderShippingInfoSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        old_shipping_info: typing.Optional["ShippingInfo"] = None
+        old_shipping_info: typing.Optional["ShippingInfo"] = None,
     ):
         self.shipping_info = shipping_info
         self.old_shipping_info = old_shipping_info
@@ -9297,7 +9296,7 @@ class OrderShippingRateInputSetMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None
+        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
     ):
         self.shipping_rate_input = shipping_rate_input
         self.old_shipping_rate_input = old_shipping_rate_input
@@ -9354,7 +9353,7 @@ class OrderStateChangedMessage(OrderMessage):
             "UserProvidedIdentifiers"
         ] = None,
         order_state: "OrderState",
-        old_order_state: typing.Optional["OrderState"] = None
+        old_order_state: typing.Optional["OrderState"] = None,
     ):
         self.order_state = order_state
         self.old_order_state = old_order_state
@@ -9414,7 +9413,7 @@ class OrderStateTransitionMessage(OrderMessage):
         ] = None,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -9469,7 +9468,7 @@ class OrderStoreSetMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        store: typing.Optional["StoreKeyReference"] = None
+        store: typing.Optional["StoreKeyReference"] = None,
     ):
         self.store = store
 
@@ -9526,7 +9525,7 @@ class ParcelAddedToDeliveryMessage(OrderMessage):
         ] = None,
         delivery: "Delivery",
         parcel: "Parcel",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery = delivery
         self.parcel = parcel
@@ -9593,7 +9592,7 @@ class ParcelItemsUpdatedMessage(OrderMessage):
         delivery_id: str,
         items: typing.List["DeliveryItem"],
         old_items: typing.List["DeliveryItem"],
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
@@ -9659,7 +9658,7 @@ class ParcelMeasurementsUpdatedMessage(OrderMessage):
         delivery_id: str,
         parcel_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
@@ -9721,7 +9720,7 @@ class ParcelRemovedFromDeliveryMessage(OrderMessage):
         ] = None,
         delivery_id: str,
         parcel: "Parcel",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel = parcel
@@ -9785,7 +9784,7 @@ class ParcelTrackingDataUpdatedMessage(OrderMessage):
         delivery_id: str,
         parcel_id: str,
         tracking_data: typing.Optional["TrackingData"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
@@ -9841,7 +9840,7 @@ class PaymentCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        payment: "Payment"
+        payment: "Payment",
     ):
         self.payment = payment
 
@@ -9892,7 +9891,7 @@ class PaymentInteractionAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        interaction: "CustomFields"
+        interaction: "CustomFields",
     ):
         self.interaction = interaction
 
@@ -9948,7 +9947,7 @@ class PaymentStatusInterfaceCodeSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         payment_id: str,
-        interface_code: typing.Optional[str] = None
+        interface_code: typing.Optional[str] = None,
     ):
         self.payment_id = payment_id
         self.interface_code = interface_code
@@ -10005,7 +10004,7 @@ class PaymentStatusStateTransitionMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         state: "StateReference",
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.force = force
@@ -10059,7 +10058,7 @@ class PaymentTransactionAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        transaction: "Transaction"
+        transaction: "Transaction",
     ):
         self.transaction = transaction
 
@@ -10115,7 +10114,7 @@ class PaymentTransactionStateChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         transaction_id: str,
-        state: "TransactionState"
+        state: "TransactionState",
     ):
         self.transaction_id = transaction_id
         self.state = state
@@ -10172,7 +10171,7 @@ class ProductAddedToCategoryMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         category: "CategoryReference",
-        staged: bool
+        staged: bool,
     ):
         self.category = category
         self.staged = staged
@@ -10226,7 +10225,7 @@ class ProductCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        product_projection: "ProductProjection"
+        product_projection: "ProductProjection",
     ):
         self.product_projection = product_projection
 
@@ -10280,7 +10279,7 @@ class ProductDeletedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         removed_image_urls: typing.List["str"],
-        current_projection: typing.Optional["ProductProjection"] = None
+        current_projection: typing.Optional["ProductProjection"] = None,
     ):
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
@@ -10338,7 +10337,7 @@ class ProductImageAddedMessage(Message):
         ] = None,
         variant_id: int,
         image: "Image",
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.image = image
@@ -10399,7 +10398,7 @@ class ProductPriceAddedMessage(Message):
         ] = None,
         variant_id: int,
         price: "Price",
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.price = price
@@ -10466,7 +10465,7 @@ class ProductPriceChangedMessage(Message):
         old_price: "Price",
         new_price: "Price",
         staged: bool,
-        old_staged_price: typing.Optional["Price"] = None
+        old_staged_price: typing.Optional["Price"] = None,
     ):
         self.variant_id = variant_id
         self.old_price = old_price
@@ -10523,7 +10522,7 @@ class ProductPriceDiscountsSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"]
+        updated_prices: typing.List["ProductPriceDiscountsSetUpdatedPrice"],
     ):
         self.updated_prices = updated_prices
 
@@ -10579,7 +10578,7 @@ class ProductPriceDiscountsSetUpdatedPrice(_BaseType):
         sku: typing.Optional[str] = None,
         price_id: str,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -10640,7 +10639,7 @@ class ProductPriceExternalDiscountSetMessage(Message):
         sku: typing.Optional[str] = None,
         price_id: str,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -10709,7 +10708,7 @@ class ProductPriceKeySetMessage(Message):
         price_id: typing.Optional[str] = None,
         old_key: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.price_id = price_id
@@ -10766,7 +10765,7 @@ class ProductPriceModeSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        to: "ProductPriceModeEnum"
+        to: "ProductPriceModeEnum",
     ):
         self.to = to
 
@@ -10825,7 +10824,7 @@ class ProductPriceRemovedMessage(Message):
         ] = None,
         variant_id: int,
         price: "Price",
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.price = price
@@ -10886,7 +10885,7 @@ class ProductPricesSetMessage(Message):
         ] = None,
         variant_id: int,
         prices: typing.List["Price"],
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.prices = prices
@@ -10947,7 +10946,7 @@ class ProductPublishedMessage(Message):
         ] = None,
         removed_image_urls: typing.List["str"],
         product_projection: "ProductProjection",
-        scope: "ProductPublishScope"
+        scope: "ProductPublishScope",
     ):
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
@@ -11005,7 +11004,7 @@ class ProductRemovedFromCategoryMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         category: "CategoryReference",
-        staged: bool
+        staged: bool,
     ):
         self.category = category
         self.staged = staged
@@ -11059,7 +11058,7 @@ class ProductRevertedStagedChangesMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        removed_image_urls: typing.List["str"]
+        removed_image_urls: typing.List["str"],
     ):
         self.removed_image_urls = removed_image_urls
 
@@ -11112,7 +11111,7 @@ class ProductSelectionCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        product_selection: "ProductSelection"
+        product_selection: "ProductSelection",
     ):
         self.product_selection = product_selection
 
@@ -11161,7 +11160,7 @@ class ProductSelectionDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -11216,7 +11215,7 @@ class ProductSelectionProductAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         product: "ProductReference",
-        variant_selection: "ProductVariantSelection"
+        variant_selection: "ProductVariantSelection",
     ):
         self.product = product
         self.variant_selection = variant_selection
@@ -11273,7 +11272,7 @@ class ProductSelectionProductExcludedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         product: "ProductReference",
-        variant_exclusion: "ProductVariantExclusion"
+        variant_exclusion: "ProductVariantExclusion",
     ):
         self.product = product
         self.variant_exclusion = variant_exclusion
@@ -11327,7 +11326,7 @@ class ProductSelectionProductRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.product = product
 
@@ -11386,7 +11385,7 @@ class ProductSelectionVariantExclusionChangedMessage(Message):
         ] = None,
         product: "ProductReference",
         old_variant_exclusion: "ProductVariantExclusion",
-        new_variant_exclusion: "ProductVariantExclusion"
+        new_variant_exclusion: "ProductVariantExclusion",
     ):
         self.product = product
         self.old_variant_exclusion = old_variant_exclusion
@@ -11451,7 +11450,7 @@ class ProductSelectionVariantSelectionChangedMessage(Message):
         ] = None,
         product: "ProductReference",
         old_variant_selection: "ProductVariantSelection",
-        new_variant_selection: "ProductVariantSelection"
+        new_variant_selection: "ProductVariantSelection",
     ):
         self.product = product
         self.old_variant_selection = old_variant_selection
@@ -11513,7 +11512,7 @@ class ProductSlugChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         slug: "LocalizedString",
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.slug = slug
         self.old_slug = old_slug
@@ -11570,7 +11569,7 @@ class ProductStateTransitionMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         state: "StateReference",
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.force = force
@@ -11648,7 +11647,7 @@ class ProductTailoringCreatedMessage(Message):
         description: typing.Optional["LocalizedString"] = None,
         name: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        published: bool
+        published: bool,
     ):
         self.key = key
         self.store = store
@@ -11717,7 +11716,7 @@ class ProductTailoringDeletedMessage(Message):
         ] = None,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -11784,7 +11783,7 @@ class ProductTailoringDescriptionSetMessage(Message):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         description: typing.Optional["LocalizedString"] = None,
-        old_description: typing.Optional["LocalizedString"] = None
+        old_description: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -11853,7 +11852,7 @@ class ProductTailoringNameSetMessage(Message):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         name: typing.Optional["LocalizedString"] = None,
-        old_name: typing.Optional["LocalizedString"] = None
+        old_name: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -11916,7 +11915,7 @@ class ProductTailoringPublishedMessage(Message):
         ] = None,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -11983,7 +11982,7 @@ class ProductTailoringSlugSetMessage(Message):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         slug: typing.Optional["LocalizedString"] = None,
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -12046,7 +12045,7 @@ class ProductTailoringUnpublishedMessage(Message):
         ] = None,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -12097,7 +12096,7 @@ class ProductUnpublishedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -12152,7 +12151,7 @@ class ProductVariantAddedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         variant: "ProductVariant",
-        staged: bool
+        staged: bool,
     ):
         self.variant = variant
         self.staged = staged
@@ -12209,7 +12208,7 @@ class ProductVariantDeletedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         variant: typing.Optional["ProductVariant"] = None,
-        removed_image_urls: typing.List["str"]
+        removed_image_urls: typing.List["str"],
     ):
         self.variant = variant
         self.removed_image_urls = removed_image_urls
@@ -12263,7 +12262,7 @@ class QuoteCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        quote: "Quote"
+        quote: "Quote",
     ):
         self.quote = quote
 
@@ -12317,7 +12316,7 @@ class QuoteCustomerChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         customer: "CustomerReference",
-        previous_customer: "CustomerReference"
+        previous_customer: "CustomerReference",
     ):
         self.customer = customer
         self.previous_customer = previous_customer
@@ -12367,7 +12366,7 @@ class QuoteDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -12417,7 +12416,7 @@ class QuoteRenegotiationRequestedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        buyer_comment: typing.Optional[str] = None
+        buyer_comment: typing.Optional[str] = None,
     ):
         self.buyer_comment = buyer_comment
 
@@ -12470,7 +12469,7 @@ class QuoteRequestCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        quote_request: "QuoteRequest"
+        quote_request: "QuoteRequest",
     ):
         self.quote_request = quote_request
 
@@ -12526,7 +12525,7 @@ class QuoteRequestCustomerChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         customer: "CustomerReference",
-        previous_customer: "CustomerReference"
+        previous_customer: "CustomerReference",
     ):
         self.customer = customer
         self.previous_customer = previous_customer
@@ -12576,7 +12575,7 @@ class QuoteRequestDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -12631,7 +12630,7 @@ class QuoteRequestStateChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         quote_request_state: "QuoteRequestState",
-        old_quote_request_state: "QuoteRequestState"
+        old_quote_request_state: "QuoteRequestState",
     ):
         self.quote_request_state = quote_request_state
         self.old_quote_request_state = old_quote_request_state
@@ -12691,7 +12690,7 @@ class QuoteRequestStateTransitionMessage(Message):
         ] = None,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -12749,7 +12748,7 @@ class QuoteStateChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         quote_state: "QuoteState",
-        old_quote_state: "QuoteState"
+        old_quote_state: "QuoteState",
     ):
         self.quote_state = quote_state
         self.old_quote_state = old_quote_state
@@ -12809,7 +12808,7 @@ class QuoteStateTransitionMessage(Message):
         ] = None,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -12864,7 +12863,7 @@ class ReturnInfoAddedMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        return_info: "ReturnInfo"
+        return_info: "ReturnInfo",
     ):
         self.return_info = return_info
 
@@ -12917,7 +12916,7 @@ class ReturnInfoSetMessage(OrderMessage):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        return_info: typing.Optional[typing.List["ReturnInfo"]] = None
+        return_info: typing.Optional[typing.List["ReturnInfo"]] = None,
     ):
         self.return_info = return_info
 
@@ -12968,7 +12967,7 @@ class ReviewCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        review: "Review"
+        review: "Review",
     ):
         self.review = review
 
@@ -13028,7 +13027,7 @@ class ReviewRatingSetMessage(Message):
         old_rating: typing.Optional[float] = None,
         new_rating: typing.Optional[float] = None,
         included_in_statistics: bool,
-        target: typing.Optional["Reference"] = None
+        target: typing.Optional["Reference"] = None,
     ):
         self.old_rating = old_rating
         self.new_rating = new_rating
@@ -13099,7 +13098,7 @@ class ReviewStateTransitionMessage(Message):
         old_included_in_statistics: bool,
         new_included_in_statistics: bool,
         target: typing.Optional["Reference"] = None,
-        force: bool
+        force: bool,
     ):
         self.old_state = old_state
         self.new_state = new_state
@@ -13157,7 +13156,7 @@ class StagedQuoteCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        staged_quote: "StagedQuote"
+        staged_quote: "StagedQuote",
     ):
         self.staged_quote = staged_quote
 
@@ -13206,7 +13205,7 @@ class StagedQuoteDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -13258,7 +13257,7 @@ class StagedQuoteSellerCommentSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        seller_comment: str
+        seller_comment: str,
     ):
         self.seller_comment = seller_comment
 
@@ -13314,7 +13313,7 @@ class StagedQuoteStateChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         staged_quote_state: "StagedQuoteState",
-        old_staged_quote_state: "StagedQuoteState"
+        old_staged_quote_state: "StagedQuoteState",
     ):
         self.staged_quote_state = staged_quote_state
         self.old_staged_quote_state = old_staged_quote_state
@@ -13374,7 +13373,7 @@ class StagedQuoteStateTransitionMessage(Message):
         ] = None,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -13429,7 +13428,7 @@ class StagedQuoteValidToSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        valid_to: datetime.datetime
+        valid_to: datetime.datetime,
     ):
         self.valid_to = valid_to
 
@@ -13485,7 +13484,7 @@ class StandalonePriceActiveChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         active: bool,
-        old_active: bool
+        old_active: bool,
     ):
         self.active = active
         self.old_active = old_active
@@ -13539,7 +13538,7 @@ class StandalonePriceCreatedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        standalone_price: "StandalonePrice"
+        standalone_price: "StandalonePrice",
     ):
         self.standalone_price = standalone_price
 
@@ -13592,7 +13591,7 @@ class StandalonePriceDeletedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        sku: str
+        sku: str,
     ):
         self.sku = sku
 
@@ -13645,7 +13644,7 @@ class StandalonePriceDiscountSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None
+        discounted: typing.Optional["DiscountedPrice"] = None,
     ):
         self.discounted = discounted
 
@@ -13698,7 +13697,7 @@ class StandalonePriceExternalDiscountSetMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        discounted: typing.Optional["DiscountedPrice"] = None
+        discounted: typing.Optional["DiscountedPrice"] = None,
     ):
         self.discounted = discounted
 
@@ -13754,7 +13753,7 @@ class StandalonePriceKeySetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         key: typing.Optional[str] = None,
-        old_key: typing.Optional[str] = None
+        old_key: typing.Optional[str] = None,
     ):
         self.key = key
         self.old_key = old_key
@@ -13808,7 +13807,7 @@ class StandalonePriceStagedChangesAppliedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        staged_changes: "StagedStandalonePrice"
+        staged_changes: "StagedStandalonePrice",
     ):
         self.staged_changes = staged_changes
 
@@ -13861,7 +13860,7 @@ class StandalonePriceStagedChangesRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        staged_changes: "StagedStandalonePrice"
+        staged_changes: "StagedStandalonePrice",
     ):
         self.staged_changes = staged_changes
 
@@ -13914,7 +13913,7 @@ class StandalonePriceTierAddedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        tier: "PriceTier"
+        tier: "PriceTier",
     ):
         self.tier = tier
 
@@ -13967,7 +13966,7 @@ class StandalonePriceTierRemovedMessage(Message):
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
         ] = None,
-        removed_tier: "PriceTier"
+        removed_tier: "PriceTier",
     ):
         self.removed_tier = removed_tier
 
@@ -14023,7 +14022,7 @@ class StandalonePriceTiersSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         tiers: typing.List["PriceTier"],
-        previous_tiers: typing.List["PriceTier"]
+        previous_tiers: typing.List["PriceTier"],
     ):
         self.tiers = tiers
         self.previous_tiers = previous_tiers
@@ -14086,7 +14085,7 @@ class StandalonePriceValidFromAndUntilSetMessage(Message):
         valid_from: typing.Optional[datetime.datetime] = None,
         previous_valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        previous_valid_until: typing.Optional[datetime.datetime] = None
+        previous_valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.previous_valid_from = previous_valid_from
@@ -14145,7 +14144,7 @@ class StandalonePriceValidFromSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
-        previous_valid_from: typing.Optional[datetime.datetime] = None
+        previous_valid_from: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.previous_valid_from = previous_valid_from
@@ -14202,7 +14201,7 @@ class StandalonePriceValidUntilSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        previous_valid_until: typing.Optional[datetime.datetime] = None
+        previous_valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_until = valid_until
         self.previous_valid_until = previous_valid_until
@@ -14263,7 +14262,7 @@ class StandalonePriceValueChangedMessage(Message):
         ] = None,
         value: "Money",
         staged: bool,
-        old_value: typing.Optional["Money"] = None
+        old_value: typing.Optional["Money"] = None,
     ):
         self.value = value
         self.staged = staged
@@ -14325,7 +14324,7 @@ class StoreCountriesChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         added_countries: typing.Optional[typing.List["StoreCountry"]] = None,
-        removed_countries: typing.Optional[typing.List["StoreCountry"]] = None
+        removed_countries: typing.Optional[typing.List["StoreCountry"]] = None,
     ):
         self.added_countries = added_countries
         self.removed_countries = removed_countries
@@ -14397,7 +14396,7 @@ class StoreCreatedMessage(Message):
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
         product_selections: typing.List["ProductSelectionSetting"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.name = name
         self.languages = languages
@@ -14450,7 +14449,7 @@ class StoreDeletedMessage(Message):
         resource_version: int,
         resource_user_provided_identifiers: typing.Optional[
             "UserProvidedIdentifiers"
-        ] = None
+        ] = None,
     ):
 
         super().__init__(
@@ -14511,7 +14510,7 @@ class StoreDistributionChannelsChangedMessage(Message):
         ] = None,
         removed_distribution_channels: typing.Optional[
             typing.List["ChannelReference"]
-        ] = None
+        ] = None,
     ):
         self.added_distribution_channels = added_distribution_channels
         self.removed_distribution_channels = removed_distribution_channels
@@ -14568,7 +14567,7 @@ class StoreLanguagesChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         added_languages: typing.Optional[typing.List["str"]] = None,
-        removed_languages: typing.Optional[typing.List["str"]] = None
+        removed_languages: typing.Optional[typing.List["str"]] = None,
     ):
         self.added_languages = added_languages
         self.removed_languages = removed_languages
@@ -14625,7 +14624,7 @@ class StoreNameSetMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         name: typing.Optional["LocalizedString"] = None,
-        name_all_locales: typing.Optional[typing.List["LocalizedString"]] = None
+        name_all_locales: typing.Optional[typing.List["LocalizedString"]] = None,
     ):
         self.name = name
         self.name_all_locales = name_all_locales
@@ -14694,7 +14693,7 @@ class StoreProductSelectionsChangedMessage(Message):
         ] = None,
         updated_product_selections: typing.Optional[
             typing.List["ProductSelectionSetting"]
-        ] = None
+        ] = None,
     ):
         self.added_product_selections = added_product_selections
         self.removed_product_selections = removed_product_selections
@@ -14756,7 +14755,9 @@ class StoreSupplyChannelsChangedMessage(Message):
             "UserProvidedIdentifiers"
         ] = None,
         added_supply_channels: typing.Optional[typing.List["ChannelReference"]] = None,
-        removed_supply_channels: typing.Optional[typing.List["ChannelReference"]] = None
+        removed_supply_channels: typing.Optional[
+            typing.List["ChannelReference"]
+        ] = None,
     ):
         self.added_supply_channels = added_supply_channels
         self.removed_supply_channels = removed_supply_channels
@@ -14816,7 +14817,7 @@ class UserProvidedIdentifiers(_BaseType):
         customer_number: typing.Optional[str] = None,
         sku: typing.Optional[str] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        container_and_key: typing.Optional["ContainerAndKey"] = None
+        container_and_key: typing.Optional["ContainerAndKey"] = None,
     ):
         self.key = key
         self.external_id = external_id
@@ -15813,7 +15814,7 @@ class ApprovalFlowRejectedMessagePayload(MessagePayload):
         *,
         associate: "CustomerReference",
         rejection_reason: typing.Optional[str] = None,
-        order: "OrderReference"
+        order: "OrderReference",
     ):
         self.associate = associate
         self.rejection_reason = rejection_reason
@@ -15902,7 +15903,7 @@ class ApprovalRuleDescriptionSetMessagePayload(MessagePayload):
         self,
         *,
         description: typing.Optional[str] = None,
-        old_description: typing.Optional[str] = None
+        old_description: typing.Optional[str] = None,
     ):
         self.description = description
         self.old_description = old_description
@@ -16021,7 +16022,7 @@ class ApprovalRuleRequestersSetMessagePayload(MessagePayload):
         self,
         *,
         requesters: typing.List["RuleRequester"],
-        old_requesters: typing.List["RuleRequester"]
+        old_requesters: typing.List["RuleRequester"],
     ):
         self.requesters = requesters
         self.old_requesters = old_requesters
@@ -16344,7 +16345,7 @@ class BusinessUnitAddressCustomFieldChangedMessagePayload(MessagePayload):
         *,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -16549,7 +16550,7 @@ class BusinessUnitAssociateModeChangedMessagePayload(MessagePayload):
         self,
         *,
         associate_mode: "BusinessUnitAssociateMode",
-        old_associate_mode: "BusinessUnitAssociateMode"
+        old_associate_mode: "BusinessUnitAssociateMode",
     ):
         self.associate_mode = associate_mode
         self.old_associate_mode = old_associate_mode
@@ -16775,7 +16776,7 @@ class BusinessUnitCustomFieldChangedMessagePayload(MessagePayload):
         *,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -16993,7 +16994,7 @@ class BusinessUnitParentChangedMessagePayload(MessagePayload):
         self,
         *,
         old_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
-        new_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None
+        new_parent_unit: typing.Optional["BusinessUnitKeyReference"] = None,
     ):
         self.old_parent_unit = old_parent_unit
         self.new_parent_unit = new_parent_unit
@@ -17140,7 +17141,7 @@ class BusinessUnitStoreModeChangedMessagePayload(MessagePayload):
         stores: typing.List["StoreKeyReference"],
         store_mode: "BusinessUnitStoreMode",
         old_stores: typing.List["StoreKeyReference"],
-        old_store_mode: "BusinessUnitStoreMode"
+        old_store_mode: "BusinessUnitStoreMode",
     ):
         self.stores = stores
         self.store_mode = store_mode
@@ -17371,7 +17372,7 @@ class CategorySlugChangedMessagePayload(MessagePayload):
         self,
         *,
         slug: "LocalizedString",
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.slug = slug
         self.old_slug = old_slug
@@ -17493,7 +17494,7 @@ class CustomerAddressCustomFieldChangedMessagePayload(MessagePayload):
         *,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -17589,7 +17590,7 @@ class CustomerAddressCustomTypeSetMessagePayload(MessagePayload):
         self,
         *,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -17732,7 +17733,7 @@ class CustomerCustomFieldChangedMessagePayload(MessagePayload):
         *,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -17816,7 +17817,7 @@ class CustomerCustomTypeSetMessagePayload(MessagePayload):
         self,
         *,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -18028,7 +18029,7 @@ class CustomerGroupCustomFieldChangedMessagePayload(MessagePayload):
         *,
         name: str,
         value: typing.Any,
-        old_value: typing.Optional[typing.Any] = None
+        old_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -18423,7 +18424,7 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
         new_quantity_on_stock: int,
         old_available_quantity: int,
         new_available_quantity: int,
-        supply_channel: typing.Optional["ChannelReference"] = None
+        supply_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.old_quantity_on_stock = old_quantity_on_stock
         self.new_quantity_on_stock = new_quantity_on_stock
@@ -18448,7 +18449,6 @@ class InventoryEntryQuantitySetMessagePayload(MessagePayload):
 
 
 class OrderMessagePayload(MessagePayload):
-
     def __init__(self, *, type: str):
 
         super().__init__(type=type)
@@ -18686,7 +18686,7 @@ class CustomLineItemStateTransitionMessagePayload(OrderMessagePayload):
         transition_date: datetime.datetime,
         quantity: int,
         from_state: "StateReference",
-        to_state: "StateReference"
+        to_state: "StateReference",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -18759,7 +18759,7 @@ class DeliveryAddressSetMessagePayload(OrderMessagePayload):
         delivery_id: str,
         address: typing.Optional["Address"] = None,
         old_address: typing.Optional["Address"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.address = address
@@ -18800,7 +18800,7 @@ class DeliveryItemsUpdatedMessagePayload(OrderMessagePayload):
         delivery_id: str,
         items: typing.List["DeliveryItem"],
         old_items: typing.List["DeliveryItem"],
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.items = items
@@ -18877,7 +18877,7 @@ class LineItemStateTransitionMessagePayload(OrderMessagePayload):
         transition_date: datetime.datetime,
         quantity: int,
         from_state: "StateReference",
-        to_state: "StateReference"
+        to_state: "StateReference",
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -18914,7 +18914,7 @@ class OrderBillingAddressSetMessagePayload(OrderMessagePayload):
         self,
         *,
         address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
+        old_address: typing.Optional["Address"] = None,
     ):
         self.address = address
         self.old_address = old_address
@@ -19004,7 +19004,7 @@ class OrderCustomFieldChangedMessagePayload(OrderMessagePayload):
         *,
         name: str,
         value: typing.Any,
-        previous_value: typing.Optional[typing.Any] = None
+        previous_value: typing.Optional[typing.Any] = None,
     ):
         self.name = name
         self.value = value
@@ -19096,7 +19096,7 @@ class OrderCustomLineItemDiscountSetMessagePayload(OrderMessagePayload):
         discounted_price_per_quantity: typing.List[
             "DiscountedLineItemPriceForQuantity"
         ],
-        taxed_price: typing.Optional["TaxedItemPrice"] = None
+        taxed_price: typing.Optional["TaxedItemPrice"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -19137,7 +19137,7 @@ class OrderCustomLineItemQuantityChangedMessagePayload(OrderMessagePayload):
         custom_line_item_id: str,
         custom_line_item_key: typing.Optional[str] = None,
         quantity: int,
-        old_quantity: int
+        old_quantity: int,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -19179,7 +19179,7 @@ class OrderCustomLineItemRemovedMessagePayload(OrderMessagePayload):
         *,
         custom_line_item_id: str,
         custom_line_item_key: typing.Optional[str] = None,
-        custom_line_item: "CustomLineItem"
+        custom_line_item: "CustomLineItem",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -19238,7 +19238,7 @@ class OrderCustomTypeSetMessagePayload(OrderMessagePayload):
         self,
         *,
         custom_fields: "CustomFields",
-        previous_type_id: typing.Optional[str] = None
+        previous_type_id: typing.Optional[str] = None,
     ):
         self.custom_fields = custom_fields
         self.previous_type_id = previous_type_id
@@ -19271,7 +19271,7 @@ class OrderCustomerEmailSetMessagePayload(OrderMessagePayload):
         self,
         *,
         email: typing.Optional[str] = None,
-        old_email: typing.Optional[str] = None
+        old_email: typing.Optional[str] = None,
     ):
         self.email = email
         self.old_email = old_email
@@ -19304,7 +19304,7 @@ class OrderCustomerGroupSetMessagePayload(OrderMessagePayload):
         self,
         *,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
     ):
         self.customer_group = customer_group
         self.old_customer_group = old_customer_group
@@ -19343,7 +19343,7 @@ class OrderCustomerSetMessagePayload(OrderMessagePayload):
         customer: typing.Optional["CustomerReference"] = None,
         customer_group: typing.Optional["CustomerGroupReference"] = None,
         old_customer: typing.Optional["CustomerReference"] = None,
-        old_customer_group: typing.Optional["CustomerGroupReference"] = None
+        old_customer_group: typing.Optional["CustomerGroupReference"] = None,
     ):
         self.customer = customer
         self.customer_group = customer_group
@@ -19456,7 +19456,7 @@ class OrderDiscountCodeStateSetMessagePayload(OrderMessagePayload):
         *,
         discount_code: "DiscountCodeReference",
         state: "DiscountCodeState",
-        old_state: typing.Optional["DiscountCodeState"] = None
+        old_state: typing.Optional["DiscountCodeState"] = None,
     ):
         self.discount_code = discount_code
         self.state = state
@@ -19586,7 +19586,7 @@ class OrderLineItemDiscountSetMessagePayload(OrderMessagePayload):
         ],
         total_price: "Money",
         taxed_price: typing.Optional["TaxedItemPrice"] = None,
-        taxed_price_portions: typing.List["MethodTaxedPrice"]
+        taxed_price_portions: typing.List["MethodTaxedPrice"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -19626,7 +19626,7 @@ class OrderLineItemDistributionChannelSetMessagePayload(OrderMessagePayload):
         *,
         line_item_id: str,
         line_item_key: typing.Optional[str] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None
+        distribution_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -19685,7 +19685,7 @@ class OrderLineItemRemovedMessagePayload(OrderMessagePayload):
         new_total_price: "CentPrecisionMoney",
         new_taxed_price: typing.Optional["TaxedItemPrice"] = None,
         new_price: typing.Optional["Price"] = None,
-        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None
+        new_shipping_detail: typing.Optional["ItemShippingDetails"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -19750,7 +19750,7 @@ class OrderPaymentStateChangedMessagePayload(OrderMessagePayload):
         self,
         *,
         payment_state: "PaymentState",
-        old_payment_state: typing.Optional["PaymentState"] = None
+        old_payment_state: typing.Optional["PaymentState"] = None,
     ):
         self.payment_state = payment_state
         self.old_payment_state = old_payment_state
@@ -19783,7 +19783,7 @@ class OrderPurchaseOrderNumberSetMessagePayload(OrderMessagePayload):
         self,
         *,
         purchase_order_number: typing.Optional[str] = None,
-        old_purchase_order_number: typing.Optional[str] = None
+        old_purchase_order_number: typing.Optional[str] = None,
     ):
         self.purchase_order_number = purchase_order_number
         self.old_purchase_order_number = old_purchase_order_number
@@ -19850,7 +19850,7 @@ class OrderShipmentStateChangedMessagePayload(OrderMessagePayload):
         self,
         *,
         shipment_state: "ShipmentState",
-        old_shipment_state: typing.Optional["ShipmentState"] = None
+        old_shipment_state: typing.Optional["ShipmentState"] = None,
     ):
         self.shipment_state = shipment_state
         self.old_shipment_state = old_shipment_state
@@ -19883,7 +19883,7 @@ class OrderShippingAddressSetMessagePayload(OrderMessagePayload):
         self,
         *,
         address: typing.Optional["Address"] = None,
-        old_address: typing.Optional["Address"] = None
+        old_address: typing.Optional["Address"] = None,
     ):
         self.address = address
         self.old_address = old_address
@@ -19916,7 +19916,7 @@ class OrderShippingInfoSetMessagePayload(OrderMessagePayload):
         self,
         *,
         shipping_info: typing.Optional["ShippingInfo"] = None,
-        old_shipping_info: typing.Optional["ShippingInfo"] = None
+        old_shipping_info: typing.Optional["ShippingInfo"] = None,
     ):
         self.shipping_info = shipping_info
         self.old_shipping_info = old_shipping_info
@@ -19949,7 +19949,7 @@ class OrderShippingRateInputSetMessagePayload(OrderMessagePayload):
         self,
         *,
         shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
-        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None
+        old_shipping_rate_input: typing.Optional["ShippingRateInput"] = None,
     ):
         self.shipping_rate_input = shipping_rate_input
         self.old_shipping_rate_input = old_shipping_rate_input
@@ -19982,7 +19982,7 @@ class OrderStateChangedMessagePayload(OrderMessagePayload):
         self,
         *,
         order_state: "OrderState",
-        old_order_state: typing.Optional["OrderState"] = None
+        old_order_state: typing.Optional["OrderState"] = None,
     ):
         self.order_state = order_state
         self.old_order_state = old_order_state
@@ -20018,7 +20018,7 @@ class OrderStateTransitionMessagePayload(OrderMessagePayload):
         *,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -20080,7 +20080,7 @@ class ParcelAddedToDeliveryMessagePayload(OrderMessagePayload):
         *,
         delivery: "Delivery",
         parcel: "Parcel",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery = delivery
         self.parcel = parcel
@@ -20123,7 +20123,7 @@ class ParcelItemsUpdatedMessagePayload(OrderMessagePayload):
         delivery_id: str,
         items: typing.List["DeliveryItem"],
         old_items: typing.List["DeliveryItem"],
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.parcel_id = parcel_id
         self.delivery_id = delivery_id
@@ -20165,7 +20165,7 @@ class ParcelMeasurementsUpdatedMessagePayload(OrderMessagePayload):
         delivery_id: str,
         parcel_id: str,
         measurements: typing.Optional["ParcelMeasurements"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
@@ -20203,7 +20203,7 @@ class ParcelRemovedFromDeliveryMessagePayload(OrderMessagePayload):
         *,
         delivery_id: str,
         parcel: "Parcel",
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel = parcel
@@ -20243,7 +20243,7 @@ class ParcelTrackingDataUpdatedMessagePayload(OrderMessagePayload):
         delivery_id: str,
         parcel_id: str,
         tracking_data: typing.Optional["TrackingData"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.parcel_id = parcel_id
@@ -20490,7 +20490,7 @@ class ProductDeletedMessagePayload(MessagePayload):
         self,
         *,
         removed_image_urls: typing.List["str"],
-        current_projection: typing.Optional["ProductProjection"] = None
+        current_projection: typing.Optional["ProductProjection"] = None,
     ):
         self.removed_image_urls = removed_image_urls
         self.current_projection = current_projection
@@ -20594,7 +20594,7 @@ class ProductPriceChangedMessagePayload(MessagePayload):
         old_price: "Price",
         new_price: "Price",
         staged: bool,
-        old_staged_price: typing.Optional["Price"] = None
+        old_staged_price: typing.Optional["Price"] = None,
     ):
         self.variant_id = variant_id
         self.old_price = old_price
@@ -20669,7 +20669,7 @@ class ProductPriceExternalDiscountSetMessagePayload(MessagePayload):
         sku: typing.Optional[str] = None,
         price_id: str,
         discounted: typing.Optional["DiscountedPrice"] = None,
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.variant_key = variant_key
@@ -20718,7 +20718,7 @@ class ProductPriceKeySetMessagePayload(MessagePayload):
         price_id: typing.Optional[str] = None,
         old_key: typing.Optional[str] = None,
         key: typing.Optional[str] = None,
-        staged: bool
+        staged: bool,
     ):
         self.variant_id = variant_id
         self.price_id = price_id
@@ -20844,7 +20844,7 @@ class ProductPublishedMessagePayload(MessagePayload):
         *,
         removed_image_urls: typing.List["str"],
         product_projection: "ProductProjection",
-        scope: "ProductPublishScope"
+        scope: "ProductPublishScope",
     ):
         self.removed_image_urls = removed_image_urls
         self.product_projection = product_projection
@@ -20977,7 +20977,7 @@ class ProductSelectionProductAddedMessagePayload(MessagePayload):
         self,
         *,
         product: "ProductReference",
-        variant_selection: "ProductVariantSelection"
+        variant_selection: "ProductVariantSelection",
     ):
         self.product = product
         self.variant_selection = variant_selection
@@ -21010,7 +21010,7 @@ class ProductSelectionProductExcludedMessagePayload(MessagePayload):
         self,
         *,
         product: "ProductReference",
-        variant_exclusion: "ProductVariantExclusion"
+        variant_exclusion: "ProductVariantExclusion",
     ):
         self.product = product
         self.variant_exclusion = variant_exclusion
@@ -21075,7 +21075,7 @@ class ProductSelectionVariantExclusionChangedMessagePayload(MessagePayload):
         *,
         product: "ProductReference",
         old_variant_exclusion: "ProductVariantExclusion",
-        new_variant_exclusion: "ProductVariantExclusion"
+        new_variant_exclusion: "ProductVariantExclusion",
     ):
         self.product = product
         self.old_variant_exclusion = old_variant_exclusion
@@ -21116,7 +21116,7 @@ class ProductSelectionVariantSelectionChangedMessagePayload(MessagePayload):
         *,
         product: "ProductReference",
         old_variant_selection: "ProductVariantSelection",
-        new_variant_selection: "ProductVariantSelection"
+        new_variant_selection: "ProductVariantSelection",
     ):
         self.product = product
         self.old_variant_selection = old_variant_selection
@@ -21154,7 +21154,7 @@ class ProductSlugChangedMessagePayload(MessagePayload):
         self,
         *,
         slug: "LocalizedString",
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.slug = slug
         self.old_slug = old_slug
@@ -21236,7 +21236,7 @@ class ProductTailoringCreatedMessagePayload(MessagePayload):
         description: typing.Optional["LocalizedString"] = None,
         name: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        published: bool
+        published: bool,
     ):
         self.key = key
         self.store = store
@@ -21281,7 +21281,7 @@ class ProductTailoringDeletedMessagePayload(MessagePayload):
         *,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -21324,7 +21324,7 @@ class ProductTailoringDescriptionSetMessagePayload(MessagePayload):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         description: typing.Optional["LocalizedString"] = None,
-        old_description: typing.Optional["LocalizedString"] = None
+        old_description: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -21369,7 +21369,7 @@ class ProductTailoringNameSetMessagePayload(MessagePayload):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         name: typing.Optional["LocalizedString"] = None,
-        old_name: typing.Optional["LocalizedString"] = None
+        old_name: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -21408,7 +21408,7 @@ class ProductTailoringPublishedMessagePayload(MessagePayload):
         *,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -21451,7 +21451,7 @@ class ProductTailoringSlugSetMessagePayload(MessagePayload):
         product_key: typing.Optional[str] = None,
         product: "ProductReference",
         slug: typing.Optional["LocalizedString"] = None,
-        old_slug: typing.Optional["LocalizedString"] = None
+        old_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.store = store
         self.product_key = product_key
@@ -21490,7 +21490,7 @@ class ProductTailoringUnpublishedMessagePayload(MessagePayload):
         *,
         store: "StoreKeyReference",
         product_key: typing.Optional[str] = None,
-        product: "ProductReference"
+        product: "ProductReference",
     ):
         self.store = store
         self.product_key = product_key
@@ -21573,7 +21573,7 @@ class ProductVariantDeletedMessagePayload(MessagePayload):
         self,
         *,
         variant: typing.Optional["ProductVariant"] = None,
-        removed_image_urls: typing.List["str"]
+        removed_image_urls: typing.List["str"],
     ):
         self.variant = variant
         self.removed_image_urls = removed_image_urls
@@ -21783,7 +21783,7 @@ class QuoteRequestStateChangedMessagePayload(MessagePayload):
         self,
         *,
         quote_request_state: "QuoteRequestState",
-        old_quote_request_state: "QuoteRequestState"
+        old_quote_request_state: "QuoteRequestState",
     ):
         self.quote_request_state = quote_request_state
         self.old_quote_request_state = old_quote_request_state
@@ -21819,7 +21819,7 @@ class QuoteRequestStateTransitionMessagePayload(MessagePayload):
         *,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -21884,7 +21884,7 @@ class QuoteStateTransitionMessagePayload(MessagePayload):
         *,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -22001,7 +22001,7 @@ class ReviewRatingSetMessagePayload(MessagePayload):
         old_rating: typing.Optional[float] = None,
         new_rating: typing.Optional[float] = None,
         included_in_statistics: bool,
-        target: typing.Optional["Reference"] = None
+        target: typing.Optional["Reference"] = None,
     ):
         self.old_rating = old_rating
         self.new_rating = new_rating
@@ -22048,7 +22048,7 @@ class ReviewStateTransitionMessagePayload(MessagePayload):
         old_included_in_statistics: bool,
         new_included_in_statistics: bool,
         target: typing.Optional["Reference"] = None,
-        force: bool
+        force: bool,
     ):
         self.old_state = old_state
         self.new_state = new_state
@@ -22179,7 +22179,7 @@ class StagedQuoteStateChangedMessagePayload(MessagePayload):
         self,
         *,
         staged_quote_state: "StagedQuoteState",
-        old_staged_quote_state: "StagedQuoteState"
+        old_staged_quote_state: "StagedQuoteState",
     ):
         self.staged_quote_state = staged_quote_state
         self.old_staged_quote_state = old_staged_quote_state
@@ -22215,7 +22215,7 @@ class StagedQuoteStateTransitionMessagePayload(MessagePayload):
         *,
         state: "StateReference",
         old_state: typing.Optional["StateReference"] = None,
-        force: bool
+        force: bool,
     ):
         self.state = state
         self.old_state = old_state
@@ -22544,7 +22544,7 @@ class StandalonePriceTiersSetMessagePayload(MessagePayload):
         self,
         *,
         tiers: typing.List["PriceTier"],
-        previous_tiers: typing.List["PriceTier"]
+        previous_tiers: typing.List["PriceTier"],
     ):
         self.tiers = tiers
         self.previous_tiers = previous_tiers
@@ -22583,7 +22583,7 @@ class StandalonePriceValidFromAndUntilSetMessagePayload(MessagePayload):
         valid_from: typing.Optional[datetime.datetime] = None,
         previous_valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        previous_valid_until: typing.Optional[datetime.datetime] = None
+        previous_valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.previous_valid_from = previous_valid_from
@@ -22622,7 +22622,7 @@ class StandalonePriceValidFromSetMessagePayload(MessagePayload):
         self,
         *,
         valid_from: typing.Optional[datetime.datetime] = None,
-        previous_valid_from: typing.Optional[datetime.datetime] = None
+        previous_valid_from: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.previous_valid_from = previous_valid_from
@@ -22655,7 +22655,7 @@ class StandalonePriceValidUntilSetMessagePayload(MessagePayload):
         self,
         *,
         valid_until: typing.Optional[datetime.datetime] = None,
-        previous_valid_until: typing.Optional[datetime.datetime] = None
+        previous_valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_until = valid_until
         self.previous_valid_until = previous_valid_until
@@ -22692,7 +22692,7 @@ class StandalonePriceValueChangedMessagePayload(MessagePayload):
         *,
         value: "Money",
         staged: bool,
-        old_value: typing.Optional["Money"] = None
+        old_value: typing.Optional["Money"] = None,
     ):
         self.value = value
         self.staged = staged
@@ -22730,7 +22730,7 @@ class StoreCountriesChangedMessagePayload(MessagePayload):
         self,
         *,
         added_countries: typing.Optional[typing.List["StoreCountry"]] = None,
-        removed_countries: typing.Optional[typing.List["StoreCountry"]] = None
+        removed_countries: typing.Optional[typing.List["StoreCountry"]] = None,
     ):
         self.added_countries = added_countries
         self.removed_countries = removed_countries
@@ -22778,7 +22778,7 @@ class StoreCreatedMessagePayload(MessagePayload):
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
         product_selections: typing.List["ProductSelectionSetting"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.name = name
         self.languages = languages
@@ -22845,7 +22845,7 @@ class StoreDistributionChannelsChangedMessagePayload(MessagePayload):
         ] = None,
         removed_distribution_channels: typing.Optional[
             typing.List["ChannelReference"]
-        ] = None
+        ] = None,
     ):
         self.added_distribution_channels = added_distribution_channels
         self.removed_distribution_channels = removed_distribution_channels
@@ -22882,7 +22882,7 @@ class StoreLanguagesChangedMessagePayload(MessagePayload):
         self,
         *,
         added_languages: typing.Optional[typing.List["str"]] = None,
-        removed_languages: typing.Optional[typing.List["str"]] = None
+        removed_languages: typing.Optional[typing.List["str"]] = None,
     ):
         self.added_languages = added_languages
         self.removed_languages = removed_languages
@@ -22915,7 +22915,7 @@ class StoreNameSetMessagePayload(MessagePayload):
         self,
         *,
         name: typing.Optional["LocalizedString"] = None,
-        name_all_locales: typing.Optional[typing.List["LocalizedString"]] = None
+        name_all_locales: typing.Optional[typing.List["LocalizedString"]] = None,
     ):
         self.name = name
         self.name_all_locales = name_all_locales
@@ -22962,7 +22962,7 @@ class StoreProductSelectionsChangedMessagePayload(MessagePayload):
         ] = None,
         updated_product_selections: typing.Optional[
             typing.List["ProductSelectionSetting"]
-        ] = None
+        ] = None,
     ):
         self.added_product_selections = added_product_selections
         self.removed_product_selections = removed_product_selections
@@ -23000,7 +23000,9 @@ class StoreSupplyChannelsChangedMessagePayload(MessagePayload):
         self,
         *,
         added_supply_channels: typing.Optional[typing.List["ChannelReference"]] = None,
-        removed_supply_channels: typing.Optional[typing.List["ChannelReference"]] = None
+        removed_supply_channels: typing.Optional[
+            typing.List["ChannelReference"]
+        ] = None,
     ):
         self.added_supply_channels = added_supply_channels
         self.removed_supply_channels = removed_supply_channels

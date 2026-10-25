@@ -48,7 +48,7 @@ class CustomObject(BaseResource):
         created_by: typing.Optional["CreatedBy"] = None,
         container: str,
         key: str,
-        value: typing.Any
+        value: typing.Any,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -93,7 +93,7 @@ class CustomObjectDraft(_BaseType):
         container: str,
         key: str,
         value: typing.Any,
-        version: typing.Optional[int] = None
+        version: typing.Optional[int] = None,
     ):
         self.container = container
         self.key = key
@@ -139,7 +139,7 @@ class CustomObjectPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["CustomObject"]
+        results: typing.List["CustomObject"],
     ):
         self.limit = limit
         self.offset = offset

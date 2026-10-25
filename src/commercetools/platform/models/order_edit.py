@@ -253,7 +253,7 @@ class OrderEdit(BaseResource):
         comment: typing.Optional[str] = None,
         custom: typing.Optional["CustomFields"] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None
+        created_by: typing.Optional["CreatedBy"] = None,
     ):
         self.key = key
         self.resource = resource
@@ -335,7 +335,7 @@ class OrderEditDraft(_BaseType):
         staged_actions: typing.Optional[typing.List["StagedOrderUpdateAction"]] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         comment: typing.Optional[str] = None,
-        dry_run: typing.Optional[bool] = None
+        dry_run: typing.Optional[bool] = None,
     ):
         self.key = key
         self.resource = resource
@@ -383,7 +383,7 @@ class OrderEditPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["OrderEdit"]
+        results: typing.List["OrderEdit"],
     ):
         self.limit = limit
         self.offset = offset
@@ -501,7 +501,7 @@ class OrderEditApplied(OrderEditResult):
         *,
         applied_at: datetime.datetime,
         excerpt_before_edit: "OrderExcerpt",
-        excerpt_after_edit: "OrderExcerpt"
+        excerpt_after_edit: "OrderExcerpt",
     ):
         self.applied_at = applied_at
         self.excerpt_before_edit = excerpt_before_edit
@@ -609,7 +609,7 @@ class OrderEditUpdate(_BaseType):
         *,
         version: int,
         actions: typing.List["OrderEditUpdateAction"],
-        dry_run: typing.Optional[bool] = None
+        dry_run: typing.Optional[bool] = None,
     ):
         self.version = version
         self.actions = actions
@@ -685,7 +685,7 @@ class OrderExcerpt(_BaseType):
         *,
         total_price: "TypedMoney",
         taxed_price: typing.Optional["TaxedPrice"] = None,
-        version: int
+        version: int,
     ):
         self.total_price = total_price
         self.taxed_price = taxed_price
@@ -706,7 +706,6 @@ class OrderExcerpt(_BaseType):
 
 
 class StagedOrder(Order):
-
     def __init__(
         self,
         *,
@@ -760,7 +759,7 @@ class StagedOrder(Order):
         custom: typing.Optional["CustomFields"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None
+        created_by: typing.Optional["CreatedBy"] = None,
     ):
 
         super().__init__(
@@ -917,7 +916,7 @@ class OrderEditSetCustomTypeAction(OrderEditUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1034,7 +1033,7 @@ class StagedOrderAddCustomLineItemAction(StagedOrderUpdateAction):
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
         price_mode: typing.Optional["CustomLineItemPriceMode"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.money = money
         self.name = name
@@ -1094,7 +1093,7 @@ class StagedOrderAddDeliveryAction(StagedOrderUpdateAction):
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.delivery_key = delivery_key
         self.shipping_key = shipping_key
@@ -1248,7 +1247,7 @@ class StagedOrderAddLineItemAction(StagedOrderUpdateAction):
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
         inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -1316,7 +1315,7 @@ class StagedOrderAddParcelToDeliveryAction(StagedOrderUpdateAction):
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -1383,7 +1382,7 @@ class StagedOrderAddReturnInfoAction(StagedOrderUpdateAction):
         *,
         return_tracking_id: typing.Optional[str] = None,
         items: typing.List["ReturnItemDraft"],
-        return_date: typing.Optional[datetime.datetime] = None
+        return_date: typing.Optional[datetime.datetime] = None,
     ):
         self.return_tracking_id = return_tracking_id
         self.items = items
@@ -1422,7 +1421,7 @@ class StagedOrderAddShoppingListAction(StagedOrderUpdateAction):
         *,
         shopping_list: "ShoppingListResourceIdentifier",
         distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.shopping_list = shopping_list
         self.distribution_channel = distribution_channel
@@ -1459,7 +1458,7 @@ class StagedOrderChangeCustomLineItemMoneyAction(StagedOrderUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        money: "Money"
+        money: "Money",
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -1505,7 +1504,7 @@ class StagedOrderChangeCustomLineItemQuantityAction(StagedOrderUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -1561,7 +1560,7 @@ class StagedOrderChangeLineItemQuantityAction(StagedOrderUpdateAction):
         line_item_key: typing.Optional[str] = None,
         quantity: int,
         external_price: typing.Optional["Money"] = None,
-        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -1756,7 +1755,7 @@ class StagedOrderImportCustomLineItemStateAction(StagedOrderUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        state: typing.List["ItemState"]
+        state: typing.List["ItemState"],
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -1800,7 +1799,7 @@ class StagedOrderImportLineItemStateAction(StagedOrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        state: typing.List["ItemState"]
+        state: typing.List["ItemState"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -1838,7 +1837,7 @@ class StagedOrderRemoveCustomLineItemAction(StagedOrderUpdateAction):
         self,
         *,
         custom_line_item_id: typing.Optional[str] = None,
-        custom_line_item_key: typing.Optional[str] = None
+        custom_line_item_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -1875,7 +1874,7 @@ class StagedOrderRemoveDeliveryAction(StagedOrderUpdateAction):
         self,
         *,
         delivery_id: typing.Optional[str] = None,
-        delivery_key: typing.Optional[str] = None
+        delivery_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -1973,7 +1972,7 @@ class StagedOrderRemoveLineItemAction(StagedOrderUpdateAction):
         quantity: typing.Optional[int] = None,
         external_price: typing.Optional["Money"] = None,
         external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
-        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details_to_remove: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -2014,7 +2013,7 @@ class StagedOrderRemoveParcelFromDeliveryAction(StagedOrderUpdateAction):
         self,
         *,
         parcel_id: typing.Optional[str] = None,
-        parcel_key: typing.Optional[str] = None
+        parcel_key: typing.Optional[str] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -2131,7 +2130,7 @@ class StagedOrderSetBillingAddressCustomTypeAction(StagedOrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -2231,7 +2230,7 @@ class StagedOrderSetCustomLineItemCustomFieldAction(StagedOrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -2275,7 +2274,7 @@ class StagedOrderSetCustomLineItemCustomTypeAction(StagedOrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -2316,7 +2315,7 @@ class StagedOrderSetCustomLineItemShippingDetailsAction(StagedOrderUpdateAction)
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -2362,7 +2361,7 @@ class StagedOrderSetCustomLineItemTaxAmountAction(StagedOrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -2409,7 +2408,7 @@ class StagedOrderSetCustomLineItemTaxRateAction(StagedOrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -2454,7 +2453,7 @@ class StagedOrderSetCustomShippingMethodAction(StagedOrderUpdateAction):
         shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method_name = shipping_method_name
         self.shipping_rate = shipping_rate
@@ -2488,7 +2487,7 @@ class StagedOrderSetCustomTypeAction(StagedOrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -2553,7 +2552,7 @@ class StagedOrderSetCustomerGroupAction(StagedOrderUpdateAction):
     def __init__(
         self,
         *,
-        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None
+        customer_group: typing.Optional["CustomerGroupResourceIdentifier"] = None,
     ):
         self.customer_group = customer_group
 
@@ -2624,7 +2623,7 @@ class StagedOrderSetDeliveryAddressAction(StagedOrderUpdateAction):
         *,
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
-        address: typing.Optional["BaseAddress"] = None
+        address: typing.Optional["BaseAddress"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2668,7 +2667,7 @@ class StagedOrderSetDeliveryAddressCustomFieldAction(StagedOrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2716,7 +2715,7 @@ class StagedOrderSetDeliveryAddressCustomTypeAction(StagedOrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2765,7 +2764,7 @@ class StagedOrderSetDeliveryCustomFieldAction(StagedOrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2809,7 +2808,7 @@ class StagedOrderSetDeliveryCustomTypeAction(StagedOrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2852,7 +2851,7 @@ class StagedOrderSetDeliveryItemsAction(StagedOrderUpdateAction):
         *,
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"]
+        items: typing.List["DeliveryItem"],
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -2955,7 +2954,7 @@ class StagedOrderSetItemShippingAddressCustomTypeAction(StagedOrderUpdateAction)
         *,
         address_key: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.address_key = address_key
         self.type = type
@@ -2999,7 +2998,7 @@ class StagedOrderSetLineItemCustomFieldAction(StagedOrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3039,7 +3038,7 @@ class StagedOrderSetLineItemCustomTypeAction(StagedOrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3083,7 +3082,7 @@ class StagedOrderSetLineItemDistributionChannelAction(StagedOrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3125,7 +3124,7 @@ class StagedOrderSetLineItemPriceAction(StagedOrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        external_price: typing.Optional["Money"] = None
+        external_price: typing.Optional["Money"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3161,7 +3160,7 @@ class StagedOrderSetLineItemShippingDetailsAction(StagedOrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3207,7 +3206,7 @@ class StagedOrderSetLineItemTaxAmountAction(StagedOrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3250,7 +3249,7 @@ class StagedOrderSetLineItemTaxRateAction(StagedOrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
-        shipping_key: typing.Optional[str] = None
+        shipping_key: typing.Optional[str] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3289,7 +3288,7 @@ class StagedOrderSetLineItemTotalPriceAction(StagedOrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None
+        external_total_price: typing.Optional["ExternalLineItemTotalPrice"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3372,7 +3371,7 @@ class StagedOrderSetOrderTotalTaxAction(StagedOrderUpdateAction):
         self,
         *,
         external_total_gross: "Money",
-        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None
+        external_tax_portions: typing.Optional[typing.List["TaxPortionDraft"]] = None,
     ):
         self.external_total_gross = external_total_gross
         self.external_tax_portions = external_tax_portions
@@ -3415,7 +3414,7 @@ class StagedOrderSetParcelCustomFieldAction(StagedOrderUpdateAction):
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3459,7 +3458,7 @@ class StagedOrderSetParcelCustomTypeAction(StagedOrderUpdateAction):
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3502,7 +3501,7 @@ class StagedOrderSetParcelItemsAction(StagedOrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"]
+        items: typing.List["DeliveryItem"],
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3544,7 +3543,7 @@ class StagedOrderSetParcelMeasurementsAction(StagedOrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        measurements: typing.Optional["ParcelMeasurements"] = None
+        measurements: typing.Optional["ParcelMeasurements"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3586,7 +3585,7 @@ class StagedOrderSetParcelTrackingDataAction(StagedOrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        tracking_data: typing.Optional["TrackingData"] = None
+        tracking_data: typing.Optional["TrackingData"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3679,7 +3678,7 @@ class StagedOrderSetReturnItemCustomFieldAction(StagedOrderUpdateAction):
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -3719,7 +3718,7 @@ class StagedOrderSetReturnItemCustomTypeAction(StagedOrderUpdateAction):
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -3757,7 +3756,7 @@ class StagedOrderSetReturnPaymentStateAction(StagedOrderUpdateAction):
         *,
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
-        payment_state: "ReturnPaymentState"
+        payment_state: "ReturnPaymentState",
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -3798,7 +3797,7 @@ class StagedOrderSetReturnShipmentStateAction(StagedOrderUpdateAction):
         *,
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
-        shipment_state: "ReturnShipmentState"
+        shipment_state: "ReturnShipmentState",
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -3874,7 +3873,7 @@ class StagedOrderSetShippingAddressAndCustomShippingMethodAction(
         shipping_method_name: str,
         shipping_rate: "ShippingRateDraft",
         tax_category: typing.Optional["TaxCategoryResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.address = address
         self.shipping_method_name = shipping_method_name
@@ -3921,7 +3920,7 @@ class StagedOrderSetShippingAddressAndShippingMethodAction(StagedOrderUpdateActi
         *,
         address: "BaseAddress",
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.address = address
         self.shipping_method = shipping_method
@@ -3990,7 +3989,7 @@ class StagedOrderSetShippingAddressCustomTypeAction(StagedOrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -4028,7 +4027,7 @@ class StagedOrderSetShippingMethodAction(StagedOrderUpdateAction):
         self,
         *,
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_method = shipping_method
         self.external_tax_rate = external_tax_rate
@@ -4061,7 +4060,7 @@ class StagedOrderSetShippingMethodTaxAmountAction(StagedOrderUpdateAction):
         self,
         *,
         shipping_key: typing.Optional[str] = None,
-        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None
+        external_tax_amount: typing.Optional["ExternalTaxAmountDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.external_tax_amount = external_tax_amount
@@ -4099,7 +4098,7 @@ class StagedOrderSetShippingMethodTaxRateAction(StagedOrderUpdateAction):
         self,
         *,
         shipping_key: typing.Optional[str] = None,
-        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None
+        external_tax_rate: typing.Optional["ExternalTaxRateDraft"] = None,
     ):
         self.shipping_key = shipping_key
         self.external_tax_rate = external_tax_rate
@@ -4209,7 +4208,7 @@ class StagedOrderTransitionCustomLineItemStateAction(StagedOrderUpdateAction):
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional[datetime.datetime] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -4262,7 +4261,7 @@ class StagedOrderTransitionLineItemStateAction(StagedOrderUpdateAction):
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional[datetime.datetime] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4366,7 +4365,7 @@ class StagedOrderUpdateSyncInfoAction(StagedOrderUpdateAction):
         *,
         external_id: typing.Optional[str] = None,
         channel: "ChannelResourceIdentifier",
-        synced_at: typing.Optional[datetime.datetime] = None
+        synced_at: typing.Optional[datetime.datetime] = None,
     ):
         self.external_id = external_id
         self.channel = channel

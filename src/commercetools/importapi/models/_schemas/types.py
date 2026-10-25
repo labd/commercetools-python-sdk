@@ -35,7 +35,6 @@ class FieldTypeSchema(helpers.BaseSchema):
 
 
 class CustomFieldBooleanTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -46,7 +45,6 @@ class CustomFieldBooleanTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -57,7 +55,6 @@ class CustomFieldDateTimeTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldDateTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -134,7 +131,6 @@ class CustomFieldLocalizedEnumValueSchema(helpers.BaseSchema):
 
 
 class CustomFieldLocalizedStringTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -145,7 +141,6 @@ class CustomFieldLocalizedStringTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldMoneyTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -156,7 +151,6 @@ class CustomFieldMoneyTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldNumberTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -220,7 +214,6 @@ class CustomFieldSetTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldStringTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -231,7 +224,6 @@ class CustomFieldStringTypeSchema(FieldTypeSchema):
 
 
 class CustomFieldTimeTypeSchema(FieldTypeSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

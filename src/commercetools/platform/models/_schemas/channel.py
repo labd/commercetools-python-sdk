@@ -201,7 +201,6 @@ class ChannelReferenceSchema(ReferenceSchema):
 
 
 class ChannelResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

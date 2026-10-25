@@ -165,7 +165,7 @@ class QuoteRequest(BaseResource):
         state: typing.Optional["StateReference"] = None,
         purchase_order_number: typing.Optional[str] = None,
         cart: typing.Optional["CartReference"] = None,
-        business_unit: typing.Optional["BusinessUnitKeyReference"] = None
+        business_unit: typing.Optional["BusinessUnitKeyReference"] = None,
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -244,7 +244,7 @@ class QuoteRequestDraft(_BaseType):
         comment: typing.Optional[str] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         state: typing.Optional["StateReference"] = None,
-        purchase_order_number: typing.Optional[str] = None
+        purchase_order_number: typing.Optional[str] = None,
     ):
         self.cart = cart
         self.cart_version = cart_version
@@ -293,7 +293,7 @@ class QuoteRequestPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["QuoteRequest"]
+        results: typing.List["QuoteRequest"],
     ):
         self.limit = limit
         self.offset = offset
@@ -542,7 +542,7 @@ class QuoteRequestSetCustomTypeAction(QuoteRequestUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

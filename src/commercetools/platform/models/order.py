@@ -714,7 +714,7 @@ class OrderPagedSearchResponse(_BaseType):
         total: int,
         offset: typing.Optional[int] = None,
         limit: typing.Optional[int] = None,
-        hits: typing.List["Hit"]
+        hits: typing.List["Hit"],
     ):
         self.total = total
         self.offset = offset
@@ -752,7 +752,7 @@ class OrderSearchQueryExpressionValue(_BaseType):
         *,
         field: str,
         boost: typing.Optional[int] = None,
-        custom_type: typing.Optional[str] = None
+        custom_type: typing.Optional[str] = None,
     ):
         self.field = field
         self.boost = boost
@@ -787,7 +787,7 @@ class OrderSearchAnyValue(OrderSearchQueryExpressionValue):
         custom_type: typing.Optional[str] = None,
         value: typing.Any,
         language: typing.Optional[str] = None,
-        case_insensitive: typing.Optional[bool] = None
+        case_insensitive: typing.Optional[bool] = None,
     ):
         self.value = value
         self.language = language
@@ -818,7 +818,7 @@ class OrderSearchDateRangeValue(OrderSearchQueryExpressionValue):
         boost: typing.Optional[int] = None,
         custom_type: typing.Optional[str] = None,
         gte: typing.Optional[datetime.datetime] = None,
-        lte: typing.Optional[datetime.datetime] = None
+        lte: typing.Optional[datetime.datetime] = None,
     ):
         self.gte = gte
         self.lte = lte
@@ -852,7 +852,7 @@ class OrderSearchFullTextValue(OrderSearchQueryExpressionValue):
         custom_type: typing.Optional[str] = None,
         value: str,
         language: typing.Optional[str] = None,
-        must_match: typing.Optional["OrderSearchMatchType"] = None
+        must_match: typing.Optional["OrderSearchMatchType"] = None,
     ):
         self.value = value
         self.language = language
@@ -885,7 +885,7 @@ class OrderSearchLongRangeValue(OrderSearchQueryExpressionValue):
         boost: typing.Optional[int] = None,
         custom_type: typing.Optional[str] = None,
         gte: typing.Optional[int] = None,
-        lte: typing.Optional[int] = None
+        lte: typing.Optional[int] = None,
     ):
         self.gte = gte
         self.lte = lte
@@ -917,7 +917,7 @@ class OrderSearchNumberRangeValue(OrderSearchQueryExpressionValue):
         boost: typing.Optional[int] = None,
         custom_type: typing.Optional[str] = None,
         gte: typing.Optional[float] = None,
-        lte: typing.Optional[float] = None
+        lte: typing.Optional[float] = None,
     ):
         self.gte = gte
         self.lte = lte
@@ -963,7 +963,7 @@ class OrderSearchStringValue(OrderSearchQueryExpressionValue):
         custom_type: typing.Optional[str] = None,
         value: str,
         language: typing.Optional[str] = None,
-        case_insensitive: typing.Optional[bool] = None
+        case_insensitive: typing.Optional[bool] = None,
     ):
         self.value = value
         self.language = language
@@ -1026,7 +1026,7 @@ class CustomLineItemImportDraft(_BaseType):
         price_mode: typing.Optional["CustomLineItemPriceMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.key = key
@@ -1083,7 +1083,7 @@ class Delivery(_BaseType):
         items: typing.List["DeliveryItem"],
         parcels: typing.List["Parcel"],
         address: typing.Optional["Address"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.key = key
@@ -1127,7 +1127,7 @@ class DeliveryDraft(_BaseType):
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
         address: typing.Optional["AddressDraft"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.items = items
@@ -1183,7 +1183,7 @@ class DiscountedLineItemPriceDraft(_BaseType):
         self,
         *,
         value: "Money",
-        included_discounts: typing.List["DiscountedLineItemPortionDraft"]
+        included_discounts: typing.List["DiscountedLineItemPortionDraft"],
     ):
         self.value = value
         self.included_discounts = included_discounts
@@ -1279,7 +1279,7 @@ class LineItemImportDraft(_BaseType):
         inventory_mode: typing.Optional["InventoryMode"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
         state: typing.Optional[typing.List["ItemState"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.key = key
@@ -1483,7 +1483,7 @@ class Order(BaseResource):
         custom: typing.Optional["CustomFields"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None
+        created_by: typing.Optional["CreatedBy"] = None,
     ):
         self.order_number = order_number
         self.purchase_order_number = purchase_order_number
@@ -1595,7 +1595,7 @@ class OrderFromCartDraft(_BaseType):
         shipment_state: typing.Optional["ShipmentState"] = None,
         order_state: typing.Optional["OrderState"] = None,
         state: typing.Optional["StateResourceIdentifier"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.id = id
         self.cart = cart
@@ -1652,7 +1652,7 @@ class OrderFromQuoteDraft(_BaseType):
         payment_state: typing.Optional["PaymentState"] = None,
         shipment_state: typing.Optional["ShipmentState"] = None,
         order_state: typing.Optional["OrderState"] = None,
-        state: typing.Optional["StateResourceIdentifier"] = None
+        state: typing.Optional["StateResourceIdentifier"] = None,
     ):
         self.quote = quote
         self.version = version
@@ -1776,7 +1776,7 @@ class OrderImportDraft(_BaseType):
         country: typing.Optional[str] = None,
         origin: typing.Optional["CartOrigin"] = None,
         completed_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.order_number = order_number
         self.purchase_order_number = purchase_order_number
@@ -1845,7 +1845,7 @@ class OrderPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Order"]
+        results: typing.List["Order"],
     ):
         self.limit = limit
         self.offset = offset
@@ -2184,7 +2184,7 @@ class OrderSearchRequest(_BaseType):
         query: "OrderSearchQuery",
         sort: typing.Optional[typing.List["OrderSearchSorting"]] = None,
         limit: typing.Optional[int] = None,
-        offset: typing.Optional[int] = None
+        offset: typing.Optional[int] = None,
     ):
         self.query = query
         self.sort = sort
@@ -2219,7 +2219,7 @@ class OrderSearchSorting(_BaseType):
         language: typing.Optional[str] = None,
         order: typing.Optional["OrderSearchSortOrder"] = None,
         mode: typing.Optional["OrderSearchSortMode"] = None,
-        filter: typing.Optional["OrderSearchQueryExpression"] = None
+        filter: typing.Optional["OrderSearchQueryExpression"] = None,
     ):
         self.field = field
         self.language = language
@@ -2553,7 +2553,7 @@ class Parcel(_BaseType):
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.key = key
@@ -2596,7 +2596,7 @@ class ParcelDraft(_BaseType):
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.measurements = measurements
@@ -2634,7 +2634,7 @@ class ParcelMeasurements(_BaseType):
         height_in_millimeter: typing.Optional[int] = None,
         length_in_millimeter: typing.Optional[int] = None,
         width_in_millimeter: typing.Optional[int] = None,
-        weight_in_gram: typing.Optional[int] = None
+        weight_in_gram: typing.Optional[int] = None,
     ):
         self.height_in_millimeter = height_in_millimeter
         self.length_in_millimeter = length_in_millimeter
@@ -2712,7 +2712,7 @@ class ProductVariantImportDraft(_BaseType):
         sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["PriceDraft"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
-        images: typing.Optional[typing.List["Image"]] = None
+        images: typing.Optional[typing.List["Image"]] = None,
     ):
         self.id = id
         self.sku = sku
@@ -2751,7 +2751,7 @@ class ReturnInfo(_BaseType):
         *,
         items: typing.List["ReturnItem"],
         return_tracking_id: typing.Optional[str] = None,
-        return_date: typing.Optional[datetime.datetime] = None
+        return_date: typing.Optional[datetime.datetime] = None,
     ):
         self.items = items
         self.return_tracking_id = return_tracking_id
@@ -2784,7 +2784,7 @@ class ReturnInfoDraft(_BaseType):
         *,
         items: typing.List["ReturnItemDraft"],
         return_tracking_id: typing.Optional[str] = None,
-        return_date: typing.Optional[datetime.datetime] = None
+        return_date: typing.Optional[datetime.datetime] = None,
     ):
         self.items = items
         self.return_tracking_id = return_tracking_id
@@ -2840,7 +2840,7 @@ class ReturnItem(_BaseType):
         payment_state: "ReturnPaymentState",
         custom: typing.Optional["CustomFields"] = None,
         last_modified_at: datetime.datetime,
-        created_at: datetime.datetime
+        created_at: datetime.datetime,
     ):
         self.id = id
         self.key = key
@@ -2888,7 +2888,7 @@ class CustomLineItemReturnItem(ReturnItem):
         custom: typing.Optional["CustomFields"] = None,
         last_modified_at: datetime.datetime,
         created_at: datetime.datetime,
-        custom_line_item_id: str
+        custom_line_item_id: str,
     ):
         self.custom_line_item_id = custom_line_item_id
 
@@ -2935,7 +2935,7 @@ class LineItemReturnItem(ReturnItem):
         custom: typing.Optional["CustomFields"] = None,
         last_modified_at: datetime.datetime,
         created_at: datetime.datetime,
-        line_item_id: str
+        line_item_id: str,
     ):
         self.line_item_id = line_item_id
 
@@ -2994,7 +2994,7 @@ class ReturnItemDraft(_BaseType):
         custom_line_item_id: typing.Optional[str] = None,
         comment: typing.Optional[str] = None,
         shipment_state: "ReturnShipmentState",
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.quantity = quantity
@@ -3077,7 +3077,7 @@ class ShippingInfoImportDraft(_BaseType):
         shipping_method: typing.Optional["ShippingMethodResourceIdentifier"] = None,
         deliveries: typing.Optional[typing.List["DeliveryDraft"]] = None,
         discounted_price: typing.Optional["DiscountedLineItemPriceDraft"] = None,
-        shipping_method_state: typing.Optional["ShippingMethodState"] = None
+        shipping_method_state: typing.Optional["ShippingMethodState"] = None,
     ):
         self.shipping_method_name = shipping_method_name
         self.price = price
@@ -3120,7 +3120,7 @@ class SyncInfo(_BaseType):
         *,
         channel: "ChannelReference",
         external_id: typing.Optional[str] = None,
-        synced_at: datetime.datetime
+        synced_at: datetime.datetime,
     ):
         self.channel = channel
         self.external_id = external_id
@@ -3186,7 +3186,7 @@ class TrackingData(_BaseType):
         carrier: typing.Optional[str] = None,
         provider: typing.Optional[str] = None,
         provider_transaction: typing.Optional[str] = None,
-        is_return: typing.Optional[bool] = None
+        is_return: typing.Optional[bool] = None,
     ):
         self.tracking_id = tracking_id
         self.carrier = carrier
@@ -3239,7 +3239,7 @@ class OrderAddDeliveryAction(OrderUpdateAction):
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
         address: typing.Optional["BaseAddress"] = None,
         parcels: typing.Optional[typing.List["ParcelDraft"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.delivery_key = delivery_key
         self.shipping_key = shipping_key
@@ -3325,7 +3325,7 @@ class OrderAddParcelToDeliveryAction(OrderUpdateAction):
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -3390,7 +3390,7 @@ class OrderAddReturnInfoAction(OrderUpdateAction):
         *,
         return_tracking_id: typing.Optional[str] = None,
         items: typing.List["ReturnItemDraft"],
-        return_date: typing.Optional[datetime.datetime] = None
+        return_date: typing.Optional[datetime.datetime] = None,
     ):
         self.return_tracking_id = return_tracking_id
         self.items = items
@@ -3505,7 +3505,7 @@ class OrderImportCustomLineItemStateAction(OrderUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        state: typing.List["ItemState"]
+        state: typing.List["ItemState"],
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3545,7 +3545,7 @@ class OrderImportLineItemStateAction(OrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        state: typing.List["ItemState"]
+        state: typing.List["ItemState"],
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -3583,7 +3583,7 @@ class OrderRemoveDeliveryAction(OrderUpdateAction):
         self,
         *,
         delivery_id: typing.Optional[str] = None,
-        delivery_key: typing.Optional[str] = None
+        delivery_key: typing.Optional[str] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -3648,7 +3648,7 @@ class OrderRemoveParcelFromDeliveryAction(OrderUpdateAction):
         self,
         *,
         parcel_id: typing.Optional[str] = None,
-        parcel_key: typing.Optional[str] = None
+        parcel_key: typing.Optional[str] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -3761,7 +3761,7 @@ class OrderSetBillingAddressCustomTypeAction(OrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -3828,7 +3828,7 @@ class OrderSetCustomLineItemCustomFieldAction(OrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3868,7 +3868,7 @@ class OrderSetCustomLineItemCustomTypeAction(OrderUpdateAction):
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3905,7 +3905,7 @@ class OrderSetCustomLineItemShippingDetailsAction(OrderUpdateAction):
         *,
         custom_line_item_id: typing.Optional[str] = None,
         custom_line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -3938,7 +3938,7 @@ class OrderSetCustomTypeAction(OrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -4040,7 +4040,7 @@ class OrderSetDeliveryAddressAction(OrderUpdateAction):
         *,
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
-        address: typing.Optional["BaseAddress"] = None
+        address: typing.Optional["BaseAddress"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4084,7 +4084,7 @@ class OrderSetDeliveryAddressCustomFieldAction(OrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4128,7 +4128,7 @@ class OrderSetDeliveryAddressCustomTypeAction(OrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4173,7 +4173,7 @@ class OrderSetDeliveryCustomFieldAction(OrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4217,7 +4217,7 @@ class OrderSetDeliveryCustomTypeAction(OrderUpdateAction):
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4260,7 +4260,7 @@ class OrderSetDeliveryItemsAction(OrderUpdateAction):
         *,
         delivery_id: typing.Optional[str] = None,
         delivery_key: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"]
+        items: typing.List["DeliveryItem"],
     ):
         self.delivery_id = delivery_id
         self.delivery_key = delivery_key
@@ -4329,7 +4329,7 @@ class OrderSetItemShippingAddressCustomTypeAction(OrderUpdateAction):
         *,
         address_key: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.address_key = address_key
         self.type = type
@@ -4369,7 +4369,7 @@ class OrderSetLineItemCustomFieldAction(OrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4409,7 +4409,7 @@ class OrderSetLineItemCustomTypeAction(OrderUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4446,7 +4446,7 @@ class OrderSetLineItemShippingDetailsAction(OrderUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -4538,7 +4538,7 @@ class OrderSetParcelCustomFieldAction(OrderUpdateAction):
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -4582,7 +4582,7 @@ class OrderSetParcelCustomTypeAction(OrderUpdateAction):
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -4625,7 +4625,7 @@ class OrderSetParcelItemsAction(OrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        items: typing.List["DeliveryItem"]
+        items: typing.List["DeliveryItem"],
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -4667,7 +4667,7 @@ class OrderSetParcelMeasurementsAction(OrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        measurements: typing.Optional["ParcelMeasurements"] = None
+        measurements: typing.Optional["ParcelMeasurements"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -4709,7 +4709,7 @@ class OrderSetParcelTrackingDataAction(OrderUpdateAction):
         *,
         parcel_id: typing.Optional[str] = None,
         parcel_key: typing.Optional[str] = None,
-        tracking_data: typing.Optional["TrackingData"] = None
+        tracking_data: typing.Optional["TrackingData"] = None,
     ):
         self.parcel_id = parcel_id
         self.parcel_key = parcel_key
@@ -4803,7 +4803,7 @@ class OrderSetReturnItemCustomFieldAction(OrderUpdateAction):
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -4843,7 +4843,7 @@ class OrderSetReturnItemCustomTypeAction(OrderUpdateAction):
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -4881,7 +4881,7 @@ class OrderSetReturnPaymentStateAction(OrderUpdateAction):
         *,
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
-        payment_state: "ReturnPaymentState"
+        payment_state: "ReturnPaymentState",
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -4922,7 +4922,7 @@ class OrderSetReturnShipmentStateAction(OrderUpdateAction):
         *,
         return_item_id: typing.Optional[str] = None,
         return_item_key: typing.Optional[str] = None,
-        shipment_state: "ReturnShipmentState"
+        shipment_state: "ReturnShipmentState",
     ):
         self.return_item_id = return_item_id
         self.return_item_key = return_item_key
@@ -5014,7 +5014,7 @@ class OrderSetShippingAddressCustomTypeAction(OrderUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -5092,7 +5092,7 @@ class OrderTransitionCustomLineItemStateAction(OrderUpdateAction):
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional[datetime.datetime] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ):
         self.custom_line_item_id = custom_line_item_id
         self.custom_line_item_key = custom_line_item_key
@@ -5141,7 +5141,7 @@ class OrderTransitionLineItemStateAction(OrderUpdateAction):
         quantity: int,
         from_state: "StateResourceIdentifier",
         to_state: "StateResourceIdentifier",
-        actual_transition_date: typing.Optional[datetime.datetime] = None
+        actual_transition_date: typing.Optional[datetime.datetime] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -5242,7 +5242,7 @@ class OrderUpdateSyncInfoAction(OrderUpdateAction):
         *,
         external_id: typing.Optional[str] = None,
         channel: "ChannelResourceIdentifier",
-        synced_at: typing.Optional[datetime.datetime] = None
+        synced_at: typing.Optional[datetime.datetime] = None,
     ):
         self.external_id = external_id
         self.channel = channel

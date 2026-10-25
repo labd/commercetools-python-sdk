@@ -131,7 +131,7 @@ class ProductDraftImport(ImportResource):
         search_keywords: typing.Optional["SearchKeywords"] = None,
         state: typing.Optional["StateKeyReference"] = None,
         publish: typing.Optional[bool] = None,
-        price_mode: typing.Optional["ProductPriceModeEnum"] = None
+        price_mode: typing.Optional["ProductPriceModeEnum"] = None,
     ):
         self.product_type = product_type
         self.name = name
@@ -181,7 +181,7 @@ class ProductVariantDraftImport(_BaseType):
         prices: typing.Optional[typing.List["PriceDraftImport"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
         images: typing.Optional[typing.List["Image"]] = None,
-        assets: typing.Optional[typing.List["Asset"]] = None
+        assets: typing.Optional[typing.List["Asset"]] = None,
     ):
         self.sku = sku
         self.key = key
@@ -239,7 +239,7 @@ class PriceDraftImport(_BaseType):
         custom: typing.Optional["Custom"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
-        key: str
+        key: str,
     ):
         self.value = value
         self.country = country

@@ -67,7 +67,7 @@ class Extension(BaseResource):
         key: typing.Optional[str] = None,
         destination: "ExtensionDestination",
         triggers: typing.List["ExtensionTrigger"],
-        timeout_in_ms: typing.Optional[int] = None
+        timeout_in_ms: typing.Optional[int] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -183,7 +183,7 @@ class ExtensionDraft(_BaseType):
         key: typing.Optional[str] = None,
         destination: "ExtensionDestination",
         triggers: typing.List["ExtensionTrigger"],
-        timeout_in_ms: typing.Optional[int] = None
+        timeout_in_ms: typing.Optional[int] = None,
     ):
         self.key = key
         self.destination = destination
@@ -253,7 +253,7 @@ class ExtensionPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Extension"]
+        results: typing.List["Extension"],
     ):
         self.limit = limit
         self.offset = offset
@@ -303,7 +303,7 @@ class ExtensionTrigger(_BaseType):
         *,
         resource_type_id: "ExtensionResourceTypeId",
         actions: typing.List["ExtensionAction"],
-        condition: typing.Optional[str] = None
+        condition: typing.Optional[str] = None,
     ):
         self.resource_type_id = resource_type_id
         self.actions = actions
@@ -418,7 +418,7 @@ class HttpDestination(ExtensionDestination):
         self,
         *,
         url: str,
-        authentication: typing.Optional["HttpDestinationAuthentication"] = None
+        authentication: typing.Optional["HttpDestinationAuthentication"] = None,
     ):
         self.url = url
         self.authentication = authentication

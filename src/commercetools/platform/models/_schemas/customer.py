@@ -405,7 +405,6 @@ class CustomerDraftSchema(helpers.BaseSchema):
 
 
 class CustomerEmailTokenReferenceSchema(ReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -457,7 +456,6 @@ class CustomerPagedQueryResponseSchema(helpers.BaseSchema):
 
 
 class CustomerPasswordTokenReferenceSchema(ReferenceSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -506,7 +504,6 @@ class CustomerResetPasswordSchema(helpers.BaseSchema):
 
 
 class CustomerResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 
 
 class FrontasticDataSourceByIdentifierRequestBuilder:
-
     _client: "BaseClient"
     _identifier: str
 

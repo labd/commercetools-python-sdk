@@ -84,7 +84,7 @@ class CustomerAddress(_BaseType):
         fax: typing.Optional[str] = None,
         additional_address_info: typing.Optional[str] = None,
         external_id: typing.Optional[str] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.key = key
         self.title = title
@@ -204,7 +204,7 @@ class CustomerImport(ImportResource):
         shipping_addresses: typing.Optional[typing.List["int"]] = None,
         locale: typing.Optional[str] = None,
         custom: typing.Optional["Custom"] = None,
-        authentication_mode: typing.Optional["AuthenticationMode"] = None
+        authentication_mode: typing.Optional["AuthenticationMode"] = None,
     ):
         self.customer_number = customer_number
         self.email = email

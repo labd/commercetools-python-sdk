@@ -49,7 +49,7 @@ class ImportContainer(_BaseType):
         resource_type: typing.Optional["ImportResourceType"] = None,
         version: int,
         created_at: datetime.datetime,
-        last_modified_at: datetime.datetime
+        last_modified_at: datetime.datetime,
     ):
         self.key = key
         self.resource_type = resource_type
@@ -114,7 +114,7 @@ class ImportContainerUpdateDraft(_BaseType):
         self,
         *,
         version: int,
-        resource_type: typing.Optional["ImportResourceType"] = None
+        resource_type: typing.Optional["ImportResourceType"] = None,
     ):
         self.version = version
         self.resource_type = resource_type
@@ -159,7 +159,7 @@ class ImportContainerPagedResponse(_BaseType):
         offset: int,
         count: int,
         total: int,
-        results: typing.List["ImportContainer"]
+        results: typing.List["ImportContainer"],
     ):
         self.limit = limit
         self.offset = offset

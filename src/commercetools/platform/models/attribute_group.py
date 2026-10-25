@@ -59,7 +59,7 @@ class AttributeGroup(BaseResource):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         attributes: typing.List["AttributeReference"],
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -103,7 +103,7 @@ class AttributeGroupDraft(_BaseType):
         name: "LocalizedString",
         description: typing.Optional["LocalizedString"] = None,
         attributes: typing.List["AttributeReference"],
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.name = name
         self.description = description
@@ -150,7 +150,7 @@ class AttributeGroupPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["AttributeGroup"]
+        results: typing.List["AttributeGroup"],
     ):
         self.limit = limit
         self.offset = offset

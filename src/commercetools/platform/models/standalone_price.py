@@ -98,7 +98,7 @@ class StagedStandalonePrice(_BaseType):
         self,
         *,
         value: "TypedMoney",
-        discounted: typing.Optional["DiscountedPrice"] = None
+        discounted: typing.Optional["DiscountedPrice"] = None,
     ):
         self.value = value
         self.discounted = discounted
@@ -174,7 +174,7 @@ class StandalonePrice(BaseResource):
         discounted: typing.Optional["DiscountedPrice"] = None,
         custom: typing.Optional["CustomFields"] = None,
         staged: typing.Optional["StagedStandalonePrice"] = None,
-        active: bool
+        active: bool,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -262,7 +262,7 @@ class StandalonePriceDraft(_BaseType):
         discounted: typing.Optional["DiscountedPriceDraft"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
         staged: typing.Optional["StagedPriceDraft"] = None,
-        active: typing.Optional[bool] = None
+        active: typing.Optional[bool] = None,
     ):
         self.key = key
         self.sku = sku
@@ -315,7 +315,7 @@ class StandalonePricePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["StandalonePrice"]
+        results: typing.List["StandalonePrice"],
     ):
         self.limit = limit
         self.offset = offset
@@ -718,7 +718,7 @@ class StandalonePriceSetCustomTypeAction(StandalonePriceUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -867,7 +867,7 @@ class StandalonePriceSetValidFromAndUntilAction(StandalonePriceUpdateAction):
         self,
         *,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until

@@ -65,7 +65,7 @@ class ProductPagedSearchResponse(_BaseType):
         offset: int,
         limit: int,
         facets: typing.List["ProductSearchFacetResult"],
-        results: typing.List["ProductSearchResult"]
+        results: typing.List["ProductSearchResult"],
     ):
         self.total = total
         self.offset = offset
@@ -90,13 +90,12 @@ class ProductPagedSearchResponse(_BaseType):
 
 
 class ProductSearchErrorResponse(ErrorResponse):
-
     def __init__(
         self,
         *,
         status_code: int,
         message: str,
-        errors: typing.Optional[typing.List["ErrorObject"]] = None
+        errors: typing.Optional[typing.List["ErrorObject"]] = None,
     ):
 
         super().__init__(status_code=status_code, message=message, errors=errors)
@@ -151,7 +150,7 @@ class ProductSearchMatchingVariants(_BaseType):
         self,
         *,
         all_matched: bool,
-        matched_variants: typing.List["ProductSearchMatchingVariantEntry"]
+        matched_variants: typing.List["ProductSearchMatchingVariantEntry"],
     ):
         self.all_matched = all_matched
         self.matched_variants = matched_variants
@@ -205,7 +204,7 @@ class ProductSearchProjectionParams(_BaseType):
         price_customer_group: typing.Optional[str] = None,
         price_channel: typing.Optional[str] = None,
         locale_projection: typing.Optional[typing.List["str"]] = None,
-        store_projection: typing.Optional[str] = None
+        store_projection: typing.Optional[str] = None,
     ):
         self.expand = expand
         self.staged = staged
@@ -261,7 +260,7 @@ class ProductSearchRequest(_BaseType):
         product_projection_parameters: typing.Optional[
             "ProductSearchProjectionParams"
         ] = None,
-        facets: typing.Optional[typing.List["ProductSearchFacetExpression"]] = None
+        facets: typing.Optional[typing.List["ProductSearchFacetExpression"]] = None,
     ):
         self.query = query
         self.sort = sort
@@ -298,7 +297,7 @@ class ProductSearchResult(_BaseType):
         *,
         id: str,
         product_projection: typing.Optional["ProductProjection"] = None,
-        matching_variants: typing.Optional["ProductSearchMatchingVariants"] = None
+        matching_variants: typing.Optional["ProductSearchMatchingVariants"] = None,
     ):
         self.id = id
         self.product_projection = product_projection
@@ -338,7 +337,7 @@ class ProductSearchFacetCountValue(_BaseType):
         name: str,
         scope: typing.Optional["ProductSearchFacetScopeEnum"] = None,
         filter: typing.Optional["SearchQuery"] = None,
-        level: typing.Optional["ProductSearchFacetCountLevelEnum"] = None
+        level: typing.Optional["ProductSearchFacetCountLevelEnum"] = None,
     ):
         self.name = name
         self.scope = scope
@@ -435,7 +434,7 @@ class ProductSearchFacetDistinctValue(_BaseType):
         limit: typing.Optional[int] = None,
         language: typing.Optional[str] = None,
         field_type: typing.Optional["SearchFieldType"] = None,
-        missing: typing.Optional[str] = None
+        missing: typing.Optional[str] = None,
     ):
         self.name = name
         self.scope = scope
@@ -553,7 +552,7 @@ class ProductSearchFacetRangesFacetRange(_BaseType):
         *,
         from_: typing.Optional[typing.Any] = None,
         to: typing.Optional[typing.Any] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.from_ = from_
         self.to = to
@@ -603,7 +602,7 @@ class ProductSearchFacetRangesValue(_BaseType):
         field: str,
         ranges: typing.List["ProductSearchFacetRangesFacetRange"],
         language: typing.Optional[str] = None,
-        field_type: typing.Optional["SearchFieldType"] = None
+        field_type: typing.Optional["SearchFieldType"] = None,
     ):
         self.name = name
         self.scope = scope

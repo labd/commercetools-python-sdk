@@ -65,7 +65,7 @@ class ImportOperation(_BaseType):
         ] = None,
         created_at: datetime.datetime,
         last_modified_at: datetime.datetime,
-        expires_at: datetime.datetime
+        expires_at: datetime.datetime,
     ):
         self.version = version
         self.import_container_key = import_container_key
@@ -114,7 +114,7 @@ class ImportOperationPagedResponse(_BaseType):
         offset: int,
         count: int,
         total: int,
-        results: typing.List["ImportOperation"]
+        results: typing.List["ImportOperation"],
     ):
         self.limit = limit
         self.offset = offset
@@ -159,7 +159,7 @@ class ImportOperationStatus(_BaseType):
         *,
         operation_id: typing.Optional[str] = None,
         state: "ImportOperationState",
-        errors: typing.Optional[typing.List["ErrorObject"]] = None
+        errors: typing.Optional[typing.List["ErrorObject"]] = None,
     ):
         self.operation_id = operation_id
         self.state = state

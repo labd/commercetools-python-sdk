@@ -149,7 +149,6 @@ class InventoryEntryReferenceSchema(ReferenceSchema):
 
 
 class InventoryEntryResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

@@ -18,7 +18,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyMessagesRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
 

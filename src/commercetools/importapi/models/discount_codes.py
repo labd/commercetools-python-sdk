@@ -62,7 +62,7 @@ class DiscountCodeImport(ImportResource):
         groups: typing.Optional[typing.List["str"]] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.name = name
         self.description = description

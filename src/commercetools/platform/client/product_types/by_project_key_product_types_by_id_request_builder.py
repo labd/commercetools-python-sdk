@@ -15,7 +15,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyProductTypesByIDRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _id: str

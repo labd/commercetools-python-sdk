@@ -134,7 +134,7 @@ class Payment(BaseResource):
         transactions: typing.List["Transaction"],
         interface_interactions: typing.List["CustomFields"],
         custom: typing.Optional["CustomFields"] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -227,7 +227,7 @@ class PaymentDraft(_BaseType):
             typing.List["CustomFieldsDraft"]
         ] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        key: typing.Optional[str] = None
+        key: typing.Optional[str] = None,
     ):
         self.customer = customer
         self.anonymous_id = anonymous_id
@@ -274,7 +274,7 @@ class PaymentMethodInfo(_BaseType):
         *,
         payment_interface: typing.Optional[str] = None,
         method: typing.Optional[str] = None,
-        name: typing.Optional["LocalizedString"] = None
+        name: typing.Optional["LocalizedString"] = None,
     ):
         self.payment_interface = payment_interface
         self.method = method
@@ -319,7 +319,7 @@ class PaymentPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["Payment"]
+        results: typing.List["Payment"],
     ):
         self.limit = limit
         self.count = count
@@ -402,7 +402,7 @@ class PaymentStatus(_BaseType):
         *,
         interface_code: typing.Optional[str] = None,
         interface_text: typing.Optional[str] = None,
-        state: typing.Optional["StateReference"] = None
+        state: typing.Optional["StateReference"] = None,
     ):
         self.interface_code = interface_code
         self.interface_text = interface_text
@@ -435,7 +435,7 @@ class PaymentStatusDraft(_BaseType):
         *,
         interface_code: typing.Optional[str] = None,
         interface_text: typing.Optional[str] = None,
-        state: typing.Optional["StateResourceIdentifier"] = None
+        state: typing.Optional["StateResourceIdentifier"] = None,
     ):
         self.interface_code = interface_code
         self.interface_text = interface_text
@@ -623,7 +623,7 @@ class Transaction(_BaseType):
         amount: "CentPrecisionMoney",
         interaction_id: typing.Optional[str] = None,
         state: "TransactionState",
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.id = id
         self.timestamp = timestamp
@@ -670,7 +670,7 @@ class TransactionDraft(_BaseType):
         amount: "Money",
         interaction_id: typing.Optional[str] = None,
         state: typing.Optional["TransactionState"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.timestamp = timestamp
         self.type = type
@@ -722,7 +722,7 @@ class PaymentAddInterfaceInteractionAction(PaymentUpdateAction):
         self,
         *,
         type: "TypeResourceIdentifier",
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -952,7 +952,7 @@ class PaymentSetAuthorizationAction(PaymentUpdateAction):
         self,
         *,
         amount: typing.Optional["Money"] = None,
-        until: typing.Optional[datetime.datetime] = None
+        until: typing.Optional[datetime.datetime] = None,
     ):
         self.amount = amount
         self.until = until
@@ -1012,7 +1012,7 @@ class PaymentSetCustomTypeAction(PaymentUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1262,7 +1262,7 @@ class PaymentSetTransactionCustomFieldAction(PaymentUpdateAction):
         *,
         transaction_id: str,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.transaction_id = transaction_id
         self.name = name
@@ -1298,7 +1298,7 @@ class PaymentSetTransactionCustomTypeAction(PaymentUpdateAction):
         *,
         transaction_id: str,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.transaction_id = transaction_id
         self.type = type

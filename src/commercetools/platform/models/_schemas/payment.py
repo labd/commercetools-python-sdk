@@ -361,7 +361,6 @@ class PaymentReferenceSchema(ReferenceSchema):
 
 
 class PaymentResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

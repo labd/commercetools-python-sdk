@@ -116,7 +116,7 @@ class DiscountCode(BaseResource):
         groups: typing.List["str"],
         valid_from: typing.Optional[datetime.datetime] = None,
         valid_until: typing.Optional[datetime.datetime] = None,
-        application_version: typing.Optional[int] = None
+        application_version: typing.Optional[int] = None,
     ):
         self.key = key
         self.last_modified_by = last_modified_by
@@ -199,7 +199,7 @@ class DiscountCodeDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         groups: typing.Optional[typing.List["str"]] = None,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.key = key
         self.name = name
@@ -254,7 +254,7 @@ class DiscountCodePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["DiscountCode"]
+        results: typing.List["DiscountCode"],
     ):
         self.limit = limit
         self.offset = offset
@@ -567,7 +567,7 @@ class DiscountCodeSetCustomTypeAction(DiscountCodeUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -743,7 +743,7 @@ class DiscountCodeSetValidFromAndUntilAction(DiscountCodeUpdateAction):
         self,
         *,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until

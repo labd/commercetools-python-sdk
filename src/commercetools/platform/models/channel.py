@@ -92,7 +92,7 @@ class Channel(BaseResource):
         address: typing.Optional["Address"] = None,
         review_rating_statistics: typing.Optional["ReviewRatingStatistics"] = None,
         custom: typing.Optional["CustomFields"] = None,
-        geo_location: typing.Optional["GeoJson"] = None
+        geo_location: typing.Optional["GeoJson"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -152,7 +152,7 @@ class ChannelDraft(_BaseType):
         description: typing.Optional["LocalizedString"] = None,
         address: typing.Optional["BaseAddress"] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        geo_location: typing.Optional["GeoJson"] = None
+        geo_location: typing.Optional["GeoJson"] = None,
     ):
         self.key = key
         self.roles = roles
@@ -201,7 +201,7 @@ class ChannelPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Channel"]
+        results: typing.List["Channel"],
     ):
         self.limit = limit
         self.offset = offset
@@ -547,7 +547,7 @@ class ChannelSetAddressCustomTypeAction(ChannelUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -607,7 +607,7 @@ class ChannelSetCustomTypeAction(ChannelUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

@@ -100,7 +100,7 @@ class ProductSelectionSettingDraft(_BaseType):
         self,
         *,
         product_selection: "ProductSelectionResourceIdentifier",
-        active: typing.Optional[bool] = None
+        active: typing.Optional[bool] = None,
     ):
         self.product_selection = product_selection
         self.active = active
@@ -164,7 +164,7 @@ class Store(BaseResource):
         distribution_channels: typing.List["ChannelReference"],
         supply_channels: typing.List["ChannelReference"],
         product_selections: typing.List["ProductSelectionSetting"],
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -236,7 +236,7 @@ class StoreDraft(_BaseType):
         product_selections: typing.Optional[
             typing.List["ProductSelectionSettingDraft"]
         ] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.name = name
@@ -305,7 +305,7 @@ class StorePagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["Store"]
+        results: typing.List["Store"],
     ):
         self.limit = limit
         self.offset = offset
@@ -553,7 +553,7 @@ class StoreAddProductSelectionAction(StoreUpdateAction):
         self,
         *,
         product_selection: "ProductSelectionResourceIdentifier",
-        active: typing.Optional[bool] = None
+        active: typing.Optional[bool] = None,
     ):
         self.product_selection = product_selection
         self.active = active
@@ -617,7 +617,7 @@ class StoreChangeProductSelectionAction(StoreUpdateAction):
         self,
         *,
         product_selection: "ProductSelectionResourceIdentifier",
-        active: typing.Optional[bool] = None
+        active: typing.Optional[bool] = None,
     ):
         self.product_selection = product_selection
         self.active = active
@@ -807,7 +807,7 @@ class StoreSetCustomTypeAction(StoreUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -844,7 +844,7 @@ class StoreSetDistributionChannelsAction(StoreUpdateAction):
         *,
         distribution_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
-        ] = None
+        ] = None,
     ):
         self.distribution_channels = distribution_channels
 
@@ -929,7 +929,7 @@ class StoreSetProductSelectionsAction(StoreUpdateAction):
         *,
         product_selections: typing.Optional[
             typing.List["ProductSelectionSettingDraft"]
-        ] = None
+        ] = None,
     ):
         self.product_selections = product_selections
 
@@ -965,7 +965,7 @@ class StoreSetSupplyChannelsAction(StoreUpdateAction):
         *,
         supply_channels: typing.Optional[
             typing.List["ChannelResourceIdentifier"]
-        ] = None
+        ] = None,
     ):
         self.supply_channels = supply_channels
 

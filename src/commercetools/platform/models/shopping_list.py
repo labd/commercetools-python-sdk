@@ -113,7 +113,7 @@ class ShoppingList(BaseResource):
         store: typing.Optional["StoreKeyReference"] = None,
         custom: typing.Optional["CustomFields"] = None,
         last_modified_by: typing.Optional["LastModifiedBy"] = None,
-        created_by: typing.Optional["CreatedBy"] = None
+        created_by: typing.Optional["CreatedBy"] = None,
     ):
         self.name = name
         self.key = key
@@ -187,7 +187,7 @@ class ShoppingListDraft(_BaseType):
         line_items: typing.Optional[typing.List["ShoppingListLineItemDraft"]] = None,
         text_line_items: typing.Optional[typing.List["TextLineItemDraft"]] = None,
         store: typing.Optional["StoreResourceIdentifier"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.slug = slug
@@ -269,7 +269,7 @@ class ShoppingListLineItem(_BaseType):
         quantity: int,
         variant_id: typing.Optional[int] = None,
         variant: typing.Optional["ProductVariant"] = None,
-        product_slug: typing.Optional["LocalizedString"] = None
+        product_slug: typing.Optional["LocalizedString"] = None,
     ):
         self.added_at = added_at
         self.custom = custom
@@ -325,7 +325,7 @@ class ShoppingListLineItemDraft(_BaseType):
         sku: typing.Optional[str] = None,
         added_at: typing.Optional[datetime.datetime] = None,
         custom: typing.Optional["CustomFieldsDraft"] = None,
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.key = key
         self.product_id = product_id
@@ -374,7 +374,7 @@ class ShoppingListPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["ShoppingList"]
+        results: typing.List["ShoppingList"],
     ):
         self.limit = limit
         self.count = count
@@ -639,7 +639,7 @@ class TextLineItem(_BaseType):
         id: str,
         key: typing.Optional[str] = None,
         name: "LocalizedString",
-        quantity: int
+        quantity: int,
     ):
         self.added_at = added_at
         self.custom = custom
@@ -685,7 +685,7 @@ class TextLineItemDraft(_BaseType):
         custom: typing.Optional["CustomFieldsDraft"] = None,
         description: typing.Optional["LocalizedString"] = None,
         name: "LocalizedString",
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.key = key
         self.added_at = added_at
@@ -739,7 +739,7 @@ class ShoppingListAddLineItemAction(ShoppingListUpdateAction):
         variant_id: typing.Optional[int] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.sku = sku
@@ -787,7 +787,7 @@ class ShoppingListAddTextLineItemAction(ShoppingListUpdateAction):
         description: typing.Optional["LocalizedString"] = None,
         quantity: typing.Optional[int] = None,
         added_at: typing.Optional[datetime.datetime] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.key = key
@@ -825,7 +825,7 @@ class ShoppingListChangeLineItemQuantityAction(ShoppingListUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -910,7 +910,7 @@ class ShoppingListChangeTextLineItemNameAction(ShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        name: "LocalizedString"
+        name: "LocalizedString",
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -949,7 +949,7 @@ class ShoppingListChangeTextLineItemQuantityAction(ShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        quantity: int
+        quantity: int,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -1015,7 +1015,7 @@ class ShoppingListRemoveLineItemAction(ShoppingListUpdateAction):
         *,
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -1050,7 +1050,7 @@ class ShoppingListRemoveTextLineItemAction(ShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        quantity: typing.Optional[int] = None
+        quantity: typing.Optional[int] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -1134,7 +1134,7 @@ class ShoppingListSetCustomTypeAction(ShoppingListUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1273,7 +1273,7 @@ class ShoppingListSetLineItemCustomFieldAction(ShoppingListUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -1317,7 +1317,7 @@ class ShoppingListSetLineItemCustomTypeAction(ShoppingListUpdateAction):
         line_item_id: typing.Optional[str] = None,
         line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.line_item_id = line_item_id
         self.line_item_key = line_item_key
@@ -1408,7 +1408,7 @@ class ShoppingListSetTextLineItemCustomFieldAction(ShoppingListUpdateAction):
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
         name: str,
-        value: typing.Optional[typing.Any] = None
+        value: typing.Optional[typing.Any] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -1452,7 +1452,7 @@ class ShoppingListSetTextLineItemCustomTypeAction(ShoppingListUpdateAction):
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key
@@ -1492,7 +1492,7 @@ class ShoppingListSetTextLineItemDescriptionAction(ShoppingListUpdateAction):
         *,
         text_line_item_id: typing.Optional[str] = None,
         text_line_item_key: typing.Optional[str] = None,
-        description: typing.Optional["LocalizedString"] = None
+        description: typing.Optional["LocalizedString"] = None,
     ):
         self.text_line_item_id = text_line_item_id
         self.text_line_item_key = text_line_item_key

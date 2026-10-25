@@ -348,7 +348,6 @@ class DiscountCodeReferenceSchema(ReferenceSchema):
 
 
 class DiscountCodeResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

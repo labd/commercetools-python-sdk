@@ -46,7 +46,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _store_key: str

@@ -14,7 +14,6 @@ if typing.TYPE_CHECKING:
 
 
 class ApiBuildUploadRequestBuilder:
-
     _client: "BaseClient"
 
     def __init__(

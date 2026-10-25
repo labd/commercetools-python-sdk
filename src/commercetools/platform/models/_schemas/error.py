@@ -69,7 +69,6 @@ class ErrorObjectSchema(helpers.BaseSchema):
 
 
 class AnonymousIdAlreadyInUseErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -228,7 +227,6 @@ class AttributeNameDoesNotExistErrorSchema(ErrorObjectSchema):
 
 
 class BadGatewayErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -278,7 +276,6 @@ class ConcurrentModificationErrorSchema(ErrorObjectSchema):
 
 
 class ContentTooLargeErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -841,7 +838,6 @@ class EnumKeyDoesNotExistErrorSchema(ErrorObjectSchema):
 
 
 class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -863,7 +859,6 @@ class EnumValueIsUsedErrorSchema(ErrorObjectSchema):
 
 
 class EnumValuesMustMatchErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1333,7 +1328,6 @@ class ExtensionUpdateActionsFailedErrorSchema(ErrorObjectSchema):
 
 
 class ExternalOAuthFailedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1355,7 +1349,6 @@ class ExternalOAuthFailedErrorSchema(ErrorObjectSchema):
 
 
 class FeatureRemovedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1377,7 +1370,6 @@ class FeatureRemovedErrorSchema(ErrorObjectSchema):
 
 
 class GeneralErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1399,7 +1391,6 @@ class GeneralErrorSchema(ErrorObjectSchema):
 
 
 class InsufficientScopeErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1421,7 +1412,6 @@ class InsufficientScopeErrorSchema(ErrorObjectSchema):
 
 
 class InternalConstraintViolatedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1443,7 +1433,6 @@ class InternalConstraintViolatedErrorSchema(ErrorObjectSchema):
 
 
 class InvalidCredentialsErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1465,7 +1454,6 @@ class InvalidCredentialsErrorSchema(ErrorObjectSchema):
 
 
 class InvalidCurrentPasswordErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1520,7 +1508,6 @@ class InvalidFieldErrorSchema(ErrorObjectSchema):
 
 
 class InvalidInputErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1593,7 +1580,6 @@ class InvalidJsonInputErrorSchema(ErrorObjectSchema):
 
 
 class InvalidOperationErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1615,7 +1601,6 @@ class InvalidOperationErrorSchema(ErrorObjectSchema):
 
 
 class InvalidSubjectErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1637,7 +1622,6 @@ class InvalidSubjectErrorSchema(ErrorObjectSchema):
 
 
 class InvalidTokenErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1659,7 +1643,6 @@ class InvalidTokenErrorSchema(ErrorObjectSchema):
 
 
 class LanguageUsedInStoresErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1753,7 +1736,6 @@ class MatchingPriceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class MaxCartDiscountsReachedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1804,7 +1786,6 @@ class MaxResourceLimitExceededErrorSchema(ErrorObjectSchema):
 
 
 class MaxStoreReferencesReachedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1893,7 +1874,6 @@ class MissingTaxRateForCountryErrorSchema(ErrorObjectSchema):
 
 
 class MoneyOverflowErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1915,7 +1895,6 @@ class MoneyOverflowErrorSchema(ErrorObjectSchema):
 
 
 class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1937,7 +1916,6 @@ class NoMatchingProductDiscountFoundErrorSchema(ErrorObjectSchema):
 
 
 class ObjectNotFoundErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1990,7 +1968,6 @@ class OutOfStockErrorSchema(ErrorObjectSchema):
 
 
 class OverCapacityErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2089,7 +2066,6 @@ class OverlappingStandalonePriceValidityErrorSchema(ErrorObjectSchema):
 
 
 class PendingOperationErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2245,7 +2221,6 @@ class ProjectNotConfiguredForLanguagesErrorSchema(ErrorObjectSchema):
 
 
 class QueryComplexityLimitExceededErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2267,7 +2242,6 @@ class QueryComplexityLimitExceededErrorSchema(ErrorObjectSchema):
 
 
 class QueryTimedOutErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2377,7 +2351,6 @@ class RequiredFieldErrorSchema(ErrorObjectSchema):
 
 
 class ResourceNotFoundErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2399,7 +2372,6 @@ class ResourceNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2421,7 +2393,6 @@ class ResourceSizeLimitExceededErrorSchema(ErrorObjectSchema):
 
 
 class SearchDeactivatedErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2443,7 +2414,6 @@ class SearchDeactivatedErrorSchema(ErrorObjectSchema):
 
 
 class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2465,7 +2435,6 @@ class SearchExecutionFailureErrorSchema(ErrorObjectSchema):
 
 
 class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2487,7 +2456,6 @@ class SearchFacetPathNotFoundErrorSchema(ErrorObjectSchema):
 
 
 class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2509,7 +2477,6 @@ class SearchIndexingInProgressErrorSchema(ErrorObjectSchema):
 
 
 class SemanticErrorErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2531,7 +2498,6 @@ class SemanticErrorErrorSchema(ErrorObjectSchema):
 
 
 class ShippingMethodDoesNotMatchCartErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2582,7 +2548,6 @@ class StoreCartDiscountsLimitReachedErrorSchema(ErrorObjectSchema):
 
 
 class SyntaxErrorErrorSchema(ErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2662,7 +2627,6 @@ class GraphQLErrorObjectSchema(helpers.BaseSchema):
 
 
 class GraphQLAnonymousIdAlreadyInUseErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2821,7 +2785,6 @@ class GraphQLAttributeNameDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLBadGatewayErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2871,7 +2834,6 @@ class GraphQLConcurrentModificationErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLContentTooLargeErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3434,7 +3396,6 @@ class GraphQLEnumKeyDoesNotExistErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLEnumValueIsUsedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3456,7 +3417,6 @@ class GraphQLEnumValueIsUsedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLEnumValuesMustMatchErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3645,7 +3605,6 @@ class GraphQLExtensionUpdateActionsFailedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLExternalOAuthFailedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3667,7 +3626,6 @@ class GraphQLExternalOAuthFailedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLFeatureRemovedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3689,7 +3647,6 @@ class GraphQLFeatureRemovedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLGeneralErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3711,7 +3668,6 @@ class GraphQLGeneralErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInsufficientScopeErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3733,7 +3689,6 @@ class GraphQLInsufficientScopeErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInternalConstraintViolatedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3755,7 +3710,6 @@ class GraphQLInternalConstraintViolatedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidCredentialsErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3777,7 +3731,6 @@ class GraphQLInvalidCredentialsErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidCurrentPasswordErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3832,7 +3785,6 @@ class GraphQLInvalidFieldErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidInputErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3905,7 +3857,6 @@ class GraphQLInvalidJsonInputErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidOperationErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3927,7 +3878,6 @@ class GraphQLInvalidOperationErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidSubjectErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3949,7 +3899,6 @@ class GraphQLInvalidSubjectErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLInvalidTokenErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -3971,7 +3920,6 @@ class GraphQLInvalidTokenErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLLanguageUsedInStoresErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4065,7 +4013,6 @@ class GraphQLMatchingPriceNotFoundErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLMaxCartDiscountsReachedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4116,7 +4063,6 @@ class GraphQLMaxResourceLimitExceededErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLMaxStoreReferencesReachedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4205,7 +4151,6 @@ class GraphQLMissingTaxRateForCountryErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLMoneyOverflowErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4227,7 +4172,6 @@ class GraphQLMoneyOverflowErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLNoMatchingProductDiscountFoundErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4249,7 +4193,6 @@ class GraphQLNoMatchingProductDiscountFoundErrorSchema(GraphQLErrorObjectSchema)
 
 
 class GraphQLObjectNotFoundErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4302,7 +4245,6 @@ class GraphQLOutOfStockErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLOverCapacityErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4401,7 +4343,6 @@ class GraphQLOverlappingStandalonePriceValidityErrorSchema(GraphQLErrorObjectSch
 
 
 class GraphQLPendingOperationErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4559,7 +4500,6 @@ class GraphQLProjectNotConfiguredForLanguagesErrorSchema(GraphQLErrorObjectSchem
 
 
 class GraphQLQueryComplexityLimitExceededErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4581,7 +4521,6 @@ class GraphQLQueryComplexityLimitExceededErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLQueryTimedOutErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4691,7 +4630,6 @@ class GraphQLRequiredFieldErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4713,7 +4651,6 @@ class GraphQLResourceNotFoundErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLResourceSizeLimitExceededErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4735,7 +4672,6 @@ class GraphQLResourceSizeLimitExceededErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchDeactivatedErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4757,7 +4693,6 @@ class GraphQLSearchDeactivatedErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchExecutionFailureErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4779,7 +4714,6 @@ class GraphQLSearchExecutionFailureErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchFacetPathNotFoundErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4801,7 +4735,6 @@ class GraphQLSearchFacetPathNotFoundErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSearchIndexingInProgressErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4823,7 +4756,6 @@ class GraphQLSearchIndexingInProgressErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLSemanticErrorErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4845,7 +4777,6 @@ class GraphQLSemanticErrorErrorSchema(GraphQLErrorObjectSchema):
 
 
 class GraphQLShippingMethodDoesNotMatchCartErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -4896,7 +4827,6 @@ class GraphQLStoreCartDiscountsLimitReachedErrorSchema(GraphQLErrorObjectSchema)
 
 
 class GraphQLSyntaxErrorErrorSchema(GraphQLErrorObjectSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

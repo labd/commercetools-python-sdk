@@ -18,7 +18,6 @@ from ..common import AttributionSource, MoneyType, ReferenceTypeId
 
 # Fields
 class LocalizedStringField(marshmallow.fields.Dict):
-
     def _deserialize(self, value, attr, data, **kwargs):
         result = super()._deserialize(value, attr, data)
         return models.LocalizedString(**result)
@@ -1033,7 +1032,6 @@ class TypedMoneySchema(MoneySchema):
 
 
 class CentPrecisionMoneySchema(TypedMoneySchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1082,7 +1080,6 @@ class TypedMoneyDraftSchema(MoneySchema):
 
 
 class CentPrecisionMoneyDraftSchema(TypedMoneyDraftSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

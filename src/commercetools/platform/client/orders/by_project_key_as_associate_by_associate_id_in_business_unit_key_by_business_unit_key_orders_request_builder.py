@@ -24,7 +24,6 @@ if typing.TYPE_CHECKING:
 
 
 class ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestBuilder:
-
     _client: "BaseClient"
     _project_key: str
     _associate_id: str

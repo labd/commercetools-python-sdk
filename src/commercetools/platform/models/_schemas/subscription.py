@@ -406,7 +406,6 @@ class PayloadNotIncludedSchema(helpers.BaseSchema):
 
 
 class PlatformFormatSchema(DeliveryFormatSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

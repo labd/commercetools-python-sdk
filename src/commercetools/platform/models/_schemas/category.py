@@ -259,7 +259,6 @@ class CategoryReferenceSchema(ReferenceSchema):
 
 
 class CategoryResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

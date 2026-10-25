@@ -68,7 +68,7 @@ class TaxRate(_BaseType):
         included_in_price: bool,
         country: str,
         state: typing.Optional[str] = None,
-        sub_rates: typing.Optional[typing.List["SubRate"]] = None
+        sub_rates: typing.Optional[typing.List["SubRate"]] = None,
     ):
         self.id = id
         self.name = name
@@ -141,7 +141,7 @@ class PriceImport(ImportResource):
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
         custom: typing.Optional["Custom"] = None,
         product_variant: "ProductVariantKeyReference",
-        product: "ProductKeyReference"
+        product: "ProductKeyReference",
     ):
         self.value = value
         self.country = country

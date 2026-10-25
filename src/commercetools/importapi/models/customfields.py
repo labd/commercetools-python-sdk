@@ -61,7 +61,7 @@ class Custom(_BaseType):
         self,
         *,
         type: "TypeKeyReference",
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

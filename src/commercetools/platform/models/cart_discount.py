@@ -148,7 +148,7 @@ class CartDiscount(BaseResource):
         requires_discount_code: bool,
         references: typing.List["Reference"],
         stacking_mode: "StackingMode",
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -243,7 +243,7 @@ class CartDiscountDraft(_BaseType):
         valid_until: typing.Optional[datetime.datetime] = None,
         requires_discount_code: typing.Optional[bool] = None,
         stacking_mode: typing.Optional["StackingMode"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.name = name
         self.key = key
@@ -299,7 +299,7 @@ class CartDiscountPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["CartDiscount"]
+        results: typing.List["CartDiscount"],
     ):
         self.limit = limit
         self.offset = offset
@@ -818,7 +818,7 @@ class CartDiscountValueGiftLineItem(CartDiscountValue):
         product: "ProductReference",
         variant_id: int,
         supply_channel: typing.Optional["ChannelReference"] = None,
-        distribution_channel: typing.Optional["ChannelReference"] = None
+        distribution_channel: typing.Optional["ChannelReference"] = None,
     ):
         self.product = product
         self.variant_id = variant_id
@@ -864,7 +864,7 @@ class CartDiscountValueGiftLineItemDraft(CartDiscountValueDraft):
         product: "ProductResourceIdentifier",
         variant_id: int,
         supply_channel: typing.Optional["ChannelResourceIdentifier"] = None,
-        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None
+        distribution_channel: typing.Optional["ChannelResourceIdentifier"] = None,
     ):
         self.product = product
         self.variant_id = variant_id
@@ -958,7 +958,7 @@ class MultiBuyCustomLineItemsTarget(CartDiscountTarget):
         trigger_quantity: int,
         discounted_quantity: int,
         max_occurrence: typing.Optional[int] = None,
-        selection_mode: "SelectionMode"
+        selection_mode: "SelectionMode",
     ):
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity
@@ -1003,7 +1003,7 @@ class MultiBuyLineItemsTarget(CartDiscountTarget):
         trigger_quantity: int,
         discounted_quantity: int,
         max_occurrence: typing.Optional[int] = None,
-        selection_mode: "SelectionMode"
+        selection_mode: "SelectionMode",
     ):
         self.predicate = predicate
         self.trigger_quantity = trigger_quantity
@@ -1342,7 +1342,7 @@ class CartDiscountSetCustomTypeAction(CartDiscountUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -1483,7 +1483,7 @@ class CartDiscountSetValidFromAndUntilAction(CartDiscountUpdateAction):
         self,
         *,
         valid_from: typing.Optional[datetime.datetime] = None,
-        valid_until: typing.Optional[datetime.datetime] = None
+        valid_until: typing.Optional[datetime.datetime] = None,
     ):
         self.valid_from = valid_from
         self.valid_until = valid_until

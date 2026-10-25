@@ -185,7 +185,7 @@ class LineItemPrice(_BaseType):
         channel: typing.Optional["ChannelKeyReference"] = None,
         discounted: typing.Optional["DiscountedPrice"] = None,
         tiers: typing.Optional[typing.List["PriceTier"]] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.value = value
         self.country = country
@@ -230,7 +230,7 @@ class LineItemProductVariantImportDraft(_BaseType):
         sku: typing.Optional[str] = None,
         prices: typing.Optional[typing.List["LineItemPrice"]] = None,
         attributes: typing.Optional[typing.List["Attribute"]] = None,
-        images: typing.Optional[typing.List["Image"]] = None
+        images: typing.Optional[typing.List["Image"]] = None,
     ):
         self.product_variant = product_variant
         self.sku = sku
@@ -301,7 +301,7 @@ class LineItemImportDraft(_BaseType):
         distribution_channel: typing.Optional["ChannelKeyReference"] = None,
         tax_rate: typing.Optional["TaxRate"] = None,
         shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.product = product
         self.name = name
@@ -368,7 +368,7 @@ class CartClassificationTier(ShippingRatePriceTier):
         value: str,
         price: "Money",
         tiers: typing.List["ShippingRatePriceTier"],
-        is_matching: typing.Optional[bool] = None
+        is_matching: typing.Optional[bool] = None,
     ):
         self.value = value
         self.price = price
@@ -401,7 +401,7 @@ class ShippingRateDraft(_BaseType):
         *,
         price: "Money",
         free_above: typing.Optional["Money"] = None,
-        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
+        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None,
     ):
         self.price = price
         self.free_above = free_above
@@ -433,7 +433,7 @@ class ParcelMeasurements(_BaseType):
         height_in_millimeter: typing.Optional[int] = None,
         length_in_millimeter: typing.Optional[int] = None,
         width_in_millimeter: typing.Optional[int] = None,
-        weight_in_gram: typing.Optional[int] = None
+        weight_in_gram: typing.Optional[int] = None,
     ):
         self.height_in_millimeter = height_in_millimeter
         self.length_in_millimeter = length_in_millimeter
@@ -468,7 +468,7 @@ class TrackingData(_BaseType):
         carrier: typing.Optional[str] = None,
         provider: typing.Optional[str] = None,
         provider_transaction: typing.Optional[str] = None,
-        is_return: typing.Optional[bool] = None
+        is_return: typing.Optional[bool] = None,
     ):
         self.tracking_id = tracking_id
         self.carrier = carrier
@@ -529,7 +529,7 @@ class Parcel(_BaseType):
         measurements: typing.Optional["ParcelMeasurements"] = None,
         tracking_data: typing.Optional["TrackingData"] = None,
         items: typing.Optional[typing.List["DeliveryItem"]] = None,
-        custom: typing.Optional["Custom"] = None
+        custom: typing.Optional["Custom"] = None,
     ):
         self.id = id
         self.created_at = created_at
@@ -566,7 +566,7 @@ class Delivery(_BaseType):
         created_at: datetime.datetime,
         items: typing.List["DeliveryItem"],
         parcels: typing.List["Parcel"],
-        address: typing.Optional["Address"] = None
+        address: typing.Optional["Address"] = None,
     ):
         self.id = id
         self.created_at = created_at
@@ -623,7 +623,7 @@ class DiscountedLineItemPriceDraft(_BaseType):
         self,
         *,
         value: "Money",
-        included_discounts: typing.List["DiscountedLineItemPortion"]
+        included_discounts: typing.List["DiscountedLineItemPortion"],
     ):
         self.value = value
         self.included_discounts = included_discounts
@@ -679,7 +679,7 @@ class ShippingInfoImportDraft(_BaseType):
         shipping_method: typing.Optional["ShippingMethodKeyReference"] = None,
         deliveries: typing.Optional[typing.List["Delivery"]] = None,
         discounted_price: typing.Optional["DiscountedLineItemPriceDraft"] = None,
-        shipping_method_state: typing.Optional["ShippingMethodState"] = None
+        shipping_method_state: typing.Optional["ShippingMethodState"] = None,
     ):
         self.shipping_method_name = shipping_method_name
         self.price = price
@@ -723,7 +723,7 @@ class ExternalTaxRateDraft(_BaseType):
         country: str,
         state: typing.Optional[str] = None,
         sub_rates: typing.Optional[typing.List["SubRate"]] = None,
-        included_in_price: typing.Optional[bool] = None
+        included_in_price: typing.Optional[bool] = None,
     ):
         self.name = name
         self.amount = amount
@@ -810,7 +810,7 @@ class CustomLineItemDraft(_BaseType):
         discounted_price_per_quantity: typing.Optional[
             typing.List["DiscountedLineItemPriceDraft"]
         ] = None,
-        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None
+        shipping_details: typing.Optional["ItemShippingDetailsDraft"] = None,
     ):
         self.name = name
         self.money = money
@@ -878,7 +878,7 @@ class TaxedPrice(_BaseType):
         *,
         total_net: "Money",
         total_gross: "Money",
-        tax_portions: typing.List["TaxPortion"]
+        tax_portions: typing.List["TaxPortion"],
     ):
         self.total_net = total_net
         self.total_gross = total_gross
@@ -979,7 +979,7 @@ class SyncInfo(_BaseType):
         *,
         channel: "ChannelKeyReference",
         external_id: typing.Optional[str] = None,
-        synced_at: datetime.datetime
+        synced_at: datetime.datetime,
     ):
         self.channel = channel
         self.external_id = external_id
@@ -1020,7 +1020,7 @@ class DiscountCodeInfo(_BaseType):
         self,
         *,
         discount_code: "DiscountCodeKeyReference",
-        state: typing.Optional["DiscountCodeState"] = None
+        state: typing.Optional["DiscountCodeState"] = None,
     ):
         self.discount_code = discount_code
         self.state = state
@@ -1207,7 +1207,7 @@ class OrderImport(_BaseType):
         origin: typing.Optional["CartOrigin"] = None,
         item_shipping_addresses: typing.Optional[typing.List["Address"]] = None,
         store: typing.Optional["StoreKeyReference"] = None,
-        state: typing.Optional["StateKeyReference"] = None
+        state: typing.Optional["StateKeyReference"] = None,
     ):
         self.order_number = order_number
         self.customer = customer

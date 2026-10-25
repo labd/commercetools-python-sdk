@@ -228,7 +228,6 @@ class ApprovalFlowUpdateActionSchema(helpers.BaseSchema):
 
 
 class ApprovalFlowApproveActionSchema(ApprovalFlowUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

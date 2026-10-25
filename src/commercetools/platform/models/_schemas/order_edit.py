@@ -757,7 +757,6 @@ class OrderEditReferenceSchema(ReferenceSchema):
 
 
 class OrderEditResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -808,7 +807,6 @@ class OrderEditAppliedSchema(OrderEditResultSchema):
 
 
 class OrderEditNotProcessedSchema(OrderEditResultSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -1778,7 +1776,6 @@ class OrderExcerptSchema(helpers.BaseSchema):
 
 
 class StagedOrderSchema(OrderSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

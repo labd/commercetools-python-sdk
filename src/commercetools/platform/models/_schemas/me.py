@@ -483,7 +483,6 @@ class MyCartUpdateActionSchema(helpers.BaseSchema):
 
 
 class MyCompanyDraftSchema(MyBusinessUnitDraftSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 
@@ -2938,7 +2937,6 @@ class MyQuoteChangeMyQuoteStateActionSchema(MyQuoteUpdateActionSchema):
 
 
 class MyQuoteRequestCancelActionSchema(MyQuoteRequestUpdateActionSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

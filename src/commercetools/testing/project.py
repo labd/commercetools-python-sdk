@@ -71,9 +71,9 @@ class ProjectBackend(ServiceBackend):
     ):
         # real API always increments version, so always apply new value.
         new = copy.deepcopy(obj)
-        new["carts"][
-            "countryTaxRateFallbackEnabled"
-        ] = action.country_tax_rate_fallback_enabled
+        new["carts"]["countryTaxRateFallbackEnabled"] = (
+            action.country_tax_rate_fallback_enabled
+        )
         return new
 
     # Fixme: use decorator for this

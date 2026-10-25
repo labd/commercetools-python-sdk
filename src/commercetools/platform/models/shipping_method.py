@@ -135,7 +135,7 @@ class ShippingMethod(BaseResource):
         zone_rates: typing.List["ZoneRate"],
         is_default: bool,
         predicate: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -203,7 +203,7 @@ class ShippingMethodDraft(_BaseType):
         zone_rates: typing.List["ZoneRateDraft"],
         is_default: bool,
         predicate: typing.Optional[str] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.name = name
@@ -255,7 +255,7 @@ class ShippingMethodPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-        results: typing.List["ShippingMethod"]
+        results: typing.List["ShippingMethod"],
     ):
         self.limit = limit
         self.count = count
@@ -464,7 +464,7 @@ class ShippingRate(_BaseType):
         price: "TypedMoney",
         free_above: typing.Optional["TypedMoney"] = None,
         is_matching: typing.Optional[bool] = None,
-        tiers: typing.List["ShippingRatePriceTier"]
+        tiers: typing.List["ShippingRatePriceTier"],
     ):
         self.price = price
         self.free_above = free_above
@@ -498,7 +498,7 @@ class ShippingRateDraft(_BaseType):
         *,
         price: "Money",
         free_above: typing.Optional["Money"] = None,
-        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None
+        tiers: typing.Optional[typing.List["ShippingRatePriceTier"]] = None,
     ):
         self.price = price
         self.free_above = free_above
@@ -601,7 +601,7 @@ class CartScoreTier(ShippingRatePriceTier):
         score: int,
         price: typing.Optional["Money"] = None,
         price_function: typing.Optional["PriceFunction"] = None,
-        is_matching: typing.Optional[bool] = None
+        is_matching: typing.Optional[bool] = None,
     ):
         self.score = score
         self.price = price
@@ -642,7 +642,7 @@ class CartValueTier(ShippingRatePriceTier):
         *,
         minimum_cent_amount: int,
         price: "Money",
-        is_matching: typing.Optional[bool] = None
+        is_matching: typing.Optional[bool] = None,
     ):
         self.minimum_cent_amount = minimum_cent_amount
         self.price = price
@@ -706,7 +706,7 @@ class ZoneRateDraft(_BaseType):
         self,
         *,
         zone: "ZoneResourceIdentifier",
-        shipping_rates: typing.List["ShippingRateDraft"]
+        shipping_rates: typing.List["ShippingRateDraft"],
     ):
         self.zone = zone
         self.shipping_rates = shipping_rates
@@ -945,7 +945,7 @@ class ShippingMethodSetCustomTypeAction(ShippingMethodUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields

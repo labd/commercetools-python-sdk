@@ -75,7 +75,7 @@ class ProductTailoring(BaseResource):
         published: bool,
         current: "ProductTailoringData",
         staged: "ProductTailoringData",
-        has_staged_changes: bool
+        has_staged_changes: bool,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -131,7 +131,7 @@ class ProductTailoringData(_BaseType):
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        slug: typing.Optional["LocalizedString"] = None
+        slug: typing.Optional["LocalizedString"] = None,
     ):
         self.name = name
         self.description = description
@@ -191,7 +191,7 @@ class ProductTailoringDraft(_BaseType):
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        publish: typing.Optional[bool] = None
+        publish: typing.Optional[bool] = None,
     ):
         self.key = key
         self.store = store
@@ -252,7 +252,7 @@ class ProductTailoringInStoreDraft(_BaseType):
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
         slug: typing.Optional["LocalizedString"] = None,
-        publish: typing.Optional[bool] = None
+        publish: typing.Optional[bool] = None,
     ):
         self.key = key
         self.product = product
@@ -305,7 +305,7 @@ class ProductTailoringPagedQueryResponse(_BaseType):
         offset: int,
         count: int,
         total: typing.Optional[int] = None,
-        results: typing.List["ProductTailoring"]
+        results: typing.List["ProductTailoring"],
     ):
         self.limit = limit
         self.offset = offset
@@ -480,7 +480,7 @@ class ProductTailoringSetDescriptionAction(ProductTailoringUpdateAction):
         self,
         *,
         description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.description = description
         self.staged = staged
@@ -523,7 +523,7 @@ class ProductTailoringSetMetaAttributesAction(ProductTailoringUpdateAction):
         meta_title: typing.Optional["LocalizedString"] = None,
         meta_description: typing.Optional["LocalizedString"] = None,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_title = meta_title
         self.meta_description = meta_description
@@ -560,7 +560,7 @@ class ProductTailoringSetMetaDescriptionAction(ProductTailoringUpdateAction):
         self,
         *,
         meta_description: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_description = meta_description
         self.staged = staged
@@ -595,7 +595,7 @@ class ProductTailoringSetMetaKeywordsAction(ProductTailoringUpdateAction):
         self,
         *,
         meta_keywords: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_keywords = meta_keywords
         self.staged = staged
@@ -630,7 +630,7 @@ class ProductTailoringSetMetaTitleAction(ProductTailoringUpdateAction):
         self,
         *,
         meta_title: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.meta_title = meta_title
         self.staged = staged
@@ -663,7 +663,7 @@ class ProductTailoringSetNameAction(ProductTailoringUpdateAction):
         self,
         *,
         name: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.name = name
         self.staged = staged
@@ -696,7 +696,7 @@ class ProductTailoringSetSlugAction(ProductTailoringUpdateAction):
         self,
         *,
         slug: typing.Optional["LocalizedString"] = None,
-        staged: typing.Optional[bool] = None
+        staged: typing.Optional[bool] = None,
     ):
         self.slug = slug
         self.staged = staged

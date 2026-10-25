@@ -174,7 +174,6 @@ class StateReferenceSchema(ReferenceSchema):
 
 
 class StateResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

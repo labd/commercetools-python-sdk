@@ -102,7 +102,7 @@ class Review(BaseResource):
         rating: typing.Optional[int] = None,
         state: typing.Optional["StateReference"] = None,
         customer: typing.Optional["CustomerReference"] = None,
-        custom: typing.Optional["CustomFields"] = None
+        custom: typing.Optional["CustomFields"] = None,
     ):
         self.last_modified_by = last_modified_by
         self.created_by = created_by
@@ -184,7 +184,7 @@ class ReviewDraft(_BaseType):
         state: typing.Optional["StateResourceIdentifier"] = None,
         rating: typing.Optional[int] = None,
         customer: typing.Optional["CustomerResourceIdentifier"] = None,
-        custom: typing.Optional["CustomFieldsDraft"] = None
+        custom: typing.Optional["CustomFieldsDraft"] = None,
     ):
         self.key = key
         self.uniqueness_value = uniqueness_value
@@ -235,7 +235,7 @@ class ReviewPagedQueryResponse(_BaseType):
         count: int,
         total: typing.Optional[int] = None,
         offset: int,
-        results: typing.List["Review"]
+        results: typing.List["Review"],
     ):
         self.limit = limit
         self.count = count
@@ -281,7 +281,7 @@ class ReviewRatingStatistics(_BaseType):
         highest_rating: float,
         lowest_rating: float,
         count: int,
-        ratings_distribution: object
+        ratings_distribution: object,
     ):
         self.average_rating = average_rating
         self.highest_rating = highest_rating
@@ -498,7 +498,7 @@ class ReviewSetCustomTypeAction(ReviewUpdateAction):
         self,
         *,
         type: typing.Optional["TypeResourceIdentifier"] = None,
-        fields: typing.Optional["FieldContainer"] = None
+        fields: typing.Optional["FieldContainer"] = None,
     ):
         self.type = type
         self.fields = fields
@@ -616,7 +616,7 @@ class ReviewSetTargetAction(ReviewUpdateAction):
     def __init__(
         self,
         *,
-        target: typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"]
+        target: typing.Union["ProductResourceIdentifier", "ChannelResourceIdentifier"],
     ):
         self.target = target
 

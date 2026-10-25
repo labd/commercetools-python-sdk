@@ -211,7 +211,6 @@ class StagedQuoteReferenceSchema(ReferenceSchema):
 
 
 class StagedQuoteResourceIdentifierSchema(ResourceIdentifierSchema):
-
     class Meta:
         unknown = marshmallow.EXCLUDE
 

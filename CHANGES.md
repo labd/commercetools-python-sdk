@@ -1,3 +1,7 @@
+Unreleased
+----------
+- *BREAKING*: requires Python 3.11 or newer; tested on 3.11–3.14.
+
 26.10.12
 --------
 - *BREAKING*: the SDK now returns `None` instead of raising an exception when

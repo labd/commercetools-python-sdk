@@ -1,7 +1,74 @@
-
 [build-system]
-requires = ["setuptools>=40.6.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "commercetools"
+dynamic = ["version"]
+description = "SDK for Commercetools"
+readme = "README.rst"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Lab Digital B.V.", email = "opensource@labdigital.nl" }]
+requires-python = ">=3.11"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+dependencies = [
+  "requests>=2.7.0",
+  "pytz",
+  "requests-oauthlib>=1.0.0",
+  "requests_mock>=1.8.0",
+  # marshmallow 4 removed APIs the generated schemas use
+  "marshmallow>=3.10.0,<4",
+  "marshmallow-enum>=1.5.1",
+  "WebOb>=1.8.0",
+  "Werkzeug>=0.15.2",
+  "wrapt>=1.10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/labd/commercetools-python-sdk"
+Documentation = "https://commercetools-python-sdk.readthedocs.io/"
+Changelog = "https://github.com/labd/commercetools-python-sdk/blob/main/CHANGES.md"
+
+[dependency-groups]
+dev = [{ include-group = "test" }]
+test = [
+  "freezegun>=1.5.5",
+  "mock>=4.0.3",
+  "pretend>=1.0.9",
+  "coverage[toml]>=7.17.0",
+  "pytest-cov>=7.1.0",
+  "pytest>=9.1.1",
+  "ruff>=0.17.2",
+  "mypy>=1.9.0",
+]
+docs = [
+  "Sphinx>=7.0.1",
+  "sphinx-autodoc-typehints>=1.23.3",
+  "m2r2>=0.3.1",
+  "sphinx-rtd-theme>=3.1.0",
+]
+
+[tool.hatch.version]
+path = "src/commercetools/version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/commercetools"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "README.rst", "LICENSE"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests"]
 
 [tool.coverage.paths]
 source = ["src", ".tox/*/site-packages", ".tox/*/lib/python*/site-packages"]

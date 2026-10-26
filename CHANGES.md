@@ -1,6 +1,9 @@
 Unreleased
 ----------
 - *BREAKING*: requires Python 3.11 or newer; tested on 3.11–3.14.
+- Packaging moved to `pyproject.toml` (hatchling) and uv; the `test` and `docs`
+  extras are removed (now dependency groups).
+- `commercetools.__version__` reports the actual package version again.
 
 26.10.12
 --------

@@ -1,18 +1,17 @@
-.. start-no-pypi
+Python SDK for Commercetools
+============================
 
-.. image:: https://github.com/labd/commercetools-python-sdk/workflows/Python%20Tests/badge.svg
-    :target: https://github.com/labd/commercetools-python-sdk/actions
+.. image:: https://img.shields.io/pypi/v/commercetools
+    :target: https://pypi.org/project/commercetools/
+    :alt: PyPI
 
-.. image:: https://img.shields.io/pypi/v/commercetools.svg
-    :target: https://pypi.python.org/pypi/commercetools/
+.. image:: https://github.com/labd/commercetools-python-sdk/actions/workflows/python-test.yml/badge.svg
+    :target: https://github.com/labd/commercetools-python-sdk/actions/workflows/python-test.yml
+    :alt: Python Tests
+
 .. image:: https://readthedocs.org/projects/commercetools-python-sdk/badge/?version=latest
     :target: https://commercetools-python-sdk.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
-.. end-no-pypi
-
-
-Python SDK for Commercetools
-============================
 
 This is an unofficial Python SDK for the Commercetools platform. It only
 supports Python 3.11+ and uses type annotation for an improved development
